@@ -1,0 +1,16 @@
+[package]
+name = "sxr-df"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "CliDomainForgeAdapter: SemanticSourcePort over the domainforge envelope CLI."
+
+[dependencies]
+sxr-core = { path = "../sxr-core" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

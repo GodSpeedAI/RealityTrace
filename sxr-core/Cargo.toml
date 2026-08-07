@@ -1,0 +1,20 @@
+[package]
+name = "sxr-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "sxr domain types, canonical JSON, CEP envelope construction and validation, record-kind registry, threshold evaluation. No I/O."
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+hex.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+jsonschema.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,20 @@
+[package]
+name = "sxr-ledger"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "SQLite adapter: generation-local hash chains, history manifest, outbox, writer lock, CAS/ARS."
+
+[dependencies]
+sxr-core = { path = "../sxr-core" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+hex.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
