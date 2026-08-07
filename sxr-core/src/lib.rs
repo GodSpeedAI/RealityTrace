@@ -9,6 +9,7 @@
 //! and pure functions.
 
 pub mod canonical_json;
+pub mod chain;
 pub mod clock;
 pub mod embedded_schema;
 pub mod envelope;
