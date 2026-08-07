@@ -1,0 +1,118 @@
+{
+  "boundary_record": {
+    "compression_notes": [],
+    "excluded_sections": [],
+    "included_sections": [
+      "representations",
+      "references",
+      "provenance"
+    ],
+    "known_omissions": [
+      "source_comments",
+      "source_formatting",
+      "source_line_positions"
+    ],
+    "limitations": [],
+    "out_of_scope_entities": [],
+    "redactions": [],
+    "scope": "valid-basic.sea",
+    "unknowns": []
+  },
+  "cep_version": "0.1.0",
+  "completeness_status": "complete_for_declared_state",
+  "created_at": "2026-08-07T21:56:02.765842Z",
+  "created_by": "domainforge 0.16.0",
+  "envelope_id": "019fde39-e04d-7451-91e9-d5ce4f68d491",
+  "envelope_kind": "semantic_snapshot",
+  "envelope_version": "1.0.0",
+  "lineage_refs": [],
+  "omission_status": "known_omissions_recorded",
+  "provenance": [
+    {
+      "created_at": "2026-08-07T21:56:02.765842Z",
+      "producer_refs": [
+        "domainforge 0.16.0"
+      ],
+      "production_method": "domainforge envelope --emit cep",
+      "provenance_id": "provenance:019fde39-e04d-7451-91e9-d5ce4f68d491",
+      "review_status": "unreviewed",
+      "source_system_refs": [
+        "source-set:sha256:199407284bab273208ccea52deb56197c582816a668ee726d7ab1ab3797d42b5"
+      ],
+      "verification_status": "unverified"
+    }
+  ],
+  "provenance_refs": [
+    "source-set:sha256:199407284bab273208ccea52deb56197c582816a668ee726d7ab1ab3797d42b5"
+  ],
+  "references": [
+    {
+      "availability_status": "available",
+      "integrity_status": "verifiable",
+      "ref_id": "source-set:199407284bab273208ccea52deb56197c582816a668ee726d7ab1ab3797d42b5",
+      "ref_type": "source_set",
+      "scope": "valid-basic.sea",
+      "target_hash": "sha256:199407284bab273208ccea52deb56197c582816a668ee726d7ab1ab3797d42b5",
+      "target_uri_or_id": "valid-basic.sea"
+    }
+  ],
+  "representations": [
+    {
+      "content_availability": "available",
+      "content_hash": "sha256:1641b0d368b1f26eb6f3768a71d14b7f0cf697b4419204d65ed1911c515ef97e",
+      "inline_content": "{\"envelope\":{\"application_contract\":{\"entities\":[],\"enums\":[],\"operations\":[],\"records\":[]},\"canonicalization_version\":\"domainforge-canonicalization/v1\",\"compiler_interpretation_version\":\"domainforge-interpretation/v1\",\"import_graph\":[],\"language_schema_version\":\"domainforge-ast/v3\",\"modules\":[{\"logical_id\":\"valid-basic.sea\",\"namespace\":\"auth\",\"semantic_content_hash\":\"sha256:8493cc0b18621b8721cb736c7f7e8d7a2376e2f095e15ff350c5f0bbb12b7e29\"}],\"namespace_bindings\":[{\"logical_id\":\"valid-basic.sea\",\"namespace\":\"auth\"}],\"resolved_references\":[],\"semantic_declarations\":[{\"declaration\":{\"data\":{\"annotations\":{},\"domain\":\"auth\",\"name\":\"User\"},\"kind\":\"entity\"},\"id\":{\"data\":{\"id\":\"5ad6a959-5924-5cf9-af04-7b502ea74784\"},\"kind\":\"concept\"},\"logical_module_id\":\"valid-basic.sea\"},{\"declaration\":{\"data\":{\"annotations\":{},\"domain\":\"auth\",\"name\":\"Role\"},\"kind\":\"entity\"},\"id\":{\"data\":{\"id\":\"72f70c63-6f3e-5061-8854-42e540bbac87\"},\"kind\":\"concept\"},\"logical_module_id\":\"valid-basic.sea\"},{\"declaration\":{\"data\":{\"annotations\":{},\"domain\":\"auth\",\"name\":\"Token\",\"unit\":{\"data\":{\"id\":{\"data\":{\"id\":\"7a50d9d2-89e2-5607-bca5-34464284bea8\"},\"kind\":\"concept\"}},\"kind\":\"declaration\"}},\"kind\":\"resource\"},\"id\":{\"data\":{\"id\":\"a81c1fec-c10a-5541-bd81-98c64b10f402\"},\"kind\":\"concept\"},\"logical_module_id\":\"valid-basic.sea\"},{\"declaration\":{\"data\":{\"annotations\":{},\"from_entity\":{\"data\":{\"id\":{\"data\":{\"id\":\"5ad6a959-5924-5cf9-af04-7b502ea74784\"},\"kind\":\"concept\"}},\"kind\":\"declaration\"},\"quantity\":\"1\",\"resource\":{\"data\":{\"id\":{\"data\":{\"id\":\"a9034d4e-9276-56a8-8543-9ee845011958\"},\"kind\":\"concept\"}},\"kind\":\"declaration\"},\"to_entity\":{\"data\":{\"id\":{\"data\":{\"id\":\"72f70c63-6f3e-5061-8854-42e540bbac87\"},\"kind\":\"concept\"}},\"kind\":\"declaration\"}},\"kind\":\"flow\"},\"id\":{\"data\":{\"content_hash\":\"sha256:0054e494b25408165361fa7d0fb1e090a7aee22d7dce2c9f188bc87e24451543\",\"duplicate_index\":0,\"kind\":\"flow\"},\"kind\":\"occurrence\"},\"logical_module_id\":\"valid-basic.sea\"},{\"declaration\":{\"data\":{\"annotations\":{},\"from_entity\":{\"data\":{\"id\":{\"data\":{\"id\":\"5ad6a959-5924-5cf9-af04-7b502ea74784\"},\"kind\":\"concept\"}},\"kind\":\"declaration\"},\"quantity\":\"1\",\"resource\":{\"data\":{\"id\":{\"data\":{\"id\":\"a9034d4e-9276-56a8-8543-9ee845011958\"},\"kind\":\"concept\"}},\"kind\":\"declaration\"},\"to_entity\":{\"data\":{\"id\":{\"data\":{\"id\":\"5ad6a959-5924-5cf9-af04-7b502ea74784\"},\"kind\":\"concept\"}},\"kind\":\"declaration\"}},\"kind\":\"flow\"},\"id\":{\"data\":{\"content_hash\":\"sha256:e2f61281af6ce70dd96268e342cb31a0832af79be550799152f986dd2fd1af66\",\"duplicate_index\":0,\"kind\":\"flow\"},\"kind\":\"occurrence\"},\"logical_module_id\":\"valid-basic.sea\"}],\"semantic_packs\":[]},\"inputs\":{\"interpretation_version\":\"domainforge-interpretation/v1\",\"language_schema_version\":\"domainforge-ast/v3\",\"semantic_pack_set_hash\":\"sha256:6e5312099a8d89e1d271bd89d9fcb36b031069bd8dad72be397af6b331d85c40\",\"source_set_hash\":\"sha256:199407284bab273208ccea52deb56197c582816a668ee726d7ab1ab3797d42b5\"},\"producer\":{\"name\":\"domainforge-core\",\"version\":\"0.16.0\"},\"schema_version\":\"domainforge-semantic-envelope/v1\",\"self_hash\":\"sha256:1641b0d368b1f26eb6f3768a71d14b7f0cf697b4419204d65ed1911c515ef97e\",\"semantic_closure_hash\":\"sha256:1a1b7053205bba72249ad04a199a216392cc803f850e171b8e3afcc945be786c\"}",
+      "media_type": "application/json",
+      "omission_record": {
+        "known_omissions": [
+          "source_comments",
+          "source_formatting",
+          "source_line_positions"
+        ],
+        "reason": "domainforge canonical envelope is formatting- and comment-independent by construction",
+        "recoverable_from": "the .sea sources at the recorded git blob hashes"
+      },
+      "preserved_distinctions": [
+        "declared_vs_observed",
+        "representation_vs_reality"
+      ],
+      "preserved_entities": [
+        "concept:5ad6a959-5924-5cf9-af04-7b502ea74784",
+        "concept:72f70c63-6f3e-5061-8854-42e540bbac87",
+        "concept:a81c1fec-c10a-5541-bd81-98c64b10f402",
+        "occurrence:flow:sha256:0054e494b25408165361fa7d0fb1e090a7aee22d7dce2c9f188bc87e24451543:0",
+        "occurrence:flow:sha256:e2f61281af6ce70dd96268e342cb31a0832af79be550799152f986dd2fd1af66:0"
+      ],
+      "provenance_record": {
+        "inputs": {
+          "interpretation_version": "domainforge-interpretation/v1",
+          "language_schema_version": "domainforge-ast/v3",
+          "semantic_pack_set_hash": "sha256:6e5312099a8d89e1d271bd89d9fcb36b031069bd8dad72be397af6b331d85c40",
+          "source_set_hash": "sha256:199407284bab273208ccea52deb56197c582816a668ee726d7ab1ab3797d42b5"
+        },
+        "producer": {
+          "name": "domainforge-core",
+          "version": "0.16.0"
+        },
+        "resolution_inputs": {
+          "entry_logical_path": "valid-basic.sea",
+          "registry_content_hash": "sha256:35c153495916c73e23cdc9e980bc95a2868727901991c7b722cb8cca863f1b16",
+          "resolved_namespaces": {
+            "valid-basic.sea": "auth"
+          }
+        }
+      },
+      "representation_id": "representation:sha256:1641b0d368b1f26eb6f3768a71d14b7f0cf697b4419204d65ed1911c515ef97e",
+      "representation_kind": "derived",
+      "representation_type": "domainforge_semantic_envelope_document",
+      "scope": "valid-basic.sea",
+      "semantic_hash": "sha256:1a1b7053205bba72249ad04a199a216392cc803f850e171b8e3afcc945be786c",
+      "size_bytes": 3195,
+      "source": "domainforge 0.16.0",
+      "validation_status": "valid"
+    }
+  ],
+  "scope": {
+    "repo_id": "01TEST"
+  },
+  "validation_status": "validated"
+}

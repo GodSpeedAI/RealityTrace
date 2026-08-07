@@ -1,0 +1,86 @@
+{
+  "boundary_record": {
+    "compression_notes": [],
+    "excluded_sections": [],
+    "included_sections": [
+      "omissions",
+      "references",
+      "provenance"
+    ],
+    "known_omissions": [
+      "source_comments",
+      "source_formatting",
+      "source_line_positions",
+      "canonical_representation_D"
+    ],
+    "limitations": [],
+    "out_of_scope_entities": [],
+    "redactions": [],
+    "scope": "domainforge-core/tests/fixtures/envelope/invalid-syntax.sea",
+    "unknowns": []
+  },
+  "cep_version": "0.1.0",
+  "completeness_status": "incomplete_for_declared_state",
+  "conformance_status": "non_conformant",
+  "created_at": "2026-08-07T21:56:03.079080Z",
+  "created_by": "domainforge 0.16.0",
+  "envelope_id": "019fde39-e187-7b90-a3b6-2f1b29e1c794",
+  "envelope_kind": "semantic_snapshot",
+  "envelope_version": "1.0.0",
+  "extensions": {
+    "domainforge": {
+      "diagnostics": [
+        "artifact_schema_violation: module '/home/sprime01/projects/domainforge-slice0b/domainforge-core/tests/fixtures/envelope/invalid-syntax.sea' failed to parse: Syntax error at 6:35: expected number"
+      ],
+      "invalid_declared_checkpoint_hash": "sha256:602c3e2e32f848d8d5f47b5c2c3df0b88c877a8d2819fc6e46efa49e52c950fa",
+      "model_validation_status": "invalid"
+    }
+  },
+  "lineage_refs": [],
+  "omission_status": "known_omissions_recorded",
+  "omissions": [
+    {
+      "affected_entities": [
+        "domainforge-core/tests/fixtures/envelope/invalid-syntax.sea"
+      ],
+      "description": "canonical D not constructed; declared model invalid",
+      "impact": "no semantic hash derivable",
+      "known_or_suspected": "known",
+      "omission_id": "omission:representation:602c3e2e32f848d8d5f47b5c2c3df0b88c877a8d2819fc6e46efa49e52c950fa",
+      "omission_type": "representation_unavailable",
+      "reason": "model validation failed"
+    }
+  ],
+  "provenance": [
+    {
+      "created_at": "2026-08-07T21:56:03.079080Z",
+      "producer_refs": [
+        "domainforge 0.16.0"
+      ],
+      "production_method": "domainforge envelope --emit cep",
+      "provenance_id": "provenance:019fde39-e187-7b90-a3b6-2f1b29e1c794",
+      "review_status": "unreviewed",
+      "source_system_refs": [
+        "source-set:sha256:1da2f040c24d5498b63de891e834d8f882facc4676e68f7ea90c61bb46de0b9e"
+      ],
+      "verification_status": "unverified"
+    }
+  ],
+  "provenance_refs": [
+    "source-set:sha256:1da2f040c24d5498b63de891e834d8f882facc4676e68f7ea90c61bb46de0b9e"
+  ],
+  "references": [
+    {
+      "availability_status": "available",
+      "integrity_status": "verifiable",
+      "ref_id": "source-set:1da2f040c24d5498b63de891e834d8f882facc4676e68f7ea90c61bb46de0b9e",
+      "ref_type": "source_set",
+      "scope": "domainforge-core/tests/fixtures/envelope/invalid-syntax.sea",
+      "target_hash": "sha256:1da2f040c24d5498b63de891e834d8f882facc4676e68f7ea90c61bb46de0b9e",
+      "target_uri_or_id": "domainforge-core/tests/fixtures/envelope/invalid-syntax.sea"
+    }
+  ],
+  "scope": {
+    "repo_id": "01TEST"
+  }
+}

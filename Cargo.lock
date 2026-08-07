@@ -1344,9 +1344,11 @@ dependencies = [
 name = "sxr-verify"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "hex",
  "serde",
  "serde_json",
- "sxr-core",
+ "sha2",
  "tempfile",
  "thiserror",
 ]

@@ -1,0 +1,482 @@
+//! `CliDomainForgeAdapter`: the §7.1 `SemanticSourcePort` normal adapter.
+//!
+//! Classification is **by envelope shape, never by exit code**: a Slice 0B
+//! `envelope --emit cep` run exits 0 for a fully valid model, 1 for *any*
+//! model-validation failure — but that set of failures has two distinct
+//! envelope shapes:
+//!
+//! - D was constructed (`validation_status: "validated"` + `representations`)
+//!   → `SemanticContext::Resolved`, whatever the diagnostics say. `content_hash`
+//!   and `semantic_closure_hash` identify an actual D (§7.1 requires them
+//!   exactly then).
+//! - D could not be constructed (`conformance_status: "non_conformant"`, no
+//!   representations, missing-D omission) → `SemanticContext::ValidationFailed`
+//!   with the exact-failed-inputs checkpoint hash (§14.4).
+//!
+//! Any other shape is an error (§10.4a: malformed output is never
+//! misclassified into the closed sum).
+
+use crate::error::SemanticError;
+use serde_json::Value;
+use std::path::{Path, PathBuf};
+use std::process::Command;
+use sxr_core::canonical_json::{canonical_json, sha256_hex};
+use sxr_core::embedded_schema::EnvelopeSchemaValidator;
+use sxr_core::types::{DeclKey, Diagnostic, OmissionRecord, ResolutionInputs, SemanticContext};
+
+/// What the adapter can report about itself (§7.1 `capabilities()`).
+#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub struct AdapterCapabilities {
+    pub producer: String,
+    pub cep_envelope_mode: String,
+    pub supports_semantic_packs: bool,
+    pub supports_default_namespace: bool,
+    pub verifies_d_hashes: bool,
+}
+
+/// The request shape for `resolve` (§7.1 `SemanticContextRequest`).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SemanticContextRequest {
+    /// The repository's semantic root; the domainforge process runs with this
+    /// as its working directory so the logical entry path stays stable.
+    pub semantic_root: PathBuf,
+    /// Logical path of the entry `.sea` relative to the root. Never absolute:
+    /// the producer embeds it in the envelope scope verbatim.
+    pub entry_logical_path: String,
+    /// Registry file (`registry_path: Option`); Slice 0B auto-discovers the
+    /// registry from the entry's directory, so this is advisory only.
+    pub registry_path: Option<PathBuf>,
+    pub default_namespace: Option<String>,
+    /// `(pack_id, content_hash)` pairs, passed through as `--pack id=hash`.
+    pub semantic_packs: Vec<(String, String)>,
+    /// `cep_scope` object, passed through as `--scope` (replaces the default).
+    pub cep_scope: Value,
+}
+
+/// The normal adapter: one configured `domainforge` binary path.
+pub struct CliDomainForgeAdapter {
+    binary: PathBuf,
+    validator: EnvelopeSchemaValidator,
+}
+
+impl std::fmt::Debug for CliDomainForgeAdapter {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("CliDomainForgeAdapter")
+            .field("binary", &self.binary)
+            .finish_non_exhaustive()
+    }
+}
+
+impl CliDomainForgeAdapter {
+    pub fn new(binary: impl Into<PathBuf>) -> Self {
+        Self {
+            binary: binary.into(),
+            validator: EnvelopeSchemaValidator::new(),
+        }
+    }
+
+    pub fn binary(&self) -> &Path {
+        &self.binary
+    }
+
+    pub fn capabilities(&self) -> AdapterCapabilities {
+        AdapterCapabilities {
+            producer: "domainforge (Slice 0B)".into(),
+            cep_envelope_mode: "semantic_snapshot".into(),
+            supports_semantic_packs: true,
+            supports_default_namespace: true,
+            verifies_d_hashes: true,
+        }
+    }
+
+    /// Resolve one entry into the closed sum (§7.1).
+    pub fn resolve(
+        &self,
+        request: &SemanticContextRequest,
+    ) -> Result<SemanticContext, SemanticError> {
+        let mut argv: Vec<String> = vec!["envelope".into(), "--emit".into(), "cep".into()];
+        for (id, hash) in &request.semantic_packs {
+            argv.push("--pack".into());
+            argv.push(format!("{id}={hash}"));
+        }
+        if let Some(ns) = &request.default_namespace {
+            argv.push("--default-namespace".into());
+            argv.push(ns.clone());
+        }
+        argv.push("--scope".into());
+        argv.push(canonical_json(&request.cep_scope));
+        argv.push(request.entry_logical_path.clone());
+
+        let output = Command::new(&self.binary)
+            .current_dir(&request.semantic_root)
+            .args(&argv)
+            .output()
+            .map_err(|e| SemanticError::BinaryUnavailable(e.to_string()))?;
+
+        let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
+        let code = output.status.code();
+        if !matches!(code, Some(0) | Some(1)) {
+            return Err(SemanticError::UnexpectedExit { code, stderr });
+        }
+        if output.stdout.is_empty() {
+            return Err(SemanticError::MalformedOutput(format!(
+                "empty stdout (exit {code:?}): {stderr}"
+            )));
+        }
+        self.parse_json(&output.stdout)
+    }
+
+    /// Parse, schema-validate, classify, and extract one raw stdout payload.
+    /// Shared by `resolve` and tests (no process involved).
+    pub fn parse_json(&self, raw: &[u8]) -> Result<SemanticContext, SemanticError> {
+        let envelope: Value = serde_json::from_slice(raw)
+            .map_err(|e| SemanticError::MalformedOutput(format!("stdout is not JSON: {e}")))?;
+        self.parse_envelope(&envelope)
+    }
+
+    /// Validate + classify + extract one envelope `Value`. Classification is
+    /// by shape only (see module docs); `resolve` applies the exit-code check.
+    pub fn parse_envelope(&self, envelope: &Value) -> Result<SemanticContext, SemanticError> {
+        if !envelope.is_object() {
+            return Err(SemanticError::MalformedOutput(
+                "stdout JSON is not an object".into(),
+            ));
+        }
+
+        // §52/§53 validation at ingest (F-05): a malformed envelope is never
+        // stored as an envelope, and never misclassified into the closed sum.
+        if let Err(errors) = self.validator.validate(envelope) {
+            return Err(SemanticError::EnvelopeSchemaViolation(errors.join("; ")));
+        }
+
+        if envelope.get("validation_status").and_then(Value::as_str) == Some("validated")
+            && envelope.get("representations").is_some()
+        {
+            self.extract_resolved(envelope)
+        } else if envelope.get("conformance_status").and_then(Value::as_str)
+            == Some("non_conformant")
+        {
+            self.extract_validation_failed(envelope)
+        } else {
+            Err(SemanticError::MalformedOutput(
+                "envelope matches neither the resolved shape (validation_status \
+                 + representations) nor the failure shape (conformance_status)"
+                    .into(),
+            ))
+        }
+    }
+
+    /// `Resolved` extraction: D verbatim (inline), both stable hashes verified
+    /// against the canonical bytes, declarations from the preserved-entities
+    /// list, resolution inputs from the provenance record (§10.7a).
+    fn extract_resolved(&self, envelope: &Value) -> Result<SemanticContext, SemanticError> {
+        let rep = &envelope["representations"][0];
+        let content_hash = string_field(rep, "content_hash", "representations[0]")?;
+        let semantic_closure_hash = string_field(rep, "semantic_hash", "representations[0]")?;
+
+        let representation_json = match rep.get("inline_content") {
+            Some(Value::String(bytes)) => bytes.clone(),
+            Some(_) => {
+                return Err(SemanticError::MalformedOutput(
+                    "representations[0].inline_content is not a string".into(),
+                ));
+            }
+            None => {
+                return Err(SemanticError::MalformedOutput(
+                    "representations[0] carries no inline_content; CAS-carried \
+                     representations are materialized by the snapshot layer, \
+                     not the resolver"
+                        .into(),
+                ));
+            }
+        };
+
+        // AC-REPLAY-001 half: D's content hash is recomputed over the
+        // canonical document bytes (self_hash excluded from its own digest),
+        // and the closure hash over the canonical envelope payload.
+        verify_d_hashes(&representation_json, &content_hash, &semantic_closure_hash)?;
+
+        let resolution_inputs = resolution_inputs_from(rep)?;
+        let declarations = declarations_from(rep)?;
+        let diagnostics = diagnostics_from(envelope)?;
+
+        Ok(SemanticContext::Resolved {
+            cep_envelope_json: serde_json::to_string(envelope)
+                .expect("validated envelope serializes"),
+            representation_json,
+            content_hash,
+            semantic_closure_hash,
+            resolution_inputs,
+            declarations,
+            diagnostics,
+        })
+    }
+
+    /// `ValidationFailed` extraction: the §14.4 checkpoint hash identifies the
+    /// exact failed inputs; the omission record is the envelope's; resolution
+    /// inputs are populated only from what the failure boundary actually
+    /// carries (source set ref + the envelope's own entry path) — never
+    /// fabricated.
+    fn extract_validation_failed(
+        &self,
+        envelope: &Value,
+    ) -> Result<SemanticContext, SemanticError> {
+        let ext = envelope
+            .get("extensions")
+            .and_then(|e| e.get("domainforge"))
+            .ok_or_else(|| {
+                SemanticError::MalformedOutput(
+                    "failure envelope lacks extensions.domainforge".into(),
+                )
+            })?;
+        let invalid_declared_checkpoint_hash = string_field(
+            ext,
+            "invalid_declared_checkpoint_hash",
+            "extensions.domainforge",
+        )?;
+        let diagnostics = diagnostics_from(envelope)?;
+
+        let omission = envelope
+            .get("omissions")
+            .and_then(Value::as_array)
+            .and_then(|a| a.first())
+            .ok_or_else(|| {
+                SemanticError::MalformedOutput("failure envelope lacks omissions[0]".into())
+            })?;
+        let representation_omission = OmissionRecord {
+            omission_id: string_field(omission, "omission_id", "omissions[0]")?,
+            omission_type: string_field(omission, "omission_type", "omissions[0]")?,
+            description: string_field(omission, "description", "omissions[0]")?,
+            reason: string_field(omission, "reason", "omissions[0]")?,
+            known_or_suspected: string_field(omission, "known_or_suspected", "omissions[0]")?,
+            impact: string_field(omission, "impact", "omissions[0]")?,
+            affected_entities: string_array(omission, "affected_entities", "omissions[0]")?,
+        };
+
+        // The failure envelope carries only source_set_hash (provenance_refs)
+        // and entry_logical_path (scope or boundary record); the checkpoint
+        // hash is the authoritative exact-failed-inputs identity (§14.4).
+        // Fields the boundary does not carry are empty, never invented.
+        let source_set_hash = envelope
+            .get("provenance_refs")
+            .and_then(Value::as_array)
+            .and_then(|a| a.first())
+            .and_then(Value::as_str)
+            .and_then(|r| r.strip_prefix("source-set:"))
+            .unwrap_or("")
+            .to_string();
+        let entry_logical_path = envelope
+            .get("scope")
+            .and_then(|s| s.get("entry_logical_path"))
+            .and_then(Value::as_str)
+            .or_else(|| {
+                envelope
+                    .get("boundary_record")
+                    .and_then(|b| b.get("scope"))
+                    .and_then(Value::as_str)
+            })
+            .unwrap_or("")
+            .to_string();
+        let resolution_inputs = ResolutionInputs {
+            source_set_hash,
+            semantic_pack_set_hash: String::new(),
+            language_schema_version: String::new(),
+            interpretation_version: String::new(),
+            producer: String::new(),
+            entry_logical_path,
+            registry_content_hash: None,
+            resolved_namespaces: Vec::new(),
+        };
+
+        Ok(SemanticContext::ValidationFailed {
+            cep_envelope_json: serde_json::to_string(envelope)
+                .expect("validated envelope serializes"),
+            invalid_declared_checkpoint_hash,
+            resolution_inputs,
+            diagnostics,
+            representation_omission,
+        })
+    }
+}
+
+/// AC-REPLAY-001 hash verification: `content_hash` must equal the sha256 of
+/// the canonical document bytes (with `self_hash` excluded from its own
+/// digest — the producer's `envelope_document_self_hash` rule), and
+/// `semantic_closure_hash` the sha256 of the canonical envelope payload.
+fn verify_d_hashes(
+    representation_json: &str,
+    declared_content_hash: &str,
+    declared_closure_hash: &str,
+) -> Result<(), SemanticError> {
+    let doc: Value = serde_json::from_str(representation_json)
+        .map_err(|e| SemanticError::MalformedOutput(format!("inline_content is not JSON: {e}")))?;
+    let envelope = doc
+        .get("envelope")
+        .ok_or_else(|| SemanticError::MalformedOutput("D lacks an envelope payload".into()))?;
+
+    let mut selfless = doc.clone();
+    selfless
+        .as_object_mut()
+        .expect("document is an object")
+        .remove("self_hash");
+    let computed_content = sha256_hex(canonical_json(&selfless).as_bytes());
+    if computed_content != declared_content_hash {
+        return Err(SemanticError::HashMismatch(format!(
+            "content_hash {declared_content_hash} != sha256(canonical D) {computed_content}"
+        )));
+    }
+    let computed_closure = sha256_hex(canonical_json(envelope).as_bytes());
+    if computed_closure != declared_closure_hash {
+        return Err(SemanticError::HashMismatch(format!(
+            "semantic_closure_hash {declared_closure_hash} != sha256(canonical envelope) {computed_closure}"
+        )));
+    }
+    Ok(())
+}
+
+/// Resolution inputs from the representation's provenance record (§10.7a).
+fn resolution_inputs_from(rep: &Value) -> Result<ResolutionInputs, SemanticError> {
+    let record = rep.get("provenance_record").ok_or_else(|| {
+        SemanticError::MalformedOutput("representations[0] lacks provenance_record".into())
+    })?;
+    let inputs = record
+        .get("inputs")
+        .ok_or_else(|| SemanticError::MalformedOutput("provenance_record lacks inputs".into()))?;
+    let producer = record
+        .get("producer")
+        .ok_or_else(|| SemanticError::MalformedOutput("provenance_record lacks producer".into()))?;
+    let name = string_field(producer, "name", "provenance_record.producer")?;
+    let version = string_field(producer, "version", "provenance_record.producer")?;
+
+    let mut resolved_namespaces = Vec::new();
+    if let Some(Value::Object(map)) = record
+        .get("resolution_inputs")
+        .and_then(|r| r.get("resolved_namespaces"))
+    {
+        let mut keys: Vec<&String> = map.keys().collect();
+        keys.sort();
+        for key in keys {
+            if let Some(Value::String(ns)) = map.get(key) {
+                resolved_namespaces.push((key.clone(), ns.clone()));
+            }
+        }
+    }
+
+    Ok(ResolutionInputs {
+        source_set_hash: string_field(inputs, "source_set_hash", "provenance_record.inputs")?,
+        semantic_pack_set_hash: string_field(
+            inputs,
+            "semantic_pack_set_hash",
+            "provenance_record.inputs",
+        )?,
+        language_schema_version: string_field(
+            inputs,
+            "language_schema_version",
+            "provenance_record.inputs",
+        )?,
+        interpretation_version: string_field(
+            inputs,
+            "interpretation_version",
+            "provenance_record.inputs",
+        )?,
+        producer: format!("{name} {version}"),
+        entry_logical_path: string_field(
+            record.get("resolution_inputs").unwrap_or(&Value::Null),
+            "entry_logical_path",
+            "provenance_record.resolution_inputs",
+        )?,
+        registry_content_hash: record
+            .get("resolution_inputs")
+            .and_then(|r| r.get("registry_content_hash"))
+            .and_then(Value::as_str)
+            .map(str::to_string),
+        resolved_namespaces,
+    })
+}
+
+/// DeclKeys from the preserved-entities refs. The ref formats are exactly
+/// `sxr-core::DeclKey::as_str` (`concept:…`, `application:…`,
+/// `occurrence:<kind>:<content_hash>:<duplicate_index>`).
+fn declarations_from(rep: &Value) -> Result<Vec<DeclKey>, SemanticError> {
+    let mut out = Vec::new();
+    for entity in string_array(rep, "preserved_entities", "representations[0]")? {
+        if let Some(id) = entity.strip_prefix("concept:") {
+            out.push(DeclKey::Concept(id.to_string()));
+        } else if let Some(sym) = entity.strip_prefix("application:") {
+            out.push(DeclKey::Application(sym.to_string()));
+        } else if let Some(rest) = entity.strip_prefix("occurrence:") {
+            let (kind, rest) = rest.split_once(':').ok_or_else(|| {
+                SemanticError::MalformedOutput(format!("malformed occurrence ref {entity}"))
+            })?;
+            let (content_hash, duplicate_index) = rest.rsplit_once(':').ok_or_else(|| {
+                SemanticError::MalformedOutput(format!("malformed occurrence ref {entity}"))
+            })?;
+            let duplicate_index: u64 = duplicate_index.parse().map_err(|_| {
+                SemanticError::MalformedOutput(format!("malformed occurrence ref {entity}"))
+            })?;
+            out.push(DeclKey::Occurrence {
+                kind: kind.to_string(),
+                content_hash: content_hash.to_string(),
+                duplicate_index,
+            });
+        } else {
+            return Err(SemanticError::MalformedOutput(format!(
+                "unrecognized preserved entity ref {entity}"
+            )));
+        }
+    }
+    Ok(out)
+}
+
+/// Diagnostics from `extensions.domainforge.diagnostics` when present. Each
+/// entry is `"<rule>: <message>"`; a missing separator keeps the whole string
+/// as the message.
+fn diagnostics_from(envelope: &Value) -> Result<Vec<Diagnostic>, SemanticError> {
+    let mut out = Vec::new();
+    if let Some(diags) = envelope
+        .get("extensions")
+        .and_then(|e| e.get("domainforge"))
+        .and_then(|d| d.get("diagnostics"))
+        .and_then(Value::as_array)
+    {
+        for item in diags {
+            let text = item.as_str().ok_or_else(|| {
+                SemanticError::MalformedOutput("diagnostics entry is not a string".into())
+            })?;
+            let (rule, message) = match text.split_once(':') {
+                Some((rule, message)) => (rule.trim().to_string(), message.trim().to_string()),
+                None => (String::new(), text.to_string()),
+            };
+            out.push(Diagnostic { rule, message });
+        }
+    }
+    Ok(out)
+}
+
+fn string_field(value: &Value, field: &str, path: &str) -> Result<String, SemanticError> {
+    value
+        .get(field)
+        .and_then(Value::as_str)
+        .map(str::to_string)
+        .ok_or_else(|| SemanticError::MalformedOutput(format!("{path}.{field} is not a string")))
+}
+
+fn string_array(value: &Value, field: &str, path: &str) -> Result<Vec<String>, SemanticError> {
+    value
+        .get(field)
+        .and_then(Value::as_array)
+        .map(|items| {
+            items
+                .iter()
+                .map(|i| {
+                    i.as_str().map(str::to_string).ok_or_else(|| {
+                        SemanticError::MalformedOutput(format!(
+                            "{path}.{field} contains a non-string"
+                        ))
+                    })
+                })
+                .collect()
+        })
+        .transpose()
+        .map(|v| v.unwrap_or_default())
+}

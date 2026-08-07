@@ -7,10 +7,12 @@ license.workspace = true
 description = "VerifierPort: process runner and the cargo-test descriptor with declared qualification rules."
 
 [dependencies]
-sxr-core = { path = "../sxr-core" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
+chrono.workspace = true
+sha2.workspace = true
+hex.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true
