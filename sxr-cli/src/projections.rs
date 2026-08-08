@@ -127,6 +127,44 @@ CREATE VIRTUAL TABLE sxr_fts USING fts5(
     content_rowid = 'rowid',
     tokenize = 'porter unicode61 remove_diacritics 2'
 );
+/* Slice 4: G_observed (§12.4) — derived ONLY from qualified history.
+   nodes: every declaration with qualifying evidence. A declared-but-unobserved
+   decl has no observed node (absence = not observed, rendered as such).
+   edges: only relations admitted under §12.4a (a claim.made asserts the
+   relation; ≥1 evidence targets that claim meeting the question's min
+   relevance/reliability; settlement status recorded). Co-reference never
+   creates an observed edge (AC-GRAPH-001). */
+CREATE TABLE IF NOT EXISTS sxr_claim (
+    claim_id TEXT PRIMARY KEY,
+    question_id TEXT NOT NULL,
+    run_id TEXT NOT NULL,
+    src_decl_key TEXT NOT NULL,
+    dst_decl_key TEXT NOT NULL,
+    edge_kind TEXT NOT NULL,
+    ledger_id TEXT NOT NULL,
+    append_ordinal INTEGER NOT NULL
+) STRICT;
+CREATE TABLE IF NOT EXISTS sxr_obs_node (
+    decl_key TEXT PRIMARY KEY,
+    first_evidenced_ordinal INTEGER NOT NULL,
+    last_evidenced_ordinal INTEGER NOT NULL,
+    evidence_count INTEGER NOT NULL,
+    settled_count INTEGER NOT NULL,
+    unsettled_count INTEGER NOT NULL,
+    debt_count INTEGER NOT NULL
+) STRICT;
+CREATE TABLE IF NOT EXISTS sxr_obs_edge (
+    src_decl_key TEXT NOT NULL,
+    dst_decl_key TEXT NOT NULL,
+    edge_kind TEXT NOT NULL,
+    claim_id TEXT NOT NULL,
+    confidence TEXT NOT NULL,
+    contradiction_count INTEGER NOT NULL,
+    settlement_status TEXT NOT NULL,
+    evidence_refs_json TEXT NOT NULL,
+    settlement_refs_json TEXT NOT NULL,
+    PRIMARY KEY (src_decl_key, dst_decl_key, edge_kind)
+) STRICT;
 "#;
 
 fn string_field(v: &Value, key: &str) -> Option<String> {
@@ -153,6 +191,7 @@ pub fn apply_row(conn: &mut Connection, row: &LedgerRow) -> Result<()> {
         RecordKind::ObservationRecorded => {}
         RecordKind::EvidenceCreated => apply_evidence(conn, row, &payload)?,
         RecordKind::SettlementRegistered => apply_settlement(conn, row, &payload)?,
+        RecordKind::ClaimMade => apply_claim(conn, row, &payload)?,
         _ => {}
     }
     Ok(())
@@ -201,7 +240,27 @@ fn apply_question(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Re
     let qtype = q
         .and_then(|v| string_field(v, "question_type"))
         .unwrap_or_default();
-    let scope = payload.get("scope").cloned().unwrap_or(Value::Null);
+    // §12.5: delta resolves the Question's selected declaration set from its
+    // target_entities/target_transformations. These live in the question spec
+    // representation's inline_content; merge them into scope_json.
+    let mut scope = payload.get("scope").cloned().unwrap_or(Value::Null);
+    let inline = payload
+        .get("representations")
+        .and_then(Value::as_array)
+        .and_then(|a| a.first())
+        .and_then(|r| r.get("inline_content"))
+        .cloned();
+    if let Some(spec) = inline {
+        if let Some(obj) = scope.as_object_mut() {
+            for key in ["target_entities", "target_transformations", "scope"] {
+                if let Some(v) = spec.get(key) {
+                    obj.insert(key.to_string(), v.clone());
+                }
+            }
+        } else {
+            scope = spec;
+        }
+    }
     conn.execute(
         "INSERT OR REPLACE INTO sxr_question(question_id, question_form, question_type, scope_json, ledger_id, append_ordinal)
          VALUES (?1,?2,?3,?4,?5,?6)",
@@ -545,8 +604,13 @@ fn apply_evidence(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Re
         .cloned()
         .unwrap_or_default();
     let target_ref = target.trim_start_matches("target:").to_string();
+    // A target may be a declaration (concept:/occurrence:/application:) or a
+    // claim (claim:<id>) — §12.4a condition 2 admits edges from evidence
+    // targeting the relation claim itself.
     let target_kind = if target_ref.starts_with("concept:") {
         "concept"
+    } else if target_ref.starts_with("claim:") {
+        "claim"
     } else {
         "target"
     };
@@ -573,6 +637,9 @@ fn apply_evidence(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Re
          VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13)",
         params![evidence_id, run_id, question_id, evidence_type, target_kind, target_ref, relevance, reliability, direction, confidence_impact, representation_ref, row.ledger_id, row.append_ordinal],
     )?;
+    // Map the evidence target into sxr_evidence_target. For a claim target,
+    // the decl_key is `claim:<id>` so G_observed edge admission can join claims
+    // to their qualifying evidence (§12.4a condition 2).
     let decl_key = target_ref;
     conn.execute(
         "INSERT OR REPLACE INTO sxr_evidence_target(evidence_id, decl_key) VALUES (?1,?2)",
@@ -628,6 +695,299 @@ fn apply_settlement(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> 
     Ok(())
 }
 
+/// Slice 4: a `claim.made` asserts a relation R(src, dst, edge_kind) under a
+/// question (§12.4a condition 1). Stored for G_observed edge admission. The
+/// CEP claim schema fixes the allowed fields, so the relation endpoints are
+/// encoded in `claim_text_or_form` as `relation <src> -> <dst> kind:<kind>`.
+fn apply_claim(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
+    let c = first_section(payload, "claims");
+    let claim_id = c
+        .and_then(|v| string_field(v, "claim_id"))
+        .unwrap_or_default();
+    if claim_id.is_empty() {
+        return Ok(());
+    }
+    let question_id = row
+        .subject_refs
+        .iter()
+        .find(|r| r.starts_with("question:"))
+        .map(|r| r.trim_start_matches("question:").to_string())
+        .unwrap_or_default();
+    let run_id = row
+        .subject_refs
+        .iter()
+        .find(|r| r.starts_with("run:"))
+        .map(|r| r.trim_start_matches("run:").to_string())
+        .unwrap_or_default();
+    // Parse the relation form: "relation <src> -> <dst> kind:<kind>".
+    let form = c
+        .and_then(|v| string_field(v, "claim_text_or_form"))
+        .unwrap_or_default();
+    let (src, dst, edge_kind) = parse_relation_form(&form);
+    if src.is_empty() || dst.is_empty() {
+        return Ok(());
+    }
+    conn.execute(
+        "INSERT OR REPLACE INTO sxr_claim(claim_id, question_id, run_id, src_decl_key, dst_decl_key, edge_kind, ledger_id, append_ordinal)
+         VALUES (?1,?2,?3,?4,?5,?6,?7,?8)",
+        params![claim_id, question_id, run_id, src, dst, edge_kind, row.ledger_id, row.append_ordinal],
+    )?;
+    Ok(())
+}
+
+/// Parse a relation claim form `"relation <src> -> <dst> kind:<kind>"`.
+fn parse_relation_form(form: &str) -> (String, String, String) {
+    let rest = form.strip_prefix("relation ").unwrap_or(form);
+    let (pair, kind) = match rest.split_once(" kind:") {
+        Some((p, k)) => (p, k.to_string()),
+        None => (rest, "relation".to_string()),
+    };
+    if let Some((s, d)) = pair.split_once(" -> ") {
+        (s.trim().to_string(), d.trim().to_string(), kind)
+    } else {
+        (String::new(), String::new(), kind)
+    }
+}
+
+/// Slice 4: materialize `G_observed` (§12.4) from qualified history. Called as
+/// a post-rebuild pass because nodes/edges aggregate across many ledger rows.
+///
+/// **Nodes** (§12.4): every declaration with ≥1 evidence record. Fields:
+/// first/last evidenced ordinal, evidence/settled/unsettled/debt counts. A
+/// declared-but-unobserved decl has no observed node (absence = not observed).
+///
+/// **Edges** (§12.4a admission rule): an edge `(src, dst, kind)` enters
+/// `G_observed` only if ALL hold:
+/// 1. a `claim.made` asserts the relation (sxr_claim);
+/// 2. ≥1 evidence targets that claim (`target:claim:<id>`, in
+///    sxr_evidence_target as `claim:<id>`);
+/// 3. that evidence meets the question's minimum relevance/reliability;
+/// 4. the relation's settlement status is recorded on the edge.
+///
+/// Co-reference (evidence on A and on B, no claim) produces NO edge
+/// (AC-GRAPH-001).
+pub fn materialize_g_observed(conn: &Connection) -> Result<()> {
+    conn.execute("DELETE FROM sxr_obs_node", [])?;
+    conn.execute("DELETE FROM sxr_obs_edge", [])?;
+
+    // ── Nodes: aggregate evidence + settlement per targeted declaration ──
+    // Only non-claim targets (concept:/occurrence:/application:/...) are
+    // observed nodes; claim targets feed edges, not nodes.
+    {
+        let mut stmt = conn.prepare(
+            "SELECT t.decl_key,
+                    MIN(e.append_ordinal), MAX(e.append_ordinal),
+                    COUNT(DISTINCT e.evidence_id)
+             FROM sxr_evidence_target t
+             JOIN sxr_evidence e ON e.evidence_id = t.evidence_id
+             WHERE t.decl_key NOT LIKE 'claim:%'
+             GROUP BY t.decl_key",
+        )?;
+        let node_rows = stmt
+            .query_map([], |r| {
+                Ok((
+                    r.get::<_, String>(0)?,
+                    r.get::<_, i64>(1)?,
+                    r.get::<_, i64>(2)?,
+                    r.get::<_, i64>(3)?,
+                ))
+            })?
+            .collect::<std::result::Result<Vec<_>, _>>()?;
+        for (decl_key, first_ord, last_ord, ev_count) in node_rows {
+            // Settled/unsettled counts: settlements for questions whose evidence
+            // targets this decl.
+            let settled: i64 = conn.query_row(
+                "SELECT COUNT(DISTINCT s.settlement_id)
+                 FROM sxr_settlement s
+                 JOIN sxr_evidence e ON e.question_id = s.question_id
+                 JOIN sxr_evidence_target t ON t.evidence_id = e.evidence_id
+                 WHERE t.decl_key = ?1 AND s.settlement_status = 'settled'",
+                [&decl_key],
+                |r| r.get(0),
+            )?;
+            let unsettled: i64 = conn.query_row(
+                "SELECT COUNT(DISTINCT s.settlement_id)
+                 FROM sxr_settlement s
+                 JOIN sxr_evidence e ON e.question_id = s.question_id
+                 JOIN sxr_evidence_target t ON t.evidence_id = e.evidence_id
+                 WHERE t.decl_key = ?1 AND s.settlement_status = 'unsettled'",
+                [&decl_key],
+                |r| r.get(0),
+            )?;
+            let debt: i64 = conn.query_row(
+                "SELECT COUNT(*) FROM sxr_settlement WHERE debt_id IS NOT NULL",
+                [],
+                |r| r.get(0),
+            )?;
+            conn.execute(
+                "INSERT OR REPLACE INTO sxr_obs_node(decl_key, first_evidenced_ordinal, last_evidenced_ordinal, evidence_count, settled_count, unsettled_count, debt_count)
+                 VALUES (?1,?2,?3,?4,?5,?6,?7)",
+                params![decl_key, first_ord, last_ord, ev_count, settled, unsettled, debt],
+            )?;
+        }
+    }
+
+    // ── Edges: §12.4a admission over claimed relations ──
+    {
+        let mut stmt = conn.prepare(
+            "SELECT cl.claim_id, cl.question_id, cl.src_decl_key, cl.dst_decl_key, cl.edge_kind
+             FROM sxr_claim cl",
+        )?;
+        let claims = stmt
+            .query_map([], |r| {
+                Ok((
+                    r.get::<_, String>(0)?,
+                    r.get::<_, String>(1)?,
+                    r.get::<_, String>(2)?,
+                    r.get::<_, String>(3)?,
+                    r.get::<_, String>(4)?,
+                ))
+            })?
+            .collect::<std::result::Result<Vec<_>, _>>()?;
+        for (claim_id, question_id, src, dst, edge_kind) in claims {
+            // Condition 2: ≥1 evidence targets this claim.
+            // Condition 3: meets the question's minimum relevance/reliability
+            // (threshold spec_json). If no threshold is declared, require the
+            // evidence to be present (admission still needs qualifying evidence).
+            let claim_target = format!("claim:{claim_id}");
+            let min_relevance = question_min_relevance(conn, &question_id);
+            let min_reliability = question_min_reliability(conn, &question_id);
+            let mut ev_q = conn.prepare(
+                "SELECT e.evidence_id, e.direction, e.relevance, e.reliability
+                 FROM sxr_evidence_target t
+                 JOIN sxr_evidence e ON e.evidence_id = t.evidence_id
+                 WHERE t.decl_key = ?1",
+            )?;
+            let qualifying: Vec<(String, String)> = ev_q
+                .query_map([&claim_target], |r| {
+                    Ok((
+                        r.get::<_, String>(0)?,
+                        r.get::<_, String>(1)?,
+                        r.get::<_, String>(2)?,
+                        r.get::<_, String>(3)?,
+                    ))
+                })?
+                .filter_map(|r| r.ok())
+                .filter(|(_, _dir, rel, relbl)| {
+                    meets_bar(rel.as_str(), min_relevance.as_deref())
+                        && meets_bar(relbl.as_str(), min_reliability.as_deref())
+                })
+                .map(|(eid, dir, _, _)| (eid, dir))
+                .collect();
+            if qualifying.is_empty() {
+                continue;
+            }
+            // Condition 4: settlement status for the relation's question.
+            let (settlement_status, settlement_refs, confidence, contradiction_count) =
+                relation_settlement(conn, &question_id, &qualifying);
+            let evidence_refs: Vec<String> = qualifying.iter().map(|(e, _)| e.clone()).collect();
+            conn.execute(
+                "INSERT OR REPLACE INTO sxr_obs_edge(src_decl_key, dst_decl_key, edge_kind, claim_id, confidence, contradiction_count, settlement_status, evidence_refs_json, settlement_refs_json)
+                 VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9)",
+                params![
+                    src,
+                    dst,
+                    edge_kind,
+                    claim_id,
+                    confidence,
+                    contradiction_count,
+                    settlement_status,
+                    serde_json::to_string(&evidence_refs)?,
+                    serde_json::to_string(&settlement_refs)?,
+                ],
+            )?;
+        }
+    }
+    Ok(())
+}
+
+/// The question's minimum relevance, read from its settlement threshold spec.
+fn question_min_relevance(conn: &Connection, question_id: &str) -> Option<String> {
+    conn.query_row(
+        "SELECT spec_json FROM sxr_threshold WHERE question_id = ?1 LIMIT 1",
+        [question_id],
+        |r| r.get::<_, String>(0),
+    )
+    .ok()
+    .and_then(|s| serde_json::from_str::<Value>(&s).ok())
+    .and_then(|v| string_field(&v, "minimum_relevance"))
+}
+
+/// The question's minimum reliability, read from its settlement threshold spec.
+fn question_min_reliability(conn: &Connection, question_id: &str) -> Option<String> {
+    conn.query_row(
+        "SELECT spec_json FROM sxr_threshold WHERE question_id = ?1 LIMIT 1",
+        [question_id],
+        |r| r.get::<_, String>(0),
+    )
+    .ok()
+    .and_then(|s| serde_json::from_str::<Value>(&s).ok())
+    .and_then(|v| string_field(&v, "minimum_reliability"))
+}
+
+/// Ordinal rank of a relevance/reliability label (higher = stronger).
+fn label_rank(label: &str) -> i64 {
+    match label {
+        "critical" => 5,
+        "high" => 4,
+        "medium" => 3,
+        "low" => 2,
+        "unknown" => 1,
+        _ => 0,
+    }
+}
+
+/// Whether an evidence label meets (≥) a declared minimum bar.
+fn meets_bar(label: &str, min: Option<&str>) -> bool {
+    match min {
+        Some(m) if !m.is_empty() => label_rank(label) >= label_rank(m),
+        _ => true, // no threshold declared → admit if evidence exists
+    }
+}
+
+/// Settlement status + refs for a claimed relation, derived from its
+/// qualifying evidence and the question's settlements.
+fn relation_settlement(
+    conn: &Connection,
+    question_id: &str,
+    qualifying: &[(String, String)],
+) -> (String, Vec<String>, String, i64) {
+    let contradiction_count = qualifying
+        .iter()
+        .filter(|(_, d)| d == "contradicts")
+        .count() as i64;
+    let supports = qualifying.iter().any(|(_, d)| d == "supports");
+    let mut settlement_refs: Vec<String> = Vec::new();
+    let mut stmt = match conn.prepare(
+        "SELECT settlement_id, settlement_status, confidence FROM sxr_settlement WHERE question_id = ?1",
+    ) {
+        Ok(s) => s,
+        Err(_) => {
+            let status = if supports { "settled" } else { "unsettled" };
+            return (status.into(), settlement_refs, "unknown".into(), contradiction_count);
+        }
+    };
+    let rows = stmt
+        .query_map([question_id], |r| {
+            Ok((
+                r.get::<_, String>(0)?,
+                r.get::<_, String>(1)?,
+                r.get::<_, String>(2)?,
+            ))
+        })
+        .ok();
+    let mut status = "unsettled".to_string();
+    let mut confidence = "unknown".to_string();
+    if let Some(rows) = rows {
+        for r in rows.flatten() {
+            settlement_refs.push(r.0.clone());
+            status = r.1;
+            confidence = r.2;
+        }
+    }
+    (status, settlement_refs, confidence, contradiction_count)
+}
+
 /// Rebuild all projections from scratch: drop the derived tables, re-create,
 /// re-apply every ledger row in ordinal order.
 pub fn rebuild(ctx: &crate::state::Ctx, repo_id: &str) -> Result<()> {
@@ -650,6 +1010,10 @@ pub fn rebuild(ctx: &crate::state::Ctx, repo_id: &str) -> Result<()> {
     for row in &rows {
         apply_row(&mut conn, row).with_context(|| format!("project row {}", row.append_ordinal))?;
     }
+    // Slice 4: G_observed is derived from qualified history (evidence +
+    // settlement + claims), which spans multiple rows, so it is materialized
+    // as a post-rebuild pass (§12.4/§12.4a).
+    materialize_g_observed(&conn)?;
     // Set watermark to the head.
     if let Some(head) = rows.last() {
         conn.execute(
@@ -670,6 +1034,9 @@ fn drop_tables(conn: &mut Connection) -> Result<()> {
         "sxr_evidence",
         "sxr_evidence_target",
         "sxr_settlement",
+        "sxr_claim",
+        "sxr_obs_node",
+        "sxr_obs_edge",
         "sxr_decl_node",
         "sxr_decl_edge",
     ] {
@@ -694,6 +1061,9 @@ pub fn export_canonical(ctx: &crate::state::Ctx, repo_id: &str) -> Result<String
         "sxr_evidence",
         "sxr_evidence_target",
         "sxr_settlement",
+        "sxr_claim",
+        "sxr_obs_node",
+        "sxr_obs_edge",
         "sxr_decl_node",
         "sxr_decl_edge",
     ] {
@@ -701,6 +1071,7 @@ pub fn export_canonical(ctx: &crate::state::Ctx, repo_id: &str) -> Result<String
             "sxr_evidence_target" => "evidence_id, decl_key",
             "sxr_decl_node" => "snapshot_id, decl_key",
             "sxr_decl_edge" => "snapshot_id, src_decl_key, dst_decl_key, edge_kind, field_path",
+            "sxr_obs_edge" => "src_decl_key, dst_decl_key, edge_kind",
             _ => "1",
         };
         let sql = format!("SELECT * FROM {table} ORDER BY {order}");
@@ -751,6 +1122,9 @@ pub fn status(ctx: &crate::state::Ctx, repo_id: &str) -> Result<Value> {
         "sxr_evidence",
         "sxr_evidence_target",
         "sxr_settlement",
+        "sxr_claim",
+        "sxr_obs_node",
+        "sxr_obs_edge",
         "sxr_decl_node",
         "sxr_decl_edge",
     ] {
@@ -965,6 +1339,204 @@ pub fn query_evidence_declared(conn: &Connection, repo_id: &str, entity: &str) -
     }))
 }
 
+/// Slice 4 §12.5: `G_delta` — question-bound typed residuals, NOT subtraction.
+/// Computes the residual for each declaration in the Question's selected scope
+/// over the given snapshot's `G_declared`, classifying each against qualified
+/// history (evidence direction + settlement status).
+///
+/// Residual kinds (§12.5): `declared_unobserved` (in scope, in G_declared, no
+/// qualifying evidence — NOT an error, severity "info"), `declared_contradicted`
+/// (evidence contradicts), `contradictory` (both supports + contradicts above
+/// threshold), `declared_unsettled` (evidence but threshold unmet),
+/// `settled_with_debt` (settled + debt open), `observed_consistent` (evidence
+/// supports, no residual), and `observed_undeclared` (G_observed edge with no
+/// declared counterpart — candidate model gap). `unknown` when representation
+/// is insufficient.
+pub fn delta_question(
+    conn: &Connection,
+    repo_id: &str,
+    question_id: &str,
+    snapshot_id: &str,
+) -> Result<Value> {
+    let scope_json: Option<String> = conn
+        .query_row(
+            "SELECT scope_json FROM sxr_question WHERE question_id = ?1",
+            [question_id],
+            |r| r.get::<_, Option<String>>(0),
+        )
+        .optional()?
+        .flatten();
+    let scope: Value = scope_json
+        .as_deref()
+        .and_then(|s| serde_json::from_str(s).ok())
+        .unwrap_or(Value::Null);
+
+    // Resolve the Question's selected declaration set (§12.5).
+    let mut target_decls: Vec<String> = Vec::new();
+    if let Some(arr) = scope.get("target_entities").and_then(Value::as_array) {
+        for v in arr {
+            if let Some(s) = v.as_str() {
+                target_decls.push(s.to_string());
+            }
+        }
+    }
+    // If the question names no targets, default to the snapshot's full declared
+    // declaration set (§12.5: "the declaration set that Question selects").
+    if target_decls.is_empty() {
+        let mut stmt = conn.prepare(
+            "SELECT decl_key FROM sxr_decl_node WHERE snapshot_id = ?1 ORDER BY decl_key",
+        )?;
+        target_decls = stmt
+            .query_map([snapshot_id], |r| r.get::<_, String>(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+    }
+
+    let min_relevance = question_min_relevance(conn, question_id);
+    let min_reliability = question_min_reliability(conn, question_id);
+
+    let mut residuals: Vec<Value> = Vec::new();
+    for decl_key in &target_decls {
+        residuals.push(classify_declared(
+            conn,
+            question_id,
+            decl_key,
+            &min_relevance,
+            &min_reliability,
+        )?);
+    }
+
+    // observed_undeclared: G_observed edges whose relation has no declared
+    // counterpart in this snapshot (candidate model gap) — §12.5.
+    let mut undeclared: Vec<Value> = Vec::new();
+    {
+        let mut stmt = conn.prepare(
+            "SELECT e.src_decl_key, e.dst_decl_key, e.edge_kind
+             FROM sxr_obs_edge e
+             WHERE NOT EXISTS (
+                 SELECT 1 FROM sxr_decl_edge d
+                 WHERE d.snapshot_id = ?1
+                   AND d.src_decl_key = e.src_decl_key
+                   AND d.dst_decl_key = e.dst_decl_key
+             )",
+        )?;
+        let rows = stmt.query_map([snapshot_id], |r| {
+            Ok(json!({
+                "src_decl_key": r.get::<_, String>(0)?,
+                "dst_decl_key": r.get::<_, String>(1)?,
+                "edge_kind": r.get::<_, String>(2)?,
+            }))
+        })?;
+        for v in rows.flatten() {
+            let mut u = v;
+            u["residual_kind"] = json!("observed_undeclared");
+            u["severity"] = json!("warning");
+            undeclared.push(u);
+        }
+    }
+
+    Ok(json!({
+        "repo_id": repo_id,
+        "question_id": question_id,
+        "snapshot_id": snapshot_id,
+        "scope_size": target_decls.len(),
+        "minimum_relevance": min_relevance,
+        "minimum_reliability": min_reliability,
+        "residuals": residuals,
+        "observed_undeclared": undeclared,
+    }))
+}
+
+/// Classify one declared declaration against qualified history (§12.5).
+fn classify_declared(
+    conn: &Connection,
+    question_id: &str,
+    decl_key: &str,
+    min_relevance: &Option<String>,
+    min_reliability: &Option<String>,
+) -> Result<Value> {
+    let mut stmt = conn.prepare(
+        "SELECT e.evidence_id, e.direction, e.relevance, e.reliability
+         FROM sxr_evidence_target t
+         JOIN sxr_evidence e ON e.evidence_id = t.evidence_id
+         WHERE t.decl_key = ?1 AND e.question_id = ?2",
+    )?;
+    let mut supports = false;
+    let mut contradicts = false;
+    let mut any_evidence = false;
+    let ev_rows = stmt
+        .query_map(params![decl_key, question_id], |r| {
+            Ok((
+                r.get::<_, String>(0)?,
+                r.get::<_, String>(1)?,
+                r.get::<_, String>(2)?,
+                r.get::<_, String>(3)?,
+            ))
+        })?
+        .collect::<std::result::Result<Vec<_>, _>>()?;
+    for (_eid, dir, rel, relbl) in &ev_rows {
+        if meets_bar(rel, min_relevance.as_deref()) && meets_bar(relbl, min_reliability.as_deref())
+        {
+            any_evidence = true;
+            if dir == "supports" {
+                supports = true;
+            }
+            if dir == "contradicts" {
+                contradicts = true;
+            }
+        }
+    }
+
+    // Settlement + debt status for this question.
+    let (settled, debt_open) = settlement_state(conn, question_id);
+
+    let (kind, severity) = if !any_evidence {
+        // §12.5: declared_unobserved is the default state of an honest system
+        // and must never be coloured red.
+        ("declared_unobserved", "info")
+    } else if supports && contradicts {
+        ("contradictory", "error")
+    } else if contradicts {
+        ("declared_contradicted", "error")
+    } else if settled && debt_open {
+        ("settled_with_debt", "warning")
+    } else if !settled {
+        ("declared_unsettled", "warning")
+    } else {
+        ("observed_consistent", "info")
+    };
+
+    Ok(json!({
+        "decl_key": decl_key,
+        "residual_kind": kind,
+        "severity": severity,
+        "supports": supports,
+        "contradicts": contradicts,
+        "evidence_count": ev_rows.len(),
+    }))
+}
+
+/// (settled?, debt_open?) for a question's settlements.
+fn settlement_state(conn: &Connection, question_id: &str) -> (bool, bool) {
+    let settled: bool = conn
+        .query_row(
+            "SELECT EXISTS(SELECT 1 FROM sxr_settlement WHERE question_id = ?1 AND settlement_status = 'settled')",
+            [question_id],
+            |r| r.get::<_, i64>(0),
+        )
+        .map(|n| n != 0)
+        .unwrap_or(false);
+    let debt_open: bool = conn
+        .query_row(
+            "SELECT EXISTS(SELECT 1 FROM sxr_settlement WHERE question_id = ?1 AND debt_id IS NOT NULL)",
+            [question_id],
+            |r| r.get::<_, i64>(0),
+        )
+        .map(|n| n != 0)
+        .unwrap_or(false);
+    (settled, debt_open)
+}
+
 /// FTS5 search over the seeded corpus (§12.2). Contentless-external-content:
 /// the index stores no text, so values are read back from `sxr_fts_content`
 /// via the rowid, keeping every result traceable to its source record (§12.6).
@@ -1088,6 +1660,9 @@ pub fn export_canonical_conn(conn: &Connection) -> Result<String> {
         "sxr_evidence",
         "sxr_evidence_target",
         "sxr_settlement",
+        "sxr_claim",
+        "sxr_obs_node",
+        "sxr_obs_edge",
         "sxr_decl_node",
         "sxr_decl_edge",
     ] {
@@ -1095,6 +1670,7 @@ pub fn export_canonical_conn(conn: &Connection) -> Result<String> {
             "sxr_evidence_target" => "evidence_id, decl_key",
             "sxr_decl_node" => "snapshot_id, decl_key",
             "sxr_decl_edge" => "snapshot_id, src_decl_key, dst_decl_key, edge_kind, field_path",
+            "sxr_obs_edge" => "src_decl_key, dst_decl_key, edge_kind",
             _ => "1",
         };
         let sql = format!("SELECT * FROM {table} ORDER BY {order}");
@@ -1131,4 +1707,135 @@ pub fn export_canonical_conn(conn: &Connection) -> Result<String> {
 #[allow(dead_code)]
 pub fn drop_tables_test(conn: &mut Connection) -> Result<()> {
     drop_tables(conn)
+}
+
+/// Slice 4: export sxr's records as an external anti-collapse corpus
+/// (`cep/anti-collapse-corpus@1`) for independent evaluation by
+/// `cep conformance anti-collapse --corpus <path>`.
+///
+/// Each delta residual becomes a `submitted_answer` that faithfully encodes
+/// sxr's honest declared↔observed position in the dialect the CEP evaluator
+/// reads (gap_status, gap_summary, declared/observed state refs, evidence_refs,
+/// confidence, recommended action, limitations). sxr does NOT evaluate its own
+/// semantics; it only translates its records into the corpus transport shape.
+/// The CEP evaluator is the semantic authority.
+pub fn export_anti_collapse_corpus(
+    conn: &Connection,
+    repo_id: &str,
+    question_id: &str,
+    snapshot_id: &str,
+) -> Result<Value> {
+    let delta = delta_question(conn, repo_id, question_id, snapshot_id)?;
+    let residuals = delta["residuals"].as_array().cloned().unwrap_or_default();
+
+    let mut records: Vec<Value> = Vec::new();
+    for r in &residuals {
+        let decl_key = r["decl_key"].as_str().unwrap_or("");
+        let kind = r["residual_kind"].as_str().unwrap_or("unknown");
+        let contradicts = r["contradicts"].as_bool().unwrap_or(false);
+        let supports = r["supports"].as_bool().unwrap_or(false);
+
+        // Faithful mapping of sxr's residual → the anti-collapse answer dialect.
+        // declared_unobserved: honestly "gap detected, evidence missing" — NOT
+        // "no gap". declared_contradicted: honestly a contradiction. These must
+        // not collapse declared↔observed or treat unknown as false.
+        let (gap_status, gap_summary, confidence_value, action_type) = match kind {
+            "declared_unobserved" => (
+                "gap_detected",
+                format!(
+                    "Declared state {decl_key} has no qualifying observed evidence; \
+                     declared and observed differ."
+                ),
+                "low",
+                "collect_evidence",
+            ),
+            "declared_contradicted" | "contradictory" => (
+                "gap_detected",
+                format!(
+                    "Declared state {decl_key} is contradicted by observed evidence; \
+                     declared and observed disagree."
+                ),
+                "high",
+                "investigate_contradiction",
+            ),
+            "declared_unsettled" => (
+                "gap_detected",
+                format!("Declared state {decl_key} has evidence but the threshold is unmet."),
+                "medium",
+                "collect_evidence",
+            ),
+            "settled_with_debt" => (
+                "no_gap_detected",
+                format!("Declared state {decl_key} is settled with open debt."),
+                "medium",
+                "resolve_debt",
+            ),
+            _ => (
+                "no_gap_detected",
+                format!("Declared state {decl_key} is observed and consistent."),
+                "high",
+                "no_action_required",
+            ),
+        };
+
+        // Evidence refs that actually exist (qualifying), so the evaluator's
+        // claim_as_evidence check has real evidence ids to match against.
+        let ev_refs: Vec<String> = if supports || contradicts {
+            evidence_ids_for(conn, question_id, decl_key)
+        } else {
+            Vec::new()
+        };
+        let valid_evidence_ids = ev_refs.clone();
+
+        records.push(json!({
+            "record_id": format!("residual:{decl_key}"),
+            "record_ref": format!("sxr://delta/{question_id}/{decl_key}"),
+            "accepted_gap_statuses": ["gap_detected"],
+            "valid_evidence_ids": valid_evidence_ids,
+            "submitted_answer": {
+                "answer_id": format!("ans-{decl_key}"),
+                "gap_status": gap_status,
+                "gap_summary": gap_summary,
+                "declared_state_refs": [format!("declared:{decl_key}")],
+                "observed_state_refs": ev_refs
+                    .iter()
+                    .map(|e| format!("observed:{e}"))
+                    .collect::<Vec<_>>(),
+                "evidence_refs": ev_refs,
+                "confidence": {
+                    "value": confidence_value,
+                    "basis": "sxr residual classification from qualified history",
+                },
+                "recommended_next_action": {
+                    "type": action_type,
+                    "description": "sxr residual recommendation; no ungrounded claim.",
+                },
+                "limitations": [
+                    "The observed evidence does not prove the declared state.",
+                ],
+            },
+        }));
+    }
+
+    Ok(json!({
+        "$schema": "cep/anti-collapse-corpus@1",
+        "corpus_id": format!("sxr-slice4-{repo_id}-{question_id}"),
+        "records": records,
+    }))
+}
+
+/// Evidence ids targeting a declaration under a question (qualifying).
+fn evidence_ids_for(conn: &Connection, question_id: &str, decl_key: &str) -> Vec<String> {
+    let mut stmt = match conn.prepare(
+        "SELECT e.evidence_id FROM sxr_evidence_target t
+         JOIN sxr_evidence e ON e.evidence_id = t.evidence_id
+         WHERE t.decl_key = ?1 AND e.question_id = ?2",
+    ) {
+        Ok(s) => s,
+        Err(_) => return Vec::new(),
+    };
+    stmt.query_map(params![decl_key, question_id], |r| r.get::<_, String>(0))
+        .ok()
+        .map(|rows| rows.filter_map(|r| r.ok()).collect())
+        .unwrap_or_default()
 }

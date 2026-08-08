@@ -1352,6 +1352,119 @@ fn question_is_invalidity(_qid: &str) -> bool {
     false
 }
 
+// ── claim (§12.4a relation claim) ────────────────────────────────────────
+
+/// Create a `claim.made` asserting a relation R(src, dst, edge_kind) under a
+/// question/run (§12.4a condition 1). This is the assertion a `G_observed`
+/// edge admission requires; it is a Claim, not Evidence.
+pub fn claim_create(
+    ctx: &Ctx,
+    run_id: &str,
+    question_id: &str,
+    src: &str,
+    dst: &str,
+    edge_kind: &str,
+) -> Result<Value> {
+    let meta = repo_for_run(ctx, run_id)?;
+    let e = state::require_enrollment(ctx, &meta.repo_id)?;
+    let claim_id = ulid();
+    let relation_form = format!("relation {src} -> {dst} kind:{edge_kind}");
+    let sections = json!({
+        "claims": [{
+            "claim_id": claim_id,
+            "claim_type": "relation",
+            "claim_text_or_form": relation_form,
+            "subject_ref": src,
+            "scope": format!("question:{question_id}"),
+            "confidence": "unsettled",
+            "question_refs": [question_id],
+        }]
+    });
+    let subject_refs = vec![
+        format!("claim:{claim_id}"),
+        format!("question:{question_id}"),
+        format!("run:{run_id}"),
+        format!("target:{src}"),
+    ];
+    let mut repo = open_repo_ledger(ctx, &meta.repo_id)?;
+    let pos = crate::envelopes::append(
+        &mut repo,
+        RecordKind::ClaimMade,
+        &meta.repo_id,
+        &e.checkout_id,
+        None,
+        None,
+        Some(run_id),
+        vec![format!("question:{question_id}")],
+        sections,
+        subject_refs,
+        None,
+    )?;
+    Ok(output::output(vec![
+        ("claim_id", json!(claim_id)),
+        ("src_decl_key", json!(src)),
+        ("dst_decl_key", json!(dst)),
+        ("edge_kind", json!(edge_kind)),
+        ("durability", json!("committed")),
+        ("ledger_position", ledger_position_json(&pos)),
+    ]))
+}
+
+/// Create evidence targeting a claim (§12.4a condition 2). This is the
+/// simplified qualification path for Slice 4: evidence bearing on the relation
+/// claim itself, with an explicit direction.
+pub fn evidence_for_claim(
+    ctx: &Ctx,
+    run_id: &str,
+    question_id: &str,
+    claim_id: &str,
+    direction: &str,
+) -> Result<Value> {
+    let meta = repo_for_run(ctx, run_id)?;
+    let e = state::require_enrollment(ctx, &meta.repo_id)?;
+    let evidence_id = ulid();
+    let sections = json!({
+        "evidence": [{
+            "evidence_id": evidence_id,
+            "evidence_type": "relation_claim",
+            "question_ref": question_id,
+            "target_claim_ref": claim_id,
+            "representation_ref": "claim://direct",
+            "relevance": "high",
+            "reliability": "medium",
+            "direction": direction,
+            "confidence_impact": "neutral",
+        }]
+    });
+    let subject_refs = vec![
+        format!("evidence:{evidence_id}"),
+        format!("run:{run_id}"),
+        format!("question:{question_id}"),
+        format!("target:claim:{claim_id}"),
+    ];
+    let mut repo = open_repo_ledger(ctx, &meta.repo_id)?;
+    let pos = crate::envelopes::append(
+        &mut repo,
+        RecordKind::EvidenceCreated,
+        &meta.repo_id,
+        &e.checkout_id,
+        None,
+        None,
+        Some(run_id),
+        vec![format!("question:{question_id}")],
+        sections,
+        subject_refs,
+        None,
+    )?;
+    Ok(output::output(vec![
+        ("evidence_id", json!(evidence_id)),
+        ("target_claim_ref", json!(claim_id)),
+        ("direction", json!(direction)),
+        ("durability", json!("committed")),
+        ("ledger_position", ledger_position_json(&pos)),
+    ]))
+}
+
 // ── run finish ───────────────────────────────────────────────────────────
 
 pub fn run_finish(ctx: &Ctx, run_id: &str) -> Result<Value> {
@@ -1483,6 +1596,23 @@ pub fn projections_export(ctx: &Ctx, repo_id: &str) -> Result<String> {
     projections::export_canonical(ctx, repo_id)
 }
 
+/// Slice 4: export sxr's delta residuals as an external anti-collapse corpus
+/// (`cep/anti-collapse-corpus@1`) for independent evaluation by the CEP
+/// evaluator (§24 Slice 4 gate). sxr does NOT judge its own semantics.
+pub fn export_anti_collapse_corpus(
+    ctx: &Ctx,
+    repo_id: &str,
+    question_id: &str,
+    snapshot_id: &str,
+) -> Result<String> {
+    let _e = state::require_enrollment(ctx, repo_id)?;
+    projections::rebuild(ctx, repo_id)?;
+    let conn = projections::open(ctx, repo_id)?;
+    let corpus =
+        projections::export_anti_collapse_corpus(&conn, repo_id, question_id, snapshot_id)?;
+    Ok(serde_json::to_string_pretty(&corpus)?)
+}
+
 // ── doctor ───────────────────────────────────────────────────────────────
 
 pub fn doctor(ctx: &Ctx) -> Result<Value> {
@@ -1507,13 +1637,12 @@ pub fn doctor(ctx: &Ctx) -> Result<Value> {
 
 // ── misc ─────────────────────────────────────────────────────────────────
 
-pub fn delta(_ctx: &Ctx, repo_id: &str, question_id: &str, snapshot_id: &str) -> Result<Value> {
-    Ok(output::output(vec![
-        ("repo_id", json!(repo_id)),
-        ("question_id", json!(question_id)),
-        ("snapshot_id", json!(snapshot_id)),
-        ("note", json!("slice-1 deferred")),
-    ]))
+pub fn delta(ctx: &Ctx, repo_id: &str, question_id: &str, snapshot_id: &str) -> Result<Value> {
+    let _e = state::require_enrollment(ctx, repo_id)?;
+    projections::rebuild(ctx, repo_id)?;
+    let conn = projections::open(ctx, repo_id)?;
+    let v = projections::delta_question(&conn, repo_id, question_id, snapshot_id)?;
+    Ok(output::output(vec![("delta", v)]))
 }
 
 pub fn spool_status(_ctx: &Ctx, repo_id: &str) -> Result<Value> {

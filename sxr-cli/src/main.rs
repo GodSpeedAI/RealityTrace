@@ -58,6 +58,9 @@ enum Command {
     /// Derive Evidence from an observation.
     #[command(subcommand)]
     Evidence(EvidenceCmds),
+    /// Create a relation Claim (§12.4a).
+    #[command(subcommand)]
+    Claim(ClaimCmds),
     /// Register a Settlement.
     #[command(subcommand)]
     Settlement(SettlementCmds),
@@ -202,6 +205,33 @@ enum EvidenceCmds {
         #[arg(long, action = clap::ArgAction::SetTrue)]
         derive: bool,
     },
+    /// Create evidence targeting a relation claim (§12.4a condition 2).
+    ForClaim {
+        #[arg(long)]
+        run: String,
+        #[arg(long)]
+        question: String,
+        #[arg(long)]
+        claim: String,
+        #[arg(long)]
+        direction: String,
+    },
+}
+
+#[derive(Subcommand)]
+enum ClaimCmds {
+    Create {
+        #[arg(long)]
+        run: String,
+        #[arg(long)]
+        question: String,
+        #[arg(long)]
+        src: String,
+        #[arg(long)]
+        dst: String,
+        #[arg(long, default_value = "relation")]
+        kind: String,
+    },
 }
 
 #[derive(Subcommand)]
@@ -271,6 +301,15 @@ enum ProjectionsCmds {
         repo: String,
         #[arg(long)]
         canonical_json: bool,
+    },
+    /// Export sxr records as an external anti-collapse corpus (§24 Slice 4 gate).
+    ExportAntiCollapseCorpus {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        question: String,
+        #[arg(long)]
+        snapshot: String,
     },
 }
 
@@ -426,6 +465,21 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 }
                 commands::evidence_create(ctx, &run, &observation)?
             }
+            EvidenceCmds::ForClaim {
+                run,
+                question,
+                claim,
+                direction,
+            } => commands::evidence_for_claim(ctx, &run, &question, &claim, &direction)?,
+        },
+        Command::Claim(c) => match c {
+            ClaimCmds::Create {
+                run,
+                question,
+                src,
+                dst,
+                kind,
+            } => commands::claim_create(ctx, &run, &question, &src, &dst, &kind)?,
         },
         Command::Settlement(c) => match c {
             SettlementCmds::Register {
@@ -460,6 +514,14 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                     return Err(anyhow!("--canonical-json required"));
                 }
                 let s = commands::projections_export(ctx, &repo)?;
+                return Ok(Dispatch::Raw(s));
+            }
+            ProjectionsCmds::ExportAntiCollapseCorpus {
+                repo,
+                question,
+                snapshot,
+            } => {
+                let s = commands::export_anti_collapse_corpus(ctx, &repo, &question, &snapshot)?;
                 return Ok(Dispatch::Raw(s));
             }
         },
