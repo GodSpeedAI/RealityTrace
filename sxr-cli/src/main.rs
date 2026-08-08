@@ -49,6 +49,9 @@ enum Command {
     /// Build a verification plan.
     #[command(subcommand)]
     Plan(PlanCmds),
+    /// Import a DomainForge verification contract (§14.0).
+    #[command(subcommand)]
+    Contract(ContractCmds),
     /// Execute plan steps (cargo-test).
     #[command(subcommand)]
     Verify(VerifyCmds),
@@ -162,6 +165,22 @@ enum PlanCmds {
         verifier: String,
         #[arg(long)]
         target: String,
+        /// Build the plan from a §14.0 verification contract obligation.
+        #[arg(long)]
+        from_contract: Option<String>,
+        /// Obligation id to bind when --from-contract is set.
+        #[arg(long)]
+        obligation: Option<String>,
+    },
+}
+
+#[derive(Subcommand)]
+enum ContractCmds {
+    Import {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        file: String,
     },
 }
 
@@ -379,7 +398,19 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 run,
                 verifier,
                 target,
-            } => commands::plan_create(ctx, &run, &verifier, &target)?,
+                from_contract,
+                obligation,
+            } => commands::plan_create(
+                ctx,
+                &run,
+                &verifier,
+                &target,
+                from_contract.as_deref(),
+                obligation.as_deref(),
+            )?,
+        },
+        Command::Contract(c) => match c {
+            ContractCmds::Import { repo, file } => commands::contract_import(ctx, &repo, &file)?,
         },
         Command::Verify(c) => match c {
             VerifyCmds::Run { run } => commands::verify_run(ctx, &run)?,

@@ -82,3 +82,81 @@ fn repo_list_after_enroll() {
     let lv: serde_json::Value = serde_json::from_slice(&l.stdout).unwrap();
     assert_eq!(lv["repos"].as_array().unwrap().len(), 1);
 }
+
+#[test]
+fn contract_import_rejects_non_work_request() {
+    let data = format!("/tmp/sxr-test-ci-{}", std::process::id());
+    let state = format!("{}-st", data);
+    std::fs::create_dir_all(&data).unwrap();
+    std::fs::create_dir_all(&state).unwrap();
+    let repo = PathBuf::from(&data).join("target");
+    std::fs::create_dir_all(repo.join("src")).unwrap();
+    std::fs::write(
+        repo.join("Cargo.toml"),
+        "[package]\nname=\"x\"\nversion=\"0.1.0\"\nedition=\"2024\"\n",
+    )
+    .unwrap();
+    std::fs::write(repo.join("src/lib.rs"), "pub fn a() -> u32 { 42 }\n").unwrap();
+    let _ = Command::new("git")
+        .args(["init", "-q"])
+        .current_dir(&repo)
+        .status();
+    let _ = Command::new("git")
+        .args(["add", "-A"])
+        .current_dir(&repo)
+        .status();
+    let _ = Command::new("git")
+        .args(["commit", "-qm", "init"])
+        .current_dir(&repo)
+        .status();
+
+    let r = run(
+        &["repo", "enroll", repo.to_str().unwrap(), "--json"],
+        &data,
+        &state,
+    );
+    assert!(r.status.success());
+    let rid = serde_json::from_slice::<serde_json::Value>(&r.stdout).unwrap()["repo_id"]
+        .as_str()
+        .unwrap()
+        .to_string();
+
+    // A non-work_request envelope (semantic_snapshot) must be rejected by
+    // `contract import` before any snapshot lookup.
+    let bad = serde_json::json!({
+        "envelope_id": "env-1",
+        "cep_version": "0.1.0",
+        "envelope_version": "1.0.0",
+        "envelope_kind": "semantic_snapshot",
+        "created_at": "2026-08-07T00:00:00Z",
+        "created_by": "test",
+        "scope": {"s": "x"},
+        "boundary_record": {"scope": "x", "included_sections": [], "excluded_sections": [],
+                            "known_omissions": [], "unknowns": [], "redactions": [],
+                            "compression_notes": [], "out_of_scope_entities": [], "limitations": []},
+        "completeness_status": "complete_for_declared_state",
+        "provenance_refs": ["source-set:sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
+        "omission_status": "known_omissions_recorded",
+        "lineage_refs": [],
+        "validation_status": "validated"
+    });
+    let bad_path = PathBuf::from(&data).join("bad-contract.json");
+    std::fs::write(&bad_path, serde_json::to_vec(&bad).unwrap()).unwrap();
+    let c = run(
+        &[
+            "contract",
+            "import",
+            "--repo",
+            &rid,
+            "--file",
+            bad_path.to_str().unwrap(),
+            "--json",
+        ],
+        &data,
+        &state,
+    );
+    assert!(
+        !c.status.success(),
+        "non-work_request contract must be rejected"
+    );
+}

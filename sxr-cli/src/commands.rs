@@ -300,6 +300,147 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
     Ok(output::output(out))
 }
 
+// ── contract import (§14.0) ──────────────────────────────────────────────
+
+/// Maximum contract envelope bytes accepted inline (mirrors domainforge's
+/// inline threshold; contracts are small).
+const CONTRACT_MAX_BYTES: usize = 1_048_576;
+
+pub fn contract_import(ctx: &Ctx, repo_id: &str, file: &str) -> Result<Value> {
+    let _e = state::require_enrollment(ctx, repo_id)?;
+    let raw = std::fs::read_to_string(file).with_context(|| format!("read {file}"))?;
+    if raw.len() > CONTRACT_MAX_BYTES {
+        bail!("contract envelope exceeds {CONTRACT_MAX_BYTES} bytes");
+    }
+    let envelope: Value = serde_json::from_str(&raw).with_context(|| format!("parse {file}"))?;
+
+    // Gate 0A: the producer envelope must validate against the embedded CEP
+    // schema and be the work_request verification contract (§14.0).
+    let validator = sxr_core::embedded_schema::EnvelopeSchemaValidator::new();
+    if let Err(errors) = validator.validate(&envelope) {
+        bail!(
+            "AC-CEP-001: contract envelope fails CEP schema: {}",
+            errors.join("; ")
+        );
+    }
+    if envelope.get("envelope_kind").and_then(Value::as_str) != Some("work_request") {
+        bail!("contract envelope is not a CEP work_request");
+    }
+    let profile = envelope["extensions"]["domainforge"]["profile"]
+        .as_str()
+        .unwrap_or("");
+    if profile != "domainforge-semantic-verification/v1" {
+        bail!("contract envelope is not a domainforge-semantic-verification/v1 contract");
+    }
+    let semantic_hash = envelope["extensions"]["domainforge"]["semantic_hash"]
+        .as_str()
+        .ok_or_else(|| anyhow!("contract lacks domainforge semantic_hash"))?
+        .to_string();
+    let obligations = envelope["extensions"]["domainforge"]["obligations"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default();
+
+    // Precondition: a committed semantic.snapshot for this semantic_hash must
+    // already exist (record-kind predecessor rule).
+    let _snapshot_pos = find_snapshot_position(ctx, repo_id, &semantic_hash)?;
+
+    // §5.4: store the producer envelope producer-preserved (id/created_at/
+    // scope/provenance untouched); the ledger row's subject_refs carry the
+    // sxr-minted contract identity.
+    let contract_id = ulid();
+    let question_ids: Vec<&str> = obligations
+        .iter()
+        .filter_map(|o| o.get("question_id").and_then(Value::as_str))
+        .collect();
+    let obligation_ids: Vec<&str> = obligations
+        .iter()
+        .filter_map(|o| o.get("obligation_id").and_then(Value::as_str))
+        .collect();
+    let decl_keys: Vec<&str> = obligations
+        .iter()
+        .filter_map(|o| o.get("decl_key").and_then(Value::as_str))
+        .collect();
+
+    let mut subject_refs: Vec<String> = vec![
+        format!("contract:{contract_id}"),
+        format!("semantic:{semantic_hash}"),
+    ];
+    subject_refs.extend(obligation_ids.iter().map(|o| format!("obligation:{o}")));
+    subject_refs.extend(question_ids.iter().map(|q| format!("question:{q}")));
+    subject_refs.extend(decl_keys.iter().map(|d| format!("declaration:{d}")));
+
+    let mut repo = open_repo_ledger(ctx, repo_id)?;
+    let pos = append_record(
+        &mut repo,
+        RecordKind::VerificationContractImported,
+        None,
+        subject_refs,
+        &envelope,
+    )?;
+
+    // Materialize Question/Claim lookup rows (content-addressed by their
+    // stable ids) without re-enveloping them as sxr-authored.
+    let mut questions = Vec::new();
+    for o in &obligations {
+        questions.push(json!({
+            "question_id": o["question_id"],
+            "question_form": o["question_form"],
+            "scope": o["decl_key"],
+            "target_entities": [o["decl_key"]],
+            "expected_answer_shape": o["expected_answer_shape"],
+        }));
+    }
+
+    Ok(output::output(vec![
+        ("contract_id", json!(contract_id)),
+        ("envelope_id", envelope["envelope_id"].clone()),
+        ("semantic_hash", json!(semantic_hash)),
+        ("snapshot_ref", json!(format!("snapshot:{semantic_hash}"))),
+        ("profile", json!(profile)),
+        ("obligation_count", json!(obligations.len())),
+        ("question_ids", json!(question_ids)),
+        ("claim_ids", json!(obligation_ids)),
+        ("declaration_refs", json!(decl_keys)),
+        ("questions", json!(questions)),
+        ("durability", json!("committed")),
+        ("ledger_position", ledger_position_json(&pos)),
+    ]))
+}
+
+/// Find the committed `semantic.snapshot` position for a semantic_hash.
+fn find_snapshot_position(
+    ctx: &Ctx,
+    repo_id: &str,
+    semantic_hash: &str,
+) -> Result<sxr_core::LedgerPosition> {
+    let rows = ledger_io::read_all(ctx, repo_id)?;
+    for r in &rows {
+        if r.record_kind != "semantic.snapshot" {
+            continue;
+        }
+        let payload: Value = serde_json::from_str(&r.payload).context("parse snapshot payload")?;
+        let rep = payload
+            .get("representations")
+            .and_then(Value::as_array)
+            .and_then(|a| a.first());
+        let rep_hash = rep
+            .and_then(|r| r.get("semantic_hash"))
+            .and_then(Value::as_str);
+        if rep_hash == Some(semantic_hash) {
+            return Ok(sxr_core::LedgerPosition::new(
+                r.ledger_id.clone(),
+                r.append_ordinal,
+            ));
+        }
+    }
+    bail!(
+        "precondition: no committed semantic.snapshot for semantic_hash {}; \
+         run `sxr snapshot create` first",
+        semantic_hash
+    )
+}
+
 // ── question ─────────────────────────────────────────────────────────────
 
 pub fn question_declare(ctx: &Ctx, repo_id: &str, file: &str) -> Result<Value> {
@@ -479,15 +620,60 @@ fn repo_for_run(ctx: &Ctx, run_id: &str) -> Result<RunMeta> {
 
 // ── plan create ──────────────────────────────────────────────────────────
 
-pub fn plan_create(ctx: &Ctx, run_id: &str, verifier: &str, target: &str) -> Result<Value> {
+pub fn plan_create(
+    ctx: &Ctx,
+    run_id: &str,
+    verifier: &str,
+    target: &str,
+    from_contract: Option<&str>,
+    obligation: Option<&str>,
+) -> Result<Value> {
     let mut meta = repo_for_run(ctx, run_id)?;
     let e = state::require_enrollment(ctx, &meta.repo_id)?;
     let plan_id = ulid();
     let transformation_ref = format!("transformation:plan:{plan_id}");
+
+    // §14.1: when built from a verification contract, the plan binds the exact
+    // contract obligation/Claim/Evidence requirement and the contract ref.
+    let mut semantic_verification_contract_ref = Value::Null;
+    let mut step_obligation_ref = Value::Null;
+    let mut step_claim_ref = Value::Null;
+    let mut step_evidence_requirement_ref = Value::Null;
+    let mut step_targets = json!([target]);
+    let mut produces_evidence_type = "test_result".to_string();
+    let mut expected_answer_shape = "boolean_with_failure_list".to_string();
+    let mut obligation_limitations: Vec<Value> = Vec::new();
+
+    if let Some(contract_id) = from_contract {
+        let obligations = load_contract_obligations(ctx, &meta.repo_id, contract_id)?;
+        let ob = obligations
+            .iter()
+            .find(|o| o.get("obligation_id").and_then(Value::as_str) == obligation)
+            .or_else(|| obligations.first())
+            .ok_or_else(|| anyhow!("contract {contract_id} has no obligations"))?;
+        semantic_verification_contract_ref = json!(format!("contract:{contract_id}"));
+        step_obligation_ref = json!(ob["obligation_id"]);
+        step_claim_ref = json!(ob["claim_id"]);
+        let evidence_type = ob["evidence_types"]
+            .as_array()
+            .and_then(|a| a.first())
+            .and_then(Value::as_str)
+            .unwrap_or("test_result");
+        step_evidence_requirement_ref =
+            json!(format!("contract://{contract_id}#evidence/{evidence_type}"));
+        produces_evidence_type = evidence_type.to_string();
+        expected_answer_shape = ob["expected_answer_shape"]
+            .as_str()
+            .unwrap_or("boolean_with_failure_list")
+            .to_string();
+        step_targets = json!([ob["decl_key"]]);
+        obligation_limitations = ob["limitations"].as_array().cloned().unwrap_or_default();
+    }
+
     let plan = json!({
         "plan_id": plan_id,
         "plan_version": "sxr-plan/v1",
-        "semantic_verification_contract_ref": null,
+        "semantic_verification_contract_ref": semantic_verification_contract_ref,
         "evaluation_profile_ref": "profile://slice2-policy@1",
         "question_ref": meta.question_id,
         "threshold_ref": meta.threshold_id,
@@ -495,6 +681,9 @@ pub fn plan_create(ctx: &Ctx, run_id: &str, verifier: &str, target: &str) -> Res
         "transformation_ref": transformation_ref,
         "steps": [{
             "step_id": "unit",
+            "obligation_ref": step_obligation_ref,
+            "claim_ref": step_claim_ref,
+            "evidence_requirement_ref": step_evidence_requirement_ref,
             "verifier_id": verifier,
             "invocation": {
                 "argv": ["cargo", "test", "--offline", "--message-format", "json"],
@@ -502,10 +691,11 @@ pub fn plan_create(ctx: &Ctx, run_id: &str, verifier: &str, target: &str) -> Res
                 "env_allowlist": ["PATH", "HOME", "CARGO_HOME"],
                 "timeout_s": 900,
             },
-            "produces_evidence_type": "test_result",
-            "targets": [target],
-            "expected_answer_shape": "boolean_with_failure_list",
+            "produces_evidence_type": produces_evidence_type,
+            "targets": step_targets,
+            "expected_answer_shape": expected_answer_shape,
             "relevance_to_question": "high",
+            "limitations": obligation_limitations,
         }],
         "evidence_requirements": [{
             "evidence_type": "test_result",
@@ -527,7 +717,7 @@ pub fn plan_create(ctx: &Ctx, run_id: &str, verifier: &str, target: &str) -> Res
         }],
         "questions": [{ "question_id": meta.question_id, "question_form": "is_true" }]
     });
-    let subject_refs = vec![
+    let mut subject_refs = vec![
         format!("plan:{plan_id}"),
         format!("run:{}", run_id),
         format!("question:{}", meta.question_id),
@@ -535,6 +725,9 @@ pub fn plan_create(ctx: &Ctx, run_id: &str, verifier: &str, target: &str) -> Res
         format!("snapshot:{}", meta.snapshot_id),
         format!("target:{target}"),
     ];
+    if let Some(contract_id) = from_contract {
+        subject_refs.push(format!("contract:{contract_id}"));
+    }
     let mut repo = open_repo_ledger(ctx, &meta.repo_id)?;
     let pos = crate::envelopes::append(
         &mut repo,
@@ -562,6 +755,27 @@ pub fn plan_create(ctx: &Ctx, run_id: &str, verifier: &str, target: &str) -> Res
         ("durability", json!("committed")),
         ("ledger_position", ledger_position_json(&pos)),
     ]))
+}
+
+/// Load the obligations of a committed verification contract (§14.0).
+fn load_contract_obligations(ctx: &Ctx, repo_id: &str, contract_id: &str) -> Result<Vec<Value>> {
+    let rows = ledger_io::read_all(ctx, repo_id)?;
+    for r in &rows {
+        if r.record_kind == "verification.contract_imported"
+            && r.subject_refs
+                .iter()
+                .any(|s| s == &format!("contract:{contract_id}"))
+        {
+            let payload: Value =
+                serde_json::from_str(&r.payload).context("parse contract payload")?;
+            let obligations = payload["extensions"]["domainforge"]["obligations"]
+                .as_array()
+                .cloned()
+                .unwrap_or_default();
+            return Ok(obligations);
+        }
+    }
+    bail!("verification contract {contract_id} not found")
 }
 
 // ── verify run ───────────────────────────────────────────────────────────
@@ -972,12 +1186,18 @@ pub fn settlement_register(
         }
     }
 
-    let has_evidence = !evidence_positions.is_empty();
+    // Slice 2 (AC-VERIFY-001): settlement is RED (unsettled/failed) when the
+    // run's evidence contradicts the claimed obligation, GREEN (settled) when
+    // it supports. Qualifying evidence is that which supports; contradicting
+    // evidence is surfaced as an unresolved contradiction, never as settled.
+    let evidence_directions = evidence_directions(ctx, &meta.repo_id, run_id)?;
+    let supports = evidence_directions.iter().any(|d| d == "supports");
+    let contradicts = evidence_directions.iter().any(|d| d == "contradicts");
 
     // §14.4/AC-SETTLEMENT-002: if snapshot is validation-failed, only negative
     // settlement is permitted.
     let snapshot_status = snapshot_model_status(ctx, &meta.repo_id, &meta.snapshot_id)?;
-    let requested: &str = if has_evidence { "settled" } else { "unsettled" };
+    let requested: &str = if supports { "settled" } else { "unsettled" };
     if snapshot_status.as_deref() == Some("invalid")
         && requested == "settled"
         && !question_is_invalidity(question_id)
@@ -985,7 +1205,17 @@ pub fn settlement_register(
         bail!("AC-SETTLEMENT-002: invalid declared model cannot support positive acceptance");
     }
 
-    let settlement_status = if has_evidence { requested } else { "unsettled" };
+    let settlement_status = if supports { "settled" } else { "unsettled" };
+    let missing_evidence: Vec<String> = if supports {
+        vec![]
+    } else {
+        vec!["no qualifying supporting evidence".to_string()]
+    };
+    let unresolved_contradictions: Vec<String> = if contradicts && !supports {
+        vec!["evidence contradicts the claimed obligation".to_string()]
+    } else {
+        vec![]
+    };
     let settlement_id = ulid();
     let sections = json!({
         "settlements": [{
@@ -1023,19 +1253,41 @@ pub fn settlement_register(
     Ok(output::output(vec![
         ("settlement_id", json!(settlement_id)),
         ("settlement_status", json!(settlement_status)),
+        ("missing_evidence", json!(missing_evidence)),
         (
-            "missing_evidence",
-            json!(if has_evidence {
-                vec![]
-            } else {
-                vec!["no supporting evidence".to_string()]
-            }),
+            "unresolved_contradictions",
+            json!(unresolved_contradictions),
         ),
-        ("unresolved_contradictions", json!([])),
         ("state_update_recommendation", json!("none")),
         ("durability", json!("committed")),
         ("ledger_position", ledger_position_json(&pos)),
     ]))
+}
+
+/// Directions of the evidence records attached to a run, in ledger order.
+fn evidence_directions(ctx: &Ctx, repo_id: &str, run_id: &str) -> Result<Vec<String>> {
+    let rows = ledger_io::read_all(ctx, repo_id)?;
+    let mut out = Vec::new();
+    for r in &rows {
+        if r.record_kind == "evidence.created"
+            && r.subject_refs
+                .iter()
+                .any(|s| s.as_str() == format!("run:{run_id}"))
+        {
+            let payload: Value =
+                serde_json::from_str(&r.payload).context("parse evidence payload")?;
+            let ev = payload
+                .get("evidence")
+                .and_then(Value::as_array)
+                .and_then(|a| a.first());
+            let direction = ev
+                .and_then(|e| e.get("direction"))
+                .and_then(Value::as_str)
+                .unwrap_or("unknown");
+            out.push(direction.to_string());
+        }
+    }
+    Ok(out)
 }
 
 fn evidence_positions(
