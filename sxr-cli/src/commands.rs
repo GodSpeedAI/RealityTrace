@@ -2,7 +2,7 @@
 //! Value (the `sxr_output_version` envelope) that the caller prints.
 
 use anyhow::{Context, Result, anyhow, bail};
-use serde_json::{Map, Value, json};
+use serde_json::{Value, json};
 use std::path::PathBuf;
 use sxr_core::record_kinds::RecordKind;
 use sxr_verify::VerifierPort;
@@ -241,42 +241,18 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
                 sid,
                 "invalid",
                 json!(diagnostics),
-                Some(
-                    json!({"omission_id": "om:df", "omission_type": "input_failure", "description": "D not constructed"}),
-                ),
+                Some(json!({"omission_type": "input_failure", "description": "D not constructed"})),
                 vec![],
                 resolution_inputs.clone(),
             )
         }
     };
-    let _ = semantic; // envelope kept producer-preserved below.
 
-    let mut sections = Map::new();
-    sections.insert("states".into(), json!([{
-        "state_id": "state:snap",
-        "state_type": "declared_model",
-        "scope": format!("checkpoint:{}", content_hash.clone().unwrap_or_else(|| "invalid".into())),
-    }]));
-    sections.insert(
-        "representations".into(),
-        json!([{
-            "representation_id": "representation:snap",
-            "representation_kind": "atomic",
-            "representation_type": "domainforge_canonical_d",
-            "content_hash": content_hash,
-            "semantic_hash": semantic_hash,
-        }]),
-    );
-    sections.insert(
-        "extensions".into(),
-        json!([{
-            "extension_id": "ext:df",
-            "extension_type": "domainforge",
-            "diagnostics": diagnostics,
-            "omission": omission_opt,
-        }]),
-    );
-
+    // §5.4: the DomainForge envelope is stored producer-preserved (its
+    // id/created_at/scope/provenance untouched); the ledger row's subject_refs
+    // carry the sxr-minted snapshot identity.
+    let payload = serde_json::from_str::<Value>(semantic.envelope_json())
+        .with_context(|| "parse producer envelope")?;
     let subject_refs = vec![
         format!("snapshot:{snapshot_id}"),
         format!("repo:{repo_id}"),
@@ -296,7 +272,7 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
         RecordKind::SemanticSnapshot,
         None,
         subject_refs,
-        &json!(sections),
+        &payload,
     )?;
 
     let mut out = vec![

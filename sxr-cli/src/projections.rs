@@ -200,14 +200,23 @@ fn apply_snapshot(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Re
         .unwrap_or_default();
     let semantic_closure_hash = rep.and_then(|v| string_field(v, "semantic_hash"));
     let content_hash = rep.and_then(|v| string_field(v, "content_hash"));
-    let invalid_checkpoint = payload
-        .get("extensions")
-        .and_then(|e| e.get("domainforge"))
-        .and_then(|d| string_field(d, "invalid_declared_checkpoint_hash"));
-    let model_status = if semantic_closure_hash.is_some() && content_hash.is_some() {
-        "valid"
-    } else {
-        "invalid"
+    let df_ext = payload.get("extensions").and_then(|e| e.get("domainforge"));
+    let invalid_checkpoint =
+        df_ext.and_then(|d| string_field(d, "invalid_declared_checkpoint_hash"));
+    let model_status = match df_ext
+        .and_then(|d| string_field(d, "model_validation_status"))
+        .as_deref()
+    {
+        Some("invalid") => "invalid",
+        _ => {
+            if invalid_checkpoint.is_some() {
+                "invalid"
+            } else if semantic_closure_hash.is_some() && content_hash.is_some() {
+                "valid"
+            } else {
+                "invalid"
+            }
+        }
     };
     let omission_json = payload
         .get("omissions")
