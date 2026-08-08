@@ -41,17 +41,31 @@ fn load_stream_if_set() {
 
 /// Mint an id for `role`. Under `SXR_TEST_ID_STREAM` the ids come from the
 /// fixture stream in consumption order (both parity runs consume the same
-/// stream, so both mint the same ids); otherwise a fresh ULID.
+/// stream, so both mint the same ids); otherwise a fresh ULID. Consumption is
+/// PERSISTENT: the stream file is rewritten with the remaining ids after each
+/// pop, so every CLI invocation (a fresh process) continues where the
+/// previous one stopped — without this, every process would re-mint the same
+/// ids and distinct records would collide (e.g. run_id == repo_id).
 pub fn mint_id(role: &str) -> String {
     load_stream_if_set();
     let mut guard = id_stream().lock().expect("id stream lock");
-    if let Some(next) = guard.1.pop_front() {
-        return next;
-    }
-    if std::env::var("SXR_TEST_ID_STREAM").is_ok_and(|v| !v.is_empty()) {
-        panic!("SXR_TEST_ID_STREAM exhausted while minting {role} (fixture under-provisioned)");
-    }
-    ulid::Ulid::new().to_string()
+    let Some(next) = guard.1.pop_front() else {
+        if std::env::var("SXR_TEST_ID_STREAM").is_ok_and(|v| !v.is_empty()) {
+            panic!("SXR_TEST_ID_STREAM exhausted while minting {role} (fixture under-provisioned)");
+        }
+        return ulid::Ulid::new().to_string();
+    };
+    persist_remaining(&guard.0, &guard.1);
+    next
+}
+
+/// Persist the unconsumed tail back to the stream file (test fixture only).
+fn persist_remaining(env_value: &Option<String>, queue: &VecDeque<String>) {
+    let Some(path) = env_value else {
+        return;
+    };
+    let body = queue.iter().cloned().collect::<Vec<String>>().join("\n") + "\n";
+    std::fs::write(path, body).expect("SXR_TEST_ID_STREAM rewritable (fixture setup)");
 }
 
 /// The clock for envelope timestamps: `SXR_TEST_FIXED_CLOCK` (RFC 3339)

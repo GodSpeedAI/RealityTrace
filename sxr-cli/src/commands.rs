@@ -27,13 +27,17 @@ pub fn repo_enroll(ctx: &Ctx, path: &str) -> Result<Value> {
     }
     let evidence = sxr_git::discover(&sxr_git::GitCli, &fs_path)
         .map_err(|e| anyhow!("discover {}: {e}", fs_path.display()))?;
-    let (repo_id, checkout_id) = sxr_git::mint_identities();
+    let (repo_id, checkout_id) = (
+        crate::determinism::mint_id("repo_id"),
+        crate::determinism::mint_id("checkout_id"),
+    );
     let identity_evidence = sxr_git::evidence_of(&evidence, &fs_path);
     let enrollment = Enrollment {
         repo_id: repo_id.clone(),
         checkout_id,
         filesystem_path: fs_path.clone(),
-        created_at: chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Micros, true),
+        created_at: crate::determinism::now_utc()
+            .to_rfc3339_opts(chrono::SecondsFormat::Micros, true),
         identity_evidence,
     };
     ctx.ensure_repo_dir(&repo_id)?;
@@ -2456,6 +2460,7 @@ fn ingest_request_meta(
     verifier: &str,
     stdin_format: &str,
     stdin_sha256: &str,
+    observation_id: &str,
 ) -> Value {
     json!({
         "request_kind": "sxr.ingest/v1",
@@ -2465,6 +2470,7 @@ fn ingest_request_meta(
         "stdin_format": stdin_format,
         "idempotency_key": ingest_idempotency_key(run_id, verifier),
         "stdin_sha256": stdin_sha256,
+        "observation_id": observation_id,
     })
 }
 
@@ -2490,6 +2496,7 @@ pub fn build_ingest_envelope(
     run_id: &str,
     verifier: &str,
     bytes: &[u8],
+    observation_id: Option<&str>,
 ) -> Result<IngestEnvelope> {
     let meta = repo_for_run(ctx, run_id)?;
     let e = state::require_enrollment(ctx, repo_id)?;
@@ -2501,7 +2508,13 @@ pub fn build_ingest_envelope(
         .and_then(Value::as_str)
         .unwrap_or("concept:unknown")
         .to_string();
-    let observation_id = ulid();
+    // The spool path pre-mints the id at spool time and stores it in the
+    // request, so drain reproduces the exact envelope it would have produced
+    // when the request was written (record parity with direct ingest).
+    let observation_id = match observation_id {
+        Some(o) => o.to_string(),
+        None => ulid(),
+    };
     let hex_stdout = hex::encode(sha2::Sha256::digest(bytes));
     let stdout_ref = format!("sha256:{hex_stdout}");
     let artifacts_dir = ctx.ensure_repo_dir(repo_id)?.join("artifacts");
@@ -2595,8 +2608,18 @@ pub fn ingest(
 
     if spool {
         // Opt-in spool: written unvalidated; not a success state (exit 75).
-        let meta_json =
-            ingest_request_meta(&meta.repo_id, run_id, verifier, stdin_format, &stdin_sha256);
+        // The observation id is minted now and carried in the request, so
+        // drain rebuilds the exact envelope the direct path would have
+        // produced here (record parity).
+        let obs_id = ulid();
+        let meta_json = ingest_request_meta(
+            &meta.repo_id,
+            run_id,
+            verifier,
+            stdin_format,
+            &stdin_sha256,
+            &obs_id,
+        );
         let key = ingest_idempotency_key(run_id, verifier);
         let dir = ctx.spool_dir(&meta.repo_id);
         std::fs::create_dir_all(&dir).context("create spool dir")?;
@@ -2636,8 +2659,8 @@ pub fn ingest(
     // F-15: daemon unavailable (or --async not requested) — direct CLI writer
     // lock, zero semantic difference.
 
-    let built = build_ingest_envelope(ctx, &meta.repo_id, run_id, verifier, &buf)?;
-    let (_already, pos) = commit_ingest_envelope(ctx, &meta.repo_id, &built)?;
+    let built = build_ingest_envelope(ctx, &meta.repo_id, run_id, verifier, &buf, None)?;
+    let (already, pos) = commit_ingest_envelope(ctx, &meta.repo_id, &built)?;
     Ok((
         output::output(vec![
             ("run_id", json!(run_id)),
@@ -2646,6 +2669,8 @@ pub fn ingest(
             ("durability", json!("committed")),
             ("daemon", json!(false)),
             ("observation_id", json!(built.observation_id)),
+            ("idempotency_key", json!(built.idempotency_key)),
+            ("already_committed", json!(already)),
             ("parsed", built.parsed),
             ("ledger_position", ledger_position_json(&pos)),
         ]),
@@ -2673,7 +2698,7 @@ fn submit_to_daemon(
     };
     // Build the same envelope the direct path would commit (§16.3 parity:
     // the queue holds the validated request, never a differently-built one).
-    let built = build_ingest_envelope(ctx, repo_id, run_id, verifier, bytes)?;
+    let built = build_ingest_envelope(ctx, repo_id, run_id, verifier, bytes, None)?;
     let request = crate::daemon::record_request(repo_id, &built);
     stream.write_all(serde_json::to_string(&request)?.as_bytes())?;
     stream.write_all(b"\n")?;
@@ -2718,6 +2743,7 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
     let mut already = 0u64;
     let mut rejected: Vec<String> = Vec::new();
     let mut failures: Vec<String> = Vec::new();
+    let mut observations: Vec<String> = Vec::new();
     for entry in entries.iter().filter(|e| e.state == "spooled") {
         let meta = crate::durability::request_json(entry);
         let run_id = meta
@@ -2733,6 +2759,9 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
             .and_then(Value::as_str)
             .unwrap_or_default()
             .to_string();
+        // Pre-minted at spool time (§F-19b): drain reproduces the envelope
+        // the spooler would have built when the request was written.
+        let obs_id = meta.get("observation_id").and_then(Value::as_str);
         let expected_sha = meta
             .get("stdin_sha256")
             .and_then(Value::as_str)
@@ -2759,7 +2788,7 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
                     let _ = crate::durability::spool_remove(entry);
                     continue;
                 }
-                match build_ingest_envelope(ctx, repo_id, run_id, verifier, &bytes) {
+                match build_ingest_envelope(ctx, repo_id, run_id, verifier, &bytes, obs_id) {
                     Ok(built) => {
                         if !key.is_empty() && built.idempotency_key != key {
                             rejected.push(format!(
@@ -2773,6 +2802,7 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
                         match commit_ingest_envelope(ctx, repo_id, &built) {
                             Ok((was_already, _)) => {
                                 let _ = crate::durability::spool_remove(entry);
+                                observations.push(built.observation_id.clone());
                                 if was_already {
                                     already += 1;
                                 } else {
@@ -2792,6 +2822,7 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
         ("repo_id", json!(repo_id)),
         ("drained", json!(drained)),
         ("already_committed", json!(already)),
+        ("observations", json!(observations)),
         ("rejected", json!(rejected)),
         ("failures", json!(failures)),
     ]))
