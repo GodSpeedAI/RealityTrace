@@ -4,9 +4,10 @@
 
 use anyhow::{Result, anyhow};
 use clap::{Parser, Subcommand};
-use serde_json::Value;
+use serde_json::{Value, json};
 
 mod commands;
+mod daemon;
 mod determinism;
 mod durability;
 mod envelopes;
@@ -84,6 +85,11 @@ enum Command {
     Await(AwaitCmd),
     /// Diagnostics.
     Doctor,
+    /// Durable commit queue recovery (§16.4, F-19c).
+    #[command(subcommand)]
+    Queue(QueueCmds),
+    /// Optional daemon (§16).
+    Daemon(DaemonCmd),
     /// Delta inspection.
     Delta(DeltaCmd),
     /// Diagnostic attribution loop (§12.5a).
@@ -442,6 +448,29 @@ struct DeltaCmd {
     snapshot: String,
 }
 
+#[derive(Subcommand)]
+enum QueueCmds {
+    /// Drain pending daemon-queue segments into the ledger with the daemon
+    /// stopped; duplicate replay is a no-op by idempotency key (§16.4).
+    Recover {
+        /// Restrict to one repo; default: every enrolled repo.
+        #[arg(long)]
+        repo: Option<String>,
+    },
+}
+
+#[derive(clap::Args)]
+struct DaemonCmd {
+    /// Socket path (default `$XDG_RUNTIME_DIR/sxr.sock`, or
+    /// `$SXR_DAEMON_SOCKET`).
+    #[arg(long)]
+    socket: Option<String>,
+    /// Pacing of the queue→ledger drain loop (test hook; a long delay makes
+    /// kill-after-receipt deterministic).
+    #[arg(long, default_value_t = 250)]
+    drain_delay_ms: u64,
+}
+
 #[derive(clap::Args)]
 struct ExplainCmd {
     record_id: String,
@@ -502,6 +531,7 @@ fn exit_for_error(e: &anyhow::Error) -> i32 {
         || msg.contains("queued_for_commit")
         || msg.contains("spooled")
         || msg.contains("not committed")
+        || msg.contains("corrupt segments")
     {
         3
     } else {
@@ -703,6 +733,19 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
         Command::Doctor => {
             let (v, code) = commands::doctor(ctx)?;
             return Ok(Dispatch::JsonExit(v, code));
+        }
+        Command::Queue(c) => match c {
+            QueueCmds::Recover { repo } => {
+                let n = match repo {
+                    Some(r) => daemon::drain_all_queues_limited(ctx, &r)?,
+                    None => daemon::drain_all_queues(ctx)?,
+                };
+                output::output(vec![("recovered", json!(n))])
+            }
+        },
+        Command::Daemon(c) => {
+            daemon::daemon_run(ctx, c.socket.as_deref(), c.drain_delay_ms)?;
+            unreachable!("daemon_run only returns on error")
         }
         Command::Delta(c) => commands::delta(ctx, &c.repo, &c.question, &c.snapshot)?,
         Command::Explain(c) => commands::explain(ctx, &c.record_id)?,

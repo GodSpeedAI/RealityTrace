@@ -2468,17 +2468,29 @@ fn ingest_request_meta(
     })
 }
 
-/// Commit one ingested verifier stream as an `observation.recorded` record
-/// (mirroring `sxr verify run`), replaying the raw bytes into the repo's
-/// artifacts dir. Returns (already_committed, observation_id, parsed, position);
-/// duplicate replay is a no-op by idempotency key (§11.4, F-19c).
-fn commit_ingest_observation(
+/// A built observation envelope ready to commit or to queue, plus the
+/// metadata the ledger needs to append it (§16.2 — the daemon queues exactly
+/// what the CLI can write).
+pub struct IngestEnvelope {
+    pub envelope: Value,
+    pub subject_refs: Vec<String>,
+    pub kind: RecordKind,
+    pub idempotency_key: String,
+    pub observation_id: String,
+    pub parsed: Value,
+}
+
+/// Build (never commit) the `observation.recorded` envelope for one ingested
+/// verifier stream, replaying the raw bytes into the repo's artifacts dir.
+/// Direct commit, daemon submission, and spool drain all construct through
+/// this one path, so the record is identical whichever way it lands.
+pub fn build_ingest_envelope(
     ctx: &Ctx,
     repo_id: &str,
     run_id: &str,
+    verifier: &str,
     bytes: &[u8],
-    idempotency_key: String,
-) -> Result<(bool, String, Value, sxr_core::LedgerPosition)> {
+) -> Result<IngestEnvelope> {
     let meta = repo_for_run(ctx, run_id)?;
     let e = state::require_enrollment(ctx, repo_id)?;
     let progress = repo_plan(ctx, repo_id, run_id)?;
@@ -2512,14 +2524,7 @@ fn commit_ingest_observation(
         format!("target:{target}"),
     ];
     let plan_id = meta.plan_id.clone().unwrap_or_default();
-    let mut repo = open_repo_ledger(ctx, repo_id)?;
-    let already = repo
-        .ledger
-        .position_by_idempotency_key(&idempotency_key)
-        .context("check idempotency key")?
-        .is_some();
-    let pos = crate::envelopes::append(
-        &mut repo,
+    let envelope = crate::envelopes::build(
         RecordKind::ObservationRecorded,
         repo_id,
         &e.checkout_id,
@@ -2528,13 +2533,43 @@ fn commit_ingest_observation(
         Some(run_id),
         vec![format!("plan:{plan_id}")],
         sections,
-        subject_refs,
-        Some(idempotency_key),
+        subject_refs.clone(),
+        None,
+        None,
     )?;
     let parsed_out = parsed.as_ref().map(|p| {
         json!({"test_count": p.test_count, "passed": p.passed, "failed": p.failed, "ignored": p.ignored})
     }).unwrap_or(Value::Null);
-    Ok((already, observation_id, parsed_out, pos))
+    Ok(IngestEnvelope {
+        envelope,
+        subject_refs,
+        kind: RecordKind::ObservationRecorded,
+        idempotency_key: ingest_idempotency_key(run_id, verifier),
+        observation_id,
+        parsed: parsed_out,
+    })
+}
+
+/// Commit one built ingest envelope to the ledger (idempotent by key).
+pub fn commit_ingest_envelope(
+    ctx: &Ctx,
+    repo_id: &str,
+    built: &IngestEnvelope,
+) -> Result<(bool, sxr_core::LedgerPosition)> {
+    let mut repo = open_repo_ledger(ctx, repo_id)?;
+    let already = repo
+        .ledger
+        .position_by_idempotency_key(&built.idempotency_key)
+        .context("check idempotency key")?
+        .is_some();
+    let pos = crate::ledger_io::append_record(
+        &mut repo,
+        built.kind,
+        Some(built.idempotency_key.clone()),
+        built.subject_refs.clone(),
+        &built.envelope,
+    )?;
+    Ok((already, pos))
 }
 
 /// `sxr ingest`: read a verifier stream from stdin and record it as an
@@ -2584,15 +2619,8 @@ pub fn ingest(
     }
 
     if async_mode
-        && let Some((duration, resp)) = submit_to_daemon(
-            ctx,
-            &meta.repo_id,
-            run_id,
-            verifier,
-            stdin_format,
-            &stdin_sha256,
-            &buf,
-        )?
+        && let Some((duration, resp)) =
+            submit_to_daemon(ctx, &meta.repo_id, run_id, verifier, &buf)?
     {
         let v = output::output(vec![
             ("run_id", json!(run_id)),
@@ -2608,13 +2636,8 @@ pub fn ingest(
     // F-15: daemon unavailable (or --async not requested) — direct CLI writer
     // lock, zero semantic difference.
 
-    let (_already, observation_id, parsed, pos) = commit_ingest_observation(
-        ctx,
-        &meta.repo_id,
-        run_id,
-        &buf,
-        ingest_idempotency_key(run_id, verifier),
-    )?;
+    let built = build_ingest_envelope(ctx, &meta.repo_id, run_id, verifier, &buf)?;
+    let (_already, pos) = commit_ingest_envelope(ctx, &meta.repo_id, &built)?;
     Ok((
         output::output(vec![
             ("run_id", json!(run_id)),
@@ -2622,26 +2645,52 @@ pub fn ingest(
             ("bytes_received", json!(buf.len())),
             ("durability", json!("committed")),
             ("daemon", json!(false)),
-            ("observation_id", json!(observation_id)),
-            ("parsed", parsed),
+            ("observation_id", json!(built.observation_id)),
+            ("parsed", built.parsed),
             ("ledger_position", ledger_position_json(&pos)),
         ]),
         0,
     ))
 }
 
-/// Submit an ingest request to the running daemon (M2). Returns None when the
-/// daemon socket is unavailable (F-15 fallback path).
+/// Submit an ingest request to the running daemon (§16.1). Returns the queue
+/// position + receipt JSON. Returns None when the daemon socket is
+/// unavailable — the caller takes the F-15 fallback (direct CLI writer lock,
+/// `"daemon": false`, zero semantic difference).
 fn submit_to_daemon(
-    _ctx: &Ctx,
-    _repo_id: &str,
-    _run_id: &str,
-    _verifier: &str,
-    _stdin_format: &str,
-    _stdin_sha256: &str,
-    _bytes: &[u8],
+    ctx: &Ctx,
+    repo_id: &str,
+    run_id: &str,
+    verifier: &str,
+    bytes: &[u8],
 ) -> Result<Option<(String, Value)>> {
-    Ok(None)
+    use std::io::{BufRead, Write};
+    use std::os::unix::net::UnixStream;
+    let socket = ctx.socket_path();
+    let mut stream = match UnixStream::connect(&socket) {
+        Ok(s) => s,
+        Err(_) => return Ok(None),
+    };
+    // Build the same envelope the direct path would commit (§16.3 parity:
+    // the queue holds the validated request, never a differently-built one).
+    let built = build_ingest_envelope(ctx, repo_id, run_id, verifier, bytes)?;
+    let request = crate::daemon::record_request(repo_id, &built);
+    stream.write_all(serde_json::to_string(&request)?.as_bytes())?;
+    stream.write_all(b"\n")?;
+    let mut resp = String::new();
+    std::io::BufReader::new(&mut stream)
+        .read_line(&mut resp)
+        .context("read daemon receipt")?;
+    let receipt: Value = serde_json::from_str(resp.trim()).context("parse daemon receipt line")?;
+    if let Some(err) = receipt.get("error").and_then(Value::as_str) {
+        bail!("daemon rejected request: {err}");
+    }
+    let position = receipt
+        .get("queue_position")
+        .and_then(Value::as_str)
+        .unwrap_or_default()
+        .to_string();
+    Ok(Some((position, receipt)))
 }
 
 pub fn spool_status(ctx: &Ctx, repo_id: &str) -> Result<Value> {
@@ -2675,7 +2724,7 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
             .get("run_id")
             .and_then(Value::as_str)
             .unwrap_or_default();
-        let _verifier = meta
+        let verifier = meta
             .get("verifier")
             .and_then(Value::as_str)
             .unwrap_or_default();
@@ -2710,13 +2759,27 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
                     let _ = crate::durability::spool_remove(entry);
                     continue;
                 }
-                match commit_ingest_observation(ctx, repo_id, run_id, &bytes, key.clone()) {
-                    Ok((was_already, _, _, _)) => {
-                        let _ = crate::durability::spool_remove(entry);
-                        if was_already {
-                            already += 1;
-                        } else {
-                            drained += 1;
+                match build_ingest_envelope(ctx, repo_id, run_id, verifier, &bytes) {
+                    Ok(built) => {
+                        if !key.is_empty() && built.idempotency_key != key {
+                            rejected.push(format!(
+                                "{} (idempotency key mismatch: expected {key}, got {})",
+                                entry.path.display(),
+                                built.idempotency_key
+                            ));
+                            let _ = crate::durability::spool_remove(entry);
+                            continue;
+                        }
+                        match commit_ingest_envelope(ctx, repo_id, &built) {
+                            Ok((was_already, _)) => {
+                                let _ = crate::durability::spool_remove(entry);
+                                if was_already {
+                                    already += 1;
+                                } else {
+                                    drained += 1;
+                                }
+                            }
+                            Err(e) => failures.push(format!("{}: {e:#}", entry.path.display())),
                         }
                     }
                     Err(e) => failures.push(format!("{}: {e:#}", entry.path.display())),

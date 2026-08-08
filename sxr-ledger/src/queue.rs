@@ -158,6 +158,11 @@ fn read_segment(path: &Path) -> Result<(QueueReceipt, String, bool)> {
         Error::Integrity(format!("queue segment {}: missing request", path.display()))
     })??;
     let hash_ok = sha256_hex(request_line.as_bytes()) == receipt.request_hash;
+    // The segment format is exactly two lines (§16.4); any further bytes are
+    // corruption (e.g. a torn write or a foreign writer), not a new segment.
+    if hash_ok && lines.next().is_some() {
+        return Ok((receipt, request_line, false));
+    }
     Ok((receipt, request_line, hash_ok))
 }
 
@@ -260,6 +265,24 @@ mod tests {
         let dir_path = dir.path().join("repo-r1");
         // Parent dir still exists but is empty of segments.
         assert_eq!(fs::read_dir(&dir_path).unwrap().count(), 0);
+    }
+
+    #[test]
+    fn trailing_garbage_after_request_is_corrupt() {
+        let dir = tempfile::tempdir().unwrap();
+        enqueue(dir.path(), "repo-r1", "key-1", "{\"a\":1}").unwrap();
+        let entries = scan(dir.path(), "repo-r1").unwrap();
+        // The format is exactly two lines; a third line means a torn/foreign
+        // write, which must be frozen, not silently committed.
+        let mut s = fs::read_to_string(&entries[0].path).unwrap();
+        s.push_str("xx\n");
+        fs::write(&entries[0].path, s).unwrap();
+        let entries = scan(dir.path(), "repo-r1").unwrap();
+        assert_eq!(entries.len(), 1);
+        assert!(!entries[0].request_hash_ok, "trailing bytes are corruption");
+        let report = recover(dir.path(), "repo-r1", |_| Ok(())).unwrap();
+        assert!(report.corrupt.len() == 1 && report.recovered == 0);
+        assert!(entries[0].path.exists(), "corrupt segment retained");
     }
 
     #[test]

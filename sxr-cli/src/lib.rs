@@ -4,6 +4,7 @@
 //! same module set.
 
 pub mod commands;
+pub mod daemon;
 pub mod determinism;
 pub mod durability;
 pub mod envelopes;
