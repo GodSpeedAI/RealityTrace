@@ -2,6 +2,7 @@
 //! Value (the `sxr_output_version` envelope) that the caller prints.
 
 use anyhow::{Context, Result, anyhow, bail};
+use rusqlite::OptionalExtension;
 use serde_json::{Value, json};
 use std::path::PathBuf;
 use sxr_core::record_kinds::RecordKind;
@@ -1454,34 +1455,12 @@ pub fn ledger_history_json(ctx: &Ctx, repo_id: &str) -> Result<Value> {
 // ── query evidence ───────────────────────────────────────────────────────
 
 pub fn query_evidence(ctx: &Ctx, repo_id: &str, entity: &str) -> Result<Value> {
-    let dir = ctx.ensure_repo_dir(repo_id)?;
-    let conn = rusqlite::Connection::open(dir.join("ledger.db")).context("open ledger db")?;
+    let _e = state::require_enrollment(ctx, repo_id)?;
+    let conn = projections::open(ctx, repo_id)?;
     // Ensure projections are present.
     projections::rebuild(ctx, repo_id)?;
-    let mut stmt = conn.prepare(
-        "SELECT e.evidence_id, e.evidence_type, e.direction, e.relevance, e.reliability
-         FROM sxr_evidence_target t
-         JOIN sxr_evidence e ON e.evidence_id = t.evidence_id
-         WHERE t.decl_key = ?1
-         ORDER BY e.append_ordinal",
-    )?;
-    let evidence: Vec<Value> = stmt
-        .query_map([entity], |r| {
-            Ok(json!({
-                "evidence_id": r.get::<_, String>(0)?,
-                "evidence_type": r.get::<_, String>(1)?,
-                "direction": r.get::<_, String>(2)?,
-                "relevance": r.get::<_, String>(3)?,
-                "reliability": r.get::<_, String>(4)?,
-            }))
-        })?
-        .filter_map(|r| r.ok())
-        .collect();
-    if evidence.is_empty() {
-        Ok(output::output1("unobserved", json!(true)))
-    } else {
-        Ok(output::output1("evidence", json!(evidence)))
-    }
+    let v = projections::query_evidence_declared(&conn, repo_id, entity)?;
+    Ok(output::output(vec![("query", v)]))
 }
 
 // ── projections ──────────────────────────────────────────────────────────
@@ -1584,9 +1563,156 @@ pub fn explain(_ctx: &Ctx, record_id: &str) -> Result<Value> {
     ]))
 }
 
-pub fn context(_ctx: &Ctx, repo_id: &str, run_id: &str) -> Result<Value> {
+pub fn context(ctx: &Ctx, repo_id: &str, run_id: &str) -> Result<Value> {
+    let _e = state::require_enrollment(ctx, repo_id)?;
+    let meta = state::get_run(ctx, run_id).with_context(|| format!("run {run_id} not found"))?;
+    let conn = projections::open(ctx, &meta.repo_id)?;
+    // Ensure projections are present.
+    projections::rebuild(ctx, &meta.repo_id)?;
+
+    // Structured retriever: the run's bound question + threshold.
+    let mut question = None;
+    if !meta.question_id.is_empty() {
+        question = conn
+            .query_row(
+                "SELECT question_form, question_type FROM sxr_question WHERE question_id = ?1",
+                [&meta.question_id],
+                |r| {
+                    Ok(json!({
+                        "question_id": meta.question_id.clone(),
+                        "question_form": r.get::<_, String>(0)?,
+                        "question_type": r.get::<_, String>(1)?,
+                    }))
+                },
+            )
+            .optional()?;
+    }
+    let mut threshold = None;
+    if !meta.threshold_id.is_empty() {
+        threshold = conn
+            .query_row(
+                "SELECT spec_json FROM sxr_threshold WHERE threshold_id = ?1",
+                [&meta.threshold_id],
+                |r| {
+                    Ok(json!({
+                        "threshold_id": meta.threshold_id.clone(),
+                        "spec_json": r.get::<_, String>(0)?,
+                    }))
+                },
+            )
+            .optional()?;
+    }
+
+    // Failure summary: the run's failing observations. sxr does not materialize
+    // an sxr_observation projection table in Slice 3; the run's exit status is
+    // reported from the run registry with an honest note when unavailable.
+    let failure = json!({
+        "step_id": "unit",
+        "verifier_id": "unknown",
+        "exit_code": serde_json::Value::Null,
+        "note": "observation projection not materialized in slice 3",
+    });
+
+    // Graph retriever: 1- and 2-hop neighbours of the run's snapshot
+    // declarations. If the run has a plan with targets, use the first target;
+    // otherwise use the run's snapshot.
+    let mut declared_neighbourhood: Vec<Value> = Vec::new();
+    let snapshot_id = &meta.snapshot_id;
+    if let Some((snap, _)) = conn
+        .query_row(
+            "SELECT snapshot_id, semantic_closure_hash FROM sxr_snapshot WHERE snapshot_id = ?1",
+            [snapshot_id],
+            |r| Ok((r.get::<_, String>(0)?, r.get::<_, Option<String>>(1)?)),
+        )
+        .optional()?
+    {
+        let _ = snap;
+        // Collect the snapshot's declarations as seeds; annotate each with
+        // observed status and its 1-2 hop neighbourhood.
+        let mut stmt = conn.prepare(
+            "SELECT decl_key, name, decl_kind, namespace FROM sxr_decl_node WHERE snapshot_id = ?1",
+        )?;
+        let rows = stmt.query_map([snapshot_id], |r| {
+            Ok((
+                r.get::<_, String>(0)?,
+                r.get::<_, String>(1)?,
+                r.get::<_, String>(2)?,
+                r.get::<_, String>(3)?,
+            ))
+        })?;
+        let mut seeds: Vec<(String, String, String, String)> =
+            rows.filter_map(|r| r.ok()).collect();
+        seeds.truncate(8);
+        for (dk, name, kind, ns) in seeds {
+            let nb = projections::neighbours(&conn, snapshot_id, &dk, 2)?;
+            let presence = if nb.is_empty() {
+                // no neighbours; check observed status directly
+                observed_status(&conn, &dk)
+            } else {
+                "connected".to_string()
+            };
+            declared_neighbourhood.push(json!({
+                "decl_key": dk,
+                "name": name,
+                "kind": kind,
+                "namespace": ns,
+                "observed": presence,
+                "neighbours": nb,
+            }));
+        }
+    }
+
+    // FTS retriever: prior runs / settlements for the same question.
+    let fts_matches: Vec<Value> = if question.is_some() {
+        projections::fts_search(&conn, &meta.question_id, 5)?
+    } else {
+        Vec::new()
+    };
+
+    // Prior settlements for the same question.
+    let mut prior_settlements: Vec<Value> = Vec::new();
+    if !meta.question_id.is_empty() {
+        let mut stmt = conn.prepare(
+            "SELECT settlement_id, settlement_status, question_id FROM sxr_settlement
+             WHERE question_id = ?1 ORDER BY append_ordinal",
+        )?;
+        let rows = stmt.query_map([&meta.question_id], |r| {
+            Ok(json!({
+                "settlement_id": r.get::<_, String>(0)?,
+                "settlement_status": r.get::<_, String>(1)?,
+                "question_id": r.get::<_, String>(2)?,
+            }))
+        })?;
+        for r in rows {
+            prior_settlements.push(r?);
+        }
+    }
+
     Ok(output::output(vec![
-        ("repo_id", json!(repo_id)),
         ("run_id", json!(run_id)),
+        ("repo_id", json!(meta.repo_id)),
+        ("question", question.unwrap_or(Value::Null)),
+        ("threshold", threshold.unwrap_or(Value::Null)),
+        ("failure", failure),
+        ("declared_neighbourhood", json!(declared_neighbourhood)),
+        ("prior_settlements", json!(prior_settlements)),
+        ("fts_matches", json!(fts_matches)),
+        ("vector_available", json!(false)),
     ]))
+}
+
+/// Presence string helper for a decl_key in the evidence tables.
+fn observed_status(conn: &rusqlite::Connection, decl_key: &str) -> String {
+    let n: i64 = conn
+        .query_row(
+            "SELECT COUNT(*) FROM sxr_evidence_target WHERE decl_key = ?1",
+            [decl_key],
+            |r| r.get(0),
+        )
+        .unwrap_or(0);
+    if n > 0 {
+        "observed".to_string()
+    } else {
+        "not_observed".to_string()
+    }
 }

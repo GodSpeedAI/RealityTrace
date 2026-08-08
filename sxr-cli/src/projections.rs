@@ -5,8 +5,8 @@
 //! (AC-REPLAY-002).
 
 use anyhow::{Context, Result, anyhow};
-use rusqlite::{Connection, params};
-use serde_json::Value;
+use rusqlite::{Connection, OptionalExtension, params};
+use serde_json::{Value, json};
 use sxr_core::LedgerRow;
 use sxr_core::record_kinds::RecordKind;
 
@@ -88,6 +88,45 @@ CREATE TABLE IF NOT EXISTS sxr_settlement (
     ledger_id TEXT NOT NULL,
     append_ordinal INTEGER NOT NULL
 ) STRICT;
+/* Slice 3: G_declared (§12.3) — derived solely from semantic.snapshot records.
+   Nodes are scoped by (snapshot_id, decl_key); the snapshot belongs to one
+   repo, so (repo_id, semantic_closure_hash, decl_key) is the full scope
+   (AC-IDENTITY-002). */
+CREATE TABLE IF NOT EXISTS sxr_decl_node (
+    snapshot_id TEXT NOT NULL,
+    decl_key TEXT NOT NULL,
+    decl_kind TEXT NOT NULL,
+    name TEXT NOT NULL,
+    namespace TEXT NOT NULL,
+    logical_module_id TEXT NOT NULL,
+    PRIMARY KEY (snapshot_id, decl_key)
+) STRICT;
+CREATE TABLE IF NOT EXISTS sxr_decl_edge (
+    snapshot_id TEXT NOT NULL,
+    src_decl_key TEXT NOT NULL,
+    dst_decl_key TEXT NOT NULL,
+    edge_kind TEXT NOT NULL,
+    field_path TEXT NOT NULL,
+    PRIMARY KEY (snapshot_id, src_decl_key, dst_decl_key, edge_kind, field_path)
+) STRICT;
+/* Slice 3: FTS5 index (§12.2). Contentless-external-content: the FTS index
+   owns no truth — the authoritative text lives in sxr_fts_content, which is
+   itself derived from the ledger and recreated on every rebuild. FTS5 reads
+   that content for indexing; a hit returns a rowid that maps back to the
+   content row, so every result names its source record (§12.6). */
+CREATE TABLE IF NOT EXISTS sxr_fts_content (
+    rowid INTEGER PRIMARY KEY,
+    subject_key TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL
+) STRICT;
+CREATE VIRTUAL TABLE sxr_fts USING fts5(
+    subject_key, kind, title, body,
+    content = 'sxr_fts_content',
+    content_rowid = 'rowid',
+    tokenize = 'porter unicode61 remove_diacritics 2'
+);
 "#;
 
 fn string_field(v: &Value, key: &str) -> Option<String> {
@@ -126,6 +165,28 @@ fn first_section<'a>(payload: &'a Value, section: &str) -> Option<&'a Value> {
         .and_then(|a| a.first())
 }
 
+/// Insert one row into the FTS index (contentless-external-content). The
+/// authoritative text lives in `sxr_fts_content`; the FTS index reads it for
+/// search. `kind`/`subject_key` are stored so a hit names its source (§12.6).
+fn fts_insert(
+    conn: &Connection,
+    subject_key: &str,
+    kind: &str,
+    title: &str,
+    body: &str,
+) -> Result<()> {
+    conn.execute(
+        "INSERT INTO sxr_fts_content(subject_key, kind, title, body) VALUES (?1,?2,?3,?4)",
+        params![subject_key, kind, title, body],
+    )?;
+    let rowid: i64 = conn.last_insert_rowid();
+    conn.execute(
+        "INSERT INTO sxr_fts(rowid, subject_key, kind, title, body) VALUES (?1,?2,?3,?4,?5)",
+        params![rowid, subject_key, kind, title, body],
+    )?;
+    Ok(())
+}
+
 fn apply_question(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
     let q = first_section(payload, "questions");
     let question_id = q
@@ -146,6 +207,8 @@ fn apply_question(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Re
          VALUES (?1,?2,?3,?4,?5,?6)",
         params![question_id, form, qtype, serde_json::to_string(&scope)?, row.ledger_id, row.append_ordinal],
     )?;
+    // FTS: question form is indexed context (§12.2).
+    fts_insert(conn, &question_id, "question", &form, &qtype)?;
     Ok(())
 }
 
@@ -181,7 +244,6 @@ fn apply_threshold(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> R
 }
 
 fn apply_snapshot(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
-    let _st = first_section(payload, "states");
     let rep = first_section(payload, "representations");
     let snapshot_id = row
         .subject_refs
@@ -239,7 +301,160 @@ fn apply_snapshot(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Re
             serde_json::to_string(&resolution_inputs)?, None::<String>, row.ledger_id, row.append_ordinal
         ],
     )?;
+    // Slice 3: populate G_declared (nodes + edges) + FTS from the inline D
+    // document when a valid representation is present.
+    if model_status == "valid" {
+        apply_g_declared(conn, &snapshot_id, payload)?;
+    }
     Ok(())
+}
+
+/// Parse the inline canonical D document from a snapshot's representation and
+/// populate `sxr_decl_node`, `sxr_decl_edge`, and the FTS index (§12.3/§12.2).
+fn apply_g_declared(conn: &mut Connection, snapshot_id: &str, payload: &Value) -> Result<()> {
+    let rep = first_section(payload, "representations");
+    let inline = rep
+        .and_then(|v| string_field(v, "inline_content"))
+        .unwrap_or_default();
+    if inline.is_empty() {
+        return Ok(());
+    }
+    let d: Value = serde_json::from_str(&inline).context("parse inline D")?;
+    let env = d.get("envelope").cloned().unwrap_or(Value::Null);
+
+    // module → namespace from namespace_bindings.
+    let ns_of: std::collections::HashMap<String, String> = env
+        .get("namespace_bindings")
+        .and_then(Value::as_array)
+        .map(|a| {
+            a.iter()
+                .filter_map(|b| {
+                    Some((
+                        b.get("logical_id")?.as_str()?.to_string(),
+                        b.get("namespace")?.as_str()?.to_string(),
+                    ))
+                })
+                .collect()
+        })
+        .unwrap_or_default();
+
+    // declarations → decl_key + metadata.
+    let declarations = env.get("semantic_declarations");
+    let mut decl_keys: std::collections::HashMap<String, Value> = std::collections::HashMap::new();
+    if let Some(arr) = declarations.and_then(Value::as_array) {
+        for sd in arr {
+            let Some(decl_key) = decl_key_of(sd.get("id")) else {
+                continue;
+            };
+            let logical = sd
+                .get("logical_module_id")
+                .and_then(Value::as_str)
+                .unwrap_or("")
+                .to_string();
+            let ns = ns_of.get(&logical).cloned().unwrap_or_default();
+            let decl_kind = sd
+                .get("declaration")
+                .and_then(|x| x.get("kind"))
+                .and_then(Value::as_str)
+                .unwrap_or("")
+                .to_string();
+            let name = sd
+                .get("declaration")
+                .and_then(|x| x.get("data"))
+                .and_then(|x| x.get("name"))
+                .and_then(Value::as_str)
+                .unwrap_or("")
+                .to_string();
+            conn.execute(
+                "INSERT OR REPLACE INTO sxr_decl_node(snapshot_id, decl_key, decl_kind, name, namespace, logical_module_id)
+                 VALUES (?1,?2,?3,?4,?5,?6)",
+                params![snapshot_id, decl_key, decl_kind, name, ns, logical],
+            )?;
+            // FTS row for this declaration (name + namespace).
+            fts_insert(conn, &decl_key, "declaration", &name, &ns)?;
+            decl_keys.insert(decl_key.to_string(), sd.clone());
+        }
+    }
+
+    // Edges from resolved_references (decl → decl, kind "reference").
+    if let Some(arr) = env.get("resolved_references").and_then(Value::as_array) {
+        for rr in arr {
+            let Some(src) = decl_key_of(rr.get("source")) else {
+                continue;
+            };
+            let field_path = rr
+                .get("field_path")
+                .and_then(Value::as_str)
+                .unwrap_or("")
+                .to_string();
+            let target = rr.get("target");
+            let mut dst = None;
+            if target.and_then(|t| t.get("kind")).and_then(Value::as_str) == Some("declaration") {
+                dst = target
+                    .and_then(|t| t.get("data"))
+                    .and_then(|d| decl_key_of(d.get("id")));
+            }
+            if let Some(dst) = dst {
+                conn.execute(
+                    "INSERT OR REPLACE INTO sxr_decl_edge(snapshot_id, src_decl_key, dst_decl_key, edge_kind, field_path)
+                     VALUES (?1,?2,?3,'reference',?4)",
+                    params![snapshot_id, src, dst, field_path],
+                )?;
+            }
+        }
+    }
+
+    // Edges from declaration-internal Flow references (resource/from_entity/
+    // to_entity) — §12.3, not present in resolved_references.
+    for sd in decl_keys.values() {
+        let Some(decl_key) = decl_key_of(sd.get("id")) else {
+            continue;
+        };
+        let data = sd
+            .get("declaration")
+            .and_then(|x| x.get("data"))
+            .cloned()
+            .unwrap_or(Value::Null);
+        for field in ["resource", "from_entity", "to_entity"] {
+            if let Some(dst) = data
+                .get(field)
+                .and_then(|x| x.get("data"))
+                .and_then(|x| x.get("id"))
+                .and_then(|x| decl_key_of(Some(x)))
+            {
+                conn.execute(
+                    "INSERT OR REPLACE INTO sxr_decl_edge(snapshot_id, src_decl_key, dst_decl_key, edge_kind, field_path)
+                     VALUES (?1,?2,?3,?4,?5)",
+                    params![snapshot_id, decl_key, dst, field, field],
+                )?;
+            }
+        }
+    }
+    Ok(())
+}
+
+/// Convert a `CanonicalDeclarationId` JSON (`{kind, data}`) to a `decl_key`
+/// string (`concept:<uuid>` / `occurrence:<kind>:<hash>:<idx>` /
+/// `application:<sym>`), matching the §12.1 spine.
+fn decl_key_of(id: Option<&Value>) -> Option<String> {
+    let id = id?;
+    match id.get("kind").and_then(Value::as_str)? {
+        "concept" => Some(format!("concept:{}", id.get("data")?.get("id")?.as_str()?)),
+        "application" => Some(format!(
+            "application:{}",
+            id.get("data")?.get("id")?.as_str()?
+        )),
+        "occurrence" => {
+            let data = id.get("data")?;
+            Some(format!(
+                "occurrence:{}:{}:{}",
+                data.get("kind")?.as_str()?,
+                data.get("content_hash")?.as_str()?,
+                data.get("duplicate_index")?.as_u64()?
+            ))
+        }
+        _ => None,
+    }
 }
 
 fn apply_run_started(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
@@ -363,6 +578,8 @@ fn apply_evidence(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Re
         "INSERT OR REPLACE INTO sxr_evidence_target(evidence_id, decl_key) VALUES (?1,?2)",
         params![evidence_id, decl_key],
     )?;
+    // FTS: evidence type + direction is searchable context (§12.2).
+    fts_insert(conn, &evidence_id, "evidence", &evidence_type, &direction)?;
     Ok(())
 }
 
@@ -406,6 +623,8 @@ fn apply_settlement(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> 
          VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",
         params![settlement_id, run_id, question_id, transformation_ref, threshold_id, status, confidence, None::<String>, row.ledger_id, row.append_ordinal],
     )?;
+    // FTS: settlement status is searchable context (§12.2).
+    fts_insert(conn, &settlement_id, "settlement", &status, &confidence)?;
     Ok(())
 }
 
@@ -451,9 +670,13 @@ fn drop_tables(conn: &mut Connection) -> Result<()> {
         "sxr_evidence",
         "sxr_evidence_target",
         "sxr_settlement",
+        "sxr_decl_node",
+        "sxr_decl_edge",
     ] {
         conn.execute(&format!("DROP TABLE IF EXISTS {t}"), [])?;
     }
+    conn.execute("DROP TABLE IF EXISTS sxr_fts", [])?;
+    conn.execute("DROP TABLE IF EXISTS sxr_fts_content", [])?;
     Ok(())
 }
 
@@ -471,9 +694,13 @@ pub fn export_canonical(ctx: &crate::state::Ctx, repo_id: &str) -> Result<String
         "sxr_evidence",
         "sxr_evidence_target",
         "sxr_settlement",
+        "sxr_decl_node",
+        "sxr_decl_edge",
     ] {
         let order = match table {
             "sxr_evidence_target" => "evidence_id, decl_key",
+            "sxr_decl_node" => "snapshot_id, decl_key",
+            "sxr_decl_edge" => "snapshot_id, src_decl_key, dst_decl_key, edge_kind, field_path",
             _ => "1",
         };
         let sql = format!("SELECT * FROM {table} ORDER BY {order}");
@@ -524,12 +751,18 @@ pub fn status(ctx: &crate::state::Ctx, repo_id: &str) -> Result<Value> {
         "sxr_evidence",
         "sxr_evidence_target",
         "sxr_settlement",
+        "sxr_decl_node",
+        "sxr_decl_edge",
     ] {
         let n: i64 = conn
             .query_row(&format!("SELECT COUNT(*) FROM {t}"), [], |r| r.get(0))
             .unwrap_or(0);
         tables.insert(t.into(), serde_json::json!(n));
     }
+    let fts: i64 = conn
+        .query_row("SELECT COUNT(*) FROM sxr_fts", [], |r| r.get(0))
+        .unwrap_or(0);
+    tables.insert("sxr_fts".into(), serde_json::json!(fts));
     let lag: i64 = conn
         .query_row(
             "SELECT (SELECT COALESCE(MAX(append_ordinal),0) FROM ledger) - COALESCE((SELECT last_append_ordinal FROM projection_watermark WHERE name='sxr_slice1'),0)",
@@ -542,4 +775,360 @@ pub fn status(ctx: &crate::state::Ctx, repo_id: &str) -> Result<Value> {
         "tables": tables,
         "lag": lag,
     }))
+}
+
+// ── Slice 3: G_declared + FTS query support (§12.3, §12.2, §12.7) ──────────
+
+/// Open the repo's ledger DB (projection tables live there).
+pub fn open(ctx: &crate::state::Ctx, repo_id: &str) -> Result<Connection> {
+    let dir = ctx.ensure_repo_dir(repo_id)?;
+    rusqlite::Connection::open(dir.join("ledger.db")).context("open ledger db")
+}
+
+/// The latest snapshot_id for a repo that produced a valid `G_declared`
+/// (has declaration nodes). Falls back to the newest snapshot row.
+pub fn latest_g_declared_snapshot(conn: &Connection, repo_id: &str) -> Result<Option<String>> {
+    let best = conn
+        .query_row(
+            "SELECT s.snapshot_id FROM sxr_snapshot s
+             WHERE s.repo_id = ?1 AND s.model_validation_status = 'valid'
+               AND EXISTS (SELECT 1 FROM sxr_decl_node n WHERE n.snapshot_id = s.snapshot_id)
+             ORDER BY s.first_seen_append_ordinal DESC LIMIT 1",
+            [repo_id],
+            |r| r.get(0),
+        )
+        .optional()?;
+    if best.is_some() {
+        return Ok(best);
+    }
+    // Fallback: newest valid snapshot even without nodes.
+    let any = conn
+        .query_row(
+            "SELECT snapshot_id FROM sxr_snapshot
+             WHERE repo_id = ?1 AND model_validation_status = 'valid'
+             ORDER BY first_seen_append_ordinal DESC LIMIT 1",
+            [repo_id],
+            |r| r.get(0),
+        )
+        .optional()?;
+    Ok(any)
+}
+
+/// Resolve an entity argument to a scoped `decl_key` in the repo's current
+/// `G_declared` snapshot. Accepts a raw `decl_key` (`concept:…`,
+/// `occurrence:…`, `application:…`), `concept:<uuid>`, or `name:<Name>` /
+/// `name::<Name>` / `name:<Namespace::<Name>>` looked up by declaration name.
+/// Returns `(decl_key, snapshot_id, semantic_closure_hash)` or None.
+pub fn resolve_decl_key(
+    conn: &Connection,
+    repo_id: &str,
+    entity: &str,
+) -> Result<Option<(String, String, String)>> {
+    let Some(snapshot_id) = latest_g_declared_snapshot(conn, repo_id)? else {
+        return Ok(None);
+    };
+    let semantic_hash: String = conn
+        .query_row(
+            "SELECT semantic_closure_hash FROM sxr_snapshot WHERE snapshot_id = ?1",
+            [&snapshot_id],
+            |r| r.get(0),
+        )
+        .optional()?
+        .flatten()
+        .unwrap_or_default();
+
+    // 1. Direct decl_key forms.
+    let direct = if entity.starts_with("concept:")
+        || entity.starts_with("occurrence:")
+        || entity.starts_with("application:")
+    {
+        Some(entity.to_string())
+    } else if entity.starts_with("name:") {
+        None
+    } else {
+        // bare: treat as a name lookup fallback
+        None
+    };
+
+    if let Some(dk) = direct {
+        let found: bool = conn
+            .query_row(
+                "SELECT EXISTS(SELECT 1 FROM sxr_decl_node WHERE snapshot_id = ?1 AND decl_key = ?2)",
+                params![snapshot_id, dk],
+                |r| r.get(0),
+            )
+            .unwrap_or(false);
+        if found {
+            return Ok(Some((dk, snapshot_id, semantic_hash)));
+        }
+        return Ok(None);
+    }
+
+    // 2. name lookup: strip `name:` prefix, then match by name (and optional
+    // namespace:: prefix).
+    let name_arg = entity.strip_prefix("name:").unwrap_or(entity);
+    let (want_ns, want_name) = if let Some((ns, n)) = name_arg.split_once("::") {
+        (Some(ns.to_string()), n.to_string())
+    } else {
+        (None, name_arg.to_string())
+    };
+    let found = conn
+        .query_row(
+            "SELECT decl_key FROM sxr_decl_node
+             WHERE snapshot_id = ?1 AND name = ?2
+               AND (?3 IS NULL OR namespace = ?3)
+             ORDER BY decl_key LIMIT 1",
+            params![snapshot_id, want_name, want_ns],
+            |r| r.get::<_, String>(0),
+        )
+        .optional()?;
+    Ok(found.map(|dk| (dk, snapshot_id, semantic_hash)))
+}
+
+/// §12.7: answer "what evidence and settlements exist for entity X?" from
+/// `G_declared` + evidence joins, with an honest `not_observed` reason when the
+/// declaration exists in `G_declared` but has no qualifying evidence.
+pub fn query_evidence_declared(conn: &Connection, repo_id: &str, entity: &str) -> Result<Value> {
+    let Some((decl_key, snapshot_id, semantic_hash)) = resolve_decl_key(conn, repo_id, entity)?
+    else {
+        return Ok(json!({
+            "decl_key": entity,
+            "presence": "not_in_declared_graph",
+            "evidence": [],
+        }));
+    };
+
+    let mut evidence: Vec<Value> = Vec::new();
+    {
+        let mut stmt = conn.prepare(
+            "SELECT e.evidence_id, e.evidence_type, e.direction, e.relevance, e.reliability,
+                    e.run_id, e.question_id, q.question_form,
+                    s.settlement_id, s.settlement_status, s.confidence
+             FROM sxr_evidence_target t
+             JOIN sxr_evidence e ON e.evidence_id = t.evidence_id
+             JOIN sxr_question q ON q.question_id = e.question_id
+             LEFT JOIN sxr_settlement s ON s.question_id = e.question_id AND s.run_id = e.run_id
+             WHERE t.decl_key = ?1
+             ORDER BY e.append_ordinal",
+        )?;
+        let rows = stmt.query_map([&decl_key], |r| {
+            Ok(json!({
+                "evidence_id": r.get::<_, String>(0)?,
+                "evidence_type": r.get::<_, String>(1)?,
+                "direction": r.get::<_, String>(2)?,
+                "relevance": r.get::<_, String>(3)?,
+                "reliability": r.get::<_, String>(4)?,
+                "run_id": r.get::<_, String>(5)?,
+                "question_id": r.get::<_, String>(6)?,
+                "question_form": r.get::<_, String>(7)?,
+                "settlement_id": r.get::<_, Option<String>>(8)?,
+                "settlement_status": r.get::<_, Option<String>>(9)?,
+                "confidence": r.get::<_, Option<String>>(10)?,
+            }))
+        })?;
+        for r in rows {
+            evidence.push(r?);
+        }
+    }
+
+    if !evidence.is_empty() {
+        return Ok(json!({
+            "repo_id": repo_id,
+            "decl_key": decl_key,
+            "snapshot_id": snapshot_id,
+            "semantic_closure_hash": semantic_hash,
+            "presence": "observed",
+            "evidence": evidence,
+        }));
+    }
+
+    // Declared but no qualifying evidence → honest not_observed (§12.4).
+    let node = conn
+        .query_row(
+            "SELECT decl_kind, name, namespace FROM sxr_decl_node WHERE snapshot_id = ?1 AND decl_key = ?2",
+            params![snapshot_id, decl_key],
+            |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?, r.get::<_, String>(2)?)),
+        )
+        .optional()?;
+    let (kind, name, ns) = node.unwrap_or_default();
+    Ok(json!({
+        "repo_id": repo_id,
+        "decl_key": decl_key,
+        "snapshot_id": snapshot_id,
+        "semantic_closure_hash": semantic_hash,
+        "decl_kind": kind,
+        "name": name,
+        "namespace": ns,
+        "presence": "not_observed",
+        "reason": "not_collected",
+        "evidence": [],
+    }))
+}
+
+/// FTS5 search over the seeded corpus (§12.2). Contentless-external-content:
+/// the index stores no text, so values are read back from `sxr_fts_content`
+/// via the rowid, keeping every result traceable to its source record (§12.6).
+pub fn fts_search(conn: &Connection, query: &str, limit: usize) -> Result<Vec<Value>> {
+    // Quote the term so FTS5 does not parse `-`, `:`, `.` etc. as operators;
+    // append `*` for a prefix match.
+    let q = format!(r#""{query}"*"#);
+    let mut stmt = conn.prepare(
+        "SELECT c.subject_key, c.kind, c.title, c.body
+         FROM sxr_fts f JOIN sxr_fts_content c ON c.rowid = f.rowid
+         WHERE sxr_fts MATCH ?1
+         ORDER BY rank LIMIT ?2",
+    )?;
+    let rows = stmt.query_map(params![q, limit as i64], |r| {
+        Ok(json!({
+            "subject_key": r.get::<_, String>(0)?,
+            "kind": r.get::<_, String>(1)?,
+            "title": r.get::<_, String>(2)?,
+            "body": r.get::<_, String>(3)?,
+        }))
+    })?;
+    let mut out = Vec::new();
+    for r in rows {
+        out.push(r?);
+    }
+    Ok(out)
+}
+
+/// 1-and-2-hop neighbours of a decl_key in `G_declared`, annotated with their
+/// observed status (§17.1 graph retriever). Returns neighbour records.
+pub fn neighbours(
+    conn: &Connection,
+    snapshot_id: &str,
+    decl_key: &str,
+    hop: u32,
+) -> Result<Vec<Value>> {
+    let mut out: Vec<Value> = Vec::new();
+    let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut frontier: Vec<(String, u32)> = vec![(decl_key.to_string(), 0)];
+    while let Some((cur, cur_hop)) = frontier.pop() {
+        if cur_hop >= hop {
+            continue;
+        }
+        // outgoing edges
+        let mut stmt = conn.prepare(
+            "SELECT dst_decl_key, edge_kind FROM sxr_decl_edge
+             WHERE snapshot_id = ?1 AND src_decl_key = ?2",
+        )?;
+        let rows = stmt.query_map(params![snapshot_id, cur], |r| {
+            Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?))
+        })?;
+        for r in rows {
+            let (dst, edge) = r?;
+            let key = format!("{dst}:{edge}");
+            if seen.insert(key) {
+                let presence = observed_presence(conn, &dst);
+                out.push(json!({
+                    "decl_key": dst,
+                    "hop": cur_hop + 1,
+                    "edge_kind": edge,
+                    "presence": presence.0,
+                    "reason": presence.1,
+                }));
+                frontier.push((dst, cur_hop + 1));
+            }
+        }
+        // incoming edges
+        let mut istmt = conn.prepare(
+            "SELECT src_decl_key, edge_kind FROM sxr_decl_edge
+             WHERE snapshot_id = ?1 AND dst_decl_key = ?2",
+        )?;
+        let irows = istmt.query_map(params![snapshot_id, cur], |r| {
+            Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?))
+        })?;
+        for r in irows {
+            let (src, edge) = r?;
+            let key = format!("{src}:{edge}");
+            if seen.insert(key) {
+                let presence = observed_presence(conn, &src);
+                out.push(json!({
+                    "decl_key": src,
+                    "hop": cur_hop + 1,
+                    "edge_kind": edge,
+                    "presence": presence.0,
+                    "reason": presence.1,
+                }));
+                frontier.push((src, cur_hop + 1));
+            }
+        }
+    }
+    Ok(out)
+}
+
+/// Presence of a decl_key in the evidence tables: `observed` if any evidence
+/// targets it, else `not_observed` with reason `not_collected`.
+fn observed_presence(conn: &Connection, decl_key: &str) -> (String, String) {
+    let n: i64 = conn
+        .query_row(
+            "SELECT COUNT(*) FROM sxr_evidence_target WHERE decl_key = ?1",
+            [decl_key],
+            |r| r.get(0),
+        )
+        .unwrap_or(0);
+    if n > 0 {
+        ("observed".to_string(), String::new())
+    } else {
+        ("not_observed".to_string(), "not_collected".to_string())
+    }
+}
+
+/// Canonical byte-stable export over a caller-owned connection (test helper +
+/// reusable by `export_canonical`).
+#[allow(dead_code)]
+pub fn export_canonical_conn(conn: &Connection) -> Result<String> {
+    let mut out: Vec<Value> = Vec::new();
+    for table in [
+        "sxr_snapshot",
+        "sxr_run",
+        "sxr_question",
+        "sxr_threshold",
+        "sxr_evidence",
+        "sxr_evidence_target",
+        "sxr_settlement",
+        "sxr_decl_node",
+        "sxr_decl_edge",
+    ] {
+        let order = match table {
+            "sxr_evidence_target" => "evidence_id, decl_key",
+            "sxr_decl_node" => "snapshot_id, decl_key",
+            "sxr_decl_edge" => "snapshot_id, src_decl_key, dst_decl_key, edge_kind, field_path",
+            _ => "1",
+        };
+        let sql = format!("SELECT * FROM {table} ORDER BY {order}");
+        let mut stmt = conn.prepare(&sql)?;
+        let ncols = stmt.column_count();
+        let cols: Vec<String> = (0..ncols)
+            .map(|i| stmt.column_name(i).unwrap_or("c").to_string())
+            .collect();
+        let rows = stmt.query_map([], |r| {
+            let mut obj = serde_json::Map::new();
+            for (i, c) in cols.iter().enumerate() {
+                let val: Value = match r.get_ref(i) {
+                    Ok(rusqlite::types::ValueRef::Null) => Value::Null,
+                    Ok(rusqlite::types::ValueRef::Integer(n)) => Value::from(n),
+                    Ok(rusqlite::types::ValueRef::Real(x)) => Value::from(x),
+                    Ok(rusqlite::types::ValueRef::Text(t)) => {
+                        Value::String(String::from_utf8_lossy(t).into_owned())
+                    }
+                    Ok(rusqlite::types::ValueRef::Blob(b)) => Value::String(hex::encode(b)),
+                    Err(_) => Value::Null,
+                };
+                obj.insert(c.clone(), val);
+            }
+            Ok(Value::Object(obj))
+        })?;
+        for r in rows {
+            out.push(r?);
+        }
+    }
+    serde_json::to_string(&out).context("serialize canonical export")
+}
+
+/// Drop the Slice-3 projection tables (test helper; `rebuild` re-applies).
+#[allow(dead_code)]
+pub fn drop_tables_test(conn: &mut Connection) -> Result<()> {
+    drop_tables(conn)
 }

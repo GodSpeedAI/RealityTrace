@@ -13,6 +13,7 @@ pub mod chain;
 pub mod clock;
 pub mod embedded_schema;
 pub mod envelope;
+pub mod graph;
 pub mod record_kinds;
 pub mod threshold;
 pub mod types;
