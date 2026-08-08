@@ -3,10 +3,8 @@
 
 use anyhow::{Context, Result, anyhow};
 use serde_json::{Value, json};
-use sxr_core::clock::{ClockPort, SystemClock};
 use sxr_core::envelope::{
-    EnvelopeParts, build_envelope, new_envelope_id, runtime_scope, sxr_created_by,
-    validate_record_kind_conformance,
+    EnvelopeParts, build_envelope, runtime_scope, sxr_created_by, validate_record_kind_conformance,
 };
 use sxr_core::record_kinds::RecordKind;
 
@@ -44,8 +42,8 @@ pub fn build(
     semantic_hash: Option<String>,
 ) -> Result<Value> {
     let parts = EnvelopeParts {
-        envelope_id: new_envelope_id(),
-        created_at: SystemClock.now_utc(),
+        envelope_id: crate::determinism::mint_id("envelope"),
+        created_at: crate::determinism::now_utc(),
         created_by: sxr_created_by(SXR_VERSION),
         record_kind: kind,
         scope: runtime_scope(
@@ -75,7 +73,32 @@ pub fn build(
     Ok(envelope)
 }
 
-/// Build and append a record to the caller's open repo ledger.
+/// Derive a producer-set idempotency key (§11.4) from the record's content:
+/// `sha256(record_kind + subject_refs sorted + canonical payload)`. Equal
+/// content ⇒ equal key ⇒ re-ingest is a ledger no-op. Records carry a freshly
+/// minted id in their payload, so distinct emissions never collide.
+fn derive_idempotency_key(kind: RecordKind, subject_refs: &[String], envelope: &Value) -> String {
+    use sha2::{Digest, Sha256};
+    let mut refs = subject_refs.to_vec();
+    refs.sort();
+    let mut h = Sha256::new();
+    h.update(kind.as_str().as_bytes());
+    h.update([0x1f]);
+    for r in &refs {
+        h.update(r.as_bytes());
+        h.update([0x1f]);
+    }
+    h.update(
+        serde_json::to_string(envelope)
+            .unwrap_or_default()
+            .as_bytes(),
+    );
+    hex::encode(h.finalize())
+}
+
+/// Build and append a record to the caller's open repo ledger. An explicit
+/// `idempotency_key` wins; otherwise one is derived from the record content
+/// (§11.4 — producers set it deterministically, re-ingest is a no-op).
 #[allow(clippy::too_many_arguments)]
 pub fn append(
     repo: &mut RepoLedger,
@@ -103,6 +126,8 @@ pub fn append(
         None,
         None,
     )?;
-    crate::ledger_io::append_record(repo, kind, idempotency_key, subject_refs, &envelope)
+    let key =
+        idempotency_key.or_else(|| Some(derive_idempotency_key(kind, &subject_refs, &envelope)));
+    crate::ledger_io::append_record(repo, kind, key, subject_refs, &envelope)
         .context("append envelope")
 }

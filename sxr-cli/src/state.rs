@@ -63,6 +63,35 @@ impl Ctx {
         std::fs::create_dir_all(&dir).context("create repo dir")?;
         Ok(dir)
     }
+
+    /// Durable commit queue root (§10.2, §11.1a):
+    /// `$XDG_STATE_HOME/sxr/daemon-queue`.
+    pub fn queue_root(&self) -> PathBuf {
+        self.state_root.join("daemon-queue")
+    }
+
+    /// Opt-in spool dir for a repo (§10.2, §11.1a):
+    /// `$XDG_STATE_HOME/sxr/spool/<repo_id>/`.
+    pub fn spool_dir(&self, repo_id: &str) -> PathBuf {
+        self.state_root.join("spool").join(repo_id)
+    }
+
+    /// Daemon socket path (§16.1): `$XDG_RUNTIME_DIR/sxr.sock`, overridable
+    /// via `SXR_DAEMON_SOCKET` (used by tests and the proof scripts).
+    pub fn socket_path(&self) -> PathBuf {
+        std::env::var("SXR_DAEMON_SOCKET")
+            .ok()
+            .filter(|v| !v.is_empty())
+            .map(PathBuf::from)
+            .unwrap_or_else(|| {
+                let runtime = std::env::var("XDG_RUNTIME_DIR")
+                    .ok()
+                    .filter(|v| !v.is_empty())
+                    .map(PathBuf::from)
+                    .unwrap_or_else(|| PathBuf::from("/tmp"));
+                runtime.join("sxr.sock")
+            })
+    }
 }
 
 /// Enrollment metadata (§9.1): minted ids + identity evidence snapshot.

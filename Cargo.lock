@@ -1277,6 +1277,7 @@ dependencies = [
  "rusqlite",
  "serde",
  "serde_json",
+ "sha2",
  "sxr-core",
  "sxr-df",
  "sxr-git",

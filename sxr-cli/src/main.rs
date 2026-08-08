@@ -7,6 +7,8 @@ use clap::{Parser, Subcommand};
 use serde_json::Value;
 
 mod commands;
+mod determinism;
+mod durability;
 mod envelopes;
 mod ledger_io;
 mod output;
@@ -335,6 +337,15 @@ struct IngestCmd {
     verifier: String,
     #[arg(long)]
     stdin_format: String,
+    /// Opt-in spooling (§11.1a): write the unvalidated request to the spool
+    /// and exit 75 — never a silent fallback on lock contention.
+    #[arg(long)]
+    spool: bool,
+    /// Submit through the daemon queue (§16.1): exit 0 with
+    /// `queued_for_commit` only after a fsynced receipt; transparently falls
+    /// back to a direct commit when the daemon is unavailable (F-15).
+    #[arg(long)]
+    async_mode: bool,
 }
 
 #[derive(Subcommand)]
@@ -406,8 +417,19 @@ enum SpoolCmds {
 
 #[derive(clap::Args)]
 struct AwaitCmd {
+    /// Wait for a specific run's records (alternative to --repo --all).
     #[arg(long)]
-    run: String,
+    run: Option<String>,
+    /// Wait until the repo's queue and spool are fully drained.
+    #[arg(long)]
+    repo: Option<String>,
+    #[arg(long)]
+    all: bool,
+    /// Fail with the remaining records listed after this many seconds.
+    #[arg(long, default_value_t = 30)]
+    timeout_secs: u64,
+    #[arg(long, default_value_t = 100)]
+    interval_ms: u64,
 }
 
 #[derive(clap::Args)]
@@ -445,6 +467,10 @@ fn main() {
     let result = dispatch(&ctx, cli.command);
     match result {
         Ok(Dispatch::Json(v)) => output::print_json(&v),
+        Ok(Dispatch::JsonExit(v, code)) => {
+            output::print_json(&v);
+            std::process::exit(code);
+        }
         Ok(Dispatch::Raw(s)) => {
             println!("{s}");
         }
@@ -457,6 +483,8 @@ fn main() {
 
 enum Dispatch {
     Json(Value),
+    /// A JSON output followed by a specific exit code (75 spooled, doctor 2).
+    JsonExit(Value, i32),
     Raw(String),
 }
 
@@ -471,6 +499,9 @@ fn exit_for_error(e: &anyhow::Error) -> i32 {
         || msg.contains("not found")
         || msg.contains("not enrolled")
         || msg.contains("no semantic configuration")
+        || msg.contains("queued_for_commit")
+        || msg.contains("spooled")
+        || msg.contains("not committed")
     {
         3
     } else {
@@ -606,7 +637,17 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 transformation,
             } => commands::settlement_register(ctx, &run, &question, &threshold, &transformation)?,
         },
-        Command::Ingest(c) => commands::ingest(ctx, &c.run, &c.verifier)?,
+        Command::Ingest(c) => {
+            let (v, code) = commands::ingest(
+                ctx,
+                &c.run,
+                &c.verifier,
+                &c.stdin_format,
+                c.spool,
+                c.async_mode,
+            )?;
+            return Ok(Dispatch::JsonExit(v, code));
+        }
         Command::Ledger(c) => match c {
             LedgerCmds::Verify { repo } => commands::ledger_verify(ctx, &repo)?,
             LedgerCmds::Export { repo } => commands::ledger_export(ctx, &repo)?,
@@ -646,8 +687,23 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
             SpoolCmds::Status { repo } => commands::spool_status(ctx, &repo)?,
             SpoolCmds::Drain { repo } => commands::spool_drain(ctx, &repo)?,
         },
-        Command::Await(c) => commands::await_run(ctx, &c.run)?,
-        Command::Doctor => commands::doctor(ctx)?,
+        Command::Await(c) => {
+            if c.run.is_none() && (c.repo.is_none() || !c.all) {
+                return Err(anyhow!("await requires --run <id>, or --repo <id> --all"));
+            }
+            commands::await_run(
+                ctx,
+                c.run.as_deref(),
+                c.repo.as_deref(),
+                c.all,
+                c.timeout_secs,
+                c.interval_ms,
+            )?
+        }
+        Command::Doctor => {
+            let (v, code) = commands::doctor(ctx)?;
+            return Ok(Dispatch::JsonExit(v, code));
+        }
         Command::Delta(c) => commands::delta(ctx, &c.repo, &c.question, &c.snapshot)?,
         Command::Explain(c) => commands::explain(ctx, &c.record_id)?,
         Command::Context(c) => commands::context(ctx, &c.repo, &c.failure)?,

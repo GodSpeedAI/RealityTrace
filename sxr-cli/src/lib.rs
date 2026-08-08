@@ -4,6 +4,8 @@
 //! same module set.
 
 pub mod commands;
+pub mod determinism;
+pub mod durability;
 pub mod envelopes;
 pub mod ledger_io;
 pub mod output;

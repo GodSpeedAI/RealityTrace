@@ -4,6 +4,7 @@
 use anyhow::{Context, Result, anyhow, bail};
 use rusqlite::OptionalExtension;
 use serde_json::{Value, json};
+use sha2::Digest;
 use std::path::PathBuf;
 use sxr_core::record_kinds::RecordKind;
 use sxr_verify::VerifierPort;
@@ -14,7 +15,7 @@ use crate::projections;
 use crate::state::{self, Ctx, Enrollment, RunMeta, SemanticConfig};
 
 fn ulid() -> String {
-    ulid::Ulid::new().to_string()
+    crate::determinism::mint_id("ulid")
 }
 
 // ── repo commands ────────────────────────────────────────────────────────
@@ -923,6 +924,8 @@ fn repo_plan(ctx: &Ctx, repo_id: &str, run_id: &str) -> Result<Value> {
 
 pub fn evidence_create(ctx: &Ctx, run_id: &str, observation_id: &str) -> Result<Value> {
     let meta = repo_for_run(ctx, run_id)?;
+    // F-19b: the referenced observation and run must be committed.
+    crate::durability::ensure_committed(ctx, &meta.repo_id, &[run_id, observation_id])?;
     let e = state::require_enrollment(ctx, &meta.repo_id)?;
     let progress = repo_plan(ctx, &meta.repo_id, run_id)?;
     let target = progress
@@ -1171,6 +1174,8 @@ pub fn settlement_register(
 ) -> Result<Value> {
     let meta = repo_for_run(ctx, run_id)?;
     let e = state::require_enrollment(ctx, &meta.repo_id)?;
+    // F-19b: the referenced run, question, and threshold must be committed.
+    crate::durability::ensure_committed(ctx, &meta.repo_id, &[run_id, question_id, threshold_id])?;
     // R-S1: threshold must be comparable to and strictly earlier than every
     // evidence position.
     let evidence_positions = evidence_positions(ctx, &meta.repo_id, run_id)?;
@@ -2294,6 +2299,8 @@ pub fn ledger_history_json(ctx: &Ctx, repo_id: &str) -> Result<Value> {
 
 pub fn query_evidence(ctx: &Ctx, repo_id: &str, entity: &str) -> Result<Value> {
     let _e = state::require_enrollment(ctx, repo_id)?;
+    // F-19b: a queried entity must be committed, not pending.
+    crate::durability::ensure_committed(ctx, repo_id, &[entity])?;
     let conn = projections::open(ctx, repo_id)?;
     // Ensure projections are present.
     projections::rebuild(ctx, repo_id)?;
@@ -2340,73 +2347,448 @@ pub fn export_anti_collapse_corpus(
 
 // ── doctor ───────────────────────────────────────────────────────────────
 
-pub fn doctor(ctx: &Ctx) -> Result<Value> {
+/// Daemon presence probe: the socket accepts connections only while the
+/// daemon holds it (§16.1, F-15). Informational — never a hard requirement.
+fn daemon_active(ctx: &Ctx) -> bool {
+    use std::os::unix::net::UnixStream;
+    UnixStream::connect(ctx.socket_path()).is_ok()
+}
+
+/// Exit code for `doctor`: 0 healthy, 2 when corrupt queue segments exist
+/// (actionable durability state, §16.4).
+pub fn doctor(ctx: &Ctx) -> Result<(Value, i32)> {
     let enrollments = state::list_enrollments(ctx)?;
-    let repos: Vec<Value> = enrollments
-        .iter()
-        .map(|e| {
-            json!({
-                "repo_id": e.repo_id,
-                "filesystem_path": e.filesystem_path.to_string_lossy(),
-            })
-        })
-        .collect();
-    Ok(output::output(vec![
-        ("data_root", json!(ctx.data_root.to_string_lossy())),
-        ("state_root", json!(ctx.state_root.to_string_lossy())),
-        ("enrolled_repos", json!(repos)),
-        ("filesystem_class", json!("safe")),
-        ("daemon_active", json!(false)),
-    ]))
+    let mut pending_count = 0u64;
+    let mut spooled_count = 0u64;
+    let mut corrupt: Vec<String> = Vec::new();
+    let mut repos: Vec<Value> = Vec::new();
+    for e in &enrollments {
+        repos.push(json!({
+            "repo_id": e.repo_id,
+            "filesystem_path": e.filesystem_path.to_string_lossy(),
+        }));
+        for p in crate::durability::pending_entries(ctx, &e.repo_id)? {
+            if p.state == "spooled" {
+                spooled_count += 1;
+            } else if p.corrupt {
+                corrupt.push(p.path.display().to_string());
+            } else {
+                pending_count += 1;
+            }
+        }
+    }
+    let active = daemon_active(ctx);
+    Ok((
+        output::output(vec![
+            ("data_root", json!(ctx.data_root.to_string_lossy())),
+            ("state_root", json!(ctx.state_root.to_string_lossy())),
+            ("enrolled_repos", json!(repos)),
+            ("filesystem_class", json!("safe")),
+            ("daemon_active", json!(active)),
+            ("pending_queue_entries", json!(pending_count)),
+            ("spooled_entries", json!(spooled_count)),
+            ("corrupt_queue_segments", json!(corrupt)),
+        ]),
+        if corrupt.is_empty() { 0 } else { 2 },
+    ))
 }
 
 // ── misc ─────────────────────────────────────────────────────────────────
 
 pub fn delta(ctx: &Ctx, repo_id: &str, question_id: &str, snapshot_id: &str) -> Result<Value> {
     let _e = state::require_enrollment(ctx, repo_id)?;
+    // F-19b: the referenced question and snapshot must be committed.
+    crate::durability::ensure_committed(ctx, repo_id, &[question_id, snapshot_id])?;
     projections::rebuild(ctx, repo_id)?;
     let conn = projections::open(ctx, repo_id)?;
     let v = projections::delta_question(&conn, repo_id, question_id, snapshot_id)?;
     Ok(output::output(vec![("delta", v)]))
 }
 
-pub fn spool_status(_ctx: &Ctx, repo_id: &str) -> Result<Value> {
-    Ok(output::output(vec![
-        ("repo_id", json!(repo_id)),
-        ("spooled_count", json!(0)),
-    ]))
+/// Observation sections mirroring §15.1 step 7's `observation.recorded`
+/// shape (also produced by `sxr verify run`).
+fn observation_sections(
+    observation_id: &str,
+    run_id: &str,
+    exit_code: Option<i32>,
+    crashed: bool,
+    stdout_ref: &str,
+    stderr_ref: Option<&str>,
+    parsed: &Option<sxr_verify::ParsedSummary>,
+) -> Value {
+    json!({
+        "observations": [{ "observation_id": observation_id, "scope": format!("run:{run_id}") }],
+        "representations": [{
+            "representation_id": format!("rep:obs:{observation_id}"),
+            "representation_kind": "atomic",
+            "representation_type": "verifier_stdout",
+            "content_hash": stdout_ref,
+            "inline_content": {
+                "exit_code": exit_code,
+                "crashed": crashed,
+                "stderr_ref": stderr_ref,
+                "parsed": parsed.as_ref().map(|p| json!({
+                    "test_count": p.test_count, "passed": p.passed, "failed": p.failed, "ignored": p.ignored,
+                })).unwrap_or(Value::Null),
+            },
+        }]
+    })
 }
 
-pub fn spool_drain(_ctx: &Ctx, repo_id: &str) -> Result<Value> {
-    Ok(output::output(vec![
-        ("repo_id", json!(repo_id)),
-        ("drained", json!(0)),
-    ]))
+/// The producer-set idempotency key for an ingest request (§11.4):
+/// `sha256(run_id + verifier_id + step_id + attempt)`. The same logical
+/// verifier stream has the same key whether it is committed directly,
+/// spooled, or queued through the daemon.
+pub fn ingest_idempotency_key(run_id: &str, verifier: &str) -> String {
+    use sha2::{Digest, Sha256};
+    let mut h = Sha256::new();
+    h.update(run_id.as_bytes());
+    h.update(b"+");
+    h.update(verifier.as_bytes());
+    h.update(b"+ingest+1");
+    hex::encode(h.finalize())
 }
 
-pub fn await_run(_ctx: &Ctx, run_id: &str) -> Result<Value> {
-    Ok(output::output(vec![
-        ("run_id", json!(run_id)),
-        ("state", json!("committed")),
-    ]))
+/// Build the ingest request metadata object (§11.1a spool shape).
+fn ingest_request_meta(
+    repo_id: &str,
+    run_id: &str,
+    verifier: &str,
+    stdin_format: &str,
+    stdin_sha256: &str,
+) -> Value {
+    json!({
+        "request_kind": "sxr.ingest/v1",
+        "repo_id": repo_id,
+        "run_id": run_id,
+        "verifier": verifier,
+        "stdin_format": stdin_format,
+        "idempotency_key": ingest_idempotency_key(run_id, verifier),
+        "stdin_sha256": stdin_sha256,
+    })
 }
 
-pub fn ingest(_ctx: &Ctx, run_id: &str, verifier: &str) -> Result<Value> {
+/// Commit one ingested verifier stream as an `observation.recorded` record
+/// (mirroring `sxr verify run`), replaying the raw bytes into the repo's
+/// artifacts dir. Returns (already_committed, observation_id, parsed, position);
+/// duplicate replay is a no-op by idempotency key (§11.4, F-19c).
+fn commit_ingest_observation(
+    ctx: &Ctx,
+    repo_id: &str,
+    run_id: &str,
+    bytes: &[u8],
+    idempotency_key: String,
+) -> Result<(bool, String, Value, sxr_core::LedgerPosition)> {
+    let meta = repo_for_run(ctx, run_id)?;
+    let e = state::require_enrollment(ctx, repo_id)?;
+    let progress = repo_plan(ctx, repo_id, run_id)?;
+    let target = progress
+        .get("targets")
+        .and_then(Value::as_array)
+        .and_then(|a| a.first())
+        .and_then(Value::as_str)
+        .unwrap_or("concept:unknown")
+        .to_string();
+    let observation_id = ulid();
+    let hex_stdout = hex::encode(sha2::Sha256::digest(bytes));
+    let stdout_ref = format!("sha256:{hex_stdout}");
+    let artifacts_dir = ctx.ensure_repo_dir(repo_id)?.join("artifacts");
+    std::fs::create_dir_all(&artifacts_dir).context("create artifacts dir")?;
+    std::fs::write(artifacts_dir.join(format!("{hex_stdout}.stdout")), bytes)
+        .context("persist ingested stream")?;
+    let parsed = sxr_verify::parse_cargo_json(bytes);
+    let sections = observation_sections(
+        &observation_id,
+        run_id,
+        None,
+        parsed.is_none(),
+        &stdout_ref,
+        None,
+        &parsed,
+    );
+    let subject_refs = vec![
+        format!("observation:{observation_id}"),
+        format!("run:{run_id}"),
+        format!("target:{target}"),
+    ];
+    let plan_id = meta.plan_id.clone().unwrap_or_default();
+    let mut repo = open_repo_ledger(ctx, repo_id)?;
+    let already = repo
+        .ledger
+        .position_by_idempotency_key(&idempotency_key)
+        .context("check idempotency key")?
+        .is_some();
+    let pos = crate::envelopes::append(
+        &mut repo,
+        RecordKind::ObservationRecorded,
+        repo_id,
+        &e.checkout_id,
+        None,
+        None,
+        Some(run_id),
+        vec![format!("plan:{plan_id}")],
+        sections,
+        subject_refs,
+        Some(idempotency_key),
+    )?;
+    let parsed_out = parsed.as_ref().map(|p| {
+        json!({"test_count": p.test_count, "passed": p.passed, "failed": p.failed, "ignored": p.ignored})
+    }).unwrap_or(Value::Null);
+    Ok((already, observation_id, parsed_out, pos))
+}
+
+/// `sxr ingest`: read a verifier stream from stdin and record it as an
+/// `observation.recorded` ledger record (§15.1 step 7 execute-elsewhere path).
+///
+/// Durability (§11.1a): direct commits synchronously (`committed`, exit 0);
+/// `--spool` writes the unvalidated request to the spool (`spooled`, exit 75 —
+/// never 0); `--async` submits to the daemon queue (`queued_for_commit`, exit
+/// 0 only after a fsynced receipt) or transparently falls back to direct
+/// commit when the daemon is unavailable (F-15, `"daemon": false`).
+pub fn ingest(
+    ctx: &Ctx,
+    run_id: &str,
+    verifier: &str,
+    stdin_format: &str,
+    spool: bool,
+    async_mode: bool,
+) -> Result<(Value, i32)> {
+    let meta = repo_for_run(ctx, run_id)?;
     let mut buf = Vec::new();
     std::io::Read::read_to_end(&mut std::io::stdin(), &mut buf).context("read stdin")?;
-    let parsed = sxr_verify::parse_cargo_json(&buf);
+    let stdin_sha256 = format!("sha256:{}", hex::encode(sha2::Sha256::digest(&buf)));
+
+    if spool {
+        // Opt-in spool: written unvalidated; not a success state (exit 75).
+        let meta_json =
+            ingest_request_meta(&meta.repo_id, run_id, verifier, stdin_format, &stdin_sha256);
+        let key = ingest_idempotency_key(run_id, verifier);
+        let dir = ctx.spool_dir(&meta.repo_id);
+        std::fs::create_dir_all(&dir).context("create spool dir")?;
+        let ndjson_path = dir.join(format!("{key}.ndjson"));
+        std::fs::write(
+            &ndjson_path,
+            format!("{}\n", serde_json::to_string(&meta_json)?),
+        )
+        .context("write spool metadata")?;
+        let bytes_path = dir.join(format!("{key}.stdin"));
+        std::fs::write(&bytes_path, &buf).context("write spooled bytes")?;
+        let v = output::output(vec![
+            ("run_id", json!(run_id)),
+            ("verifier", json!(verifier)),
+            ("bytes_received", json!(buf.len())),
+            ("durability", json!("spooled")),
+            ("spool_entry", json!(ndjson_path.display().to_string())),
+        ]);
+        return Ok((v, 75));
+    }
+
+    if async_mode
+        && let Some((duration, resp)) = submit_to_daemon(
+            ctx,
+            &meta.repo_id,
+            run_id,
+            verifier,
+            stdin_format,
+            &stdin_sha256,
+            &buf,
+        )?
+    {
+        let v = output::output(vec![
+            ("run_id", json!(run_id)),
+            ("verifier", json!(verifier)),
+            ("bytes_received", json!(buf.len())),
+            ("durability", json!("queued_for_commit")),
+            ("daemon", json!(true)),
+            ("receipt", resp),
+            ("queue_position", json!(duration)),
+        ]);
+        return Ok((v, 0));
+    }
+    // F-15: daemon unavailable (or --async not requested) — direct CLI writer
+    // lock, zero semantic difference.
+
+    let (_already, observation_id, parsed, pos) = commit_ingest_observation(
+        ctx,
+        &meta.repo_id,
+        run_id,
+        &buf,
+        ingest_idempotency_key(run_id, verifier),
+    )?;
+    Ok((
+        output::output(vec![
+            ("run_id", json!(run_id)),
+            ("verifier", json!(verifier)),
+            ("bytes_received", json!(buf.len())),
+            ("durability", json!("committed")),
+            ("daemon", json!(false)),
+            ("observation_id", json!(observation_id)),
+            ("parsed", parsed),
+            ("ledger_position", ledger_position_json(&pos)),
+        ]),
+        0,
+    ))
+}
+
+/// Submit an ingest request to the running daemon (M2). Returns None when the
+/// daemon socket is unavailable (F-15 fallback path).
+fn submit_to_daemon(
+    _ctx: &Ctx,
+    _repo_id: &str,
+    _run_id: &str,
+    _verifier: &str,
+    _stdin_format: &str,
+    _stdin_sha256: &str,
+    _bytes: &[u8],
+) -> Result<Option<(String, Value)>> {
+    Ok(None)
+}
+
+pub fn spool_status(ctx: &Ctx, repo_id: &str) -> Result<Value> {
+    let entries = crate::durability::pending_entries(ctx, repo_id)?;
+    let spooled: Vec<Value> = entries
+        .iter()
+        .filter(|e| e.state == "spooled")
+        .map(|e| {
+            json!({
+                "path": e.path.display().to_string(),
+                "request": crate::durability::request_json(e),
+            })
+        })
+        .collect();
+    Ok(output::output(vec![
+        ("repo_id", json!(repo_id)),
+        ("spooled_count", json!(spooled.len())),
+        ("entries", json!(spooled)),
+    ]))
+}
+
+pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
+    let entries = crate::durability::pending_entries(ctx, repo_id)?;
+    let mut drained = 0u64;
+    let mut already = 0u64;
+    let mut rejected: Vec<String> = Vec::new();
+    let mut failures: Vec<String> = Vec::new();
+    for entry in entries.iter().filter(|e| e.state == "spooled") {
+        let meta = crate::durability::request_json(entry);
+        let run_id = meta
+            .get("run_id")
+            .and_then(Value::as_str)
+            .unwrap_or_default();
+        let _verifier = meta
+            .get("verifier")
+            .and_then(Value::as_str)
+            .unwrap_or_default();
+        let key = meta
+            .get("idempotency_key")
+            .and_then(Value::as_str)
+            .unwrap_or_default()
+            .to_string();
+        let expected_sha = meta
+            .get("stdin_sha256")
+            .and_then(Value::as_str)
+            .unwrap_or_default();
+        let bytes_path = entry.path.with_extension("stdin");
+        match std::fs::read(&bytes_path) {
+            Ok(bytes) => {
+                let actual = format!("sha256:{}", hex::encode(sha2::Sha256::digest(&bytes)));
+                if actual != expected_sha {
+                    rejected.push(format!(
+                        "{} (checksum mismatch: expected {expected_sha}, got {actual})",
+                        entry.path.display()
+                    ));
+                    let _ = crate::durability::spool_remove(entry);
+                    continue;
+                }
+                // Drain is ordinary ingest: a spooled record can still be
+                // rejected on validation (§11.1a).
+                if sxr_verify::parse_cargo_json(&bytes).is_none() {
+                    rejected.push(format!(
+                        "{} (unparseable verifier stream)",
+                        entry.path.display()
+                    ));
+                    let _ = crate::durability::spool_remove(entry);
+                    continue;
+                }
+                match commit_ingest_observation(ctx, repo_id, run_id, &bytes, key.clone()) {
+                    Ok((was_already, _, _, _)) => {
+                        let _ = crate::durability::spool_remove(entry);
+                        if was_already {
+                            already += 1;
+                        } else {
+                            drained += 1;
+                        }
+                    }
+                    Err(e) => failures.push(format!("{}: {e:#}", entry.path.display())),
+                }
+            }
+            Err(e) => failures.push(format!("{}: {e}", entry.path.display())),
+        }
+    }
+    Ok(output::output(vec![
+        ("repo_id", json!(repo_id)),
+        ("drained", json!(drained)),
+        ("already_committed", json!(already)),
+        ("rejected", json!(rejected)),
+        ("failures", json!(failures)),
+    ]))
+}
+
+/// `sxr await --run <run_id>`: block until every record for the run reaches
+/// `committed`, or report which remain and why (§11.1a). `--repo <id> --all`
+/// waits for the repo's queue and spool to drain entirely.
+pub fn await_run(
+    ctx: &Ctx,
+    run_id: Option<&str>,
+    repo_id: Option<&str>,
+    all: bool,
+    timeout_secs: u64,
+    interval_ms: u64,
+) -> Result<Value> {
+    let repo_id = match repo_id {
+        Some(r) => r.to_string(),
+        None => repo_for_run(ctx, run_id.expect("--run or --repo required"))?.repo_id,
+    };
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(timeout_secs);
+    loop {
+        let pending = crate::durability::pending_entries(ctx, &repo_id)?;
+        let relevant: Vec<_> = pending
+            .into_iter()
+            .filter(|e| all || run_id.is_some_and(|r| crate::durability::references(e, r)))
+            .collect();
+        if relevant.is_empty() {
+            break;
+        }
+        if std::time::Instant::now() >= deadline {
+            let remaining: Vec<Value> = relevant
+                .iter()
+                .map(|e| {
+                    let why = if e.corrupt {
+                        "corrupt queue segment (request hash mismatch); frozen"
+                    } else if e.state == "spooled" {
+                        "spooled (not yet validated); run `sxr spool drain`"
+                    } else {
+                        "queued_for_commit (not yet committed); run `sxr queue recover`"
+                    };
+                    json!({
+                        "path": e.path.display().to_string(),
+                        "state": e.state,
+                        "why": why,
+                    })
+                })
+                .collect();
+            bail!(
+                "await {}: timed out after {timeout_secs}s; remaining not committed: {}",
+                run_id.unwrap_or("--all"),
+                serde_json::to_string(&remaining)?
+            );
+        }
+        std::thread::sleep(std::time::Duration::from_millis(interval_ms));
+    }
     Ok(output::output(vec![
         ("run_id", json!(run_id)),
-        ("verifier", json!(verifier)),
-        ("bytes_received", json!(buf.len())),
-        (
-            "parsed",
-            if let Some(p) = parsed {
-                json!({"test_count": p.test_count, "passed": p.passed, "failed": p.failed, "ignored": p.ignored})
-            } else {
-                Value::Null
-            },
-        ),
+        ("repo_id", json!(repo_id)),
+        ("state", json!("committed")),
     ]))
 }
 

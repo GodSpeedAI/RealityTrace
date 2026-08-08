@@ -266,6 +266,21 @@ impl Ledger {
         Ok(outcomes.remove(0))
     }
 
+    /// Look up a committed position by its producer-set idempotency key
+    /// (§11.4) — used by spool drain and recovery to distinguish a duplicate
+    /// replay from a fresh commit without relying on error text.
+    pub fn position_by_idempotency_key(&self, key: &str) -> Result<Option<LedgerPosition>> {
+        let row = self
+            .conn
+            .query_row(
+                "SELECT ledger_id, append_ordinal FROM ledger WHERE idempotency_key = ?1",
+                [key],
+                |r| Ok((r.get::<_, String>(0)?, r.get::<_, i64>(1)? as u64)),
+            )
+            .optional()?;
+        Ok(row.map(|(ledger_id, ordinal)| LedgerPosition::new(ledger_id, ordinal)))
+    }
+
     /// Append N entries plus outbox rows in one transaction (§11.2).
     /// Idempotent: an `idempotency_key` that already exists returns the
     /// existing position without inserting (AC-INGEST-002).
