@@ -19,6 +19,12 @@ sxr-verify = { path = "../sxr-verify" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
+clap = { version = "4.6.6", features = ["derive", "env"] }
+anyhow = "1.0.104"
+chrono.workspace = true
+rusqlite.workspace = true
+ulid.workspace = true
+hex.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true

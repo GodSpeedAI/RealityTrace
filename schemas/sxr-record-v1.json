@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/schemas/sxr-record-v1.json",
+  "title": "sxr ledger row contract (v1)",
+  "description": "The frozen v1 ledger row shape (§10.3). sxr owns this storage contract.",
+  "type": "object",
+  "required": [
+    "ledger_id", "append_ordinal", "entry_ulid", "record_kind", "record_version",
+    "idempotency_key", "subject_refs", "canonicalization", "hash_algorithm",
+    "payload", "payload_hash", "previous_entry_hash", "entry_hash",
+    "committed_at", "writer_identity_ref"
+  ],
+  "properties": {
+    "ledger_id": { "type": "string", "minLength": 1 },
+    "append_ordinal": { "type": "integer", "minimum": 1 },
+    "entry_ulid": { "type": "string", "minLength": 26 },
+    "record_kind": { "type": "string", "minLength": 1 },
+    "record_version": { "const": "sxr-record/v1" },
+    "idempotency_key": { "type": ["string", "null"] },
+    "subject_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "canonicalization": { "const": "sxr-canonical-json/v1" },
+    "hash_algorithm": { "const": "sha256" },
+    "payload": { "type": "string", "minLength": 1 },
+    "payload_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "previous_entry_hash": { "type": ["string", "null"] },
+    "entry_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "committed_at": { "type": "string", "format": "date-time" },
+    "writer_identity_ref": { "type": "string", "minLength": 1 }
+  }
+}

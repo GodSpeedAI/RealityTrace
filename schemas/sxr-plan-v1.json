@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/schemas/sxr-plan-v1.json",
+  "title": "sxr VerificationPlan (v1)",
+  "description": "The thin plan contract §14.1: how to obtain evidence, not what it means. sxr owns this contract.",
+  "type": "object",
+  "required": [
+    "plan_id", "plan_version", "question_ref", "threshold_ref", "snapshot_ref", "steps"
+  ],
+  "properties": {
+    "plan_id": { "type": "string", "minLength": 1 },
+    "plan_version": { "const": "sxr-plan/v1" },
+    "semantic_verification_contract_ref": { "type": ["string", "null"] },
+    "evaluation_profile_ref": { "type": "string" },
+    "question_ref": { "type": "string", "minLength": 1 },
+    "transformation_ref": { "type": "string" },
+    "snapshot_ref": { "type": "string", "minLength": 1 },
+    "threshold_ref": { "type": "string", "minLength": 1 },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "verifier_id", "invocation", "produces_evidence_type", "targets"],
+        "properties": {
+          "step_id": { "type": "string" },
+          "verifier_id": { "type": "string" },
+          "invocation": {
+            "type": "object",
+            "required": ["argv", "cwd", "env_allowlist", "timeout_s"],
+            "properties": {
+              "argv": { "type": "array", "items": { "type": "string" } },
+              "cwd": { "type": "string" },
+              "env_allowlist": { "type": "array", "items": { "type": "string" } },
+              "timeout_s": { "type": "integer", "minimum": 1 }
+            },
+            "additionalProperties": true
+          },
+          "produces_evidence_type": { "type": "string" },
+          "targets": { "type": "array", "items": { "type": "string" } },
+          "expected_answer_shape": { "type": "string" },
+          "relevance_to_question": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "evidence_requirements": { "type": "array" },
+    "boundary": { "type": "object" }
+  },
+  "additionalProperties": true
+}

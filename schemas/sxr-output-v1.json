@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/schemas/sxr-output-v1.json",
+  "title": "sxr CLI output document (v1)",
+  "description": "The stable envelope every `sxr --json` command emits on stdout (§15). sxr owns this contract.",
+  "type": "object",
+  "required": [
+    "sxr_output_version",
+    "unknowns",
+    "omissions"
+  ],
+  "properties": {
+    "sxr_output_version": { "const": "1" },
+    "unknowns": { "type": "array", "items": { "type": "string" } },
+    "omissions": { "type": "array", "items": { "type": "string" } },
+    "durability": { "type": "string", "enum": ["committed", "queued_for_commit", "spooled", "failed"] }
+  }
+}
