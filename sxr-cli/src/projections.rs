@@ -165,6 +165,64 @@ CREATE TABLE IF NOT EXISTS sxr_obs_edge (
     settlement_refs_json TEXT NOT NULL,
     PRIMARY KEY (src_decl_key, dst_decl_key, edge_kind)
 ) STRICT;
+/* Slice 5: diagnostic attribution loop (§12.5a). A residual is an observation
+   of disagreement with attribution_status "undiagnosed" — never a causal
+   claim (F-27). A supported failure locus exists only via a diagnostic
+   settlement under the four §12.5a conditions; a model proposal only after
+   the cheap loci are evidence-excluded (AC-DIAG-001). */
+CREATE TABLE IF NOT EXISTS sxr_residual (
+    residual_id TEXT PRIMARY KEY,
+    question_id TEXT NOT NULL,
+    snapshot_id TEXT NOT NULL,
+    decl_key TEXT NOT NULL,
+    residual_kind TEXT NOT NULL,
+    severity TEXT NOT NULL,
+    attribution_status TEXT NOT NULL,
+    supported_failure_locus TEXT,
+    diagnostic_settlement_ref TEXT,
+    ledger_id TEXT NOT NULL,
+    append_ordinal INTEGER NOT NULL
+) STRICT;
+CREATE TABLE IF NOT EXISTS sxr_hypothesis (
+    hypothesis_id TEXT PRIMARY KEY,
+    question_id TEXT NOT NULL,
+    residual_id TEXT NOT NULL,
+    failure_locus_candidate TEXT NOT NULL,
+    confidence TEXT NOT NULL,
+    supporting_evidence_refs_json TEXT NOT NULL,
+    contradicting_evidence_refs_json TEXT NOT NULL,
+    alternatives_json TEXT NOT NULL,
+    falsification_path TEXT NOT NULL,
+    next_action_kind TEXT NOT NULL,
+    next_action_ref TEXT NOT NULL,
+    expected_discrimination TEXT NOT NULL,
+    ledger_id TEXT NOT NULL,
+    append_ordinal INTEGER NOT NULL
+) STRICT;
+CREATE TABLE IF NOT EXISTS sxr_diag_settlement (
+    settlement_id TEXT PRIMARY KEY,
+    question_id TEXT NOT NULL,
+    hypothesis_id TEXT NOT NULL,
+    residual_id TEXT NOT NULL,
+    supported_locus TEXT NOT NULL,
+    threshold_id TEXT NOT NULL,
+    qualifying_evidence_refs_json TEXT NOT NULL,
+    contradicting_evidence_refs_json TEXT NOT NULL,
+    excluded_alternatives_json TEXT NOT NULL,
+    ledger_id TEXT NOT NULL,
+    append_ordinal INTEGER NOT NULL
+) STRICT;
+CREATE TABLE IF NOT EXISTS sxr_proposal (
+    proposal_id TEXT PRIMARY KEY,
+    question_id TEXT NOT NULL,
+    hypothesis_id TEXT NOT NULL,
+    locus TEXT NOT NULL,
+    target_ref TEXT NOT NULL,
+    transformation_ref TEXT NOT NULL,
+    diagnostic_settlement_ref TEXT NOT NULL,
+    ledger_id TEXT NOT NULL,
+    append_ordinal INTEGER NOT NULL
+) STRICT;
 "#;
 
 fn string_field(v: &Value, key: &str) -> Option<String> {
@@ -192,6 +250,10 @@ pub fn apply_row(conn: &mut Connection, row: &LedgerRow) -> Result<()> {
         RecordKind::EvidenceCreated => apply_evidence(conn, row, &payload)?,
         RecordKind::SettlementRegistered => apply_settlement(conn, row, &payload)?,
         RecordKind::ClaimMade => apply_claim(conn, row, &payload)?,
+        RecordKind::ResidualComputed => apply_residual(conn, row, &payload)?,
+        RecordKind::DiagnosticHypothesis => apply_hypothesis(conn, row, &payload)?,
+        RecordKind::DiagnosticSettled => apply_diag_settlement(conn, row, &payload)?,
+        RecordKind::ProposalRaised => apply_proposal(conn, row, &payload)?,
         _ => {}
     }
     Ok(())
@@ -749,6 +811,322 @@ fn parse_relation_form(form: &str) -> (String, String, String) {
     }
 }
 
+/// Slice 5: a `residual.computed` record — the observation of disagreement,
+/// no causal claim. `attribution_status` starts "undiagnosed" (F-27) and stays
+/// there until a diagnostic settlement names a supported locus.
+fn apply_residual(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
+    let rep = first_section(payload, "representations");
+    let spec = rep
+        .and_then(|r| r.get("inline_content"))
+        .cloned()
+        .unwrap_or(Value::Null);
+    let residual_id = spec
+        .get("residual_id")
+        .and_then(Value::as_str)
+        .map(str::to_string)
+        .or_else(|| {
+            row.subject_refs
+                .iter()
+                .find(|r| r.starts_with("residual:"))
+                // Strip exactly ONE prefix: residual ids carry their own
+                // "residual:" kind prefix (`residual:<question>:<decl>`), so
+                // refs are `residual:<full-id>` and a greedy trim would
+                // mangle them (F-27: id contract is deterministic).
+                .map(|r| r.strip_prefix("residual:").unwrap_or(r).to_string())
+        })
+        .unwrap_or_default();
+    if residual_id.is_empty() {
+        return Ok(());
+    }
+    let question_id = spec
+        .get("question_ref")
+        .and_then(Value::as_str)
+        .map(str::to_string)
+        .or_else(|| {
+            row.subject_refs
+                .iter()
+                .find(|r| r.starts_with("question:"))
+                .map(|r| r.trim_start_matches("question:").to_string())
+        })
+        .unwrap_or_default();
+    let snapshot_id = row
+        .subject_refs
+        .iter()
+        .find(|r| r.starts_with("snapshot:"))
+        .map(|r| r.trim_start_matches("snapshot:").to_string())
+        .unwrap_or_default();
+    let decl_key = spec
+        .get("decl_key")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    let kind = spec
+        .get("residual_kind")
+        .and_then(Value::as_str)
+        .unwrap_or("unknown")
+        .to_string();
+    let severity = spec
+        .get("severity")
+        .and_then(Value::as_str)
+        .unwrap_or("info")
+        .to_string();
+    let attribution_status = spec
+        .get("attribution_status")
+        .and_then(Value::as_str)
+        .unwrap_or("undiagnosed")
+        .to_string();
+    conn.execute(
+        "INSERT OR REPLACE INTO sxr_residual(residual_id, question_id, snapshot_id, decl_key, residual_kind, severity, attribution_status, supported_failure_locus, diagnostic_settlement_ref, ledger_id, append_ordinal)
+         VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)",
+        params![
+            residual_id, question_id, snapshot_id, decl_key, kind, severity,
+            attribution_status, None::<String>, None::<String>, row.ledger_id, row.append_ordinal
+        ],
+    )?;
+    Ok(())
+}
+
+/// Slice 5: a `diagnostic.hypothesis` record — one per candidate failure locus
+/// (§12.5a). Carries the locus, confidence, supporting/contradicting evidence,
+/// alternatives (other hypotheses for the same residual), falsification path,
+/// and next discriminating action. A hypothesis is NOT a verdict.
+fn apply_hypothesis(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
+    let rep = first_section(payload, "representations");
+    let spec = rep
+        .and_then(|r| r.get("inline_content"))
+        .cloned()
+        .unwrap_or(Value::Null);
+    let hypothesis_id = spec
+        .get("hypothesis_id")
+        .and_then(Value::as_str)
+        .map(str::to_string)
+        .or_else(|| {
+            row.subject_refs
+                .iter()
+                .find(|r| r.starts_with("hypothesis:"))
+                .map(|r| r.trim_start_matches("hypothesis:").to_string())
+        })
+        .unwrap_or_default();
+    if hypothesis_id.is_empty() {
+        return Ok(());
+    }
+    let question_id = spec
+        .get("diagnostic_question_ref")
+        .and_then(Value::as_str)
+        .map(str::to_string)
+        .or_else(|| {
+            row.subject_refs
+                .iter()
+                .find(|r| r.starts_with("question:"))
+                .map(|r| r.trim_start_matches("question:").to_string())
+        })
+        .unwrap_or_default();
+    let residual_id = row
+        .subject_refs
+        .iter()
+        .find(|r| r.starts_with("residual:"))
+        // Strip exactly ONE prefix (residual ids carry their own kind prefix).
+        .map(|r| r.strip_prefix("residual:").unwrap_or(r).to_string())
+        .unwrap_or_default();
+    let locus = spec
+        .get("failure_locus_candidate")
+        .and_then(Value::as_str)
+        .unwrap_or("unknown")
+        .to_string();
+    let confidence = spec
+        .get("confidence")
+        .and_then(Value::as_str)
+        .unwrap_or("low")
+        .to_string();
+    let j = |k: &str| {
+        spec.get(k)
+            .cloned()
+            .map(|v| serde_json::to_string(&v).unwrap_or_else(|_| "[]".into()))
+            .unwrap_or_else(|| "[]".into())
+    };
+    let falsification_path = spec
+        .get("falsification_path")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    let next_action = spec
+        .get("next_discriminating_action")
+        .cloned()
+        .unwrap_or(Value::Null);
+    let next_action_kind = next_action
+        .get("kind")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    let next_action_ref = next_action
+        .get("ref")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    let expected_discrimination = next_action
+        .get("expected_discrimination")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    conn.execute(
+        "INSERT OR REPLACE INTO sxr_hypothesis(hypothesis_id, question_id, residual_id, failure_locus_candidate, confidence, supporting_evidence_refs_json, contradicting_evidence_refs_json, alternatives_json, falsification_path, next_action_kind, next_action_ref, expected_discrimination, ledger_id, append_ordinal)
+         VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14)",
+        params![
+            hypothesis_id, question_id, residual_id, locus, confidence,
+            j("supporting_evidence_refs"), j("contradicting_evidence_refs"),
+            j("alternatives"), falsification_path, next_action_kind, next_action_ref,
+            expected_discrimination, row.ledger_id, row.append_ordinal
+        ],
+    )?;
+    Ok(())
+}
+
+/// Slice 5: a `diagnostic.settled` record — promotion under ALL of §12.5a's
+/// four conditions (≥2 candidates; ≥1 alternative excluded by evidence;
+/// qualifying evidence vs the diagnostic threshold; contradicting evidence
+/// recorded, not omitted). Names the supported failure locus.
+fn apply_diag_settlement(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
+    let rep = first_section(payload, "representations");
+    let spec = rep
+        .and_then(|r| r.get("inline_content"))
+        .cloned()
+        .unwrap_or(Value::Null);
+    let settlement_id = spec
+        .get("settlement_id")
+        .and_then(Value::as_str)
+        .map(str::to_string)
+        .or_else(|| {
+            row.subject_refs
+                .iter()
+                .find(|r| r.starts_with("settlement:"))
+                .map(|r| r.trim_start_matches("settlement:").to_string())
+        })
+        .unwrap_or_default();
+    if settlement_id.is_empty() {
+        return Ok(());
+    }
+    let question_id = row
+        .subject_refs
+        .iter()
+        .find(|r| r.starts_with("question:"))
+        .map(|r| r.trim_start_matches("question:").to_string())
+        .unwrap_or_default();
+    let hypothesis_id = row
+        .subject_refs
+        .iter()
+        .find(|r| r.starts_with("hypothesis:"))
+        .map(|r| r.trim_start_matches("hypothesis:").to_string())
+        .unwrap_or_default();
+    let residual_id = spec
+        .get("residual_ref")
+        .and_then(Value::as_str)
+        // Strip exactly ONE prefix (residual ids carry their own kind prefix).
+        .map(|s| s.strip_prefix("residual:").unwrap_or(s).to_string())
+        .unwrap_or_default();
+    let locus = spec
+        .get("supported_locus")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    let threshold_id = spec
+        .get("threshold_ref")
+        .and_then(Value::as_str)
+        .map(|s| s.trim_start_matches("threshold:").to_string())
+        .unwrap_or_default();
+    let j = |k: &str| {
+        spec.get(k)
+            .cloned()
+            .map(|v| serde_json::to_string(&v).unwrap_or_else(|_| "[]".into()))
+            .unwrap_or_else(|| "[]".into())
+    };
+    conn.execute(
+        "INSERT OR REPLACE INTO sxr_diag_settlement(settlement_id, question_id, hypothesis_id, residual_id, supported_locus, threshold_id, qualifying_evidence_refs_json, contradicting_evidence_refs_json, excluded_alternatives_json, ledger_id, append_ordinal)
+         VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)",
+        params![
+            settlement_id, question_id, hypothesis_id, residual_id, locus, threshold_id,
+            j("qualifying_evidence_refs"), j("contradicting_evidence_refs"),
+            j("excluded_alternatives"), row.ledger_id, row.append_ordinal
+        ],
+    )?;
+    // The residual's supported locus is now named (AC-DIAG-001: null until
+    // a diagnostic Settlement).
+    if !residual_id.is_empty() {
+        conn.execute(
+            "UPDATE sxr_residual SET supported_failure_locus=?2, diagnostic_settlement_ref=?3 WHERE residual_id=?1",
+            params![residual_id, locus, settlement_id],
+        )?;
+    }
+    Ok(())
+}
+
+/// Slice 5: a `proposal.raised` record — a repair proposal bound to its
+/// diagnostic settlement. Naming `declared_model` additionally requires the
+/// cheap loci (verifier, verification_plan, implementation, environment) each
+/// explicitly excluded with evidence (§12.5a asymmetric friction). A proposal
+/// is not approval/promotion.
+fn apply_proposal(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
+    let rep = first_section(payload, "representations");
+    let spec = rep
+        .and_then(|r| r.get("inline_content"))
+        .cloned()
+        .unwrap_or(Value::Null);
+    let proposal_id = spec
+        .get("proposal_id")
+        .and_then(Value::as_str)
+        .map(str::to_string)
+        .or_else(|| {
+            row.subject_refs
+                .iter()
+                .find(|r| r.starts_with("proposal:"))
+                .map(|r| r.trim_start_matches("proposal:").to_string())
+        })
+        .unwrap_or_default();
+    if proposal_id.is_empty() {
+        return Ok(());
+    }
+    let question_id = row
+        .subject_refs
+        .iter()
+        .find(|r| r.starts_with("question:"))
+        .map(|r| r.trim_start_matches("question:").to_string())
+        .unwrap_or_default();
+    let hypothesis_id = spec
+        .get("hypothesis_ref")
+        .and_then(Value::as_str)
+        .map(|s| s.trim_start_matches("hypothesis:").to_string())
+        .unwrap_or_default();
+    let locus = spec
+        .get("locus")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    let target_ref = row
+        .subject_refs
+        .iter()
+        .find(|r| r.starts_with("target:"))
+        .map(|r| r.trim_start_matches("target:").to_string())
+        .unwrap_or_default();
+    let transformation_ref = spec
+        .get("transformation_ref")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    let diag_settlement_ref = spec
+        .get("diagnostic_settlement_ref")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    conn.execute(
+        "INSERT OR REPLACE INTO sxr_proposal(proposal_id, question_id, hypothesis_id, locus, target_ref, transformation_ref, diagnostic_settlement_ref, ledger_id, append_ordinal)
+         VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9)",
+        params![
+            proposal_id, question_id, hypothesis_id, locus, target_ref,
+            transformation_ref, diag_settlement_ref, row.ledger_id, row.append_ordinal
+        ],
+    )?;
+    Ok(())
+}
+
 /// Slice 4: materialize `G_observed` (§12.4) from qualified history. Called as
 /// a post-rebuild pass because nodes/edges aggregate across many ledger rows.
 ///
@@ -1039,6 +1417,10 @@ fn drop_tables(conn: &mut Connection) -> Result<()> {
         "sxr_obs_edge",
         "sxr_decl_node",
         "sxr_decl_edge",
+        "sxr_residual",
+        "sxr_hypothesis",
+        "sxr_diag_settlement",
+        "sxr_proposal",
     ] {
         conn.execute(&format!("DROP TABLE IF EXISTS {t}"), [])?;
     }
@@ -1066,6 +1448,10 @@ pub fn export_canonical(ctx: &crate::state::Ctx, repo_id: &str) -> Result<String
         "sxr_obs_edge",
         "sxr_decl_node",
         "sxr_decl_edge",
+        "sxr_residual",
+        "sxr_hypothesis",
+        "sxr_diag_settlement",
+        "sxr_proposal",
     ] {
         let order = match table {
             "sxr_evidence_target" => "evidence_id, decl_key",
@@ -1127,6 +1513,10 @@ pub fn status(ctx: &crate::state::Ctx, repo_id: &str) -> Result<Value> {
         "sxr_obs_edge",
         "sxr_decl_node",
         "sxr_decl_edge",
+        "sxr_residual",
+        "sxr_hypothesis",
+        "sxr_diag_settlement",
+        "sxr_proposal",
     ] {
         let n: i64 = conn
             .query_row(&format!("SELECT COUNT(*) FROM {t}"), [], |r| r.get(0))
@@ -1431,6 +1821,17 @@ pub fn delta_question(
             let mut u = v;
             u["residual_kind"] = json!("observed_undeclared");
             u["severity"] = json!("warning");
+            let rid = format!(
+                "residual:{question_id}:{}->{}:{}",
+                u["src_decl_key"].as_str().unwrap_or(""),
+                u["dst_decl_key"].as_str().unwrap_or(""),
+                u["edge_kind"].as_str().unwrap_or("")
+            );
+            u["residual_id"] = json!(rid);
+            let (attr, locus, settle_ref) = residual_diag_state(conn, &rid);
+            u["attribution_status"] = json!(attr);
+            u["supported_failure_locus"] = locus;
+            u["diagnostic_settlement_ref"] = settle_ref;
             undeclared.push(u);
         }
     }
@@ -1506,13 +1907,24 @@ fn classify_declared(
         ("observed_consistent", "info")
     };
 
+    let residual_id = format!("residual:{question_id}:{decl_key}");
+    // Join committed diagnostic state when this residual entered the loop
+    // (§12.5a): attribution starts "undiagnosed" and stays so until a
+    // diagnostic settlement names a supported locus (AC-DIAG-001).
+    let (attr, locus, settle_ref) = residual_diag_state(conn, &residual_id);
+
     Ok(json!({
         "decl_key": decl_key,
+        "residual_id": residual_id,
         "residual_kind": kind,
         "severity": severity,
         "supports": supports,
         "contradicts": contradicts,
         "evidence_count": ev_rows.len(),
+        "attribution_status": attr,
+        "supported_failure_locus": locus,
+        "diagnostic_settlement_ref": settle_ref,
+        "candidate_failure_loci": candidate_failure_loci(conn, &residual_id),
     }))
 }
 
@@ -1535,6 +1947,422 @@ fn settlement_state(conn: &Connection, question_id: &str) -> (bool, bool) {
         .map(|n| n != 0)
         .unwrap_or(false);
     (settled, debt_open)
+}
+
+// ── Slice 5: diagnostic attribution loop (§12.5a) ────────────────────────
+
+/// The §12.5a candidate failure locus vocabulary (9 values).
+pub const FAILURE_LOCUS_CANDIDATES: &[&str] = &[
+    "verifier",
+    "verification_plan",
+    "projection",
+    "implementation",
+    "environment",
+    "authority",
+    "evidence_collection",
+    "declared_model",
+    "unknown",
+];
+
+/// Deterministic residual id for a declared declaration: reused by the delta
+/// classifier, `residual compute`, and the diagnostic loop so the loop can
+/// join committed residual rows.
+pub fn residual_id_for(question_id: &str, decl_key: &str) -> String {
+    format!("residual:{question_id}:{decl_key}")
+}
+
+/// Attribution state of a committed residual row, if any. A residual starts
+/// `undiagnosed`; only a diagnostic settlement updates it (AC-DIAG-001).
+fn residual_diag_state(conn: &Connection, residual_id: &str) -> (String, Value, Value) {
+    let row: Option<(String, Option<String>, Option<String>)> = conn
+        .query_row(
+            "SELECT attribution_status, supported_failure_locus, diagnostic_settlement_ref
+             FROM sxr_residual WHERE residual_id = ?1",
+            [residual_id],
+            |r| {
+                Ok((
+                    r.get::<_, String>(0)?,
+                    r.get::<_, Option<String>>(1)?,
+                    r.get::<_, Option<String>>(2)?,
+                ))
+            },
+        )
+        .optional()
+        .ok()
+        .flatten();
+    match row {
+        Some((attr, locus, settle)) => (
+            attr,
+            locus.map(Value::String).unwrap_or(Value::Null),
+            settle.map(Value::String).unwrap_or(Value::Null),
+        ),
+        None => ("undiagnosed".into(), Value::Null, Value::Null),
+    }
+}
+
+/// Candidate failure loci of a residual from its committed hypotheses:
+/// `[{locus, hypothesis_ref}]` (§17.2 residual shape).
+pub fn candidate_failure_loci(conn: &Connection, residual_id: &str) -> Value {
+    let mut stmt = match conn.prepare(
+        "SELECT failure_locus_candidate FROM sxr_hypothesis WHERE residual_id = ?1 ORDER BY hypothesis_id",
+    ) {
+        Ok(s) => s,
+        Err(_) => return json!([]),
+    };
+    let loci: Vec<Value> = stmt
+        .query_map([residual_id], |r| r.get::<_, String>(0))
+        .ok()
+        .map(|rows| rows.filter_map(|r| r.ok()).map(|l| json!(l)).collect())
+        .unwrap_or_default();
+    json!(loci)
+}
+
+/// Evidence ids targeting `claim:<target_id>` under a question, filtered by
+/// direction and the question's minimum relevance/reliability (qualifying).
+/// Used to count a hypothesis's supporting / exclusion evidence.
+pub fn qualifying_claim_evidence(
+    conn: &Connection,
+    question_id: &str,
+    target_id: &str,
+    direction: &str,
+) -> Vec<String> {
+    let claim_target = format!("claim:{target_id}");
+    let min_relevance = question_min_relevance(conn, question_id);
+    let min_reliability = question_min_reliability(conn, question_id);
+    let mut stmt = match conn.prepare(
+        "SELECT e.evidence_id, e.direction, e.relevance, e.reliability
+         FROM sxr_evidence_target t
+         JOIN sxr_evidence e ON e.evidence_id = t.evidence_id
+         WHERE t.decl_key = ?1 AND e.question_id = ?2",
+    ) {
+        Ok(s) => s,
+        Err(_) => return Vec::new(),
+    };
+    let rows = match stmt.query_map(params![claim_target, question_id], |r| {
+        Ok((
+            r.get::<_, String>(0)?,
+            r.get::<_, String>(1)?,
+            r.get::<_, String>(2)?,
+            r.get::<_, String>(3)?,
+        ))
+    }) {
+        Ok(rows) => rows,
+        Err(_) => return Vec::new(),
+    };
+    rows.filter_map(|r| r.ok())
+        .filter(|(_, dir, rel, relbl)| {
+            dir == direction
+                && meets_bar(rel, min_relevance.as_deref())
+                && meets_bar(relbl, min_reliability.as_deref())
+        })
+        .map(|(eid, _, _, _)| eid)
+        .collect()
+}
+
+/// Whether a hypothesis for a residual is explicitly excluded by evidence
+/// (≥1 qualifying `contradicts` evidence targets its claim).
+pub fn hypothesis_excluded(conn: &Connection, question_id: &str, hypothesis_id: &str) -> bool {
+    !qualifying_claim_evidence(conn, question_id, hypothesis_id, "contradicts").is_empty()
+}
+
+/// Hypotheses of a residual, joined with their evidence state (§17.2).
+pub fn hypotheses_for_residual(conn: &Connection, residual_id: &str) -> Result<Vec<Value>> {
+    let mut stmt = conn.prepare(
+        "SELECT hypothesis_id, question_id, failure_locus_candidate, confidence,
+                supporting_evidence_refs_json, contradicting_evidence_refs_json,
+                alternatives_json, falsification_path, next_action_kind, next_action_ref,
+                expected_discrimination
+         FROM sxr_hypothesis WHERE residual_id = ?1 ORDER BY hypothesis_id",
+    )?;
+    let rows = stmt.query_map([residual_id], |r| {
+        let parse = |s: String| serde_json::from_str::<Value>(&s).unwrap_or_else(|_| json!([]));
+        let supporting: Value = parse(r.get::<_, String>(4)?);
+        let contradicting: Value = parse(r.get::<_, String>(5)?);
+        let alternatives: Value = parse(r.get::<_, String>(6)?);
+        Ok(json!({
+            "hypothesis_id": r.get::<_, String>(0)?,
+            "question_id": r.get::<_, String>(1)?,
+            "failure_locus_candidate": r.get::<_, String>(2)?,
+            "confidence": r.get::<_, String>(3)?,
+            "supporting_evidence_refs": supporting,
+            "contradicting_evidence_refs": contradicting,
+            "alternatives": alternatives,
+            "falsification_path": r.get::<_, String>(7)?,
+            "next_discriminating_action": {
+                "kind": r.get::<_, String>(8)?,
+                "ref": r.get::<_, String>(9)?,
+                "expected_discrimination": r.get::<_, String>(10)?,
+            },
+        }))
+    })?;
+    let mut out = Vec::new();
+    for r in rows {
+        out.push(r?);
+    }
+    Ok(out)
+}
+
+/// §17.2-shaped diagnostic loop state for one residual: residual record,
+/// candidate failure loci, per-hypothesis evidence/exclusion state,
+/// settlements and proposals.
+pub fn diagnostic_status(
+    conn: &Connection,
+    repo_id: &str,
+    _question_id: &str,
+    residual_id: &str,
+) -> Result<Value> {
+    let found: bool = conn
+        .query_row(
+            "SELECT EXISTS(SELECT 1 FROM sxr_residual WHERE residual_id = ?1)",
+            [residual_id],
+            |r| r.get::<_, i64>(0),
+        )
+        .map(|n| n != 0)
+        .unwrap_or(false);
+    if !found {
+        return Ok(json!({
+            "repo_id": repo_id,
+            "residual_id": residual_id,
+            "found": false,
+        }));
+    }
+    let (decl_key, kind, severity): (String, String, String) = conn.query_row(
+        "SELECT decl_key, residual_kind, severity
+         FROM sxr_residual WHERE residual_id = ?1",
+        [residual_id],
+        |r| {
+            Ok((
+                r.get::<_, String>(0)?,
+                r.get::<_, String>(1)?,
+                r.get::<_, String>(2)?,
+            ))
+        },
+    )?;
+    let (locus, settle_ref): (Option<String>, Option<String>) = conn.query_row(
+        "SELECT supported_failure_locus, diagnostic_settlement_ref
+         FROM sxr_residual WHERE residual_id = ?1",
+        [residual_id],
+        |r| {
+            Ok((
+                r.get::<_, Option<String>>(0)?,
+                r.get::<_, Option<String>>(1)?,
+            ))
+        },
+    )?;
+
+    let hypotheses = hypotheses_for_residual(conn, residual_id)?;
+    let candidate_loci: Vec<Value> = hypotheses
+        .iter()
+        .map(|h| {
+            json!({
+                "locus": h["failure_locus_candidate"],
+                "hypothesis_ref": format!("hypothesis:{}", h["hypothesis_id"].as_str().unwrap_or("")),
+            })
+        })
+        .collect();
+
+    let mut settlements: Vec<Value> = Vec::new();
+    if let Some(sid) = &settle_ref {
+        let s = conn
+            .query_row(
+                "SELECT supported_locus, threshold_id, qualifying_evidence_refs_json,
+                        contradicting_evidence_refs_json, excluded_alternatives_json
+                 FROM sxr_diag_settlement WHERE settlement_id = ?1",
+                [sid],
+                |r| {
+                    let parse =
+                        |s: String| serde_json::from_str::<Value>(&s).unwrap_or_else(|_| json!([]));
+                    Ok(json!({
+                        "settlement_id": sid,
+                        "supported_locus": r.get::<_, String>(0)?,
+                        "threshold_id": r.get::<_, String>(1)?,
+                        "qualifying_evidence_refs": parse(r.get::<_, String>(2)?),
+                        "contradicting_evidence_refs": parse(r.get::<_, String>(3)?),
+                        "excluded_alternatives": parse(r.get::<_, String>(4)?),
+                    }))
+                },
+            )
+            .optional()?;
+        if let Some(s) = s {
+            settlements.push(s);
+        }
+    }
+
+    let mut proposals: Vec<Value> = Vec::new();
+    {
+        // Proposals are bound to the DIAGNOSTIC question (diagq:<residual>),
+        // not the model question.
+        let diag_question_id = format!("diagq:{residual_id}");
+        let mut stmt = conn.prepare(
+            "SELECT proposal_id, hypothesis_id, locus, target_ref, transformation_ref, diagnostic_settlement_ref
+             FROM sxr_proposal WHERE question_id = ?1 ORDER BY proposal_id",
+        )?;
+        let rows = stmt.query_map([&diag_question_id], |r| {
+            Ok(json!({
+                "proposal_id": r.get::<_, String>(0)?,
+                "hypothesis_id": r.get::<_, String>(1)?,
+                "locus": r.get::<_, String>(2)?,
+                "target_ref": r.get::<_, String>(3)?,
+                "transformation_ref": r.get::<_, String>(4)?,
+                "diagnostic_settlement_ref": r.get::<_, String>(5)?,
+            }))
+        })?;
+        for r in rows {
+            proposals.push(r?);
+        }
+    }
+
+    Ok(json!({
+        "repo_id": repo_id,
+        "residual_id": residual_id,
+        "found": true,
+        "decl_key": decl_key,
+        "residual_kind": kind,
+        "severity": severity,
+        "attribution_status": if locus.is_some() { "diagnosed" } else { "undiagnosed" },
+        "supported_failure_locus": locus,
+        "diagnostic_settlement_ref": settle_ref,
+        "candidate_failure_loci": candidate_loci,
+        "hypotheses": hypotheses,
+        "settlements": settlements,
+        "proposals": proposals,
+    }))
+}
+
+/// §12.5a settlement check for one hypothesis: ALL four conditions must hold
+/// for promotion to `diagnostic.settled`. Returns the verdict with the unmet
+/// conditions named and the evidence/exclusion details the settlement record
+/// must carry (condition d: contradicting evidence recorded, not omitted).
+pub fn diagnostic_settlement_check(
+    conn: &Connection,
+    question_id: &str,
+    hypothesis_id: &str,
+) -> Result<Value> {
+    let hyp = conn
+        .query_row(
+            "SELECT residual_id, failure_locus_candidate, question_id
+             FROM sxr_hypothesis WHERE hypothesis_id = ?1",
+            [hypothesis_id],
+            |r| {
+                Ok((
+                    r.get::<_, String>(0)?,
+                    r.get::<_, String>(1)?,
+                    r.get::<_, String>(2)?,
+                ))
+            },
+        )
+        .optional()?
+        .ok_or_else(|| anyhow!("hypothesis {hypothesis_id} not found"))?;
+    let (residual_id, locus, hyp_question) = hyp;
+    if hyp_question != question_id {
+        return Ok(json!({
+            "conditions_met": false,
+            "unmet": ["hypothesis question does not match diagnostic question"],
+            "supported_locus": locus,
+        }));
+    }
+
+    // Condition (a): ≥2 candidate loci enumerated for the residual.
+    let candidate_count: i64 = conn
+        .query_row(
+            "SELECT COUNT(*) FROM sxr_hypothesis WHERE residual_id = ?1",
+            [&residual_id],
+            |r| r.get(0),
+        )
+        .unwrap_or(0);
+
+    // Other hypotheses for the same residual.
+    let mut stmt = conn.prepare(
+        "SELECT hypothesis_id FROM sxr_hypothesis
+         WHERE residual_id = ?1 AND hypothesis_id != ?2",
+    )?;
+    let alternatives: Vec<String> = stmt
+        .query_map(params![&residual_id, hypothesis_id], |r| {
+            r.get::<_, String>(0)
+        })?
+        .filter_map(|r| r.ok())
+        .collect();
+
+    // Condition (b): ≥1 alternative excluded BY EVIDENCE (qualifying
+    // contradicts evidence targeting the alternative's claim), not by silence.
+    let excluded_alternatives: Vec<String> = alternatives
+        .iter()
+        .filter(|alt| hypothesis_excluded(conn, question_id, alt))
+        .cloned()
+        .collect();
+
+    // Conditions (c)+(d): qualifying supports evidence for the survivor, and
+    // contradicting evidence recorded (both directions, never omitted).
+    let supporting = qualifying_claim_evidence(conn, question_id, hypothesis_id, "supports");
+    let contradicting = qualifying_claim_evidence(conn, question_id, hypothesis_id, "contradicts");
+
+    let mut unmet: Vec<String> = Vec::new();
+    if candidate_count < 2 {
+        unmet.push(format!(
+            "condition a: only {candidate_count} candidate loci enumerated; ≥2 required"
+        ));
+    }
+    if excluded_alternatives.is_empty() {
+        unmet.push(
+            "condition b: no alternative excluded by evidence (silence is not exclusion)"
+                .to_string(),
+        );
+    }
+    if supporting.is_empty() {
+        unmet.push(
+            "condition c: survivor lacks qualifying evidence meeting the diagnostic threshold"
+                .to_string(),
+        );
+    }
+    // Condition d is satisfied by construction here: contradicting refs are
+    // always carried into the settlement record, even when empty.
+    let conditions_met = unmet.is_empty();
+    Ok(json!({
+        "conditions_met": conditions_met,
+        "unmet": unmet,
+        "supported_locus": locus,
+        "residual_id": residual_id,
+        "candidate_count": candidate_count,
+        "qualifying_evidence_refs": supporting,
+        "contradicting_evidence_refs": contradicting,
+        "excluded_alternatives": excluded_alternatives,
+    }))
+}
+
+/// §12.5a model-locus friction: a `proposal.raised` naming `declared_model`
+/// additionally requires the cheap loci — verifier, verification_plan,
+/// implementation, environment — each explicitly excluded with evidence.
+pub fn model_locus_exclusions(conn: &Connection, residual_id: &str) -> Result<Value> {
+    let mut stmt = conn.prepare(
+        "SELECT hypothesis_id, question_id, failure_locus_candidate
+         FROM sxr_hypothesis WHERE residual_id = ?1 AND failure_locus_candidate IN
+         ('verifier','verification_plan','implementation','environment')",
+    )?;
+    let rows: Vec<(String, String, String)> = stmt
+        .query_map([residual_id], |r| {
+            Ok((
+                r.get::<_, String>(0)?,
+                r.get::<_, String>(1)?,
+                r.get::<_, String>(2)?,
+            ))
+        })?
+        .filter_map(|r| r.ok())
+        .collect();
+    let mut excluded: Vec<Value> = Vec::new();
+    let mut missing: Vec<String> = Vec::new();
+    for (hyp_id, qid, locus) in rows {
+        if hypothesis_excluded(conn, &qid, &hyp_id) {
+            excluded
+                .push(json!({ "locus": locus, "hypothesis_ref": format!("hypothesis:{hyp_id}") }));
+        } else {
+            missing.push(locus);
+        }
+    }
+    Ok(json!({
+        "model_locus_proposal_allowed": missing.is_empty(),
+        "excluded_cheap_loci": excluded,
+        "missing_exclusions": missing,
+    }))
 }
 
 /// FTS5 search over the seeded corpus (§12.2). Contentless-external-content:
@@ -1665,6 +2493,10 @@ pub fn export_canonical_conn(conn: &Connection) -> Result<String> {
         "sxr_obs_edge",
         "sxr_decl_node",
         "sxr_decl_edge",
+        "sxr_residual",
+        "sxr_hypothesis",
+        "sxr_diag_settlement",
+        "sxr_proposal",
     ] {
         let order = match table {
             "sxr_evidence_target" => "evidence_id, decl_key",

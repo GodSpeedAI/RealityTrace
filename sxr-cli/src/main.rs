@@ -84,6 +84,12 @@ enum Command {
     Doctor,
     /// Delta inspection.
     Delta(DeltaCmd),
+    /// Diagnostic attribution loop (§12.5a).
+    #[command(subcommand)]
+    Diagnostic(DiagnosticCmds),
+    /// Commit residual.computed records (§12.5a).
+    #[command(subcommand)]
+    Residual(ResidualCmds),
     /// Explain a record's provenance.
     Explain(ExplainCmd),
     /// Failure context pack.
@@ -215,6 +221,79 @@ enum EvidenceCmds {
         claim: String,
         #[arg(long)]
         direction: String,
+    },
+    /// Create discriminating evidence targeting a diagnostic hypothesis
+    /// (§12.5a; `supports` = discriminating, `contradicts` = exclusion).
+    ForHypothesis {
+        #[arg(long)]
+        run: String,
+        #[arg(long)]
+        question: String,
+        #[arg(long)]
+        hypothesis: String,
+        #[arg(long)]
+        direction: String,
+    },
+}
+
+#[derive(Subcommand)]
+enum ResidualCmds {
+    /// Commit residual.computed records for a question's snapshot delta
+    /// (§12.5a). `declared_unobserved` residuals never enter the loop.
+    Compute {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        question: String,
+        #[arg(long)]
+        snapshot: String,
+    },
+}
+
+#[derive(Subcommand)]
+enum DiagnosticCmds {
+    /// Create the diagnostic question + threshold and one hypothesis per
+    /// candidate failure locus (§12.5a). Idempotent.
+    Enumerate {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        question: String,
+        #[arg(long)]
+        snapshot: String,
+        #[arg(long)]
+        residual: String,
+    },
+    /// Promote a hypothesis to diagnostic.settled — only under all four
+    /// §12.5a conditions (else exits 3).
+    Settle {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        question: String,
+        #[arg(long)]
+        hypothesis: String,
+    },
+    /// Raise a repair proposal bound to a diagnostic settlement. Model-locus
+    /// proposals require cheap loci evidence-excluded first (AC-DIAG-001).
+    Propose {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        question: String,
+        #[arg(long)]
+        hypothesis: String,
+        #[arg(long)]
+        locus: String,
+        #[arg(long)]
+        target: String,
+    },
+    /// §17.2-shaped diagnostic loop state for one residual.
+    Status {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        residual: String,
     },
 }
 
@@ -386,7 +465,9 @@ fn exit_for_error(e: &anyhow::Error) -> i32 {
     let msg = e.to_string();
     if msg.contains("AC-SETTLEMENT")
         || msg.contains("AC-EVIDENCE")
+        || msg.contains("AC-DIAG-001")
         || msg.contains("precondition")
+        || msg.contains("predecessor rule")
         || msg.contains("not found")
         || msg.contains("not enrolled")
         || msg.contains("no semantic configuration")
@@ -471,6 +552,42 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 claim,
                 direction,
             } => commands::evidence_for_claim(ctx, &run, &question, &claim, &direction)?,
+            EvidenceCmds::ForHypothesis {
+                run,
+                question,
+                hypothesis,
+                direction,
+            } => commands::evidence_for_hypothesis(ctx, &run, &question, &hypothesis, &direction)?,
+        },
+        Command::Residual(c) => match c {
+            ResidualCmds::Compute {
+                repo,
+                question,
+                snapshot,
+            } => commands::residual_compute(ctx, &repo, &question, &snapshot)?,
+        },
+        Command::Diagnostic(c) => match c {
+            DiagnosticCmds::Enumerate {
+                repo,
+                question,
+                snapshot,
+                residual,
+            } => commands::diagnostic_enumerate(ctx, &repo, &question, &snapshot, &residual)?,
+            DiagnosticCmds::Settle {
+                repo,
+                question,
+                hypothesis,
+            } => commands::diagnostic_settle(ctx, &repo, &question, &hypothesis)?,
+            DiagnosticCmds::Propose {
+                repo,
+                question,
+                hypothesis,
+                locus,
+                target,
+            } => commands::diagnostic_propose(ctx, &repo, &question, &hypothesis, &locus, &target)?,
+            DiagnosticCmds::Status { repo, residual } => {
+                commands::diagnostic_status(ctx, &repo, &residual)?
+            }
         },
         Command::Claim(c) => match c {
             ClaimCmds::Create {

@@ -1052,7 +1052,10 @@ pub fn evidence_create(ctx: &Ctx, run_id: &str, observation_id: &str) -> Result<
             "target_entity_ref": format!("concept:{}", target.trim_start_matches("concept:")),
             "representation_ref": format!("rep:obs:{observation_id}"),
             "relevance": "high",
-            "reliability": "unknown",
+            // Verifier-profile reliability model: cargo-test is a standard
+            // deterministic harness → "medium" (a derived result must be able
+            // to qualify against a medium bar; "unknown" could never).
+            "reliability": "medium",
             "direction": direction,
             "confidence_impact": "neutral",
         }]
@@ -1420,16 +1423,59 @@ pub fn evidence_for_claim(
     claim_id: &str,
     direction: &str,
 ) -> Result<Value> {
+    evidence_targeting(
+        ctx,
+        run_id,
+        question_id,
+        claim_id,
+        direction,
+        "relation_claim",
+        "claim://direct",
+    )
+}
+
+/// Create evidence targeting a diagnostic hypothesis's claim (§12.5a). The
+/// hypothesis IS a claim (its claim_id equals the hypothesis id), so this
+/// reuses the claim-target machinery: `target:claim:<hypothesis_id>`.
+/// Direction `supports` = discriminating evidence FOR the locus;
+/// `contradicts` = explicit exclusion of the locus (never silence).
+pub fn evidence_for_hypothesis(
+    ctx: &Ctx,
+    run_id: &str,
+    question_id: &str,
+    hypothesis_id: &str,
+    direction: &str,
+) -> Result<Value> {
+    evidence_targeting(
+        ctx,
+        run_id,
+        question_id,
+        hypothesis_id,
+        direction,
+        "discriminating_evidence",
+        "diagnostic://hypothesis",
+    )
+}
+
+fn evidence_targeting(
+    ctx: &Ctx,
+    run_id: &str,
+    question_id: &str,
+    claim_id: &str,
+    direction: &str,
+    evidence_type: &str,
+    representation_ref: &str,
+) -> Result<Value> {
     let meta = repo_for_run(ctx, run_id)?;
     let e = state::require_enrollment(ctx, &meta.repo_id)?;
     let evidence_id = ulid();
     let sections = json!({
         "evidence": [{
             "evidence_id": evidence_id,
-            "evidence_type": "relation_claim",
+            "evidence_type": evidence_type,
             "question_ref": question_id,
             "target_claim_ref": claim_id,
-            "representation_ref": "claim://direct",
+            "representation_ref": representation_ref,
             "relevance": "high",
             "reliability": "medium",
             "direction": direction,
@@ -1463,6 +1509,685 @@ pub fn evidence_for_claim(
         ("durability", json!("committed")),
         ("ledger_position", ledger_position_json(&pos)),
     ]))
+}
+
+// ── Slice 5: diagnostic attribution loop (§12.5a) ────────────────────────
+
+/// §12.5a: commit `residual.computed` records — one per disagreement residual
+/// from the delta classifier. `declared_unobserved` (the honest default,
+/// severity info) never enters the loop; only residuals that represent a
+/// declared↔observed disagreement are emitted, each starting
+/// `attribution_status: "undiagnosed"` (F-27, AC-DIAG-001).
+pub fn residual_compute(
+    ctx: &Ctx,
+    repo_id: &str,
+    question_id: &str,
+    snapshot_id: &str,
+) -> Result<Value> {
+    let e = state::require_enrollment(ctx, repo_id)?;
+    projections::rebuild(ctx, repo_id)?;
+    let conn = projections::open(ctx, repo_id)?;
+    let delta = projections::delta_question(&conn, repo_id, question_id, snapshot_id)?;
+
+    let mut residuals: Vec<Value> = delta["residuals"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default()
+        .into_iter()
+        .filter(|r| {
+            // Disagreement residuals only; declared_unobserved/observed_consistent
+            // are honest default states, not disagreements (§12.5).
+            matches!(
+                r["residual_kind"].as_str(),
+                Some(
+                    "declared_contradicted"
+                        | "contradictory"
+                        | "declared_unsettled"
+                        | "settled_with_debt"
+                )
+            )
+        })
+        .collect();
+    residuals.extend(
+        delta["observed_undeclared"]
+            .as_array()
+            .cloned()
+            .unwrap_or_default(),
+    );
+
+    let mut committed: Vec<Value> = Vec::new();
+    let mut repo = open_repo_ledger(ctx, repo_id)?;
+    for r in &residuals {
+        let residual_id = r["residual_id"]
+            .as_str()
+            .map(str::to_string)
+            .unwrap_or_default();
+        let decl_key = r["decl_key"]
+            .as_str()
+            .map(str::to_string)
+            .unwrap_or_else(|| {
+                format!(
+                    "{}->{}:{}",
+                    r["src_decl_key"].as_str().unwrap_or(""),
+                    r["dst_decl_key"].as_str().unwrap_or(""),
+                    r["edge_kind"].as_str().unwrap_or("")
+                )
+            });
+        // Deterministic id contract (§12.5a): derived from question + decl_key
+        // so the diagnostic loop can always join the committed row.
+        let residual_id = if residual_id.is_empty() {
+            projections::residual_id_for(question_id, &decl_key)
+        } else {
+            residual_id
+        };
+        let kind = r["residual_kind"].as_str().unwrap_or("unknown").to_string();
+        let severity = r["severity"].as_str().unwrap_or("info").to_string();
+        if residual_id.is_empty() {
+            continue;
+        }
+        let spec = json!({
+            "residual_id": residual_id,
+            "residual_kind": kind,
+            "decl_key": decl_key,
+            "question_ref": question_id,
+            "snapshot_ref": snapshot_id,
+            "severity": severity,
+            "evidence_refs": [],
+            "attribution_status": "undiagnosed",
+        });
+        let sections = json!({
+            "representations": [{
+                "representation_id": format!("rep:residual:{residual_id}"),
+                "representation_kind": "atomic",
+                "representation_type": "residual",
+                "inline_content": spec,
+            }],
+            "questions": [{
+                "question_id": question_id,
+                "question_form": "is the declared state realized?",
+            }],
+        });
+        let subject_refs = vec![
+            format!("residual:{residual_id}"),
+            format!("question:{question_id}"),
+            format!("snapshot:{snapshot_id}"),
+            format!("target:{decl_key}"),
+        ];
+        let pos = crate::envelopes::append(
+            &mut repo,
+            RecordKind::ResidualComputed,
+            repo_id,
+            &e.checkout_id,
+            None,
+            None,
+            None,
+            vec![],
+            sections,
+            subject_refs,
+            None,
+        )?;
+        committed.push(json!({
+            "residual_id": residual_id,
+            "residual_kind": kind,
+            "severity": severity,
+            "decl_key": decl_key,
+            "attribution_status": "undiagnosed",
+            "ledger_position": ledger_position_json(&pos),
+        }));
+    }
+    Ok(output::output(vec![
+        ("question_id", json!(question_id)),
+        ("snapshot_id", json!(snapshot_id)),
+        ("committed_count", json!(committed.len())),
+        ("residuals", json!(committed)),
+    ]))
+}
+
+/// Falsification path + next discriminating action for a failure locus (§12.5a).
+/// Deterministic per locus so enumeration is rebuild-identical.
+fn locus_plan(locus: &str) -> (String, &'static str, &'static str, &'static str) {
+    match locus {
+        "verifier" => (
+            "if the verifier is at fault, running it against the previously-settled commit must also fail".into(),
+            "question",
+            "verifier://rerun-previously-settled",
+            "separates verifier fault from implementation fault",
+        ),
+        "verification_plan" => (
+            "if the plan is at fault, a different plan targeting the same obligation must change the outcome".into(),
+            "question",
+            "plan://alternate-plan",
+            "separates plan fault from verifier/implementation fault",
+        ),
+        "projection" => (
+            "if the projection is at fault, re-projecting the same observation must change the residual".into(),
+            "question",
+            "projection://reproject",
+            "separates projection fault from model fault",
+        ),
+        "implementation" => (
+            "if the implementation is at fault, a clean rebuild of the same commit must change the outcome".into(),
+            "transformation",
+            "implementation://clean-rebuild",
+            "separates implementation fault from verifier/environment fault",
+        ),
+        "environment" => (
+            "if the environment is at fault, the same run in a fresh identical environment must not reproduce".into(),
+            "question",
+            "environment://fresh-environment",
+            "separates environment fault from implementation fault",
+        ),
+        "authority" => (
+            "if the authority is at fault, re-querying under the same authority must not reproduce the denial".into(),
+            "question",
+            "authority://requery",
+            "separates authority denial from evidence-collection fault",
+        ),
+        "evidence_collection" => (
+            "if evidence collection is at fault, re-collecting the same observation independently must not contradict".into(),
+            "question",
+            "evidence://recollect-independently",
+            "separates collection fault from verifier/model fault",
+        ),
+        "declared_model" => (
+            "if the declared model is at fault, the declaration must mis-state reality even with a healthy verifier".into(),
+            "transformation",
+            "model://semantic-diff",
+            "separates model fault from all cheap loci",
+        ),
+        _ => (
+            "no locus can be excluded yet; collect discriminating evidence first".into(),
+            "question",
+            "diagnostic://collect-discriminating-evidence",
+            "separates the unknown into named loci",
+        ),
+    }
+}
+
+/// §12.5a: create the diagnostic question + threshold for a residual (if
+/// absent) and ONE `diagnostic.hypothesis` per candidate failure locus.
+/// Idempotent: deterministic ids, re-enumeration is a no-op.
+pub fn diagnostic_enumerate(
+    ctx: &Ctx,
+    repo_id: &str,
+    question_id: &str,
+    snapshot_id: &str,
+    residual_id: &str,
+) -> Result<Value> {
+    let e = state::require_enrollment(ctx, repo_id)?;
+    projections::rebuild(ctx, repo_id)?;
+    let conn = projections::open(ctx, repo_id)?;
+    let residual: Option<String> = conn
+        .query_row(
+            "SELECT decl_key FROM sxr_residual WHERE residual_id = ?1",
+            [residual_id],
+            |r| r.get::<_, String>(0),
+        )
+        .optional()?;
+    let Some(decl_key) = residual else {
+        bail!("residual {residual_id} not committed; run `sxr residual compute` first");
+    };
+
+    let diag_question_id = format!("diagq:{residual_id}");
+    let diag_threshold_id = format!("diagth:{residual_id}");
+    let mut repo = open_repo_ledger(ctx, repo_id)?;
+
+    // 1. Diagnostic question (§12.5a): "why does declared X disagree with
+    // observed Y?" — deterministic id, idempotent.
+    let q_exists: bool = conn
+        .query_row(
+            "SELECT EXISTS(SELECT 1 FROM sxr_question WHERE question_id = ?1)",
+            [&diag_question_id],
+            |r| r.get::<_, i64>(0),
+        )
+        .map(|n| n != 0)
+        .unwrap_or(false);
+    if !q_exists {
+        let spec = json!({
+            "question_id": diag_question_id,
+            "question_form": format!("why does declared {decl_key} disagree with observed reality?"),
+            "question_type": "diagnostic",
+            "target_entities": [decl_key],
+            "model_question_ref": question_id,
+            "snapshot_ref": snapshot_id,
+            "residual_ref": residual_id,
+        });
+        let sections = json!({
+            "questions": [{
+                "question_id": diag_question_id,
+                "question_form": format!("why does declared {decl_key} disagree with observed reality?"),
+                "question_type": "diagnostic",
+            }],
+            "representations": [{
+                "representation_id": format!("rep:question:{diag_question_id}"),
+                "representation_kind": "atomic",
+                "representation_type": "question_spec",
+                "inline_content": spec,
+            }],
+        });
+        let subject_refs = vec![
+            format!("question:{diag_question_id}"),
+            format!("target:{residual_id}"),
+        ];
+        crate::envelopes::append(
+            &mut repo,
+            RecordKind::QuestionDeclared,
+            repo_id,
+            &e.checkout_id,
+            None,
+            None,
+            None,
+            vec![],
+            sections,
+            subject_refs,
+            None,
+        )?;
+    }
+
+    // 2. Diagnostic threshold (condition c: "a threshold declared for the
+    // *diagnostic* question"). Idempotent.
+    let t_exists: bool = conn
+        .query_row(
+            "SELECT EXISTS(SELECT 1 FROM sxr_threshold WHERE threshold_id = ?1)",
+            [&diag_threshold_id],
+            |r| r.get::<_, i64>(0),
+        )
+        .map(|n| n != 0)
+        .unwrap_or(false);
+    if !t_exists {
+        let spec = json!({
+            "threshold_id": diag_threshold_id,
+            "minimum_relevance": "medium",
+            "minimum_reliability": "medium",
+        });
+        let sections = json!({
+            "states": [{ "state_id": diag_threshold_id, "state_type": "settlement_threshold", "scope": format!("question:{diag_question_id}") }],
+            "representations": [{
+                "representation_id": format!("rep:threshold:{diag_threshold_id}"),
+                "representation_kind": "atomic",
+                "representation_type": "settlement_threshold_spec",
+                "inline_content": spec,
+            }],
+        });
+        let subject_refs = vec![
+            format!("threshold:{diag_threshold_id}"),
+            format!("question:{diag_question_id}"),
+        ];
+        crate::envelopes::append(
+            &mut repo,
+            RecordKind::ThresholdDeclared,
+            repo_id,
+            &e.checkout_id,
+            None,
+            None,
+            None,
+            vec![format!("question:{diag_question_id}")],
+            sections,
+            subject_refs,
+            None,
+        )?;
+    }
+
+    // 3. One diagnostic.hypothesis per candidate locus (the full §12.5a set).
+    let all_loci = projections::FAILURE_LOCUS_CANDIDATES;
+    let mut hypotheses: Vec<Value> = Vec::new();
+    for locus in all_loci {
+        let hypothesis_id = format!("hyp:{residual_id}:{locus}");
+        let exists: bool = conn
+            .query_row(
+                "SELECT EXISTS(SELECT 1 FROM sxr_hypothesis WHERE hypothesis_id = ?1)",
+                [&hypothesis_id],
+                |r| r.get::<_, i64>(0),
+            )
+            .map(|n| n != 0)
+            .unwrap_or(false);
+        if exists {
+            hypotheses.push(json!({
+                "hypothesis_id": hypothesis_id,
+                "failure_locus_candidate": locus,
+                "created": false,
+            }));
+            continue;
+        }
+        let alternatives: Vec<String> = all_loci
+            .iter()
+            .filter(|l| *l != locus)
+            .map(|l| format!("hypothesis:hyp:{residual_id}:{l}"))
+            .collect();
+        let (falsification_path, next_kind, next_ref, expected_discrimination) = locus_plan(locus);
+        let spec = json!({
+            "hypothesis_id": hypothesis_id,
+            "diagnostic_question_ref": diag_question_id,
+            "residual_ref": residual_id,
+            "failure_locus_candidate": locus,
+            "confidence": "low",
+            "supporting_evidence_refs": [],
+            "contradicting_evidence_refs": [],
+            "alternatives": alternatives,
+            "falsification_path": falsification_path,
+            "next_discriminating_action": {
+                "kind": next_kind,
+                "ref": next_ref,
+                "expected_discrimination": expected_discrimination,
+            },
+        });
+        let sections = json!({
+            "questions": [{
+                "question_id": diag_question_id,
+                "question_form": format!("why does declared {decl_key} disagree with observed reality?"),
+                "question_type": "diagnostic",
+            }],
+            "claims": [{
+                "claim_id": hypothesis_id,
+                "claim_type": "diagnostic",
+                "claim_text_or_form": format!("failure locus candidate is {locus} for residual {residual_id}"),
+                "subject_ref": format!("residual:{residual_id}"),
+                "scope": format!("question:{diag_question_id}"),
+                "confidence": "low",
+            }],
+            "representations": [{
+                "representation_id": format!("rep:hypothesis:{hypothesis_id}"),
+                "representation_kind": "atomic",
+                "representation_type": "diagnostic_hypothesis",
+                "inline_content": spec,
+            }],
+        });
+        let subject_refs = vec![
+            format!("hypothesis:{hypothesis_id}"),
+            format!("question:{diag_question_id}"),
+            format!("residual:{residual_id}"),
+        ];
+        let pos = crate::envelopes::append(
+            &mut repo,
+            RecordKind::DiagnosticHypothesis,
+            repo_id,
+            &e.checkout_id,
+            None,
+            None,
+            None,
+            vec![format!("residual:{residual_id}")],
+            sections,
+            subject_refs,
+            None,
+        )?;
+        hypotheses.push(json!({
+            "hypothesis_id": hypothesis_id,
+            "failure_locus_candidate": locus,
+            "created": true,
+            "ledger_position": ledger_position_json(&pos),
+        }));
+    }
+
+    Ok(output::output(vec![
+        ("residual_id", json!(residual_id)),
+        ("diagnostic_question_id", json!(diag_question_id)),
+        ("diagnostic_threshold_id", json!(diag_threshold_id)),
+        ("hypothesis_count", json!(hypotheses.len())),
+        ("hypotheses", json!(hypotheses)),
+    ]))
+}
+
+/// §12.5a: promote a hypothesis to `diagnostic.settled` — only under ALL four
+/// conditions. The settlement records the supported locus, qualifying
+/// evidence, ALL contradicting evidence (never omitted), and the excluded
+/// alternatives.
+pub fn diagnostic_settle(
+    ctx: &Ctx,
+    repo_id: &str,
+    question_id: &str,
+    hypothesis_id: &str,
+) -> Result<Value> {
+    let e = state::require_enrollment(ctx, repo_id)?;
+    projections::rebuild(ctx, repo_id)?;
+    let conn = projections::open(ctx, repo_id)?;
+    let check = projections::diagnostic_settlement_check(&conn, question_id, hypothesis_id)?;
+    if !check["conditions_met"].as_bool().unwrap_or(false) {
+        let unmet: Vec<String> = check["unmet"]
+            .as_array()
+            .cloned()
+            .unwrap_or_default()
+            .iter()
+            .filter_map(|v| v.as_str().map(str::to_string))
+            .collect();
+        bail!(
+            "AC-DIAG-001: promotion to diagnostic.settled refused: {}",
+            unmet.join("; ")
+        );
+    }
+
+    let supported_locus = check["supported_locus"].as_str().unwrap_or("unknown");
+    let residual_id = check["residual_id"].as_str().unwrap_or("");
+    let qualifying: Vec<String> = check["qualifying_evidence_refs"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default()
+        .iter()
+        .filter_map(|v| v.as_str().map(str::to_string))
+        .collect();
+    let contradicting: Vec<String> = check["contradicting_evidence_refs"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default()
+        .iter()
+        .filter_map(|v| v.as_str().map(str::to_string))
+        .collect();
+    let excluded: Vec<String> = check["excluded_alternatives"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default()
+        .iter()
+        .filter_map(|v| v.as_str().map(str::to_string))
+        .collect();
+
+    let diag_question_id = format!("diagq:{residual_id}");
+    let diag_threshold_id = format!("diagth:{residual_id}");
+    let settlement_id = format!("ds:{residual_id}:{hypothesis_id}");
+    let spec = json!({
+        "settlement_id": settlement_id,
+        "settlement_status": "settled",
+        "question_ref": diag_question_id,
+        "hypothesis_ref": format!("hypothesis:{hypothesis_id}"),
+        "residual_ref": format!("residual:{residual_id}"),
+        "supported_locus": supported_locus,
+        "threshold_ref": format!("threshold:{diag_threshold_id}"),
+        "qualifying_evidence_refs": qualifying,
+        "contradicting_evidence_refs": contradicting,
+        "excluded_alternatives": excluded,
+    });
+    let sections = json!({
+        "settlements": [{
+            "settlement_id": settlement_id,
+            "settlement_status": "settled",
+            "transformation_ref": "transformation:diagnostic",
+            "question_ref": diag_question_id,
+            "evidence_refs": qualifying,
+            "threshold_ref": format!("threshold:{diag_threshold_id}"),
+        }],
+        "questions": [{
+            "question_id": diag_question_id,
+            "question_form": format!("why does the declared state disagree with observed reality?"),
+            "question_type": "diagnostic",
+        }],
+        "representations": [{
+            "representation_id": format!("rep:diag-settlement:{settlement_id}"),
+            "representation_kind": "atomic",
+            "representation_type": "diagnostic_settlement",
+            "inline_content": spec,
+        }],
+    });
+    let subject_refs = vec![
+        format!("settlement:{settlement_id}"),
+        format!("question:{diag_question_id}"),
+        format!("hypothesis:{hypothesis_id}"),
+    ];
+    let mut repo = open_repo_ledger(ctx, repo_id)?;
+    let pos = crate::envelopes::append(
+        &mut repo,
+        RecordKind::DiagnosticSettled,
+        repo_id,
+        &e.checkout_id,
+        None,
+        None,
+        None,
+        vec![format!("hypothesis:{hypothesis_id}")],
+        sections,
+        subject_refs,
+        None,
+    )?;
+
+    Ok(output::output(vec![
+        ("settlement_id", json!(settlement_id)),
+        ("supported_failure_locus", json!(supported_locus)),
+        ("residual_id", json!(residual_id)),
+        ("qualifying_evidence_refs", json!(qualifying)),
+        ("contradicting_evidence_refs", json!(contradicting)),
+        ("excluded_alternatives", json!(excluded)),
+        ("durability", json!("committed")),
+        ("ledger_position", ledger_position_json(&pos)),
+    ]))
+}
+
+/// §12.5a: raise a repair proposal bound to its diagnostic settlement. A
+/// proposal naming `declared_model` additionally requires the cheap loci —
+/// verifier, verification_plan, implementation, environment — each explicitly
+/// excluded with evidence (the asymmetric friction). A proposal is not
+/// approval/promotion.
+pub fn diagnostic_propose(
+    ctx: &Ctx,
+    repo_id: &str,
+    _question_id: &str,
+    hypothesis_id: &str,
+    locus: &str,
+    target: &str,
+) -> Result<Value> {
+    let e = state::require_enrollment(ctx, repo_id)?;
+    projections::rebuild(ctx, repo_id)?;
+    let conn = projections::open(ctx, repo_id)?;
+
+    // Predecessor rule: proposal.raised requires a diagnostic.settled.
+    let settlement: Option<(String, String)> = conn
+        .query_row(
+            "SELECT settlement_id, residual_id FROM sxr_diag_settlement WHERE hypothesis_id = ?1",
+            [hypothesis_id],
+            |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)),
+        )
+        .optional()?;
+    let Some((settlement_id, residual_id)) = settlement else {
+        bail!(
+            "proposal requires a diagnostic settlement for hypothesis {hypothesis_id} \
+             (predecessor rule: diagnostic.settled)"
+        );
+    };
+
+    // Model-locus friction (§12.5a): declared_model only after the cheap loci
+    // are each explicitly excluded with evidence (AC-DIAG-001).
+    if locus == "declared_model" {
+        let exclusions = projections::model_locus_exclusions(&conn, &residual_id)?;
+        let allowed = exclusions["model_locus_proposal_allowed"]
+            .as_bool()
+            .unwrap_or(false);
+        if !allowed {
+            let missing: Vec<String> = exclusions["missing_exclusions"]
+                .as_array()
+                .cloned()
+                .unwrap_or_default()
+                .iter()
+                .filter_map(|v| v.as_str().map(str::to_string))
+                .collect();
+            bail!(
+                "AC-DIAG-001: model-locus proposal refused: cheap loci not all \
+                 evidence-excluded (missing: {})",
+                missing.join(", ")
+            );
+        }
+    }
+
+    let diag_question_id = format!("diagq:{residual_id}");
+    let proposal_id = format!("prop:{residual_id}:{hypothesis_id}");
+    let transformation_ref = format!("transformation:proposal:{proposal_id}");
+    let spec = json!({
+        "proposal_id": proposal_id,
+        "locus": locus,
+        "hypothesis_ref": format!("hypothesis:{hypothesis_id}"),
+        "diagnostic_settlement_ref": format!("settlement:{settlement_id}"),
+        "transformation_ref": transformation_ref,
+        "question_ref": diag_question_id,
+        "target_ref": target,
+    });
+    let sections = json!({
+        "transformations": [{
+            "transformation_id": format!("tx:{proposal_id}"),
+            "transformation_type": if locus == "declared_model" { "model_revision_proposal" } else { "repair_proposal" },
+            "scope": format!("locus:{locus}"),
+            "affected_entities": [target],
+        }],
+        "questions": [{
+            "question_id": diag_question_id,
+            "question_form": format!("why does the declared state disagree with observed reality?"),
+            "question_type": "diagnostic",
+        }],
+        "representations": [{
+            "representation_id": format!("rep:proposal:{proposal_id}"),
+            "representation_kind": "atomic",
+            "representation_type": "proposal",
+            "inline_content": spec,
+        }],
+    });
+    let subject_refs = vec![
+        format!("proposal:{proposal_id}"),
+        format!("locus:{locus}"),
+        format!("target:{target}"),
+        format!("question:{diag_question_id}"),
+        format!("hypothesis:{hypothesis_id}"),
+        format!("settlement:{settlement_id}"),
+    ];
+    let mut repo = open_repo_ledger(ctx, repo_id)?;
+    let pos = crate::envelopes::append(
+        &mut repo,
+        RecordKind::ProposalRaised,
+        repo_id,
+        &e.checkout_id,
+        None,
+        None,
+        None,
+        vec![format!("settlement:{settlement_id}")],
+        sections,
+        subject_refs,
+        None,
+    )?;
+
+    Ok(output::output(vec![
+        ("proposal_id", json!(proposal_id)),
+        ("locus", json!(locus)),
+        ("target_ref", json!(target)),
+        (
+            "diagnostic_settlement_ref",
+            json!(format!("settlement:{settlement_id}")),
+        ),
+        ("durability", json!("committed")),
+        ("ledger_position", ledger_position_json(&pos)),
+    ]))
+}
+
+/// §17.2-shaped diagnostic loop state for one residual.
+pub fn diagnostic_status(ctx: &Ctx, repo_id: &str, residual_id: &str) -> Result<Value> {
+    let _e = state::require_enrollment(ctx, repo_id)?;
+    projections::rebuild(ctx, repo_id)?;
+    let conn = projections::open(ctx, repo_id)?;
+    let question_id: Option<String> = conn
+        .query_row(
+            "SELECT question_id FROM sxr_residual WHERE residual_id = ?1",
+            [residual_id],
+            |r| r.get::<_, String>(0),
+        )
+        .optional()?;
+    let v = projections::diagnostic_status(
+        &conn,
+        repo_id,
+        question_id.as_deref().unwrap_or(""),
+        residual_id,
+    )?;
+    Ok(output::output(vec![("diagnostic", v)]))
 }
 
 // ── run finish ───────────────────────────────────────────────────────────
