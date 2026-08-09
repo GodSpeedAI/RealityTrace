@@ -75,6 +75,22 @@ fn run_invocation(
     let mut stdout = child.stdout.take().expect("stdout is piped");
     let mut stderr = child.stderr.take().expect("stderr is piped");
 
+    // Drain the pipes concurrently: cargo's JSON stream routinely exceeds the
+    // OS pipe buffer (~64 KiB), and a blocked writer never reaches exit — the
+    // wait loop below would otherwise deadlock until the deadline kills it
+    // (observed in the §26 corpus dogfood: verify run on domainforge crashed
+    // with `crashed: true, exit_code: null` after exactly the timeout).
+    let stdout_thread = std::thread::spawn(move || {
+        let mut buf = Vec::new();
+        let _ = stdout.read_to_end(&mut buf);
+        buf
+    });
+    let stderr_thread = std::thread::spawn(move || {
+        let mut buf = Vec::new();
+        let _ = stderr.read_to_end(&mut buf);
+        buf
+    });
+
     let deadline = Instant::now() + Duration::from_secs(invocation.timeout_s);
     let (exit_code, crashed) = loop {
         match child.try_wait() {
@@ -93,11 +109,10 @@ fn run_invocation(
         }
     };
 
-    // Read the streams to completion (after wait/kill the pipes are closed).
-    let mut stdout_bytes = Vec::new();
-    let mut stderr_bytes = Vec::new();
-    let _ = stdout.read_to_end(&mut stdout_bytes);
-    let _ = stderr.read_to_end(&mut stderr_bytes);
+    // The child is dead (or killed) now: the pipe write ends are closed, so
+    // the draining threads hit EOF and complete.
+    let stdout_bytes = stdout_thread.join().unwrap_or_default();
+    let stderr_bytes = stderr_thread.join().unwrap_or_default();
 
     let ended_at = chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Micros, true);
     let stdout_ref = persist(&ctx.artifacts_dir, &stdout_bytes, "stdout")?;
@@ -287,6 +302,41 @@ fn it_fails() {
         assert_eq!(outcome.exit_code, None);
         assert!(start.elapsed() < Duration::from_secs(10));
         assert_eq!(direction_of(&outcome), "unknown");
+    }
+
+    #[test]
+    fn large_stdout_is_drained_without_deadlock() {
+        // Regression (corpus dogfood): cargo's JSON stream exceeds the OS
+        // pipe buffer; without concurrent draining the child blocks on write
+        // and the deadline kills it with `crashed: true`.
+        let dir = tempdir().unwrap();
+        std::fs::write(
+            dir.path().join("Cargo.toml"),
+            "[package]\nname=\"x\"\nversion=\"0.1.0\"\n",
+        )
+        .unwrap();
+        // 1 MiB stream > 64 KiB pipe buffer, generated without a huge argv.
+        let step = step(
+            &[
+                "sh",
+                "-c",
+                "dd if=/dev/zero bs=1048576 count=1 2>/dev/null | tr '\\0' x",
+            ],
+            dir.path().to_path_buf(),
+            30,
+        );
+        let v = CargoTestVerifier;
+        let outcome = v
+            .execute(&step, &ExecutionContext::new(dir.path().join("artifacts")))
+            .unwrap();
+        assert_eq!(outcome.exit_code, Some(0));
+        assert!(!outcome.crashed);
+        let art = dir.path().join("artifacts");
+        let stdout_bytes = std::fs::read(
+            art.join(format!("{}.stdout", outcome.stdout_ref.strip_prefix("sha256:").unwrap())),
+        )
+        .unwrap();
+        assert_eq!(stdout_bytes.len(), 1 << 20);
     }
 
     #[test]
