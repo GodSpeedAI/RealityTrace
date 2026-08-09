@@ -1,0 +1,37 @@
+{
+  "record_type": "owner_adjudication",
+  "date": "2026-08-09",
+  "experiment": "23.1 retrieval ablation selection-term clarification",
+  "context": "The predeclared §23.1 selection term 'settlement success' was found "
+             "underspecified after observing the ambiguity: under concrete "
+             "failure-locus attribution it selects Arm A, under concrete + "
+             "honest unknown it selects Arm D.",
+  "adjudication": {
+    "selection_term": "diagnostic_decision_success",
+    "definition": "diagnostic_decision_success = correct concrete failure "
+                  "locus when the answer key has a determinate locus, OR "
+                  "honest 'unknown' when the answer key is 'unknown'.",
+    "frozen_arm": "D",
+    "reason": "diagnostic decision success is the intended meaning for "
+              "choosing the retrieval substrate used by the §23.2 "
+              "diagnostic-loop experiment; the corpus includes 'unknown' as a "
+              "legitimate ground-truth diagnostic state and §23.2 treats "
+              "terminating 'unknown' under insufficient evidence as a "
+              "success. Do NOT interpret as confirmation of H5.",
+    "transparency": "This is post-experiment adjudication of an underspecified "
+                    "selection term; NOT a preregistered metric definition.",
+    "h5_status": "unsupported/falsified with respect to its concrete "
+                 "attribution prediction; NOT retroactively re-scored as D won"
+  },
+  "rankings_preserved": {
+    "concrete_failure_locus_attribution": {"A": 30, "B": 26, "C": 21, "D": 26},
+    "diagnostic_decision_success": {"A": 32, "B": 30, "C": 25, "D": 34}
+  },
+  "semantic_model_change_fp": {"A": 0, "B": 0, "C": 0, "D": 0},
+  "note": "Both rankings are preserved and NOT collapsed into one claim. "
+          "Settlement (CEP) semantics are NOT altered; Settlement is not "
+          "synonymous with success. The §23.1 result is evidence that "
+          "retrieval representation may affect two separable capabilities "
+          "(attribution power; epistemic restraint/abstention), to be tested "
+          "as a new hypothesis later, not a conclusion already established."
+}

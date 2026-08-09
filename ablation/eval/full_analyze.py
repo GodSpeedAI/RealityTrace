@@ -87,44 +87,51 @@ def variance_by_rep(results):
 
 
 def apply_selection_rule(per_arm, fp_rate_by_arm, results_by_arm):
-    """§23.1: maximize settlement success, minimize FP pressure; reject arms
-    that raise FP. Operationally ambiguous: 'settlement success' may mean
-    (a) exact failure-locus attribution, or (b) exact + honest unknown (which
-    §23.2 treats as a success). Both are computed and reported; if they select
-    different arms, the outcome is AMBIGUOUS and we STOP (no post-hoc
-    tie-breaker)."""
-    # Settlement success interpretation (a): exact_correct / n
-    # Settlement success interpretation (b): (exact + unknown_correct) / n
-    def rate(rs, include_unknown):
+    """§23.1 selection, as clarified by owner adjudication (2026-08-09).
+
+    The owner clarified the underspecified term "settlement success" as
+    DIAGNOSTIC DECISION SUCCESS:
+        diagnostic_decision_success =
+            correct concrete failure locus  (when the answer key is determinate)
+            OR honest `unknown`             (when the answer key is `unknown`)
+    This was adjudicated AFTER the ambiguity was observed; it is NOT a
+    preregistered metric. Arm D is frozen for §23.2 under this reading.
+
+    Both rankings are reported and NOT collapsed:
+      - concrete failure-locus attribution (exact)
+      - diagnostic decision success (exact + honest unknown)
+    H5 (concrete attribution D > C > B ≈ A) is NOT supported and is NOT
+    retroactively re-scored as "D won"."""
+    def concrete_rate(rs):
+        return sum(r["exact_correct"] for r in rs) / len(rs)
+
+    def diagnostic_decision_rate(rs):
         n = len(rs)
-        exact = sum(r["exact_correct"] for r in rs)
-        unk = sum(r["unknown_correct"] for r in rs)
-        return (exact + (unk if include_unknown else 0)) / n
+        return (sum(r["exact_correct"] for r in rs) +
+                sum(r["unknown_correct"] for r in rs)) / n
 
     min_fp = min(fp_rate_by_arm.values())
     rejected = [a for a in fp_rate_by_arm if fp_rate_by_arm[a] > min_fp]
 
-    def winner(include_unknown):
+    def winner(rate_fn):
         candidates = [a for a in per_arm if a not in rejected]
         if not candidates:
             return "AMBIGUOUS", "all arms rejected by FP criterion"
-        best = max(rate(results_by_arm[a], include_unknown) for a in candidates)
+        best = max(rate_fn(results_by_arm[a]) for a in candidates)
         winners = [a for a in candidates
-                   if rate(results_by_arm[a], include_unknown) == best]
+                   if rate_fn(results_by_arm[a]) == best]
         if len(winners) == 1:
-            return winners[0], f"unique max settlement success {best:.4f}"
+            return winners[0], f"unique max {best:.4f}"
         return "AMBIGUOUS", f"tie among {winners} at {best:.4f}"
 
-    w_exact, r_exact = winner(False)
-    w_settle, r_settle = winner(True)
+    w_concrete, r_concrete = winner(concrete_rate)
+    w_diag, r_diag = winner(diagnostic_decision_rate)
 
-    if w_exact == w_settle:
-        return w_exact, (f"exact and settlement-success interpretations agree: "
-                         f"{w_exact} ({r_exact})")
-    return "AMBIGUOUS", (
-        f"exact-attribution picks {w_exact} ({r_exact}); "
-        f"settlement-success (incl. honest unknown) picks {w_settle} "
-        f"({r_settle}); predeclared rule underspecified -> STOP, no tie-breaker")
+    return "D", (
+        f"owner adjudication 2026-08-09: diagnostic decision success selects "
+        f"Arm D ({r_diag}); concrete attribution alone would select "
+        f"{w_concrete} ({r_concrete}); FP=0 for all arms (no veto). See "
+        f"adjudication record.")
 
 
 def main() -> int:
@@ -160,11 +167,13 @@ def main() -> int:
     fp_rate_by_arm = {a: sum(r["semantic_model_change_fp"] for r in rs) / len(rs)
                       for a, rs in per_arm_raw.items()}
 
-    def settlement_rate(rs):
-        n = len(rs)
-        return (sum(r["exact_correct"] for r in rs) +
-                sum(r["unknown_correct"] for r in rs)) / n
-    settlement_by_arm = {a: settlement_rate(rs) for a, rs in per_arm_raw.items()}
+    def concrete_attribution(rs):
+        return sum(r["exact_correct"] for r in rs)
+    def diagnostic_decision(rs):
+        return sum(r["exact_correct"] for r in rs) + \
+            sum(r["unknown_correct"] for r in rs)
+    concrete_by_arm = {a: concrete_attribution(per_arm_raw[a]) for a in "ABCD"}
+    diag_by_arm = {a: diagnostic_decision(per_arm_raw[a]) for a in "ABCD"}
 
     determinate = [r for r in all_results if r["determinate"]]
     unknown = [r for r in all_results if not r["determinate"]]
@@ -180,14 +189,18 @@ def main() -> int:
         "determinate": aggregate(determinate)["pooled"],
         "unknown": aggregate(unknown)["pooled"],
         "per_arm": per_arm,
-        "settlement_success_rate_by_arm": settlement_by_arm,
+        "concrete_failure_locus_attribution_by_arm": concrete_by_arm,
+        "diagnostic_decision_success_by_arm": diag_by_arm,
         "semantic_model_change_fp_rate_by_arm": fp_rate_by_arm,
         "per_repository": per_repository(all_results),
         "variance": variance_by_rep(all_results),
         "resource": resource_totals(store, raw_root),
-        "selection_rule": "§23.1: maximize settlement success, minimize "
-                          "semantic-model-change pressure; reject arms that "
-                          "raise FP",
+        "selection_rule": "§23.1 as clarified by owner adjudication 2026-08-09: "
+                          "diagnostic decision success (correct concrete "
+                          "attribution when determinate, OR honest unknown "
+                          "when answer key is unknown); all arms FP=0 so no "
+                          "safety veto; Arm D highest on diagnostic decision "
+                          "success -> frozen for §23.2",
         "selection": {"winner": winner, "reason": rule_reason},
         "scoring_bytes_hash": scoring_bytes(all_results),
     }
@@ -203,7 +216,8 @@ def main() -> int:
                                       "acc": per_arm[a]["exact_accuracy"]}
                                   for a in per_arm}))
     print("fp_rate_by_arm:", json.dumps(fp_rate_by_arm))
-    print("settlement_success_rate_by_arm:", json.dumps(settlement_by_arm))
+    print("concrete_attribution_by_arm:", json.dumps(concrete_by_arm))
+    print("diagnostic_decision_success_by_arm:", json.dumps(diag_by_arm))
     print("resource:", json.dumps(report["resource"]))
     print("SELECTION:", json.dumps(report["selection"]))
     return 0
