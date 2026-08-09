@@ -1,0 +1,31 @@
+{
+  "record_type": "superseded_preflight_live_calls",
+  "pilot_id": "pilot-000",
+  "status": "excluded_from_pilot_statistics",
+  "reason": "Both calls are protocol-preflight artifacts (isolation + budget enforcement validation), NOT among the 60 pilot units. Call 1 preceded the budget packer and exposed the defect; call 2 validated the packer.",
+  "calls": [
+    {
+      "call": 1,
+      "case_id": "ag-01", "arm": "A", "repetition": 1,
+      "phase": "pre-budget-fix",
+      "finding": "frozen context_budget_tokens=32000 not enforced; actual prompt 43282 tokens. Model window accepted it; irrelevant. Protocol-implementation defect, not evidence to change the frozen budget.",
+      "resolved_model": "zai/glm-5.2",
+      "prompt_bytes": 131980, "prompt_tokens": 43282,
+      "cost_usd": 0.063076, "latency_ms": 14578.7, "retries": 0,
+      "extracted_locus": "implementation",
+      "isolation": {"key_path_probe_resolved": [], "prompt_sanitized": true}
+    },
+    {
+      "call": 2,
+      "case_id": "ag-01", "arm": "A", "repetition": 1,
+      "phase": "post-budget-fix",
+      "validated": "deterministic context packer (pack-v1) enforces 32K total-input budget; all 20 case/arm combos fit; provider-verified prompt_tokens=22405 < 32000.",
+      "resolved_model": "zai/glm-5.2",
+      "prompt_tokens": 22405, "total_tokens": 22937,
+      "cost_usd": 0.033696, "latency_ms": 8137.7, "retries": 0,
+      "extracted_locus": "verifier",
+      "isolation": {"key_path_probe_resolved": [], "prompt_sanitized": true}
+    }
+  ],
+  "disposition": "superseded; do not count toward pilot metrics; do not reuse outputs"
+}

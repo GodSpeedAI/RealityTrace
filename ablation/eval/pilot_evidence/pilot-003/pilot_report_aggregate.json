@@ -1,0 +1,256 @@
+{
+  "pilot_id": "pilot-003",
+  "namespace": "pilot-003",
+  "classification": "PILOT \u2014 NOT INFERENTIAL; NOT FOR ARM SELECTION",
+  "n_units": 60,
+  "pooled": {
+    "scoring_version": "m2-scorer-1",
+    "determinate": {
+      "n": 48,
+      "exact_correct": 22,
+      "unknown_correct": 0,
+      "unsupported_concrete": 0,
+      "semantic_model_change_fp": 0,
+      "unparseable": 10,
+      "exact_accuracy": 0.4583
+    },
+    "unknown": {
+      "n": 12,
+      "exact_correct": 0,
+      "unknown_correct": 0,
+      "unsupported_concrete": 12,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "exact_accuracy": 0.0
+    },
+    "pooled": {
+      "n": 60,
+      "exact_correct": 22,
+      "unknown_correct": 0,
+      "unsupported_concrete": 12,
+      "semantic_model_change_fp": 0,
+      "unparseable": 10,
+      "exact_accuracy": 0.3667
+    }
+  },
+  "per_arm": {
+    "A": {
+      "n": 15,
+      "exact_correct": 5,
+      "unknown_correct": 0,
+      "unsupported_concrete": 3,
+      "semantic_model_change_fp": 0,
+      "unparseable": 3,
+      "agg": {
+        "scoring_version": "m2-scorer-1",
+        "determinate": {
+          "n": 12,
+          "exact_correct": 5,
+          "unknown_correct": 0,
+          "unsupported_concrete": 0,
+          "semantic_model_change_fp": 0,
+          "unparseable": 3,
+          "exact_accuracy": 0.4167
+        },
+        "unknown": {
+          "n": 3,
+          "exact_correct": 0,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.0
+        },
+        "pooled": {
+          "n": 15,
+          "exact_correct": 5,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 3,
+          "exact_accuracy": 0.3333
+        }
+      }
+    },
+    "B": {
+      "n": 15,
+      "exact_correct": 6,
+      "unknown_correct": 0,
+      "unsupported_concrete": 3,
+      "semantic_model_change_fp": 0,
+      "unparseable": 4,
+      "agg": {
+        "scoring_version": "m2-scorer-1",
+        "determinate": {
+          "n": 12,
+          "exact_correct": 6,
+          "unknown_correct": 0,
+          "unsupported_concrete": 0,
+          "semantic_model_change_fp": 0,
+          "unparseable": 4,
+          "exact_accuracy": 0.5
+        },
+        "unknown": {
+          "n": 3,
+          "exact_correct": 0,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.0
+        },
+        "pooled": {
+          "n": 15,
+          "exact_correct": 6,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 4,
+          "exact_accuracy": 0.4
+        }
+      }
+    },
+    "C": {
+      "n": 15,
+      "exact_correct": 6,
+      "unknown_correct": 0,
+      "unsupported_concrete": 3,
+      "semantic_model_change_fp": 0,
+      "unparseable": 3,
+      "agg": {
+        "scoring_version": "m2-scorer-1",
+        "determinate": {
+          "n": 12,
+          "exact_correct": 6,
+          "unknown_correct": 0,
+          "unsupported_concrete": 0,
+          "semantic_model_change_fp": 0,
+          "unparseable": 3,
+          "exact_accuracy": 0.5
+        },
+        "unknown": {
+          "n": 3,
+          "exact_correct": 0,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.0
+        },
+        "pooled": {
+          "n": 15,
+          "exact_correct": 6,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 3,
+          "exact_accuracy": 0.4
+        }
+      }
+    },
+    "D": {
+      "n": 15,
+      "exact_correct": 5,
+      "unknown_correct": 0,
+      "unsupported_concrete": 3,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "agg": {
+        "scoring_version": "m2-scorer-1",
+        "determinate": {
+          "n": 12,
+          "exact_correct": 5,
+          "unknown_correct": 0,
+          "unsupported_concrete": 0,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.4167
+        },
+        "unknown": {
+          "n": 3,
+          "exact_correct": 0,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.0
+        },
+        "pooled": {
+          "n": 15,
+          "exact_correct": 5,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.3333
+        }
+      }
+    }
+  },
+  "determinate": {
+    "scoring_version": "m2-scorer-1",
+    "determinate": {
+      "n": 48,
+      "exact_correct": 22,
+      "unknown_correct": 0,
+      "unsupported_concrete": 0,
+      "semantic_model_change_fp": 0,
+      "unparseable": 10,
+      "exact_accuracy": 0.4583
+    },
+    "unknown": {
+      "n": 0
+    },
+    "pooled": {
+      "n": 48,
+      "exact_correct": 22,
+      "unknown_correct": 0,
+      "unsupported_concrete": 0,
+      "semantic_model_change_fp": 0,
+      "unparseable": 10,
+      "exact_accuracy": 0.4583
+    }
+  },
+  "unknown": {
+    "scoring_version": "m2-scorer-1",
+    "determinate": {
+      "n": 0
+    },
+    "unknown": {
+      "n": 12,
+      "exact_correct": 0,
+      "unknown_correct": 0,
+      "unsupported_concrete": 12,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "exact_accuracy": 0.0
+    },
+    "pooled": {
+      "n": 12,
+      "exact_correct": 0,
+      "unknown_correct": 0,
+      "unsupported_concrete": 12,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "exact_accuracy": 0.0
+    }
+  },
+  "resource": {
+    "units_with_usage": 60,
+    "total_tokens": 609708,
+    "total_cost_usd": 0.648403,
+    "total_latency_ms": 1356760.2,
+    "total_retries": 0,
+    "avg_latency_ms": 22612.7
+  },
+  "projected_full_run": {
+    "per_unit_cost": 0.010807,
+    "full_720_est_cost": 7.78,
+    "attribution_360_est_cost": 3.89,
+    "full_720_est_tokens": 7316496,
+    "attribution_360_est_tokens": 3658248,
+    "note": "projected from actual pilot measurements; not a commitment"
+  },
+  "scoring_bytes_hash": "fefbc0998bff36e7f0711b4f4181db75925c05643b41a3073db0f1eb9a70c8e0",
+  "raw_evidence_on_disk": "runs/pilot-003/pilot-003/ (gitignored; raw outputs + per-unit scoring records + bundles; preserved as developmental evidence, not committed to preserve key isolation)"
+}

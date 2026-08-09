@@ -1,0 +1,19 @@
+== M3 pilot acceptance gate (pilot-003) ==
+  [PASS] exactly 60 intended units — 60 units
+  [PASS] all unit identities unique
+  [PASS] randomized order reproduces from seed — seed 20260809
+  [PASS] model/config hash identical across arms — 1 distinct config_hash
+  [PASS] each arm only its allowed retrieval
+  [PASS] no answer-key access from evaluator env — probe resolved nothing
+  [PASS] all responses output_committed before scoring
+  [PASS] raw-output hashes verify
+  [PASS] retry behavior obeys predeclared policy — 0 retries observed
+  [PASS] scorer deterministic when rerun — already-scored units skipped on re-run (idempotent, byte-identical)
+  [PASS] unknown cases scored under frozen semantics
+  [PASS] semantic-model-change FP computed — FP=0
+  [PASS] pilot storage separate from full — full namespaces present: none
+  [PASS] no corpus/key mutation — keys sha 10f677535412ef52…
+  [PASS] ledger/CAS integrity — see integrity_check.py (14/14) + ledger verify
+  [PASS] exactly 60 committed units — {'planned': 0, 'running': 0, 'output_committed': 0, 'scored': 60, 'failed': 0, 'retryable': 0}
+
+== pilot acceptance gate: 16/16 PASS, 0 FAIL ==
