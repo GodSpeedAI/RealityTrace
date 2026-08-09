@@ -1,0 +1,139 @@
+{
+  "experiment": "full-001",
+  "classification": "FULL RETRIEVAL ABLATION (not pilot)",
+  "n_units": 720,
+  "pooled": {
+    "n": 720,
+    "exact_correct": 103,
+    "unknown_correct": 18,
+    "unsupported_concrete": 65,
+    "semantic_model_change_fp": 0,
+    "unparseable": 114,
+    "exact_accuracy": 0.1431
+  },
+  "determinate": {
+    "n": 624,
+    "exact_correct": 103,
+    "unknown_correct": 0,
+    "unsupported_concrete": 0,
+    "semantic_model_change_fp": 0,
+    "unparseable": 101,
+    "exact_accuracy": 0.1651
+  },
+  "unknown": {
+    "n": 96,
+    "exact_correct": 0,
+    "unknown_correct": 18,
+    "unsupported_concrete": 65,
+    "semantic_model_change_fp": 0,
+    "unparseable": 13,
+    "exact_accuracy": 0.0
+  },
+  "per_arm": {
+    "A": {
+      "n": 180,
+      "exact_correct": 30,
+      "unknown_correct": 2,
+      "unsupported_concrete": 19,
+      "semantic_model_change_fp": 0,
+      "unparseable": 35,
+      "exact_accuracy": 0.1667
+    },
+    "B": {
+      "n": 180,
+      "exact_correct": 26,
+      "unknown_correct": 4,
+      "unsupported_concrete": 20,
+      "semantic_model_change_fp": 0,
+      "unparseable": 21,
+      "exact_accuracy": 0.1444
+    },
+    "C": {
+      "n": 180,
+      "exact_correct": 21,
+      "unknown_correct": 4,
+      "unsupported_concrete": 11,
+      "semantic_model_change_fp": 0,
+      "unparseable": 50,
+      "exact_accuracy": 0.1167
+    },
+    "D": {
+      "n": 180,
+      "exact_correct": 26,
+      "unknown_correct": 8,
+      "unsupported_concrete": 15,
+      "semantic_model_change_fp": 0,
+      "unparseable": 8,
+      "exact_accuracy": 0.1444
+    }
+  },
+  "settlement_success_rate_by_arm": {
+    "A": 0.17777777777777778,
+    "B": 0.16666666666666666,
+    "C": 0.1388888888888889,
+    "D": 0.18888888888888888
+  },
+  "semantic_model_change_fp_rate_by_arm": {
+    "A": 0.0,
+    "B": 0.0,
+    "C": 0.0,
+    "D": 0.0
+  },
+  "per_repository": {
+    "ag": {
+      "n": 180,
+      "exact_correct": 43,
+      "unknown_correct": 0,
+      "unsupported_concrete": 11,
+      "semantic_model_change_fp": 0,
+      "unparseable": 11,
+      "exact_accuracy": 0.2389
+    },
+    "cep": {
+      "n": 180,
+      "exact_correct": 12,
+      "unknown_correct": 7,
+      "unsupported_concrete": 0,
+      "semantic_model_change_fp": 0,
+      "unparseable": 56,
+      "exact_accuracy": 0.0667
+    },
+    "df": {
+      "n": 180,
+      "exact_correct": 29,
+      "unknown_correct": 8,
+      "unsupported_concrete": 25,
+      "semantic_model_change_fp": 0,
+      "unparseable": 20,
+      "exact_accuracy": 0.1611
+    },
+    "sr": {
+      "n": 180,
+      "exact_correct": 19,
+      "unknown_correct": 3,
+      "unsupported_concrete": 29,
+      "semantic_model_change_fp": 0,
+      "unparseable": 27,
+      "exact_accuracy": 0.1056
+    }
+  },
+  "variance": {
+    "repetition_sets": 240,
+    "mean_within_set_pstdev": 0.0295
+  },
+  "resource": {
+    "units": 720,
+    "tokens": 1896220,
+    "cost_usd": 4.472912,
+    "latency_ms": 16578752.5,
+    "retries": 4,
+    "avg_latency_ms": 23026.0
+  },
+  "selection_rule": "\u00a723.1: maximize settlement success, minimize semantic-model-change pressure; reject arms that raise FP",
+  "selection": {
+    "winner": "AMBIGUOUS",
+    "reason": "exact-attribution picks A (unique max settlement success 0.1667); settlement-success (incl. honest unknown) picks D (unique max settlement success 0.1889); predeclared rule underspecified -> STOP, no tie-breaker"
+  },
+  "scoring_bytes_hash": "9a99ec9d07f4e9654c039a92ae78a23b8b07a8be3aeeee6c67beb1a59f731446",
+  "raw_evidence_on_disk": "runs/full-001/full-001/ (gitignored; 720 raw outputs + 720 per-unit scoring + bundles + usage sidecars; preserved as evidence, not committed to preserve key isolation)"
+}

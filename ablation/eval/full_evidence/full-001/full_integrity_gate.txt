@@ -1,0 +1,14 @@
+== full experiment integrity gate (full-001) ==
+  [PASS] exactly 720 intended units — 720
+  [PASS] all unit identities unique
+  [PASS] order reproduces from seed — seed 20260809
+  [PASS] model/config hash identical across arms
+  [PASS] arm isolation
+  [PASS] no answer-key access — probe nothing
+  [PASS] all outputs committed before scoring
+  [PASS] raw-output hashes verify
+  [PASS] usage sidecars present — 720
+  [PASS] 720 committed units — {'scored': 720}
+  [PASS] no corpus/key mutation
+
+== full experiment gate: 11/11 PASS, 0 FAIL ==
