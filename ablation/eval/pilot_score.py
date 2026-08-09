@@ -2,14 +2,14 @@
 """M3 pilot scorer + report — scores the 60 committed pilot units and reports
 performance WITHOUT selecting a winner (PILOT, NOT INFERENTIAL).
 
-Inputs: the pilot-002 checkpoint (committed raw outputs), the sealed keys, the
+Inputs: the pilot-003 checkpoint (committed raw outputs), the sealed keys, the
 matrix, and the manifest. Outputs:
-  - per-unit scoring records (scoring/pilot-002/)
+  - per-unit scoring records (scoring/pilot-003/)
   - aggregate pilot metrics (pooled, per-arm, determinate, unknown, FP)
   - resource accounting (tokens/cost/latency totals + projected full-run)
   - a pilot report JSON
 
-Pilot results are quarantined in the pilot-002 namespace and never pooled into
+Pilot results are quarantined in the pilot-003 namespace and never pooled into
 the full experiment.
 """
 
@@ -27,8 +27,8 @@ from eval.scorer import score_run, aggregate, scoring_bytes  # noqa: E402
 
 CORPUS = os.path.join(HERE, "..", "corpus")
 RUNS = os.path.join(HERE, "..", "runs")
-PILOT_EXPERIMENT = "pilot-002"
-PILOT_NAMESPACE = "pilot-002"
+PILOT_EXPERIMENT = "pilot-003"
+PILOT_NAMESPACE = "pilot-003"
 
 
 def resource_totals(store: CheckpointStore, raw_root: str) -> dict:

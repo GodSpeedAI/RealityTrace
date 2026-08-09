@@ -6,7 +6,7 @@ call), then executes the 60 units in the frozen seeded randomized order under
 the live backend, durably committing each raw output before any scoring, with
 per-unit token/cost/latency accounting and crash-resume.
 
-The pilot uses a distinct immutable namespace (pilot-001) so its results are
+The pilot uses a distinct immutable namespace (pilot-003) so its results are
 quarantined from the full experiment. The FULL experiment is NOT launched: the
 release marker authorizes only this pilot experiment id.
 
@@ -37,8 +37,8 @@ from eval.pilot_manifest import build_pilot_manifest, write_manifest  # noqa: E4
 
 CORPUS = os.path.join(HERE, "..", "corpus")
 SXR_ROOT = os.path.join(HERE, "..", "..")
-PILOT_EXPERIMENT = "pilot-001"
-PILOT_NAMESPACE = "pilot-001"
+PILOT_EXPERIMENT = "pilot-003"
+PILOT_NAMESPACE = "pilot-003"
 
 
 def load_artifacts(rows):
@@ -134,6 +134,10 @@ def main():
         if st0 is not None and st0.status in ("output_committed", "scored"):
             skipped += 1
             continue
+        # A unit left in "running" by a crash mid-call must be rolled back to
+        # retryable before re-running (running -> running is invalid).
+        if st0 is not None and st0.status == "running":
+            store.transition(uid, "retryable")
         ctx = build_arm_context(u.arm, u.case_id, store_map[u.case_id])
         validate_arm_context(ctx)
         run_evaluator(u, bundle_root, rows_by_id[u.case_id], ctx.to_dict(),

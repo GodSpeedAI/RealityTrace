@@ -67,10 +67,13 @@ def build_pilot_manifest(cfg, selection: dict, sxr_root: str,
     selection_seed = selection.get("seed")
 
     manifest = {
-        "pilot_id": "pilot-001",
-        "namespace": "pilot-001",
-        "freeze_statement": "contract frozen before first live call; change "
-                            "requires owner re-adjudication",
+        "pilot_id": "pilot-003",
+        "namespace": "pilot-003",
+        "freeze_statement": "contract frozen before first live call under the "
+                            "corrected 32K budget enforcement and durable "
+                            "resource accounting; pilot-001 superseded "
+                            "(budget not yet enforced) and pilot-002 superseded "
+                            "(resource usage lost at scoring)",
         "model_identity_tag": cfg.model_identity_tag(),
         "model": {
             "model_id": cfg.model_id,
