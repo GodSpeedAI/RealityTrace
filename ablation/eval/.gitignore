@@ -1,0 +1,5 @@
+# M2 experiment state (simulated/recorded outputs, bundles, manifests) —
+# regenerable; never contains sealed keys (bundles are scrubbed by design)
+runs/
+__pycache__/
+*.pyc
