@@ -201,3 +201,252 @@ fn neither_shape_is_rejected() {
     let err = adapter.parse_envelope(&envelope).unwrap_err();
     assert!(err.to_string().contains("matches neither"), "got {err}");
 }
+
+// ── CAS-carried materialization (§10.7a) ──────────────────────────────────
+//
+// The valid-basic fixture carries D inline. The same envelope with
+// `inline_content` replaced by `content_ref` is the CAS-carried shape: same D
+// bytes, same declared hashes — only the carriage mode differs. Both must
+// materialize to a semantically identical `Resolved` context.
+
+/// The inline valid-basic envelope, re-carried as `content_ref`.
+fn cas_carried_envelope() -> serde_json::Value {
+    let mut envelope: serde_json::Value =
+        serde_json::from_str(&fixture("env-valid-basic.json")).unwrap();
+    let rep = &mut envelope["representations"][0];
+    let inline = rep["inline_content"].as_str().unwrap().to_string();
+    let hex = rep["content_hash"]
+        .as_str()
+        .unwrap()
+        .strip_prefix("sha256:")
+        .unwrap()
+        .to_string();
+    rep.as_object_mut().unwrap().remove("inline_content");
+    rep["content_ref"] = json!(format!("cas://sha256:{hex}"));
+    rep["content_availability"] = json!("available");
+    assert!(!inline.is_empty());
+    envelope
+}
+
+/// The `--emit both` shape as produced by domainforge: D alongside the
+/// envelope that references it.
+fn both_shape() -> serde_json::Value {
+    let envelope = cas_carried_envelope();
+    // D is the canonical bytes: reproduce them from the original inline
+    // fixture so the content hash verifies.
+    let original: serde_json::Value =
+        serde_json::from_str(&fixture("env-valid-basic.json")).unwrap();
+    let inline = original["representations"][0]["inline_content"]
+        .as_str()
+        .unwrap()
+        .to_string();
+    json!({ "representation": serde_json::from_str::<serde_json::Value>(&inline).unwrap(), "cep_envelope": envelope })
+}
+
+#[test]
+fn cas_carried_without_producer_d_or_cas_fails_loudly() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let envelope = cas_carried_envelope();
+    let err = adapter.parse_envelope(&envelope).unwrap_err();
+    let msg = err.to_string();
+    assert!(
+        msg.contains("no producer D") && msg.contains("cas_root"),
+        "got {msg}"
+    );
+}
+
+#[test]
+fn cas_carried_materializes_from_producer_d() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let both = both_shape();
+    let ctx = adapter
+        .parse_both(both.to_string().as_bytes(), None)
+        .unwrap();
+    let SemanticContext::Resolved {
+        content_hash,
+        semantic_closure_hash,
+        representation_json,
+        resolution_inputs,
+        declarations,
+        ..
+    } = ctx
+    else {
+        panic!("CAS-carried envelope must resolve");
+    };
+    assert!(content_hash.starts_with("sha256:"));
+    assert!(semantic_closure_hash.starts_with("sha256:"));
+    assert_eq!(declarations.len(), 5);
+    assert_eq!(
+        resolution_inputs.source_set_hash,
+        "sha256:199407284bab273208ccea52deb56197c582816a668ee726d7ab1ab3797d42b5"
+    );
+    // Same D bytes as the inline fixture (carriage must not change semantics).
+    let inline_fixture: serde_json::Value =
+        serde_json::from_str(&fixture("env-valid-basic.json")).unwrap();
+    let inline_d = inline_fixture["representations"][0]["inline_content"]
+        .as_str()
+        .unwrap();
+    assert_eq!(representation_json, inline_d);
+}
+
+#[test]
+fn cas_carried_persists_into_cas_store_and_reuses_it() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let cas = tempfile::tempdir().unwrap();
+    let both = both_shape();
+    let hex = cas_carried_envelope()["representations"][0]["content_hash"]
+        .as_str()
+        .unwrap()
+        .strip_prefix("sha256:")
+        .unwrap()
+        .to_string();
+
+    let ctx = adapter
+        .parse_both(both.to_string().as_bytes(), Some(cas.path()))
+        .unwrap();
+    let SemanticContext::Resolved { content_hash, .. } = &ctx else {
+        panic!("must resolve");
+    };
+    assert_eq!(
+        content_hash.strip_prefix("sha256:").unwrap(),
+        &hex,
+        "snapshot identity must be the content address"
+    );
+    assert!(
+        cas.path().join(&hex).exists(),
+        "materialized D must be persisted content-addressed"
+    );
+
+    // Re-resolve from the CAS store alone (no producer D): identical context.
+    let envelope = cas_carried_envelope();
+    let ctx2 = adapter
+        .parse_both(envelope.to_string().as_bytes(), Some(cas.path()))
+        .unwrap();
+    let SemanticContext::Resolved {
+        representation_json,
+        content_hash: ch2,
+        semantic_closure_hash,
+        ..
+    } = ctx2
+    else {
+        panic!("must resolve from CAS");
+    };
+    assert_eq!(&ch2, content_hash);
+    assert!(semantic_closure_hash.starts_with("sha256:"));
+    let inline_fixture: serde_json::Value =
+        serde_json::from_str(&fixture("env-valid-basic.json")).unwrap();
+    assert_eq!(
+        representation_json,
+        inline_fixture["representations"][0]["inline_content"]
+            .as_str()
+            .unwrap()
+    );
+}
+
+#[test]
+fn cas_carried_hash_mismatch_fails_loudly() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let mut both = both_shape();
+    // Tamper the producer D: hashes then cannot verify.
+    let mut doc = both["representation"].clone();
+    if let Some(obj) = doc.as_object_mut() {
+        obj.insert("tampered".into(), json!(true));
+    }
+    both["representation"] = doc;
+    let err = adapter
+        .parse_both(both.to_string().as_bytes(), None)
+        .unwrap_err();
+    assert!(err.to_string().contains("hash mismatch"), "got {err}");
+}
+
+#[test]
+fn cas_carried_missing_cas_object_fails_loudly() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let envelope = cas_carried_envelope();
+    // cas_root present but the object was never persisted: replay cannot
+    // materialize without the producer D.
+    let cas = tempfile::tempdir().unwrap();
+    let err = adapter
+        .parse_both(envelope.to_string().as_bytes(), Some(cas.path()))
+        .unwrap_err();
+    let msg = err.to_string();
+    assert!(msg.contains("CAS object missing"), "got {msg}");
+}
+
+#[test]
+fn cas_carried_corrupt_cas_object_fails_loudly() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let envelope = cas_carried_envelope();
+    let hex = envelope["representations"][0]["content_hash"]
+        .as_str()
+        .unwrap()
+        .strip_prefix("sha256:")
+        .unwrap()
+        .to_string();
+    let cas = tempfile::tempdir().unwrap();
+    // Valid JSON, but not D: the selfless recompute must fail the hash check.
+    std::fs::write(cas.path().join(&hex), br#"{"tampered": true}"#).unwrap();
+    let err = adapter
+        .parse_both(envelope.to_string().as_bytes(), Some(cas.path()))
+        .unwrap_err();
+    let msg = err.to_string();
+    assert!(
+        msg.contains("hash mismatch") || msg.contains("not JSON"),
+        "got {msg}"
+    );
+}
+
+#[test]
+fn cas_carried_expired_content_fails_loudly() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let mut envelope = cas_carried_envelope();
+    envelope["representations"][0]["content_availability"] = json!("expired");
+    let inline_d = {
+        let inline_fixture: serde_json::Value =
+            serde_json::from_str(&fixture("env-valid-basic.json")).unwrap();
+        inline_fixture["representations"][0]["inline_content"]
+            .as_str()
+            .unwrap()
+            .to_string()
+    };
+    let both = json!({
+        "representation": serde_json::from_str::<serde_json::Value>(&inline_d).unwrap(),
+        "cep_envelope": envelope,
+    });
+    let err = adapter
+        .parse_both(both.to_string().as_bytes(), None)
+        .unwrap_err();
+    assert!(err.to_string().contains("expired"), "got {err}");
+}
+
+#[test]
+fn cas_carried_wrong_content_ref_scheme_fails_loudly() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let mut envelope = cas_carried_envelope();
+    // Schema-valid scheme+address shape, but not the `cas` scheme.
+    let hex = envelope["representations"][0]["content_hash"]
+        .as_str()
+        .unwrap()
+        .strip_prefix("sha256:")
+        .unwrap()
+        .to_string();
+    envelope["representations"][0]["content_ref"] = json!(format!("http://sha256:{hex}"));
+    let err = adapter.parse_envelope(&envelope).unwrap_err();
+    assert!(
+        err.to_string().contains("unsupported content_ref scheme"),
+        "got {err}"
+    );
+}
+
+#[test]
+fn cas_carried_content_ref_mismatches_content_hash_fails_loudly() {
+    let adapter = CliDomainForgeAdapter::new("/nonexistent");
+    let mut envelope = cas_carried_envelope();
+    envelope["representations"][0]["content_ref"] =
+        json!("cas://sha256:0000000000000000000000000000000000000000000000000000000000000000");
+    let err = adapter.parse_envelope(&envelope).unwrap_err();
+    assert!(
+        err.to_string().contains("does not match content_hash"),
+        "got {err}"
+    );
+}

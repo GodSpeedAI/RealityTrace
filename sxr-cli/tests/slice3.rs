@@ -114,6 +114,37 @@ fn decl_ref_id(tag: &str) -> Value {
     }
 }
 
+/// CAS-carried variant of `snapshot_payload`: the D document is persisted as
+/// a content-addressed object under `cas_root` and the representation carries
+/// `content_ref` instead of `inline_content` (§10.7a). Returns
+/// `(payload, content_hash)`.
+fn snapshot_payload_cas(
+    cas_root: &std::path::Path,
+    semantic_hash: &str,
+    decl_kinds: &[(&str, &str)],
+    references: &[(&str, &str, &str)],
+) -> (Value, String) {
+    let mut payload = snapshot_payload(semantic_hash, decl_kinds, references);
+    let rep = payload["representations"][0].as_object_mut().unwrap();
+    let d: Value = serde_json::from_str(rep["inline_content"].as_str().unwrap()).unwrap();
+    let mut selfless = d.clone();
+    selfless.as_object_mut().unwrap().remove("self_hash");
+    let content_hash = sxr_core::canonical_json::sha256_hex(
+        sxr_core::canonical_json::canonical_json(&selfless).as_bytes(),
+    );
+    let hex = content_hash.trim_start_matches("sha256:");
+    std::fs::create_dir_all(cas_root).unwrap();
+    std::fs::write(
+        cas_root.join(hex),
+        sxr_core::canonical_json::canonical_json(&d),
+    )
+    .unwrap();
+    rep.remove("inline_content");
+    rep.insert("content_ref".into(), format!("cas://{content_hash}").into());
+    rep.insert("content_hash".into(), content_hash.clone().into());
+    (payload, content_hash)
+}
+
 fn row(kind: RecordKind, snapshot_id: &str, repo_id: &str, payload: &Value) -> LedgerRow {
     LedgerRow {
         ledger_id: format!("ledger-{repo_id}"),
@@ -264,6 +295,81 @@ fn rebuild_drops_and_recreates_identically() {
     assert_eq!(
         snapshot_before, snapshot_after,
         "rebuild must be byte-identical"
+    );
+}
+
+#[test]
+fn cas_carried_snapshot_projects_decl_nodes_and_edges() {
+    let tmp = tempfile::tempdir().unwrap();
+    let cas_root = tmp.path().join("cas");
+    let mut conn = setup_db();
+    let snapshot_id = "snap-cas-1";
+    let (payload, content_hash) = snapshot_payload_cas(
+        &cas_root,
+        "sha256:s9",
+        &[("entity", "entity"), ("flow", "flow"), ("record", "record")],
+        &[
+            ("entity", "flow", "resource"),
+            ("entity", "record", "input"),
+        ],
+    );
+    projections::apply_row_with_cas(
+        &mut conn,
+        &row(RecordKind::SemanticSnapshot, snapshot_id, "r1", &payload),
+        Some(&cas_root),
+    )
+    .unwrap();
+
+    // Inline and CAS-carried snapshots must project identically: 3 nodes,
+    // 2 reference edges, FTS rows, and a stored content_hash.
+    let nodes: i64 = conn
+        .query_row("SELECT COUNT(*) FROM sxr_decl_node", [], |r| r.get(0))
+        .unwrap();
+    assert_eq!(nodes, 3);
+    let refs: i64 = conn
+        .query_row(
+            "SELECT COUNT(*) FROM sxr_decl_edge WHERE edge_kind='reference'",
+            [],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(refs, 2);
+    let fts: i64 = conn
+        .query_row("SELECT COUNT(*) FROM sxr_fts", [], |r| r.get(0))
+        .unwrap();
+    assert_eq!(fts, 3);
+    let stored: String = conn
+        .query_row(
+            "SELECT content_hash FROM sxr_snapshot WHERE snapshot_id = ?1",
+            [snapshot_id],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(stored, content_hash);
+}
+
+#[test]
+fn cas_carried_snapshot_missing_object_fails_loudly() {
+    let tmp = tempfile::tempdir().unwrap();
+    let mut conn = setup_db();
+    let snapshot_id = "snap-cas-2";
+    let (payload, _) = snapshot_payload_cas(
+        &tmp.path().join("cas"),
+        "sha256:s10",
+        &[("entity", "entity")],
+        &[],
+    );
+    // Remove the CAS object to simulate a corrupt/incomplete store.
+    std::fs::remove_dir_all(tmp.path().join("cas")).unwrap();
+    let err = projections::apply_row_with_cas(
+        &mut conn,
+        &row(RecordKind::SemanticSnapshot, snapshot_id, "r1", &payload),
+        Some(&tmp.path().join("cas")),
+    )
+    .unwrap_err();
+    assert!(
+        err.to_string().contains("read CAS object"),
+        "missing CAS object must fail loudly: {err}"
     );
 }
 

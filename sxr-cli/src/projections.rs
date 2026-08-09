@@ -4,10 +4,13 @@
 //! order so `export --canonical-json` is byte-identical across rebuilds
 //! (AC-REPLAY-002).
 
+use std::path::Path;
+
 use anyhow::{Context, Result, anyhow};
 use rusqlite::{Connection, OptionalExtension, params};
 use serde_json::{Value, json};
 use sxr_core::LedgerRow;
+use sxr_core::canonical_json::{canonical_json, sha256_hex};
 use sxr_core::record_kinds::RecordKind;
 
 pub const PROJECTION_VERSION: &str = "sxr-projection/v1";
@@ -235,7 +238,22 @@ fn parse_kind(kind: &str) -> Option<RecordKind> {
 
 /// Apply one ledger row to the projection tables. `conn` is a connection to
 /// the repo's ledger DB (projection tables live in the same DB file).
+// Test-facing convenience wrapper: inline-carriage-only projection.
+#[allow(dead_code)]
 pub fn apply_row(conn: &mut Connection, row: &LedgerRow) -> Result<()> {
+    apply_row_with_cas(conn, row, None)
+}
+
+/// Project one row, materializing CAS-carried snapshot representations from
+/// the given CAS root (`<repo_dir>/cas`) when the ledger record carries only
+/// a `content_ref` (§10.7a). Consumers of the projection never depend on the
+/// carriage mode of the snapshot: inline and CAS-carried D documents project
+/// identically.
+pub fn apply_row_with_cas(
+    conn: &mut Connection,
+    row: &LedgerRow,
+    cas_root: Option<&Path>,
+) -> Result<()> {
     let Some(record_kind) = parse_kind(&row.record_kind) else {
         return Ok(());
     };
@@ -243,7 +261,7 @@ pub fn apply_row(conn: &mut Connection, row: &LedgerRow) -> Result<()> {
     match record_kind {
         RecordKind::QuestionDeclared => apply_question(conn, row, &payload)?,
         RecordKind::ThresholdDeclared => apply_threshold(conn, row, &payload)?,
-        RecordKind::SemanticSnapshot => apply_snapshot(conn, row, &payload)?,
+        RecordKind::SemanticSnapshot => apply_snapshot_cas(conn, row, &payload, cas_root)?,
         RecordKind::RunStarted => apply_run_started(conn, row, &payload)?,
         RecordKind::RunFinished => apply_run_finished(conn, row, &payload)?,
         RecordKind::ObservationRecorded => {}
@@ -364,7 +382,17 @@ fn apply_threshold(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> R
     Ok(())
 }
 
+// Test-facing convenience wrapper: inline-carriage-only snapshot projection.
+#[allow(dead_code)]
 fn apply_snapshot(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Result<()> {
+    apply_snapshot_cas(conn, row, payload, None)
+}
+fn apply_snapshot_cas(
+    conn: &mut Connection,
+    row: &LedgerRow,
+    payload: &Value,
+    cas_root: Option<&Path>,
+) -> Result<()> {
     let rep = first_section(payload, "representations");
     let snapshot_id = row
         .subject_refs
@@ -422,25 +450,84 @@ fn apply_snapshot(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> Re
             serde_json::to_string(&resolution_inputs)?, None::<String>, row.ledger_id, row.append_ordinal
         ],
     )?;
-    // Slice 3: populate G_declared (nodes + edges) + FTS from the inline D
-    // document when a valid representation is present.
+    // Slice 3: populate G_declared (nodes + edges) + FTS from the D
+    // document when a valid representation is present. The document is read
+    // from `inline_content` (inline carriage) or materialized from the CAS
+    // store via `content_ref` (§10.7a) — the projection never depends on the
+    // carriage mode.
     if model_status == "valid" {
-        apply_g_declared(conn, &snapshot_id, payload)?;
+        apply_g_declared(conn, &snapshot_id, payload, cas_root)?;
     }
     Ok(())
 }
 
-/// Parse the inline canonical D document from a snapshot's representation and
-/// populate `sxr_decl_node`, `sxr_decl_edge`, and the FTS index (§12.3/§12.2).
-fn apply_g_declared(conn: &mut Connection, snapshot_id: &str, payload: &Value) -> Result<()> {
-    let rep = first_section(payload, "representations");
-    let inline = rep
-        .and_then(|v| string_field(v, "inline_content"))
-        .unwrap_or_default();
-    if inline.is_empty() {
-        return Ok(());
+/// Read the D document for a snapshot's representation: `inline_content` when
+/// present, otherwise the CAS object named by `content_ref`/`content_hash`.
+/// The CAS object's canonical selfless digest must equal `content_hash`
+/// (AC-REPLAY-001), mirroring `materialize_cas_carried` in the adapter.
+fn snapshot_document(rep: &Value, cas_root: Option<&Path>) -> Result<Value> {
+    if let Some(inline) = rep
+        .get("inline_content")
+        .and_then(Value::as_str)
+        .filter(|s| !s.is_empty())
+    {
+        return serde_json::from_str::<Value>(inline).context("parse inline D");
     }
-    let d: Value = serde_json::from_str(&inline).context("parse inline D")?;
+    let content_ref = rep.get("content_ref").and_then(Value::as_str).unwrap_or("");
+    let content_hash = rep
+        .get("content_hash")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    let (scheme, ref_hash) = content_ref
+        .split_once("://")
+        .with_context(|| format!("malformed content_ref {content_ref}"))?;
+    if scheme != "cas" {
+        anyhow::bail!("unsupported content_ref scheme {scheme}");
+    }
+    if ref_hash != content_hash {
+        anyhow::bail!("content_ref {content_ref} does not match content_hash {content_hash}");
+    }
+    let hex = content_hash
+        .strip_prefix("sha256:")
+        .context("content_hash is not a sha256 ref")?;
+    let root = cas_root.with_context(|| {
+        format!("CAS-carried snapshot {content_ref} but no CAS root is available")
+    })?;
+    let path = root.join(hex);
+    let bytes =
+        std::fs::read(&path).with_context(|| format!("read CAS object {}", path.display()))?;
+    let doc: Value = serde_json::from_slice(&bytes)
+        .with_context(|| format!("parse CAS object {}", path.display()))?;
+    let mut selfless = doc.clone();
+    selfless
+        .as_object_mut()
+        .ok_or_else(|| anyhow!("CAS object is not a document object"))?
+        .remove("self_hash");
+    let computed = sha256_hex(canonical_json(&selfless).as_bytes());
+    if computed != content_hash {
+        anyhow::bail!(
+            "CAS object {} computed {computed} != content_hash {content_hash}",
+            path.display()
+        );
+    }
+    Ok(doc)
+}
+
+/// Parse the D document from a snapshot's representation (inline or
+/// CAS-materialized) and populate `sxr_decl_node`, `sxr_decl_edge`, and the
+/// FTS index (§12.3/§12.2).
+fn apply_g_declared(
+    conn: &mut Connection,
+    snapshot_id: &str,
+    payload: &Value,
+    cas_root: Option<&Path>,
+) -> Result<()> {
+    let rep = first_section(payload, "representations");
+    let rep = match rep {
+        Some(r) => r,
+        None => return Ok(()),
+    };
+    let d = snapshot_document(rep, cas_root)?;
     let env = d.get("envelope").cloned().unwrap_or(Value::Null);
 
     // module → namespace from namespace_bindings.
@@ -1371,6 +1458,7 @@ fn relation_settlement(
 pub fn rebuild(ctx: &crate::state::Ctx, repo_id: &str) -> Result<()> {
     let dir = ctx.ensure_repo_dir(repo_id)?;
     let db_path = dir.join("ledger.db");
+    let cas_root = dir.join("cas");
     let mut conn = rusqlite::Connection::open(&db_path).context("open ledger db")?;
     drop_tables(&mut conn)?;
     conn.execute_batch(PROJECTION_DDL)
@@ -1386,7 +1474,8 @@ pub fn rebuild(ctx: &crate::state::Ctx, repo_id: &str) -> Result<()> {
         ledger.read_all().map_err(|e| anyhow!("read all: {e}"))?
     };
     for row in &rows {
-        apply_row(&mut conn, row).with_context(|| format!("project row {}", row.append_ordinal))?;
+        apply_row_with_cas(&mut conn, row, Some(&cas_root))
+            .with_context(|| format!("project row {}", row.append_ordinal))?;
     }
     // Slice 4: G_observed is derived from qualified history (evidence +
     // settlement + claims), which spans multiple rows, so it is materialized

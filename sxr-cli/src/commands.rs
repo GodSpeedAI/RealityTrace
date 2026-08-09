@@ -191,6 +191,7 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
         default_namespace: cfg.default_namespace.clone(),
         semantic_packs: vec![],
         cep_scope: json!({}),
+        cas_root: Some(ctx.ensure_repo_dir(repo_id)?.join("cas")),
     };
     let semantic = adapter
         .resolve(&req)

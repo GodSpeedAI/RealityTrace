@@ -51,6 +51,14 @@ pub struct SemanticContextRequest {
     pub semantic_packs: Vec<(String, String)>,
     /// `cep_scope` object, passed through as `--scope` (replaces the default).
     pub cep_scope: Value,
+    /// CAS store root (the snapshot layer's artifact store). When set, the
+    /// adapter materializes CAS-carried representations (`content_ref`) into
+    /// this store — verified, content-addressed by `content_hash` — so the
+    /// Authoritative Replay Set's "durable CAS representations" hold. When
+    /// unset, CAS-carried D is still materialized from the producer's
+    /// `--emit both` representation for the adapter contract, but nothing is
+    /// persisted.
+    pub cas_root: Option<PathBuf>,
 }
 
 /// The normal adapter: one configured `domainforge` binary path.
@@ -94,7 +102,7 @@ impl CliDomainForgeAdapter {
         &self,
         request: &SemanticContextRequest,
     ) -> Result<SemanticContext, SemanticError> {
-        let mut argv: Vec<String> = vec!["envelope".into(), "--emit".into(), "cep".into()];
+        let mut argv: Vec<String> = vec!["envelope".into(), "--emit".into(), "both".into()];
         for (id, hash) in &request.semantic_packs {
             argv.push("--pack".into());
             argv.push(format!("{id}={hash}"));
@@ -123,20 +131,53 @@ impl CliDomainForgeAdapter {
                 "empty stdout (exit {code:?}): {stderr}"
             )));
         }
-        self.parse_json(&output.stdout)
+        self.parse_both(&output.stdout, request.cas_root.as_deref())
     }
 
-    /// Parse, schema-validate, classify, and extract one raw stdout payload.
-    /// Shared by `resolve` and tests (no process involved).
+    /// Parse the `--emit both` output: `{"representation": D, "cep_envelope":
+    /// E}` on the success-with-D path; the bare failure envelope on the
+    /// non-conformant path. CAS-carried D (`content_ref`) is materialized here
+    /// through the snapshot/runtime boundary (§10.7a): verified against
+    /// `content_hash`, persisted into the CAS store when one is configured,
+    /// and handed to the envelope parse as inline bytes — carriage mode never
+    /// changes semantic meaning.
+    pub fn parse_both(
+        &self,
+        raw: &[u8],
+        cas_root: Option<&Path>,
+    ) -> Result<SemanticContext, SemanticError> {
+        let both: Value = serde_json::from_slice(raw)
+            .map_err(|e| SemanticError::MalformedOutput(format!("stdout is not JSON: {e}")))?;
+        let (envelope, representation) = match both.get("cep_envelope") {
+            Some(env) => (env.clone(), both.get("representation").cloned()),
+            None => (both, None),
+        };
+        self.parse_envelope_with_cas(&envelope, representation.as_ref(), cas_root)
+    }
+
+    /// Parse, schema-validate, classify, and extract one raw stdout payload
+    /// (the `--emit cep` shape, or the bare envelope from `--emit both`).
+    /// Shared by tests (no process involved).
     pub fn parse_json(&self, raw: &[u8]) -> Result<SemanticContext, SemanticError> {
         let envelope: Value = serde_json::from_slice(raw)
             .map_err(|e| SemanticError::MalformedOutput(format!("stdout is not JSON: {e}")))?;
-        self.parse_envelope(&envelope)
+        self.parse_envelope_with_cas(&envelope, None, None)
     }
 
     /// Validate + classify + extract one envelope `Value`. Classification is
     /// by shape only (see module docs); `resolve` applies the exit-code check.
+    /// CAS-carried representations are materialized from `representation` (the
+    /// producer's D) and the CAS store when configured.
     pub fn parse_envelope(&self, envelope: &Value) -> Result<SemanticContext, SemanticError> {
+        self.parse_envelope_with_cas(envelope, None, None)
+    }
+
+    fn parse_envelope_with_cas(
+        &self,
+        envelope: &Value,
+        representation: Option<&Value>,
+        cas_root: Option<&Path>,
+    ) -> Result<SemanticContext, SemanticError> {
         if !envelope.is_object() {
             return Err(SemanticError::MalformedOutput(
                 "stdout JSON is not an object".into(),
@@ -152,7 +193,7 @@ impl CliDomainForgeAdapter {
         if envelope.get("validation_status").and_then(Value::as_str) == Some("validated")
             && envelope.get("representations").is_some()
         {
-            self.extract_resolved(envelope)
+            self.extract_resolved(envelope, representation, cas_root)
         } else if envelope.get("conformance_status").and_then(Value::as_str)
             == Some("non_conformant")
         {
@@ -166,14 +207,23 @@ impl CliDomainForgeAdapter {
         }
     }
 
-    /// `Resolved` extraction: D verbatim (inline), both stable hashes verified
+    /// `Resolved` extraction: D verbatim (inline or materialized from the
+    /// both-mode representation / CAS store), both stable hashes verified
     /// against the canonical bytes, declarations from the preserved-entities
     /// list, resolution inputs from the provenance record (§10.7a).
-    fn extract_resolved(&self, envelope: &Value) -> Result<SemanticContext, SemanticError> {
+    fn extract_resolved(
+        &self,
+        envelope: &Value,
+        representation: Option<&Value>,
+        cas_root: Option<&Path>,
+    ) -> Result<SemanticContext, SemanticError> {
         let rep = &envelope["representations"][0];
         let content_hash = string_field(rep, "content_hash", "representations[0]")?;
         let semantic_closure_hash = string_field(rep, "semantic_hash", "representations[0]")?;
 
+        // Carriage mode must not change semantic meaning: inline D is used
+        // verbatim; CAS-carried D is materialized through the snapshot/runtime
+        // boundary and handed to the same verification path.
         let representation_json = match rep.get("inline_content") {
             Some(Value::String(bytes)) => bytes.clone(),
             Some(_) => {
@@ -181,14 +231,7 @@ impl CliDomainForgeAdapter {
                     "representations[0].inline_content is not a string".into(),
                 ));
             }
-            None => {
-                return Err(SemanticError::MalformedOutput(
-                    "representations[0] carries no inline_content; CAS-carried \
-                     representations are materialized by the snapshot layer, \
-                     not the resolver"
-                        .into(),
-                ));
-            }
+            None => self.materialize_cas_carried(rep, representation, cas_root, &content_hash)?,
         };
 
         // AC-REPLAY-001 half: D's content hash is recomputed over the
@@ -210,6 +253,124 @@ impl CliDomainForgeAdapter {
             declarations,
             diagnostics,
         })
+    }
+
+    /// Snapshot-layer materialization for CAS-carried representations (§10.7a,
+    /// CEP-0008 §14.2 Referenced Carriage).
+    ///
+    /// `content_ref` names the CAS object (`cas://sha256:<hex>`); the
+    /// representation's own `content_hash` must match that address and the
+    /// materialized bytes must validate as the expected DomainForge
+    /// representation D. Source of D bytes, in order:
+    ///
+    /// 1. The producer's `--emit both` representation (the deterministic D),
+    ///    verified against the declared hash — used on the create path and
+    ///    never persisted unless a CAS root is configured.
+    /// 2. The CAS store (`cas_root`), content-addressed by `content_hash`.
+    ///
+    /// Missing, expired, or hash-mismatched CAS content fails loudly; the
+    /// adapter never silently falls back to a different snapshot or re-resolves
+    /// different semantics.
+    fn materialize_cas_carried(
+        &self,
+        rep: &Value,
+        representation: Option<&Value>,
+        cas_root: Option<&Path>,
+        content_hash: &str,
+    ) -> Result<String, SemanticError> {
+        let content_ref = string_field(rep, "content_ref", "representations[0]")?;
+        let (scheme, ref_hash) = content_ref.split_once("://").ok_or_else(|| {
+            SemanticError::MalformedOutput(format!("malformed content_ref {content_ref}"))
+        })?;
+        if scheme != "cas" {
+            return Err(SemanticError::MalformedOutput(format!(
+                "unsupported content_ref scheme {scheme}"
+            )));
+        }
+        // `cas://sha256:<hex>` — the address hash includes the `sha256:`
+        // prefix and must equal `content_hash` exactly.
+        if ref_hash != content_hash {
+            return Err(SemanticError::HashMismatch(format!(
+                "content_ref {content_ref} does not match content_hash {content_hash}"
+            )));
+        }
+        let expected_hex = content_hash.strip_prefix("sha256:").ok_or_else(|| {
+            SemanticError::MalformedOutput(format!(
+                "content_hash {content_hash} is not a sha256 ref"
+            ))
+        })?;
+        if rep.get("content_availability").and_then(Value::as_str) == Some("expired") {
+            return Err(SemanticError::MalformedOutput(
+                "representation content_availability is expired; CAS object cannot \
+                 be materialized"
+                    .into(),
+            ));
+        }
+
+        // 1. Producer-carried D (deterministic, canonical): verify the declared
+        //    content hash against the canonical bytes before use. The digest
+        //    follows AC-REPLAY-001: `self_hash` is excluded from its own
+        //    digest, exactly as the inline path's `verify_d_hashes` computes it.
+        if let Some(d) = representation {
+            let mut selfless = d.clone();
+            selfless
+                .as_object_mut()
+                .expect("representation is a document object")
+                .remove("self_hash");
+            let computed = sha256_hex(canonical_json(&selfless).as_bytes());
+            if computed != content_hash {
+                return Err(SemanticError::HashMismatch(format!(
+                    "producer representation {computed} != content_hash {content_hash}"
+                )));
+            }
+            // Persist the full canonical D into the CAS store when configured,
+            // so the ARS's durable-CAS-representation requirement holds for
+            // this snapshot.
+            let canonical = canonical_json(d);
+            if let Some(root) = cas_root {
+                persist_cas_object(root, expected_hex, canonical.as_bytes())?;
+            }
+            return Ok(canonical);
+        }
+
+        // 2. CAS store lookup by content address.
+        let root = cas_root.ok_or_else(|| {
+            SemanticError::MalformedOutput(
+                "CAS-carried representation has no producer D and no cas_root is \
+                 configured; cannot materialize"
+                    .into(),
+            )
+        })?;
+        let path = cas_object_path(root, expected_hex);
+        let bytes = std::fs::read(&path).map_err(|_| {
+            SemanticError::MalformedOutput(format!(
+                "CAS object missing for content_ref {content_ref} (expected {})",
+                path.display()
+            ))
+        })?;
+        // The object is the canonical D document (with its own self_hash, as
+        // domainforge emits it); the content address covers the selfless
+        // canonical bytes (AC-REPLAY-001). Parse, strip self_hash, recompute.
+        let doc: Value = serde_json::from_slice(&bytes).map_err(|e| {
+            SemanticError::MalformedOutput(format!(
+                "CAS object {} is not JSON: {e}",
+                path.display()
+            ))
+        })?;
+        let mut selfless = doc.clone();
+        selfless
+            .as_object_mut()
+            .expect("D is a document object")
+            .remove("self_hash");
+        let computed = sha256_hex(canonical_json(&selfless).as_bytes());
+        if computed != content_hash {
+            return Err(SemanticError::HashMismatch(format!(
+                "CAS object {} computed {computed} != content_hash {content_hash}",
+                path.display()
+            )));
+        }
+        String::from_utf8(bytes)
+            .map_err(|e| SemanticError::MalformedOutput(format!("CAS object is not UTF-8: {e}")))
     }
 
     /// `ValidationFailed` extraction: the §14.4 checkpoint hash identifies the
@@ -479,4 +640,35 @@ fn string_array(value: &Value, field: &str, path: &str) -> Result<Vec<String>, S
         })
         .transpose()
         .map(|v| v.unwrap_or_default())
+}
+
+/// CAS object path for a content address: `<cas_root>/<hex>`. CAS writes are
+/// atomic (`write-temp → fsync → rename`, §11.3): a concurrent reader sees
+/// either no object or the complete, verified object.
+fn cas_object_path(root: &Path, hex: &str) -> PathBuf {
+    root.join(hex)
+}
+
+fn persist_cas_object(root: &Path, hex: &str, bytes: &[u8]) -> Result<(), SemanticError> {
+    std::fs::create_dir_all(root)?;
+    let final_path = cas_object_path(root, hex);
+    if final_path.exists() {
+        // Object already present: it must match the content address. A
+        // mismatch means the store is corrupt or the object is stale — fail
+        // loudly, never overwrite content-addressed bytes.
+        let existing = std::fs::read(&final_path)?;
+        if existing.as_slice() != bytes {
+            return Err(SemanticError::HashMismatch(format!(
+                "CAS object {} exists but differs from the producer's D",
+                final_path.display()
+            )));
+        }
+        return Ok(());
+    }
+    let tmp = root.join(format!(".tmp-{hex}-{}", std::process::id()));
+    std::fs::write(&tmp, bytes)?;
+    let f = std::fs::File::open(&tmp)?;
+    f.sync_all()?;
+    std::fs::rename(&tmp, &final_path)?;
+    Ok(())
 }

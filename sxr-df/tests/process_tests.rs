@@ -36,6 +36,7 @@ fn request(semantic_root: &std::path::Path) -> SemanticContextRequest {
         default_namespace: Some("auth".into()),
         semantic_packs: vec![("logistics".into(), "sha256:aa".into())],
         cep_scope: json!({ "repo_id": "01TEST" }),
+        cas_root: None,
     }
 }
 
@@ -63,7 +64,7 @@ exit 0
     let args: Vec<&str> = argv.lines().collect();
     assert_eq!(args[0], "envelope");
     assert_eq!(args[1], "--emit");
-    assert_eq!(args[2], "cep");
+    assert_eq!(args[2], "both");
     assert_eq!(args[3], "--pack");
     assert_eq!(args[4], "logistics=sha256:aa");
     assert_eq!(args[5], "--default-namespace");
