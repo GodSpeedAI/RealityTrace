@@ -154,6 +154,11 @@ def run_evaluator(unit, bundle_root: str, case_def: dict, context_dict: dict,
         note += (";tokens=%d;cost=%.6f;latency_ms=%.1f;retries=%d" % (
             int(usage["total_tokens"] or 0), usage["cost"],
             usage["latency_ms"], usage["retries"]))
+        # Durable per-unit usage sidecar: survives later note overwrites by the
+        # scorer (which marks units scored). Immutable resource accounting.
+        usage_path = raw_path.replace(".txt", ".usage.json")
+        with open(usage_path, "w") as f:
+            f.write(json.dumps(usage, sort_keys=True, separators=(",", ":")))
     store.transition(uid, st.OUTPUT_COMMITTED,
                      raw_output_path=raw_path, raw_output_hash=h, note=note)
     return EvalResult(uid, output, h, raw_path, committed=True)

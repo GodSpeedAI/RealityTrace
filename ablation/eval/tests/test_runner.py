@@ -111,6 +111,14 @@ def test_live_denied_until_release_gate_open(tmp_path, monkeypatch):
     assert res.committed
     assert store.get(unit.unit_id).status == OUTPUT_COMMITTED
     assert "tokens=9" in (store.get(unit.unit_id).note or "")
+    # Durable usage sidecar: written at commit, survives scorer note overwrite.
+    usage_path = str(tmp_path / "raw" / f"{unit.unit_id}.usage.json")
+    assert os.path.exists(usage_path)
+    import json
+    usage = json.load(open(usage_path))
+    assert usage["total_tokens"] == 9
+    assert usage["cost"] == 0.001
+    assert usage["packing_version"] == "pack-v1"
 
 
 def test_recorded_backend_replays(tmp_path):
