@@ -256,6 +256,31 @@ for r in recs:
   printf '%s|%s|%s\n' "$RID" "$QID" "$TID"
 }
 
+# ledger_observation_artifact_hash <repo-id> <observation-id>: prints the
+# sha256 of the recorded observation's CAS artifact (representation content
+# hash for rep:obs:<observation-id>), or nothing when absent. Used to prove
+# recorded evidence corresponds byte-for-byte to the probed verifier stream.
+ledger_observation_artifact_hash() {
+  local rid=$1 obs=$2
+  $BIN ledger export --repo "$rid" 2>/dev/null | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+recs = d if isinstance(d, list) else d.get('records', [])
+for r in recs:
+    if r.get('record_kind') != 'observation.recorded':
+        continue
+    p = r['payload'] if isinstance(r['payload'], dict) else json.loads(r['payload'])
+    for rep in p.get('representations', []):
+        if rep.get('representation_id') == 'rep:obs:$obs':
+            h = rep.get('content_hash', '')
+            if h.startswith('sha256:'):
+                h = h[len('sha256:'):]
+            print(h)
+            sys.exit(0)
+sys.exit(1)
+"
+}
+
 # ── ledger helpers (idempotency guards for closure) ────────────────────────
 
 # ledger_has_settlement_for_run <repo-id> <run-id>: exit 0 if a
