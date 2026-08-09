@@ -80,21 +80,37 @@ def test_live_backend_denied_even_with_env_but_wrong_marker(tmp_path):
                       raw_root=str(tmp_path / "raw"), env=env)
 
 
-def test_live_never_executes_even_with_correct_release(tmp_path):
-    """The milestone guard blocks live execution regardless of gate state."""
+def test_live_denied_until_release_gate_open(tmp_path, monkeypatch):
+    """Live execution requires an open release gate for THIS experiment; the
+    gate is the only thing standing between the harness and a paid model call.
+    With the gate open and a stub model client, live execution commits the
+    raw output (no network needed)."""
     from ..release import write_release_marker
+    from ..model_client import ModelCall
     unit, contract, store = setup(
-        tmp_path, contract={"backend": "live", "system_prompt": "p"})
+        tmp_path, contract={"backend": "live", "system_prompt": "p",
+                            "model_id": "glm-5.2", "provider": "cline-pass"})
     marker = tmp_path / "RELEASE.gate"
     write_release_marker(str(marker), unit.experiment_id, "tok")
     env = {"SXR_ABLATION_RELEASE": "tok",
            "SXR_ABLATION_RELEASE_MARKER": str(marker)}
-    with pytest.raises(ReleaseGateError):
-        run_evaluator(unit, str(tmp_path / "bundles"), {"case_id": "c1"},
-                      {"case_id": "c1", "arm": "A",
-                       "sections": {"sql": "s", "fts": "f"}},
-                      contract, unit.seed, store,
-                      raw_root=str(tmp_path / "raw"), env=env)
+
+    def fake_call_model(**kw):
+        return ModelCall(text="Locus: environment\n", usage={
+            "total_tokens": 9, "prompt_tokens": 5, "completion_tokens": 4},
+            cost=0.001, latency_ms=12.0, generation_id="gen-test", retries=0,
+            model="cline-pass/glm-5.2")
+
+    import eval.runner as runner_mod
+    monkeypatch.setattr(runner_mod, "call_model", fake_call_model)
+    res = run_evaluator(unit, str(tmp_path / "bundles"), {"case_id": "c1"},
+                        {"case_id": "c1", "arm": "A",
+                         "sections": {"sql": "s", "fts": "f"}},
+                        contract, unit.seed, store,
+                        raw_root=str(tmp_path / "raw"), env=env)
+    assert res.committed
+    assert store.get(unit.unit_id).status == OUTPUT_COMMITTED
+    assert "tokens=9" in (store.get(unit.unit_id).note or "")
 
 
 def test_recorded_backend_replays(tmp_path):

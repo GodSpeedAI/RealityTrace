@@ -10,7 +10,7 @@ def test_contract_frozen_fields():
     c = frozen_contract()
     d = asdict(c)
     assert d["model_id"] == "glm-5.2"
-    assert d["provider"] == "cline-api"
+    assert d["provider"] == "cline-pass"
     assert d["temperature"] == 0.0
     assert "system_prompt" in d and len(d["system_prompt"]) > 0
     assert d["context_budget_tokens"] == 32_000

@@ -143,3 +143,28 @@ def bundle_references_scorer_state(bundle: EvalBundle) -> bool:
     return any(s in blob for s in ("scoring/", "keys.json",
                                    "scenario-keys.json", "true_locus",
                                    "answer-key-review"))
+
+
+# Substrings that must never appear in a model prompt (answer material).
+_PROMPT_FORBIDDEN = (
+    "true_locus",
+    "scenario-keys.json",
+    "keys.json",
+    "answer-key-review",
+    "repairs.jsonl",
+    "keys.sha256",
+)
+
+
+def assert_prompt_sanitized(prompt: str, case_id: str) -> None:
+    """The prompt sent to the model must contain no answer-bearing material.
+
+    The retrieval context is the ONLY corpus-derived input; the case metadata
+    embedded in the SQL section is public (no loci). This asserts the prompt
+    carries none of the sealed-key / scorer-state markers.
+    """
+    low = prompt.lower()
+    for marker in _PROMPT_FORBIDDEN:
+        if marker in low:
+            raise AssertionError(
+                f"prompt for {case_id} carries answer-bearing marker {marker!r}")

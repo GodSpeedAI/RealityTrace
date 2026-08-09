@@ -24,8 +24,11 @@ import re
 from dataclasses import dataclass
 
 from . import state as st
-from .bundle import build_bundle, scrub_env, assert_bundle_sanitized, EvalBundle
+from .bundle import (build_bundle, scrub_env, assert_bundle_sanitized,
+                     assert_prompt_sanitized, EvalBundle)
 from .release import verify_release, ReleaseGateError
+from .model_client import call_model, ModelClientError
+from .context_packer import pack_context, estimate_tokens
 
 LOCUS_VOCABULARY = (
     "verifier", "verification_plan", "projection", "implementation",
@@ -129,14 +132,15 @@ def run_evaluator(unit, bundle_root: str, case_def: dict, context_dict: dict,
     store.transition(uid, st.RUNNING, seed=seed)
 
     if backend == "live":
-        raise ReleaseGateError(
-            "live model-backed execution not permitted in this milestone")
-    if backend == "simulated":
+        output, usage = _live_output(unit, context_dict, contract)
+    elif backend == "simulated":
         output = _simulated_output(seed, context_dict, contract)
+        usage = None
     elif backend == "recorded":
         if record_dir is None:
             raise EvaluatorError("recorded backend requires record_dir")
         output = _recorded_output(record_dir, uid)
+        usage = None
     else:
         raise EvaluatorError(f"unknown backend {backend!r}")
 
@@ -144,6 +148,69 @@ def run_evaluator(unit, bundle_root: str, case_def: dict, context_dict: dict,
     with open(raw_path, "w") as f:
         f.write(output)
     h = hashlib.sha256(output.encode()).hexdigest()
+
+    note = f"output_committed;model={contract.get('model_id')}"
+    if usage is not None:
+        note += (";tokens=%d;cost=%.6f;latency_ms=%.1f;retries=%d" % (
+            int(usage["total_tokens"] or 0), usage["cost"],
+            usage["latency_ms"], usage["retries"]))
     store.transition(uid, st.OUTPUT_COMMITTED,
-                     raw_output_path=raw_path, raw_output_hash=h)
+                     raw_output_path=raw_path, raw_output_hash=h, note=note)
     return EvalResult(uid, output, h, raw_path, committed=True)
+
+
+def _live_output(unit, context_dict: dict, contract: dict) -> tuple[str, dict]:
+    """Generate a model-backed answer for one unit.
+
+    The prompt is composed from the sanitized bundle's public case metadata
+    and the arm retrieval context ONLY (no keys, no scorer state), packed to
+    the frozen total-input budget, and the prompt is checked for answer-material
+    leakage before the call. The model is an external API: it never reads our
+    filesystem, so isolation is the prompt content + the scrubbed process env.
+    """
+    budget = int(contract.get("context_budget_tokens", 32_000))
+    pc = pack_context(
+        sections=dict(context_dict.get("sections", {})),
+        system_prompt=contract.get("system_prompt", ""),
+        case_id=context_dict.get("case_id", unit.case_id),
+        arm=context_dict.get("arm", unit.arm),
+        budget=budget)
+    prompt = pc.prompt
+    assert_prompt_sanitized(prompt, context_dict.get("case_id", unit.case_id))
+    # Budget compliance asserted BEFORE the call, verified again from provider
+    # usage after the call.
+    if pc.estimated_prompt_tokens > budget:
+        raise EvaluatorError(
+            f"packed prompt exceeds frozen budget: "
+            f"{pc.estimated_prompt_tokens} > {budget}")
+    try:
+        model = "%s/%s" % (contract.get("provider", "cline-pass"),
+                           contract.get("model_id", "glm-5.2"))
+        mc = call_model(
+            model=model,
+            system_prompt=contract.get("system_prompt", ""),
+            user_prompt=prompt,
+            temperature=float(contract.get("temperature", 0.0)))
+    except ModelClientError as e:
+        raise EvaluatorError(f"live model call failed: {e}") from e
+    usage = {
+        "total_tokens": int(mc.usage.get("total_tokens") or 0),
+        "prompt_tokens": int(mc.usage.get("prompt_tokens") or 0),
+        "completion_tokens": int(mc.usage.get("completion_tokens") or 0),
+        "cost": mc.cost,
+        "latency_ms": mc.latency_ms,
+        "retries": mc.retries,
+        "generation_id": mc.generation_id,
+        "resolved_model": mc.model,
+        "packing_version": pc.packing_version,
+        "estimated_prompt_tokens": pc.estimated_prompt_tokens,
+        "omitted_material": pc.omitted_material,
+        "packing_items": [i.to_dict() for i in pc.items],
+    }
+    # Provider-verified budget compliance: the actual prompt tokens the model
+    # saw must not exceed the frozen budget.
+    if usage["prompt_tokens"] > budget:
+        raise EvaluatorError(
+            f"provider prompt_tokens {usage['prompt_tokens']} > frozen "
+            f"budget {budget} for {unit.unit_id}")
+    return mc.text, usage
