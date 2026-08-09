@@ -1,0 +1,135 @@
+{
+  "audit": "answer-blind unparseable audit (no sealed keys read)",
+  "pilot": "pilot-003",
+  "n_unparseable": 10,
+  "classifications": {
+    "MODEL_CONTRACT_VIOLATION": 10
+  },
+  "decision": {
+    "all_model_contract_violation": true,
+    "any_parser_defect": false,
+    "any_ambiguous": false
+  },
+  "items": [
+    {
+      "run_id": "0798e0ab14a4f939",
+      "case_id": "df-01",
+      "arm": "A",
+      "repetition": 1,
+      "raw_output_hash": "cc6b031367cad3ca090d943c1dee7cbe3fe52af479020d8a5deaab5728a7a949",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "2cdeb272047897ca",
+      "case_id": "sr-10",
+      "arm": "B",
+      "repetition": 2,
+      "raw_output_hash": "72e04024985c7593bd7f842eb7e6b52fb7d4e730de4b58b7ccfebdf89d49525d",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "348ad1aafb0bfcf7",
+      "case_id": "sr-10",
+      "arm": "C",
+      "repetition": 3,
+      "raw_output_hash": "fd1b3add54842af6ba54ce83db14359e03f39d4973923a48e09f86fd696d92f9",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "4b8e6ebf2da29ab9",
+      "case_id": "sr-10",
+      "arm": "B",
+      "repetition": 3,
+      "raw_output_hash": "d4810ff73a9fe99b26b7c87d94f4780263c94711b350d464cd9c080037d0011f",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "7d79dee44c1c010f",
+      "case_id": "df-01",
+      "arm": "A",
+      "repetition": 3,
+      "raw_output_hash": "f666b1633406f2996437ab0409b4a7e199662c5919d48e0a92aa9c1f1634ec78",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "87b68239b91caaae",
+      "case_id": "df-01",
+      "arm": "C",
+      "repetition": 3,
+      "raw_output_hash": "65743715f632a31325b236a52e018dd7668a56696fe58cb284543f90858dd97d",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "b3a457a0b9f119e5",
+      "case_id": "df-01",
+      "arm": "C",
+      "repetition": 1,
+      "raw_output_hash": "57ec45b68bc9e2e2c3138b221653fe637178180cc05e9805ca323573e426ec44",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "d586de759208d507",
+      "case_id": "df-01",
+      "arm": "A",
+      "repetition": 2,
+      "raw_output_hash": "dc6bfeadb0a266e8b0110f0bc448ebdf6a3e9d289f7771f7e4079ede6d6c2986",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "e67aaaf6156860a5",
+      "case_id": "ag-01",
+      "arm": "B",
+      "repetition": 1,
+      "raw_output_hash": "2c6b8b380080a22492454e184f59a7fb97837063b90956c0881c95678057d30c",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    },
+    {
+      "run_id": "f8eef13f346de9e0",
+      "case_id": "df-01",
+      "arm": "B",
+      "repetition": 1,
+      "raw_output_hash": "c40e445885964a9d7875bc12775a3bc8766720cf5488bf3d0cf3bdf38acc40ef",
+      "classification": "MODEL_CONTRACT_VIOLATION",
+      "parser_result": "no_claim",
+      "contract_clause": "Frozen system prompt: 'Reply with a single line: Locus: <locus>.' where <locus> is exactly one of the nine vocabulary terms; the response must be a single line, not prose or reasoning.",
+      "parser_rule": "extract_locus: regex 'Locus:\\s*([a-z_]+)' captured token must be in the frozen vocabulary; else no claim (unparseable).",
+      "reason": "'Locus' appears only as echoed template or mid-prose reasoning; no final 'Locus: <vocab>' answer; contract requires a single line"
+    }
+  ]
+}
