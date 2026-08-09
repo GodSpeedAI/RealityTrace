@@ -267,6 +267,7 @@ pub fn apply_row_with_cas(
         RecordKind::ObservationRecorded => {}
         RecordKind::EvidenceCreated => apply_evidence(conn, row, &payload)?,
         RecordKind::SettlementRegistered => apply_settlement(conn, row, &payload)?,
+        RecordKind::DebtRecorded => apply_debt(conn, row, &payload)?,
         RecordKind::ClaimMade => apply_claim(conn, row, &payload)?,
         RecordKind::ResidualComputed => apply_residual(conn, row, &payload)?,
         RecordKind::DiagnosticHypothesis => apply_hypothesis(conn, row, &payload)?,
@@ -834,13 +835,52 @@ fn apply_settlement(conn: &mut Connection, row: &LedgerRow, payload: &Value) -> 
     let threshold_id = s
         .and_then(|v| string_field(v, "threshold_ref"))
         .unwrap_or_default();
+    // §26/CEP-0007 §18: `settled_with_debt` carries `debt_refs` on the
+    // settlement; store the first (bare id) so `debt_open` classification
+    // works.
+    let debt_id = s
+        .and_then(|v| v.get("debt_refs"))
+        .and_then(Value::as_array)
+        .and_then(|a| a.first())
+        .and_then(Value::as_str)
+        .map(|r| r.trim_start_matches("debt:").to_string());
     conn.execute(
         "INSERT OR REPLACE INTO sxr_settlement(settlement_id, run_id, question_id, transformation_ref, threshold_id, settlement_status, confidence, debt_id, ledger_id, append_ordinal)
          VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",
-        params![settlement_id, run_id, question_id, transformation_ref, threshold_id, status, confidence, None::<String>, row.ledger_id, row.append_ordinal],
+        params![settlement_id, run_id, question_id, transformation_ref, threshold_id, status, confidence, debt_id, row.ledger_id, row.append_ordinal],
     )?;
     // FTS: settlement status is searchable context (§12.2).
     fts_insert(conn, &settlement_id, "settlement", &status, &confidence)?;
+    Ok(())
+}
+
+/// Slice 6 (§26/CEP-0007 §18): a `debt.recorded` names open debt carried by a
+/// `settled_with_debt` settlement. The settlement row already holds the debt
+/// ref; this projection makes debt queryable through the FTS index.
+fn apply_debt(conn: &mut Connection, _row: &LedgerRow, payload: &Value) -> Result<()> {
+    let Some(d) = first_section(payload, "debt") else {
+        return Ok(());
+    };
+    let debt_id = d
+        .get("debt_id")
+        .and_then(Value::as_str)
+        .unwrap_or_default()
+        .to_string();
+    let description = d
+        .get("description")
+        .and_then(Value::as_str)
+        .unwrap_or_default()
+        .to_string();
+    if debt_id.is_empty() {
+        return Ok(());
+    }
+    fts_insert(
+        conn,
+        &debt_id,
+        "debt",
+        &format!("debt:{debt_id}"),
+        &description,
+    )?;
     Ok(())
 }
 

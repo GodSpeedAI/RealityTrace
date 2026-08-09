@@ -218,6 +218,9 @@ enum EvidenceCmds {
         observation: String,
         #[arg(long, action = clap::ArgAction::SetTrue)]
         derive: bool,
+        /// Evidence type for the record (§26). Defaults to "test_result".
+        #[arg(long, default_value = "test_result")]
+        evidence_type: String,
     },
     /// Create evidence targeting a relation claim (§12.4a condition 2).
     ForClaim {
@@ -332,6 +335,10 @@ enum SettlementCmds {
         threshold: String,
         #[arg(long)]
         transformation: String,
+        /// Record the settlement as `settled_with_debt` and append a
+        /// `debt.recorded` record naming this debt (§26/CEP-0007 §18).
+        #[arg(long)]
+        debt: Option<String>,
     },
 }
 
@@ -601,11 +608,12 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 run,
                 observation,
                 derive,
+                evidence_type,
             } => {
                 if !derive {
                     return Err(anyhow!("only --derive is supported in slice 1"));
                 }
-                commands::evidence_create(ctx, &run, &observation)?
+                commands::evidence_create(ctx, &run, &observation, &evidence_type)?
             }
             EvidenceCmds::ForClaim {
                 run,
@@ -665,7 +673,15 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 question,
                 threshold,
                 transformation,
-            } => commands::settlement_register(ctx, &run, &question, &threshold, &transformation)?,
+                debt,
+            } => commands::settlement_register(
+                ctx,
+                &run,
+                &question,
+                &threshold,
+                &transformation,
+                debt.as_deref(),
+            )?,
         },
         Command::Ingest(c) => {
             let (v, code) = commands::ingest(

@@ -927,7 +927,12 @@ fn repo_plan(ctx: &Ctx, repo_id: &str, run_id: &str) -> Result<Value> {
 
 // ── evidence create ──────────────────────────────────────────────────────
 
-pub fn evidence_create(ctx: &Ctx, run_id: &str, observation_id: &str) -> Result<Value> {
+pub fn evidence_create(
+    ctx: &Ctx,
+    run_id: &str,
+    observation_id: &str,
+    evidence_type: &str,
+) -> Result<Value> {
     let meta = repo_for_run(ctx, run_id)?;
     // F-19b: the referenced observation and run must be committed.
     crate::durability::ensure_committed(ctx, &meta.repo_id, &[run_id, observation_id])?;
@@ -976,7 +981,7 @@ pub fn evidence_create(ctx: &Ctx, run_id: &str, observation_id: &str) -> Result<
         deriv(
             "evidence_type",
             "verifier-profile://cargo-test@1#evidence_types",
-            &json!({"evidence_types": ["test_result"]}),
+            &json!({"evidence_types": [evidence_type]}),
             &plan_pos,
             precedes,
         ),
@@ -1055,7 +1060,7 @@ pub fn evidence_create(ctx: &Ctx, run_id: &str, observation_id: &str) -> Result<
     let sections = json!({
         "evidence": [{
             "evidence_id": evidence_id,
-            "evidence_type": "test_result",
+            "evidence_type": evidence_type,
             "question_ref": meta.question_id,
             "target_entity_ref": format!("concept:{}", target.trim_start_matches("concept:")),
             "representation_ref": format!("rep:obs:{observation_id}"),
@@ -1176,6 +1181,7 @@ pub fn settlement_register(
     question_id: &str,
     threshold_id: &str,
     transformation_ref: &str,
+    debt: Option<&str>,
 ) -> Result<Value> {
     let meta = repo_for_run(ctx, run_id)?;
     let e = state::require_enrollment(ctx, &meta.repo_id)?;
@@ -1220,6 +1226,16 @@ pub fn settlement_register(
     }
 
     let settlement_status = if supports { "settled" } else { "unsettled" };
+    let settlement_status = if debt.is_some() {
+        if !supports {
+            bail!(
+                "AC-SETTLEMENT-003: debt requires a supporting settlement; evidence does not support"
+            );
+        }
+        "settled_with_debt"
+    } else {
+        settlement_status
+    };
     let missing_evidence: Vec<String> = if supports {
         vec![]
     } else {
@@ -1231,16 +1247,28 @@ pub fn settlement_register(
         vec![]
     };
     let settlement_id = ulid();
-    let sections = json!({
-        "settlements": [{
-            "settlement_id": settlement_id,
-            "settlement_status": settlement_status,
-            "transformation_ref": transformation_ref,
-            "question_ref": question_id,
-            "threshold_ref": threshold_id,
-        }]
+    let mut settlement = json!({
+        "settlement_id": settlement_id,
+        "settlement_status": settlement_status,
+        "transformation_ref": transformation_ref,
+        "question_ref": question_id,
+        "threshold_ref": threshold_id,
     });
-    let subject_refs = vec![
+    let debt_id = debt.map(|_| ulid());
+    if let Some(did) = &debt_id {
+        settlement["debt_refs"] = json!([format!("debt:{did}")]);
+    }
+    let mut sections = json!({
+        "settlements": [settlement],
+    });
+    if let Some(did) = &debt_id {
+        sections["debt"] = json!([{
+            "debt_id": did,
+            "settlement_ref": settlement_id,
+            "description": debt.unwrap_or(""),
+        }]);
+    }
+    let mut subject_refs = vec![
         format!("settlement:{}", settlement_id),
         format!("question:{}", question_id),
         format!("run:{}", run_id),
@@ -1250,6 +1278,9 @@ pub fn settlement_register(
         ),
         format!("snapshot:{}", meta.snapshot_id),
     ];
+    if let Some(did) = &debt_id {
+        subject_refs.push(format!("debt:{did}"));
+    }
     let mut repo = open_repo_ledger(ctx, &meta.repo_id)?;
     let pos = crate::envelopes::append(
         &mut repo,
@@ -1264,9 +1295,51 @@ pub fn settlement_register(
         subject_refs,
         None,
     )?;
+    // §26/CEP-0007 §18: `settled_with_debt` MUST be accompanied by a
+    // debt.recorded record (settlement_packet, allowed_predecessor
+    // settlement.registered).
+    if let Some(did) = &debt_id {
+        let debt_sections = json!({
+            "settlements": [{
+                "settlement_id": settlement_id,
+                "settlement_status": "settled_with_debt",
+                "transformation_ref": transformation_ref,
+                "question_ref": question_id,
+                "threshold_ref": threshold_id,
+                "debt_refs": [format!("debt:{did}")],
+            }],
+            "debt": [{
+                "debt_id": did,
+                "settlement_ref": settlement_id,
+                "description": debt.unwrap_or(""),
+            }]
+        });
+        let debt_refs = vec![
+            format!("debt:{did}"),
+            format!("settlement:{}", settlement_id),
+            format!("run:{}", run_id),
+        ];
+        crate::envelopes::append(
+            &mut repo,
+            RecordKind::DebtRecorded,
+            &meta.repo_id,
+            &e.checkout_id,
+            None,
+            None,
+            Some(run_id),
+            vec![format!("settlement:{settlement_id}")],
+            debt_sections,
+            debt_refs,
+            None,
+        )?;
+    }
     Ok(output::output(vec![
         ("settlement_id", json!(settlement_id)),
         ("settlement_status", json!(settlement_status)),
+        (
+            "debt_id",
+            debt_id.map(|d| json!(d)).unwrap_or(json!(Value::Null)),
+        ),
         ("missing_evidence", json!(missing_evidence)),
         (
             "unresolved_contradictions",

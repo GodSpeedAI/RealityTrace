@@ -741,3 +741,62 @@ fn diagnostic_tables_rebuild_deterministic() {
         "diagnostic tables must rebuild byte-identical"
     );
 }
+
+/// §26/CEP-0007 §18: a `settled_with_debt` settlement carries a `debt_ref`
+/// into the projection, and its companion `debt.recorded` record is FTS
+/// queryable as open debt.
+#[test]
+fn settled_with_debt_records_debt_and_is_queryable() {
+    let mut conn = setup_db();
+    let payload = json!({
+        "settlements": [{
+            "settlement_id": "settlement:s-d1",
+            "settlement_status": "settled_with_debt",
+            "transformation_ref": "transformation:t",
+            "question_ref": "question:q1",
+            "threshold_ref": "threshold:t1",
+            "debt_refs": ["debt:d1"],
+        }],
+        "debt": [],
+    });
+    apply(
+        &mut conn,
+        RecordKind::SettlementRegistered,
+        &[
+            "settlement:s-d1",
+            "question:q1",
+            "run:r1",
+            "transformation:t",
+            "snapshot:snap-1",
+            "debt:d1",
+        ],
+        &payload,
+    );
+    let debt_id: Option<String> = conn
+        .query_row(
+            "SELECT debt_id FROM sxr_settlement WHERE settlement_id = 'settlement:s-d1'",
+            [],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(debt_id.as_deref(), Some("d1"));
+
+    apply(
+        &mut conn,
+        RecordKind::DebtRecorded,
+        &["debt:d1", "settlement:s-d1", "run:r1"],
+        &json!({
+            "debt": [{
+                "debt_id": "d1",
+                "settlement_ref": "settlement:s-d1",
+                "description": "no integration evidence",
+            }]
+        }),
+    );
+    let hits = projections::fts_search(&conn, "debt:d1", 10).unwrap();
+    assert!(
+        hits.iter()
+            .any(|h| h.get("subject_key").and_then(Value::as_str) == Some("d1")),
+        "debt must be FTS queryable: {hits:#?}"
+    );
+}
