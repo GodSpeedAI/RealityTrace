@@ -1,0 +1,34 @@
+{
+  "acquisition_dist": {
+    "authority": 6,
+    "declared_model": 4,
+    "environment": 7,
+    "evidence_collection": 7,
+    "implementation": 10,
+    "projection": 2,
+    "unknown": 7,
+    "verification_plan": 7,
+    "verifier": 10
+  },
+  "experiment": "diagnostic-acquisition-001",
+  "original_dist": {
+    "authority": 6,
+    "declared_model": 4,
+    "environment": 6,
+    "evidence_collection": 7,
+    "implementation": 10,
+    "projection": 2,
+    "unknown": 8,
+    "verification_plan": 7,
+    "verifier": 10
+  },
+  "reclassifications": [
+    {
+      "acquisition_locus": "environment",
+      "case_id": "df-15",
+      "evidence": "P3 tmpdir=not_writable",
+      "original_locus": "unknown",
+      "reason": "P3 inspect_environment reveals TMPDIR not writable; concretely resolvable under acquisition environment (\u00a78)"
+    }
+  ]
+}
