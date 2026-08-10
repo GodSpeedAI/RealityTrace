@@ -31,12 +31,19 @@ from eval.attribution import (attribution_prompt, attribution_contract_dict,
 from eval.context_packer import estimate_tokens  # noqa: E402
 from eval.bundle import assert_prompt_sanitized  # noqa: E402
 from eval.release import verify_release  # noqa: E402
-from eval.model_client import call_model, ModelClientError  # noqa: E402
+from eval.zai_client import call_coding_plan, ModelClientError  # noqa: E402
 
 CORPUS = os.path.join(HERE, "..", "corpus")
 SXR_ROOT = os.path.join(HERE, "..", "..")
-ATTR_EXPERIMENT = "attribution-001"
-ATTR_NAMESPACE = "attribution-001"
+ATTR_EXPERIMENT = "attribution-002"
+ATTR_NAMESPACE = "attribution-002"
+SUPERSEDED_EXPERIMENT = "attribution-001"
+SUPERSEDED_REASON = ("Clinepass monthly quota exhausted before first scored "
+                     "unit (0/360 committed); provider-route substitution to "
+                     "Z.ai GLM Coding Plan per owner directive 2026-08-10. "
+                     "Only provider/access route changed; all experimental "
+                     "semantics frozen (GLM-5.2, Arm D, C-loop/D-direct, 32K "
+                     "pack-v1, prompts, scorer, unknown semantics, FP def).")
 ARM_D = "D"
 REPS = 3
 
@@ -93,12 +100,28 @@ def freeze_contract(exp_dir, cfg):
         "retrieval_substrate": "Arm D (SQL+FTS+graph+vector) frozen from §23.1",
         "arm_D_frozen_reason": "owner adjudication 2026-08-09: diagnostic "
                                "decision success (see owner_adjudication_23-1.json)",
+        "supersedes": SUPERSEDED_EXPERIMENT,
+        "supersession": {
+            "superseded_experiment": SUPERSEDED_EXPERIMENT,
+            "superseded_provider": "clinepass",
+            "superseded_status": "superseded_before_execution",
+            "committed_units_under_superseded": 0,
+            "reason": SUPERSEDED_REASON,
+        },
+        "provider_route": {
+            "provider": "zai-coding-plan",
+            "endpoint": "https://api.z.ai/api/coding/paas/v4/chat/completions",
+            "route_kind": "Z.ai GLM Coding Plan (dedicated endpoint, not "
+                          "pay-as-you-go)",
+            "auth": "Zhipu signed-JWT HS256 (sign_type=SIGN)",
+        },
         "methods": list(METHODS),
         "reps": REPS,
         "model_identity_tag": cfg.model_identity_tag(),
         "model": {"model_id": cfg.model_id, "provider": cfg.provider,
                   "temperature": cfg.temperature,
-                  "context_budget_tokens": cfg.context_budget_tokens},
+                  "context_budget_tokens": cfg.context_budget_tokens,
+                  "max_tokens": 4096},
         "scaffold_hashes": {m: method_scaffold_hash(m) for m in METHODS},
         "primary_measure": "semantic-model-change false-positive rate",
         "secondary_measures": ["unknown termination rate (honest non-answer = "
@@ -108,6 +131,11 @@ def freeze_contract(exp_dir, cfg):
                          "extra cost",
         "scorer_version": SCORING_VERSION,
         "packer_version": PACKING_VERSION,
+        "interpretation_caveat": "§23.1 used Clinepass (finalProvider "
+                                 "fireworks); §23.2 uses Z.ai Coding Plan. "
+                                 "Cross-experiment absolute rates are NOT "
+                                 "directly comparable; only the internal "
+                                 "C-loop vs D-direct comparison is causal.",
     }
     case_path = os.path.join(CORPUS, "cases.jsonl")
     key_manifest = open(os.path.join(CORPUS, "keys.sha256")).read().strip().split()[0]
@@ -166,9 +194,10 @@ def run_one(unit, method, case_row, ctx_sections, ctx_arm, cfg, store,
     if estimate_tokens(prompt) > budget:
         raise RuntimeError(f"prompt exceeds budget for {uid}")
     try:
-        mc = call_model(model="%s/%s" % (contract["provider"], contract["model_id"]),
-                        system_prompt=contract["system_prompt"],
-                        user_prompt=prompt, temperature=0.0)
+        mc = call_coding_plan(model=contract["model_id"],
+                              system_prompt=contract["system_prompt"],
+                              user_prompt=prompt, temperature=0.0,
+                              max_tokens=4096)
     except ModelClientError as e:
         raise RuntimeError(f"live call failed: {e}") from e
     if int(mc.usage.get("prompt_tokens") or 0) > budget:
@@ -177,9 +206,13 @@ def run_one(unit, method, case_row, ctx_sections, ctx_arm, cfg, store,
     with open(raw_path, "w") as f:
         f.write(mc.text)
     usage = {"total_tokens": int(mc.usage.get("total_tokens") or 0),
+             "prompt_tokens": int(mc.usage.get("prompt_tokens") or 0),
+             "completion_tokens": int(mc.usage.get("completion_tokens") or 0),
+             "reasoning_tokens": int(mc.usage.get("reasoning_tokens") or 0),
              "cost": mc.cost, "latency_ms": mc.latency_ms,
              "retries": mc.retries, "generation_id": mc.generation_id,
-             "method": method}
+             "resolved_model": mc.model, "method": method,
+             "provider_route": "zai-coding-plan"}
     with open(raw_path.replace(".txt", ".usage.json"), "w") as f:
         f.write(json.dumps(usage, sort_keys=True))
     import hashlib
