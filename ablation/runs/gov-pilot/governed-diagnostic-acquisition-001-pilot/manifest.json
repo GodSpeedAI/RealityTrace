@@ -1,0 +1,70 @@
+{
+  "experiment_id": "governed-diagnostic-acquisition-001",
+  "kind": "governed-diagnostic-acquisition-H-GOVERNED-ACQUISITION",
+  "derived_from": "diagnostic-acquisition-001 (NOT SUPPORTED)",
+  "parent_report": ".agents/reports/8-diagnostic-acquisition.md",
+  "conditions": [
+    "V",
+    "G",
+    "O"
+  ],
+  "reps": 3,
+  "model": {
+    "model_id": "glm-5.2",
+    "provider": "zai-coding-plan",
+    "endpoint": "https://api.z.ai/api/coding/paas/v4",
+    "temperature": 0.0,
+    "context_budget_tokens": 32000,
+    "max_tokens": 4096
+  },
+  "contract_fingerprint": "1608c4654b3bdbc7ea41333de9c3363f09b43bf8d039f8c5dfba0f83dbc8a8e8",
+  "acquisition_budget": {
+    "max_rounds": 3,
+    "max_payment": 7
+  },
+  "probe_catalogue_hash": "a20c53251be6e2faac93b790a8f0b57b3034d3167cd50be5b4e4c52744b466a4",
+  "hypothesis": {
+    "name": "H-GOVERNED-ACQUISITION",
+    "sub_hypotheses": {
+      "H-GA-INVOCATION": {
+        "description": "Structural gating prevents premature settlement and causes acquisition",
+        "type": "system/controller",
+        "pass_conditions": {
+          "gate_rejects_exist": "G premature_settlement_attempts > 0",
+          "invocation_gap": "G acquisition_invocation_rate > V by >= 30pp"
+        }
+      },
+      "H-GA-SELECTION": {
+        "description": "Model selects discriminating actions once acquisition is required",
+        "type": "model/controller",
+        "pass_conditions": {
+          "select_first": "G A_select_first >= 25%",
+          "select_any": "G A_select_any >= 40%"
+        }
+      },
+      "H-GA-UTILIZATION": {
+        "description": "Model correctly uses discriminating evidence to settle",
+        "type": "evidence metabolization",
+        "pass_conditions": {
+          "g_use": "G A_use >= 50%",
+          "o_use": "O A_use >= 50%"
+        }
+      }
+    },
+    "overall": {
+      "SUPPORTED": "all three sub-hypotheses pass",
+      "PARTIALLY_SUPPORTED": "exactly two pass",
+      "NOT_SUPPORTED": "zero or one pass"
+    }
+  },
+  "hashes": {
+    "corpus_cases": "7612b9881bb807ab208fc02b73982052a451cf436b31e39889a2274a0d794520",
+    "sealed_keys_sha256": "10f677535412ef52b3150ca3c28865aec560da970ac2ff27c73b50f40b5c8e17",
+    "governed_keys": "3b1fa60c10832a34520ff1e6b6d9c7258535b2f28f7e238555228dcfdf96bf28",
+    "governed_sufficiency_contract": "a371a6558af543cc383ae301d962abaaf4df04d5f78080b3d7ab824fad362181",
+    "acquisition_hidden_meta": "dcf75d1340972fd6cb16b594493fae0554ec327a98278a092686a5abf71719e5",
+    "acquisition_probes": "04223b490369e5e58052c780142cad2e7fcc3b9336c977b3c2c635136a1f6f8a",
+    "sxr_git_head": "47b6da68ef1b5fca2e24d676ab1fd696695dc15e"
+  },
+  "contract_hash": "b053e87aff9938c799a7cf11ecd3c0964159d5080ca42490b8bc456983ed8cef"
+}

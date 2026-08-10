@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2764,
+      "latency_ms": 51812.2,
+      "prompt_tokens": 978,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "ag-09",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "82778a19e3f852f6",
+  "unknown_premature": 0
+}

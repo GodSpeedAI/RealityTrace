@@ -1,0 +1,75 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3690,
+      "latency_ms": 68653.5,
+      "prompt_tokens": 978,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-internal failure or an implementation panic propagated through the veri"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 614,
+      "latency_ms": 12900.8,
+      "prompt_tokens": 376,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the failure is due to a misconfigured verifier command/rule or because sufficient evidence was not collected "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1599,
+      "latency_ms": 26860.6,
+      "prompt_tokens": 561,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"None; verifier command, direction rule, and evidence types are coherent, but the env assignment points to a nonexistent config path.\", \"s"
+    }
+  ],
+  "case_id": "ag-09",
+  "condition": "G",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "AST_GREP_CONFIG=/nonexistent-corpus-config.toml",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline --message-format json corpus_scenario"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "dabfd819457f8292",
+  "unknown_premature": 0
+}

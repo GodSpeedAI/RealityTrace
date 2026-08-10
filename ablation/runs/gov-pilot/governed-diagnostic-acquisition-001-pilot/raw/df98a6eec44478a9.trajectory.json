@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1821,
+      "latency_ms": 23242.8,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verifier\"],\n  \"unresolved_distinction\": \"The verifier exited with code 101 and produced no evidence (all-zero vector, empty FTS). This could mean the env"
+    }
+  ],
+  "case_id": "ag-06",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "df98a6eec44478a9",
+  "unknown_premature": 0
+}

@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 71064.8,
+      "prompt_tokens": 971,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 566,
+      "latency_ms": 9933.1,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: evidence_collection, verification_plan, environment, unknown\nExcluded: verifier (no verification checks implicated), projection (not a projection failure), implementation (not code behavio"
+    }
+  ],
+  "case_id": "cep-11",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "dff78b258d4ac72e",
+  "unknown_premature": 0
+}

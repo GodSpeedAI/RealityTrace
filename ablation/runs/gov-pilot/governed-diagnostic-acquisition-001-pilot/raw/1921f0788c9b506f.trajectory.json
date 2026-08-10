@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1558,
+      "latency_ms": 27735.8,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a real implementation/test failure versus a verifier/"
+    }
+  ],
+  "case_id": "cep-15",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "1921f0788c9b506f",
+  "unknown_premature": 0
+}

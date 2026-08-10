@@ -1,0 +1,133 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1154,
+      "latency_ms": 15357.4,
+      "prompt_tokens": 677,
+      "response_preview": "Looking at the retrieval context for case cep-15:\n\n**What I can observe:**\n- `verifier_exit`: 1 (non-zero \u2014 verification failed)\n- `stdin_format`: \"pytest-progress\"\n- FTS results: empty (no textual ev"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2483,
+      "latency_ms": 37787.1,
+      "prompt_tokens": 251,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"evidence_collection\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"The target test file exists, but no verifier output, error text, logs, or artifacts "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 972,
+      "latency_ms": 15491.1,
+      "prompt_tokens": 245,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"evidence_collection\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"No referenced symbols, verifier output, logs, or artifacts were available, so the fa"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 580,
+      "latency_ms": 10210.2,
+      "prompt_tokens": 237,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"evidence_collection\", \"verifier\"], \"unresolved_distinction\": \"Environment appears nominal, but no logs, artifacts, verifier output, or symbol references are avai"
+    }
+  ],
+  "case_id": "cep-15",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "tests/fixtures/sample_settlement_recorded.json",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "644",
+          "path": "tests/test_import.py",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "4aa0e2334299b6dd",
+  "unknown_premature": 4
+}

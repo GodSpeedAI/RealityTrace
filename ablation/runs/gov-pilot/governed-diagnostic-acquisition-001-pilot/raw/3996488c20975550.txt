@@ -1,0 +1,7 @@
+Locus: environment
+Terminal: BUDGET_EXHAUSTED
+Actions: inspect_verifier_config, inspect_fixture_integrity
+Payment: 2/7
+Rounds: 3
+Premature attempts: 0
+Unknown premature: 0

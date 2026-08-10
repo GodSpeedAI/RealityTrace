@@ -1,0 +1,133 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 353,
+      "latency_ms": 10694.9,
+      "prompt_tokens": 677,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"verification_plan\", \"environment\"],\n  \"unresolved_distinction\": \"The retrieval context contains no error text, stack trace, log output, or"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 586,
+      "latency_ms": 10805.1,
+      "prompt_tokens": 297,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"The target test file exists, so the failure is not due to a missing bound target. Howe"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 561,
+      "latency_ms": 8210.3,
+      "prompt_tokens": 255,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"The probe found no referenced symbols, so it provides no distinguishing evidence among"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 556,
+      "latency_ms": 9811.6,
+      "prompt_tokens": 230,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Environment appears clean/default, but this does not distinguish between verifier, implementation, an"
+    }
+  ],
+  "case_id": "cep-15",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "tests/fixtures/sample_settlement_recorded.json",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "644",
+          "path": "tests/test_import.py",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "e59a76352c5897e2",
+  "unknown_premature": 4
+}

@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 71121.0,
+      "prompt_tokens": 972,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 548,
+      "latency_ms": 11036.3,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: environment, evidence_collection\nExcluded: verifier: none, verification_plan: none, projection: none, implementation: none, authority: none, declared_model: none\nLocus: environment"
+    }
+  ],
+  "case_id": "ag-06",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "environment",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "afbae83231146664",
+  "unknown_premature": 0
+}

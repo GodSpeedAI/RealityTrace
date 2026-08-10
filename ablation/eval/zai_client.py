@@ -59,8 +59,8 @@ def _read_key() -> str:
 
 
 def call_coding_plan(model: str, system_prompt: str, user_prompt: str,
-                     temperature: float = 0.0, max_tokens: int = 4096,
-                     timeout: float = 180.0) -> ModelCall:
+                     temperature: float = 0.0, max_tokens: int = 8192,
+                     timeout: float = 300.0) -> ModelCall:
     """One GLM-5.2 call via the Coding Plan endpoint. Returns ModelCall."""
     key = _read_key()
     token = _jwt(key)

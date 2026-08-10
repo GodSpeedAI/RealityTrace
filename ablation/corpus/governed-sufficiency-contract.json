@@ -1,0 +1,83 @@
+{
+  "bears_on": {
+    "inspect_environment": [
+      "environment"
+    ],
+    "inspect_fixture_integrity": [
+      "evidence_collection"
+    ],
+    "inspect_permissions": [
+      "authority"
+    ],
+    "inspect_source_symbols": [
+      "implementation"
+    ],
+    "inspect_target_binding": [
+      "verification_plan"
+    ],
+    "inspect_verifier_config": [
+      "environment"
+    ],
+    "rerun_verifier_isolated": [
+      "implementation"
+    ],
+    "validate_semantic_model": [
+      "declared_model",
+      "projection"
+    ]
+  },
+  "description": "Evidence-sufficiency contract for governed-diagnostic-acquisition-001",
+  "gate_infeasible_loci": [
+    "verifier"
+  ],
+  "hash": "4b10d887c7aeff5061243e4e067840fbf11887b0a45c6ac92812bfd3a007a419",
+  "principle": "Gate checks structural observation properties only. No ground truth, no error content interpretation, no action selection.",
+  "signal_rules": {
+    "inspect_environment|environment": {
+      "description": "Environmental anomaly (toolchain/tmpdir/path)",
+      "locus": "environment",
+      "probe": "inspect_environment"
+    },
+    "inspect_fixture_integrity|evidence_collection": {
+      "description": "Missing or stale fixtures",
+      "locus": "evidence_collection",
+      "probe": "inspect_fixture_integrity"
+    },
+    "inspect_permissions|authority": {
+      "description": "Restrictive permissions detected",
+      "locus": "authority",
+      "probe": "inspect_permissions"
+    },
+    "inspect_source_symbols|implementation": {
+      "description": "Source symbols missing (len(missing)>0)",
+      "locus": "implementation",
+      "probe": "inspect_source_symbols"
+    },
+    "inspect_target_binding|verification_plan": {
+      "description": "Test targets missing (not all_exist)",
+      "locus": "verification_plan",
+      "probe": "inspect_target_binding"
+    },
+    "inspect_verifier_config|environment": {
+      "description": "Non-default env assignments present",
+      "locus": "environment",
+      "probe": "inspect_verifier_config"
+    },
+    "rerun_verifier_isolated|implementation": {
+      "description": "Compilation error on isolated rerun",
+      "locus": "implementation",
+      "probe": "rerun_verifier_isolated"
+    },
+    "validate_semantic_model|declared_model": {
+      "description": "Semantic model validation failed",
+      "locus": "declared_model",
+      "probe": "validate_semantic_model"
+    },
+    "validate_semantic_model|projection": {
+      "description": "Semantic model validation failed",
+      "locus": "projection",
+      "probe": "validate_semantic_model"
+    }
+  },
+  "version": "governed-sufficiency-v1"
+}

@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 840,
+      "latency_ms": 11914.1,
+      "prompt_tokens": 977,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"declared_model\"], \"unresolved_distinction\": \"The verifier exited with code 1, but existing evidence does not reveal whether this is due to a "
+    }
+  ],
+  "case_id": "sr-11",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "4734090b8c9eb174",
+  "unknown_premature": 0
+}

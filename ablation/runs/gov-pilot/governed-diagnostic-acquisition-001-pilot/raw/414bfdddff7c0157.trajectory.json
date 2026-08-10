@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2646,
+      "latency_ms": 45790.1,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"evidence_collection\"], \"unresolved_distinction\": \"The only observed signal is verifier_exit=1; there is no failure trace, config"
+    }
+  ],
+  "case_id": "cep-11",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "414bfdddff7c0157",
+  "unknown_premature": 0
+}

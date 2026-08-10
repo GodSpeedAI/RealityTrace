@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 998,
+      "latency_ms": 16515.2,
+      "prompt_tokens": 678,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 reflects an internal verifier failure, a failure caused by the implementatio"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 431,
+      "latency_ms": 8480.7,
+      "prompt_tokens": 262,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"\", \"settle\": \"implementation\"}\nLocus: implementation"
+    }
+  ],
+  "case_id": "ag-06",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "missing": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "95c052973068c148",
+  "unknown_premature": 1
+}

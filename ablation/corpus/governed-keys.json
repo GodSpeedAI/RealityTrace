@@ -1,0 +1,372 @@
+{
+  "ag-01": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "ag-1",
+    "true_locus": "verifier"
+  },
+  "ag-02": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "ag-2",
+    "true_locus": "verifier"
+  },
+  "ag-03": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "ag-3",
+    "true_locus": "verifier"
+  },
+  "ag-04": {
+    "gate_infeasible": false,
+    "original_locus": "verification_plan",
+    "scenario": "ag-4",
+    "true_locus": "verification_plan"
+  },
+  "ag-05": {
+    "gate_infeasible": false,
+    "original_locus": "verification_plan",
+    "scenario": "ag-5",
+    "true_locus": "verification_plan"
+  },
+  "ag-06": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "ag-6",
+    "true_locus": "implementation"
+  },
+  "ag-07": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "ag-7",
+    "true_locus": "implementation"
+  },
+  "ag-08": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "ag-8",
+    "true_locus": "implementation"
+  },
+  "ag-09": {
+    "gate_infeasible": false,
+    "original_locus": "environment",
+    "scenario": "ag-9",
+    "true_locus": "environment"
+  },
+  "ag-10": {
+    "gate_infeasible": false,
+    "original_locus": "environment",
+    "scenario": "ag-10",
+    "true_locus": "environment"
+  },
+  "ag-11": {
+    "gate_infeasible": false,
+    "original_locus": "authority",
+    "scenario": "ag-11",
+    "true_locus": "authority"
+  },
+  "ag-12": {
+    "gate_infeasible": false,
+    "original_locus": "authority",
+    "scenario": "ag-12",
+    "true_locus": "authority"
+  },
+  "ag-13": {
+    "gate_infeasible": false,
+    "original_locus": "evidence_collection",
+    "scenario": "ag-13",
+    "true_locus": "evidence_collection"
+  },
+  "ag-14": {
+    "gate_infeasible": false,
+    "original_locus": "evidence_collection",
+    "scenario": "ag-14",
+    "true_locus": "evidence_collection"
+  },
+  "ag-15": {
+    "gate_infeasible": false,
+    "original_locus": "unknown",
+    "scenario": "ag-15",
+    "true_locus": "unknown"
+  },
+  "cep-01": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "cep-1",
+    "true_locus": "verifier"
+  },
+  "cep-02": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "cep-2",
+    "true_locus": "verifier"
+  },
+  "cep-03": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "cep-3",
+    "true_locus": "verifier"
+  },
+  "cep-04": {
+    "gate_infeasible": false,
+    "original_locus": "verification_plan",
+    "scenario": "cep-4",
+    "true_locus": "verification_plan"
+  },
+  "cep-05": {
+    "gate_infeasible": false,
+    "original_locus": "verification_plan",
+    "scenario": "cep-5",
+    "true_locus": "verification_plan"
+  },
+  "cep-06": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "cep-6",
+    "true_locus": "implementation"
+  },
+  "cep-07": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "cep-7",
+    "true_locus": "implementation"
+  },
+  "cep-08": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "cep-8",
+    "true_locus": "implementation"
+  },
+  "cep-09": {
+    "gate_infeasible": false,
+    "original_locus": "environment",
+    "scenario": "cep-9",
+    "true_locus": "environment"
+  },
+  "cep-10": {
+    "gate_infeasible": false,
+    "original_locus": "environment",
+    "scenario": "cep-10",
+    "true_locus": "environment"
+  },
+  "cep-11": {
+    "gate_infeasible": false,
+    "original_locus": "authority",
+    "scenario": "cep-11",
+    "true_locus": "authority"
+  },
+  "cep-12": {
+    "gate_infeasible": false,
+    "original_locus": "authority",
+    "scenario": "cep-12",
+    "true_locus": "authority"
+  },
+  "cep-13": {
+    "gate_infeasible": false,
+    "original_locus": "evidence_collection",
+    "scenario": "cep-13",
+    "true_locus": "evidence_collection"
+  },
+  "cep-14": {
+    "gate_infeasible": false,
+    "original_locus": "evidence_collection",
+    "scenario": "cep-14",
+    "true_locus": "evidence_collection"
+  },
+  "cep-15": {
+    "gate_infeasible": false,
+    "original_locus": "unknown",
+    "scenario": "cep-15",
+    "true_locus": "unknown"
+  },
+  "df-01": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "df-1",
+    "true_locus": "verifier"
+  },
+  "df-02": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "df-2",
+    "true_locus": "verifier"
+  },
+  "df-03": {
+    "gate_infeasible": false,
+    "original_locus": "verification_plan",
+    "scenario": "df-3",
+    "true_locus": "verification_plan"
+  },
+  "df-04": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "df-4",
+    "true_locus": "implementation"
+  },
+  "df-05": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "df-5",
+    "true_locus": "implementation"
+  },
+  "df-06": {
+    "gate_infeasible": false,
+    "original_locus": "environment",
+    "scenario": "df-6",
+    "true_locus": "environment"
+  },
+  "df-07": {
+    "gate_infeasible": false,
+    "original_locus": "authority",
+    "scenario": "df-7",
+    "true_locus": "authority"
+  },
+  "df-08": {
+    "gate_infeasible": false,
+    "original_locus": "evidence_collection",
+    "scenario": "df-8",
+    "true_locus": "evidence_collection"
+  },
+  "df-09": {
+    "gate_infeasible": false,
+    "original_locus": "declared_model",
+    "scenario": "df-9",
+    "true_locus": "declared_model"
+  },
+  "df-10": {
+    "gate_infeasible": false,
+    "original_locus": "declared_model",
+    "scenario": "df-10",
+    "true_locus": "declared_model"
+  },
+  "df-11": {
+    "gate_infeasible": false,
+    "original_locus": "projection",
+    "scenario": "df-11",
+    "true_locus": "projection"
+  },
+  "df-12": {
+    "gate_infeasible": false,
+    "original_locus": "projection",
+    "scenario": "df-12",
+    "true_locus": "projection"
+  },
+  "df-13": {
+    "gate_infeasible": false,
+    "original_locus": "unknown",
+    "scenario": "df-13",
+    "true_locus": "unknown"
+  },
+  "df-14": {
+    "gate_infeasible": false,
+    "original_locus": "unknown",
+    "scenario": "df-14",
+    "true_locus": "unknown"
+  },
+  "df-15": {
+    "gate_infeasible": false,
+    "original_locus": "unknown",
+    "scenario": "df-15",
+    "true_locus": "environment"
+  },
+  "sr-01": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "sr-1",
+    "true_locus": "verifier"
+  },
+  "sr-02": {
+    "gate_infeasible": true,
+    "gate_infeasible_reason": "verifier locus has no structural signal: rerun_verifier_isolated 'failed' overlaps with UNKNOWN cases",
+    "original_locus": "verifier",
+    "scenario": "sr-2",
+    "true_locus": "verifier"
+  },
+  "sr-03": {
+    "gate_infeasible": false,
+    "original_locus": "verification_plan",
+    "scenario": "sr-3",
+    "true_locus": "verification_plan"
+  },
+  "sr-04": {
+    "gate_infeasible": false,
+    "original_locus": "verification_plan",
+    "scenario": "sr-4",
+    "true_locus": "verification_plan"
+  },
+  "sr-05": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "sr-5",
+    "true_locus": "implementation"
+  },
+  "sr-06": {
+    "gate_infeasible": false,
+    "original_locus": "implementation",
+    "scenario": "sr-6",
+    "true_locus": "implementation"
+  },
+  "sr-07": {
+    "gate_infeasible": false,
+    "original_locus": "environment",
+    "scenario": "sr-7",
+    "true_locus": "environment"
+  },
+  "sr-08": {
+    "gate_infeasible": false,
+    "original_locus": "authority",
+    "scenario": "sr-8",
+    "true_locus": "authority"
+  },
+  "sr-09": {
+    "gate_infeasible": false,
+    "original_locus": "evidence_collection",
+    "scenario": "sr-9",
+    "true_locus": "evidence_collection"
+  },
+  "sr-10": {
+    "gate_infeasible": false,
+    "original_locus": "evidence_collection",
+    "scenario": "sr-10",
+    "true_locus": "evidence_collection"
+  },
+  "sr-11": {
+    "gate_infeasible": false,
+    "original_locus": "declared_model",
+    "scenario": "sr-11",
+    "true_locus": "declared_model"
+  },
+  "sr-12": {
+    "gate_infeasible": false,
+    "original_locus": "declared_model",
+    "scenario": "sr-12",
+    "true_locus": "declared_model"
+  },
+  "sr-13": {
+    "gate_infeasible": false,
+    "original_locus": "unknown",
+    "scenario": "sr-13",
+    "true_locus": "unknown"
+  },
+  "sr-14": {
+    "gate_infeasible": false,
+    "original_locus": "unknown",
+    "scenario": "sr-14",
+    "true_locus": "unknown"
+  },
+  "sr-15": {
+    "gate_infeasible": false,
+    "original_locus": "unknown",
+    "scenario": "sr-15",
+    "true_locus": "unknown"
+  }
+}

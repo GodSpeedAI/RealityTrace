@@ -1,0 +1,98 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_fixture_integrity"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 586,
+      "latency_ms": 9940.2,
+      "prompt_tokens": 978,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-side/configuration fault or an environment/toolchain availability fault\", \"sele"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 598,
+      "latency_ms": 10738.9,
+      "prompt_tokens": 552,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"Whether the failure is caused by a missing/misassigned environment artifact (AST_GREP_CONFIG points to a nonexistent config) "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 69266.8,
+      "prompt_tokens": 498,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1579,
+      "latency_ms": 28937.6,
+      "prompt_tokens": 282,
+      "response_preview": "Candidates: environment, verifier, verification_plan\nExcluded: implementation(untested), projection(untested), declared_model(untested), evidence_collection(meta-only), authority(untested), unknown(su"
+    }
+  ],
+  "case_id": "ag-09",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_fixture_integrity": {
+      "checked": [
+        "tests/fixtures/example.py"
+      ],
+      "missing": [],
+      "ok": [
+        "tests/fixtures/example.py"
+      ],
+      "stale": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "AST_GREP_CONFIG=/nonexistent-corpus-config.toml",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline --message-format json corpus_scenario"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_fixture_integrity",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "environment",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "3996488c20975550",
+  "unknown_premature": 0
+}

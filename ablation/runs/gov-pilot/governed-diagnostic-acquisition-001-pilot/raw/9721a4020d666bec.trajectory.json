@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 559,
+      "latency_ms": 11002.0,
+      "prompt_tokens": 678,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier/environment crash versus a failure det"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 555,
+      "latency_ms": 10459.5,
+      "prompt_tokens": 258,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The missing source symbols strongly indicate the expected implementation is absent, though a probing/path mismatch could still theoret"
+    }
+  ],
+  "case_id": "ag-06",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "missing": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_source_symbols",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "9721a4020d666bec",
+  "unknown_premature": 0
+}

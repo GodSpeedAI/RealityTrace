@@ -1,0 +1,127 @@
+{
+  "aggregate": {
+    "G": {
+      "A_c": 0.08333333333333333,
+      "A_select_any": 0.0,
+      "A_select_first": 0.0,
+      "A_u": 1.0,
+      "A_use": 0.0,
+      "acquisition_invocation_rate": 0.26666666666666666,
+      "avg_payment": 0.6666666666666666,
+      "avg_tokens": 7476.333333333333,
+      "n": 15,
+      "premature_attempts_total": 5,
+      "unknown_premature_total": 0,
+      "unsupported_concrete": 0
+    },
+    "O": {
+      "A_c": 0.5,
+      "A_select_any": 1.0,
+      "A_select_first": 1.0,
+      "A_u": 1.0,
+      "A_use": 0.5,
+      "acquisition_invocation_rate": 1.0,
+      "avg_payment": 3.2,
+      "avg_tokens": 3434.6,
+      "n": 15,
+      "premature_attempts_total": 10,
+      "unknown_premature_total": 30,
+      "unsupported_concrete": 0
+    },
+    "V": {
+      "A_c": 0.16666666666666666,
+      "A_select_any": 0.0,
+      "A_select_first": 0.0,
+      "A_u": 0.3333333333333333,
+      "A_use": 0.0,
+      "acquisition_invocation_rate": 0.13333333333333333,
+      "avg_payment": 0.26666666666666666,
+      "avg_tokens": 5212.866666666667,
+      "n": 15,
+      "premature_attempts_total": 0,
+      "unknown_premature_total": 0,
+      "unsupported_concrete": 2
+    }
+  },
+  "failure_loci_G": {
+    "ACTION_SELECTION_FAILURE": 3,
+    "SUFFICIENCY_DETECTION_FAILURE": 8
+  },
+  "invocation_gap_pp": 13.333333333333334,
+  "paired": {
+    "G_vs_V_correct_determinate": {
+      "G_rate": 0.08333333333333333,
+      "V_rate": 0.16666666666666666,
+      "ci_95": [
+        -33.33333333333333,
+        16.666666666666664
+      ],
+      "diff": -0.08333333333333333,
+      "diff_pp": -8.333333333333332,
+      "mcnemar_b": 1,
+      "mcnemar_c": 2,
+      "mcnemar_p": 1.0,
+      "n_paired": 12
+    },
+    "G_vs_V_invocation": {
+      "G_rate": 0.26666666666666666,
+      "V_rate": 0.13333333333333333,
+      "ci_95": [
+        -20.0,
+        46.666666666666664
+      ],
+      "diff": 0.13333333333333333,
+      "diff_pp": 13.333333333333334,
+      "mcnemar_b": 4,
+      "mcnemar_c": 2,
+      "mcnemar_p": 0.6875,
+      "n_paired": 15
+    },
+    "O_vs_G_correct_determinate": {
+      "G_rate": 0.08333333333333333,
+      "O_rate": 0.5,
+      "ci_95": [
+        8.333333333333332,
+        75.0
+      ],
+      "diff": 0.4166666666666667,
+      "diff_pp": 41.66666666666667,
+      "mcnemar_b": 6,
+      "mcnemar_c": 1,
+      "mcnemar_p": 0.125,
+      "n_paired": 12
+    },
+    "O_vs_G_use": {
+      "G_rate": 0,
+      "O_rate": 0,
+      "ci_95": [
+        0,
+        0
+      ],
+      "diff": 0,
+      "diff_pp": 0,
+      "mcnemar_b": 0,
+      "mcnemar_c": 0,
+      "mcnemar_p": 1.0,
+      "n_paired": 0
+    }
+  },
+  "stability": {
+    "G": {
+      "A_c_pstdev": 0.11785113019775792
+    },
+    "O": {
+      "A_c_pstdev": 0.0
+    },
+    "V": {
+      "A_c_pstdev": 0.11785113019775792
+    }
+  },
+  "verdicts": {
+    "H-GA-INVOCATION": "FAIL",
+    "H-GA-SELECTION": "FAIL",
+    "H-GA-UTILIZATION": "FAIL",
+    "H-GOVERNED-ACQUISITION": "NOT_SUPPORTED",
+    "sub_pass_count": 0
+  }
+}

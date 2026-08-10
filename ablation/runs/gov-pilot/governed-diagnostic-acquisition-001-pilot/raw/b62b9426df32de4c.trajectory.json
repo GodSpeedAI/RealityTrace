@@ -1,0 +1,60 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 149,
+      "latency_ms": 3067.8,
+      "prompt_tokens": 683,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a defect in the verifier itself or a genuine implementation failure cannot be determ"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 908,
+      "latency_ms": 13471.4,
+      "prompt_tokens": 278,
+      "response_preview": "{\"candidate_loci\": [\"declared_model\"], \"unresolved_distinction\": \"The verifier is correctly reporting a grammar error in the semantic model artifact; the undefined subject role indicates an invalid de"
+    }
+  ],
+  "case_id": "sr-11",
+  "condition": "O",
+  "final_locus": "declared_model",
+  "observations": {
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Parse failed for .sea/interaction/interaction-model.sea: resolved closure failed graph construction: Grammar error: Undefined subject role 'NoSuchRoleForCorpus'"
+      ],
+      "exit_code": 1,
+      "model_file": ".sea/interaction/interaction-model.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "b62b9426df32de4c",
+  "unknown_premature": 1
+}

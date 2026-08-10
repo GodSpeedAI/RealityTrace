@@ -1,0 +1,145 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 960,
+      "latency_ms": 13179.5,
+      "prompt_tokens": 677,
+      "response_preview": "Looking at the retrieval context for case cep-11:\n\n**1. Candidate loci enumeration:**\n\n- **verifier**: `verifier_exit: 1` indicates the verifier process exited with a non-zero code, which could mean t"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 128,
+      "latency_ms": 3817.1,
+      "prompt_tokens": 319,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The restrictive permissions on the fixture file explain the empty evidence vector: evidence collection could not read it. However"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1092,
+      "latency_ms": 18022.6,
+      "prompt_tokens": 251,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"implementation\"], \"unresolved_distinction\": \"The probe confirms the target file exists, but does not reveal whether the restrictive fixture permissions were caused "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 898,
+      "latency_ms": 13955.9,
+      "prompt_tokens": 235,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"implementation\"], \"unresolved_distinction\": \"Still unclear whether restrictive fixture permissions stem from environment provisioning or implementation setup code; "
+    }
+  ],
+  "case_id": "cep-11",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "0",
+          "path": "tests/fixtures/sample_settlement_recorded.json",
+          "readable": false,
+          "restrictive": true
+        },
+        {
+          "mode": "644",
+          "path": "tests/test_import.py",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "tests/fixtures/sample_settlement_recorded.json",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "c2c28811a23ffdeb",
+  "unknown_premature": 3
+}
