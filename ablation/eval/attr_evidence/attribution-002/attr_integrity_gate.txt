@@ -1,0 +1,14 @@
+== §23.2 integrity gate (attribution-002) ==
+  [PASS] 360 intended units — 360
+  [PASS] all unit identities unique
+  [PASS] 2 methods x 60 cases x 3 reps — matrix construction verified
+  [PASS] resolved model uniform glm-5.2 — {'glm-5.2'}
+  [PASS] no answer-key access — probe nothing
+  [PASS] all outputs committed before scoring
+  [PASS] raw-output hashes verify
+  [PASS] usage sidecars present
+  [PASS] 360 committed/scored units — {'scored': 360}
+  [PASS] no corpus/key mutation
+  [PASS] canonical attribution-001 untouched (0 units) — manifest.jsonl size 0
+
+== §23.2 gate: 11/11 PASS, 0 FAIL ==
