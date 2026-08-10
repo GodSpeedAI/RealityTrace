@@ -1,0 +1,4 @@
+Candidates: environment, verifier, evidence_collection
+Unresolved: Whether exit code 127 originates from the OS/shell failing to locate the verifier binary (environment) versus the verifier process itself returning 127 (verifier defect).
+Excluded: verifier (127 is a shell-level signal meaning command-not-found, not a verifier logic output), evidence_collection (evidence artifact was successfully recorded with full metadata), implementation (exit 127 precedes any subject execution), declared_model (insufficient basis), authority (no indication), projection (no indication), verification_plan (no indication)
+Locus: environment

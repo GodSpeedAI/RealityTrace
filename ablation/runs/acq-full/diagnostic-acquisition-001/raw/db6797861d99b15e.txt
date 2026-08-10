@@ -1,0 +1,32 @@
+**Diagnostic Decomposition:**
+
+**1. Candidate loci enumerated:**
+- **implementation**: The sea-forge-core code produces an incorrect value (2) where 3 was expected.
+- **verifier**: The test assertion in `corpus_sr1.rs` has an incorrect expected value (expects 3 when 2 is actually correct).
+- **verification_plan**: The specification encoded in the corpus scenario mandates the wrong expected behavior.
+- **environment**: Some external factor caused the wrong computation.
+
+**2. Key unresolved distinction:**
+Whether the expected value `3` in the assertion represents a correct specification (→ implementation bug producing `2`) or an incorrect expectation (→ verifier or plan bug).
+
+**3. Evidence assessment per candidate:**
+- **implementation**: The test `test_corpus_scenario_assertion_bug` is a named corpus test specifically targeting a known assertion bug scenario. The implementation's computation yielded `2`; the test expected `3`. The test name signals the implementation is the intended subject of scrutiny.
+- **verifier**: No independent evidence confirms the assertion's expected value of `3` is wrong. The test compiled and executed without structural errors—only the value mismatch triggered failure.
+- **verification_plan**: No evidence shows the plan or specification itself is contradictory or malformed.
+- **environment**: The build finished successfully (`"success":true`), all dependencies compiled fresh, the test binary executed and produced a deterministic assertion failure—not a crash, timeout, or missing-resource error.
+
+**4. Exclusion by evidence:**
+- **environment** — excluded: build succeeded, clean assertion mismatch, no infrastructural failure.
+- **authority** — excluded: no authorization or signing failure in evidence.
+- **evidence_collection** — excluded: full build logs, test output, and exit code (101) are present and coherent.
+- **projection** — excluded: artifacts compiled and linked; failure is a value mismatch, not a build/projection error.
+- **verifier** — excluded: test is a named corpus regression test (`test_corpus_scenario_assertion_bug`); no evidence of an erroneous expectation; the test structure is sound.
+- **verification_plan** — excluded: no evidence of malformed or contradictory plan; the scenario ran to completion and produced a clear, specific mismatch.
+
+**5. Settlement:**
+The implementation produced a value (`2`) that does not match the expected corpus-specified value (`3`), in a test explicitly named to catch an assertion bug. All alternative loci are excluded by available evidence.
+
+Candidates: implementation, verifier, verification_plan, environment
+Unresolved: Whether expected value 3 is the correct specification or an erroneous test expectation
+Excluded: environment (build-ok), authority (none), evidence_collection (present), projection (linked), verifier (corpus-named), verification_plan (ran-clean)
+Locus: implementation

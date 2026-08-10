@@ -1,0 +1,4 @@
+Candidates: environment, verifier, evidence_collection
+Unresolved: Whether verifier_exit=127 reflects a missing/misconfigured verifier binary in the environment, a broken verifier itself, or an evidence-collection failure capturing a shell-level error rather than the verifier's actual behavior.
+Excluded: projection(no evidence), implementation(no evidence), authority(no evidence), declared_model(not eligible without explicit exclusions), verification_plan(no evidence)
+Locus: unknown

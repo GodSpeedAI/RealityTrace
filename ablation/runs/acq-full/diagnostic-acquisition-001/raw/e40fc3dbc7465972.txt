@@ -1,0 +1,4 @@
+Candidates: verifier, environment, implementation, evidence_collection
+Unresolved: Whether verifier_exit=2 indicates a verifier/harness fault, an environment/execution problem, an implementation-triggered pytest collection failure, or merely missing captured diagnostic detail.
+Excluded: none
+Locus: unknown

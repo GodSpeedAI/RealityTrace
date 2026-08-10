@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: whether verifier_exit=101 reflects a verifier crash, invalid implementation output, or an environment failure
+Excluded: none
+Locus: unknown

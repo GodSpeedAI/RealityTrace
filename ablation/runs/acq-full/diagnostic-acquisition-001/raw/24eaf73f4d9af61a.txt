@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment
+Unresolved: Whether the nonzero verifier exit reflects a real implementation defect, a faulty verifier/plan, or an environment problem.
+Excluded: none
+Locus: unknown

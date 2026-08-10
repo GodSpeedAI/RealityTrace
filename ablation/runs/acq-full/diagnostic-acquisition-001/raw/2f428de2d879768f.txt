@@ -1,0 +1,10 @@
+Looking at the evidence for case ag-12:
+
+- **SQL** records `verifier_exit: 101` — the verifier process itself exited with a non-zero error code (101 typically indicates a panic or crash).
+- **FTS** is empty — no textual evidence was captured.
+- **Vector** is all zeros — no meaningful content was encoded.
+- **Graph** confirms the case and evidence artifact were registered, so provenance metadata exists, but no substantive evidence content was produced.
+
+The zero vector and empty FTS indicate that the verifier crashed before it could produce or emit any meaningful evaluation output. The root cause is the verifier itself faulting (exit 101), not a problem with the subject implementation, plan, or environment.
+
+Locus: verifier

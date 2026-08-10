@@ -1,0 +1,4 @@
+Candidates: implementation, verifier, verification_plan, evidence_collection
+Unresolved: verifier_exit=1 establishes only that verification ended unsuccessfully; it does not establish whether the cause was failing repo behavior, verifier malfunction, plan/input mismatch, or incomplete captured evidence
+Excluded: none
+Locus: unknown

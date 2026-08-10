@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: The specific root cause of the verifier exiting with code 101 (e.g., verifier crash, implementation runtime error, or environment termination), as there are no logs or traces to diagnose the failure.
+Excluded: none
+Locus: unknown

@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether verifier_exit=101 reflects a fault in the verifier itself, a failure triggered by the implementation under verification, an environment failure, or incomplete captured evidence.
+Excluded: none
+Locus: unknown

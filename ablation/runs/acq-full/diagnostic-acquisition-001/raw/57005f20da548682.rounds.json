@@ -1,0 +1,29 @@
+{
+  "actions": [],
+  "final_locus": "unknown",
+  "observations": [],
+  "payment_used": 0,
+  "rounds": [
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 94591.5,
+      "parse_failed": true,
+      "prompt_tokens": 971,
+      "round": 1
+    },
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 90045.8,
+      "parse_failed": true,
+      "prompt_tokens": 147,
+      "round": 2
+    },
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 85520.6,
+      "parse_failed": true,
+      "prompt_tokens": 147,
+      "round": 3
+    }
+  ]
+}

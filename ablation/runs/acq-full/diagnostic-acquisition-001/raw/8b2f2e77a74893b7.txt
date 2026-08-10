@@ -1,0 +1,4 @@
+Candidates: verifier, evidence_collection, implementation, environment
+Unresolved: Whether exit code 101 reflects an internal verifier fault (crash/panic) versus an abnormal exit triggered by malformed implementation output or environment conditions — the evidence provides no logs, stderr, or content to distinguish these.
+Excluded: none — no candidate can be excluded with stated evidence; the empty FTS, zero vector, and sole verifier_exit value are equally consistent with multiple loci.
+Locus: unknown

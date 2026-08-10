@@ -1,0 +1,9 @@
+Looking at this case:
+
+- **verifier_exit: 101** — This is a non-standard, high exit code that typically indicates the verifier itself crashed or encountered an internal error (not a normal "implementation produced wrong output" signal, which would typically be exit code 1).
+- **FTS is empty** and **vector is all zeros** — No meaningful evidence features were extracted, consistent with the verifier failing before or during evidence processing.
+- The provenance chain (graph edges, SQL record) is intact, so the failure isn't in data linkage or environment setup.
+
+The verifier could not complete its run, producing exit 101 and leaving behind only zeroed/null evidence artifacts. The causal layer is the verifier itself.
+
+Locus: verifier

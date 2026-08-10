@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, unknown
+Unresolved: Whether the verifier exited with code 101 due to an internal fault (verifier), unhandled bad input from the model (implementation), or another untracked issue.
+Excluded: none (no evidence to rule out any locus)
+Locus: unknown

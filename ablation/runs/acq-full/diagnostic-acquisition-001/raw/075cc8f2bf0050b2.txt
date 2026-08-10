@@ -1,0 +1,11 @@
+Looking at the evidence for case cep-14:
+
+- **SQL**: `verifier_exit: 1` — the verifier ran and returned a failure exit code.
+- **stdin_format**: `pytest-progress` — standard test progress was fed to the verifier, indicating the verification pipeline executed normally up to and including the verifier.
+- **FTS**: Empty — no anomalous content suggesting a verifier or environment error message.
+- **Vector**: All zeros — no distinctive error signature.
+- **Graph**: Clean provenance chain (case → repo, case → evidence) with no broken links.
+
+The verifier executed, processed pytest progress output, and returned exit code 1, which is the conventional signal that the subject under test did not pass the checks. No evidence points to the verifier itself crashing, a malformed plan, missing authority, or a broken environment. The most direct causal layer is the artifact being verified.
+
+Locus: implementation

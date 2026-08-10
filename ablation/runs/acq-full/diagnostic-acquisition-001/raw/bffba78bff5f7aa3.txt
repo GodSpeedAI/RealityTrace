@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, projection, implementation, environment, evidence_collection
+Unresolved: Whether verifier_exit=101 reflects an internal verifier/harness failure versus an implementation-produced invalid result; no stdout/stderr/logs/artifact contents are available.
+Excluded: none
+Locus: unknown

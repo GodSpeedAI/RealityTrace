@@ -1,0 +1,10 @@
+Looking at the evidence for case df-07:
+
+- **SQL** records `verifier_exit: 101` — a crash/panic exit code, not a normal failure.
+- **FTS** is completely empty — no textual evidence content was produced.
+- **Vector** is all zeros — no meaningful embedding was generated.
+- **Graph** shows only structural metadata links.
+
+The provenance chain is clear: the verifier itself crashed (exit 101), which prevented any meaningful evidence from being generated downstream (empty FTS, zero vector). The metadata (SQL) was captured, but the verifier's panic meant no actual verification output or evidence content existed to collect. The root causal layer is the verifier's own failure, not a downstream collection issue.
+
+Locus: verifier

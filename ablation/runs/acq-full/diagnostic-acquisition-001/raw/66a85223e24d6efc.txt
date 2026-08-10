@@ -1,0 +1,4 @@
+Candidates: implementation, verifier, unknown
+Unresolved: Whether the non-zero verifier exit resulted from a defect in the subject under test (implementation) or an internal error within the verifier process itself.
+Excluded: none (insufficient evidence to exclude any candidate)
+Locus: unknown

@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: whether the nonzero verifier exit was caused by the system under test versus verifier/infra/evidence capture
+Excluded: none
+Locus: unknown

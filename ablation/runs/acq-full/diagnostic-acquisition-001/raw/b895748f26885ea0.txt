@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether `verifier_exit=1` reflects a verifier-side failure or a correctly detected invalid artifact/implementation cannot be determined from the zero-vector artifact and absence of output/logs.
+Excluded: none
+Locus: unknown

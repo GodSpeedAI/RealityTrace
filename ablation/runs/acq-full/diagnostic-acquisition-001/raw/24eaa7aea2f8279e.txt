@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, unknown
+Unresolved: Whether verifier_exit=101 reflects a verifier-side failure, an implementation-under-test failure, or an evidence-collection capture error
+Excluded: verifier (unproven), implementation (unproven), evidence_collection (unproven), projection (no evidence), verification_plan (no evidence), authority (no evidence), declared_model (no evidence), environment (no evidence)
+Locus: unknown

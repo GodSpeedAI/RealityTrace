@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment
+Unresolved: whether verifier_exit=1 reflects a genuine implementation defect versus a verifier/plan/environment failure
+Excluded: none
+Locus: unknown

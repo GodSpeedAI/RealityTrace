@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether the verifier itself crashed (verifier fault) or the verifier correctly ran but detected an implementation failure, versus an infrastructure/environment problem causing the abnormal exit — all we know is exit code 101 with no logs, output, or error messages.
+Excluded: none — no evidence distinguishes any candidate
+Locus: unknown

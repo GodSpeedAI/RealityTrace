@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether verifier_exit=1 indicates a crash within the verifier itself, a malformed input from the implementation/declared_model, or a failure during evidence capture (suggested by the all-zero vector)
+Excluded: <none — no evidence in the retrieval context rules out any candidate; the artifact content is not surfaced, no error logs are shown, and the all-zero vector is ambiguous>
+Locus: unknown

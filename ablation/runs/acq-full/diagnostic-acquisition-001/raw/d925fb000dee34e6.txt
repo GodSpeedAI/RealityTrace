@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment, evidence_collection
+Unresolved: whether verifier_exit=1 reflects a verifier/plan/evidence-processing fault versus an actual implementation failure under pytest-progress
+Excluded: none
+Locus: unknown

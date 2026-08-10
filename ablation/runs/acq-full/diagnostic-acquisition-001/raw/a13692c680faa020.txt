@@ -1,0 +1,4 @@
+Candidates: implementation, verification_plan, declared_model
+Unresolved: Whether the computed value (2) is incorrect due to a bug in the code under test, or whether the expected value (3) encoded in the test assertion is itself wrong — the retrieval context provides no source for either the test body (`corpus_sr1.rs` line 3) or the implementation under test, so the semantic origin of the mismatch cannot be traced.
+Excluded: environment (build-finished success:true; all deps compiled fresh), verifier (cargo test compiled and executed correctly; exit 101 is normal test-failure code), evidence_collection (full build log + stdout captured), authority (no signing/permission errors), projection (test artifacts compiled and linked correctly)
+Locus: unknown

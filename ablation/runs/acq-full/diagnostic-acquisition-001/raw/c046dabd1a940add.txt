@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether verifier_exit=101 reflects a verifier crash, an implementation failure detected by the verifier, or an environment-level fault
+Excluded: evidence_collection(silence), authority(absence), projection(absence), verification_plan(absence), declared_model(absence)
+Locus: unknown

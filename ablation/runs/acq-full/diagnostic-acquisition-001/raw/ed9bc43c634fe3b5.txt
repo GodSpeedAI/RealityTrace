@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether `verifier_exit: 101` reflects a crash originating inside the verifier process itself (e.g., a panic/bug in verifier code) or an abnormal termination propagated from the implementation under test or an environment fault.
+Excluded: (none)
+Locus: unknown

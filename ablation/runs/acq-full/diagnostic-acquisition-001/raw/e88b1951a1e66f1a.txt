@@ -1,0 +1,20 @@
+## Analysis of Case ag-12
+
+**Key evidence from retrieval context:**
+
+| Field | Value |
+|---|---|
+| `verifier_exit` | **101** |
+| `stdin_format` | car-go-json |
+| vector | all zeros (no semantic signal captured) |
+| FTS | empty |
+
+## Diagnosis
+
+Exit code **101** is the standard Rust panic/unwinding exit code. The recorded `verifier_exit` field reflects the exit status of the *verifier process itself*. A clean pass/fail verdict typically uses exit codes 0/1. Exit code 101 indicates the **verifier process crashed** (panicked) before or during its evaluation — it never reached a normal verdict.
+
+The all-zero vector and empty FTS slot further confirm that no meaningful evaluation signal was produced, consistent with an early verifier-level crash rather than a judgment about any artifact's correctness.
+
+The failure is in the verifier layer itself.
+
+Locus: verifier

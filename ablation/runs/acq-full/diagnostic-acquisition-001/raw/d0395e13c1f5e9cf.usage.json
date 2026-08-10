@@ -1,0 +1,1 @@
+{"actions_taken": ["inspect_verifier_config", "validate_semantic_model"], "completion_tokens": 0, "condition": "D2", "cost": 0.0, "latency_ms": 34484.8, "payment_used": 4, "prompt_tokens": 0, "reasoning_tokens": 1443, "resolved_model": "glm-5.2", "retries": 0, "rounds": 3, "total_tokens": 3766}

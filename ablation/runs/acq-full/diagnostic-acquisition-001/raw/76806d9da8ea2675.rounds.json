@@ -1,0 +1,27 @@
+{
+  "actions": [
+    "inspect_environment"
+  ],
+  "final_locus": "implementation",
+  "observations": [
+    "[inspect_environment]: {\"env_assignments\": \"(none)\", \"path\": \"default\", \"tmpdir\": \"default\", \"toolchain\": \"available\"}"
+  ],
+  "payment_used": 1,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "completion_tokens": 983,
+      "cost": 1,
+      "latency_ms": 14788.2,
+      "prompt_tokens": 974,
+      "round": 1
+    },
+    {
+      "completion_tokens": 127,
+      "latency_ms": 3020.0,
+      "prompt_tokens": 486,
+      "round": 2,
+      "settled": true
+    }
+  ]
+}

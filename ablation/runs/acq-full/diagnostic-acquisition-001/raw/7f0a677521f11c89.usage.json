@@ -1,0 +1,1 @@
+{"completion_tokens": 3943, "condition": "D1", "cost": 0.0, "latency_ms": 80171.5, "prompt_tokens": 21828, "reasoning_tokens": 3875, "resolved_model": "glm-5.2", "retries": 0, "rounds": 1, "total_tokens": 25771}

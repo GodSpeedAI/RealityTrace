@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: Whether the verifier's exit code 101 (Rust panic) was triggered by a defect in the verifier code itself, by unexpected/malformed output from the implementation under test, or by an environmental factor during verification execution.
+Excluded: evidence_collection (present — FTS artifacts and SQL metadata both exist), projection (no evidence of mapping defect), verification_plan (no evidence of plan-level error), declared_model (F-28 bar not met — cannot explicitly exclude verifier/implementation/environment)
+Locus: unknown

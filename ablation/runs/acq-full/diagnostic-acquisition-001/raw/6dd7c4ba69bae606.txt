@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: Whether the verifier's panic (exit 101) stems from an internal verifier defect or from unrecoverable runtime input produced by the implementation under test
+Excluded: environment (all compiler artifacts marked fresh — build phase completed successfully, no evidence of toolchain or dependency failures)
+Locus: verifier

@@ -1,0 +1,10 @@
+Looking at the provenance for case ag-02:
+
+1. **SQL record** shows `verifier_exit: 101` — a non-zero, abnormal exit code from the verifier process.
+2. **Vector evidence** is entirely zeroed out (all 64 dimensions = 0.0), meaning no meaningful evidence content was captured.
+3. **FTS** section is completely empty — no textual evidence was indexed.
+4. **Graph** confirms an evidence artifact was created (`01KZH8DTG477QJ3DH8QP81CANP`), but the artifact has no real content.
+
+The pattern is clear: the verifier process itself crashed or errored out (exit 101), which prevented any meaningful evidence from being produced or collected. The empty evidence (zero vector, no FTS) is a downstream consequence of the verifier failing, not an independent collection problem. An evidence record exists but is hollow, which is consistent with the verifier process aborting before it could emit real evidence.
+
+Locus: verifier

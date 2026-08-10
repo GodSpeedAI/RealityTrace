@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: The root cause of the verifier crashing with exit code 101 and whether the all-zero vector indicates a systemic failure in evidence collection or an empty/failed embedding of an otherwise valid text record.
+Excluded: none
+Locus: unknown

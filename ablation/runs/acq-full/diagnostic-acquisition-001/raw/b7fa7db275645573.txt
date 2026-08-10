@@ -1,0 +1,9 @@
+Looking at the evidence for sr-10:
+
+- **verifier_exit: 101** — A non-zero, panic-style exit code (101 is the conventional Rust panic exit code), indicating the verifier crashed.
+- **stdin_format: "car-go-json"** — This is malformed; it should almost certainly be **"cargo-json"** (Cargo, the Rust build tool). The misplaced hyphen means the verifier received an unrecognized format specification.
+- The FTS is empty and the vector is all zeros — consistent with the verifier crashing before meaningful processing could occur.
+
+The root cause is the malformed `stdin_format` in the scenario/plan configuration ("car-go-json" instead of "cargo-json"), which caused the verifier to panic on an unexpected input format. The plan defined how input should be delivered, and that definition was wrong.
+
+Locus: verification_plan

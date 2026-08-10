@@ -1,0 +1,1 @@
+{"actions_taken": ["inspect_environment", "inspect_verifier_config"], "completion_tokens": 0, "condition": "D2", "cost": 0.0, "latency_ms": 95910.1, "payment_used": 2, "prompt_tokens": 0, "reasoning_tokens": 5141, "resolved_model": "glm-5.2", "retries": 0, "rounds": 3, "total_tokens": 7499}

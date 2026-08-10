@@ -1,0 +1,5 @@
+Locus: implementation
+Actions: inspect_verifier_config
+Payment: 1/7
+Rounds: 2
+Observation[0]: [inspect_verifier_config]: {"direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts", "env_assignments": "(none)", "evidence_types": ["test_result", "execution_log"], "verifier": "cargo-test", "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_assertion_bug"}

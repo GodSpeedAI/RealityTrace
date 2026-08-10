@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, declared_model
+Unresolved: Whether verifier_exit=1 reflects an implementation failure, a verifier fault, an environment error, or a declared-model mismatch.
+Excluded: none
+Locus: unknown

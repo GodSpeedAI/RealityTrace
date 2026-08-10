@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **FTS**: Empty — no text evidence captured
+- **Vector**: All zeros — no meaningful embedding
+- **SQL**: Records `verifier_exit: 101`, indicating the verifier itself crashed/panicked (exit code 101)
+- **Graph**: Only basic structural metadata
+
+The primary diagnostic signal is `verifier_exit: 101`, which is a non-zero exit indicating the verifier process failed abnormally. The empty FTS and zero-vector are downstream artifacts of the verifier not completing its run. The evidence record exists but the verifier could not process it.
+
+Locus: verifier

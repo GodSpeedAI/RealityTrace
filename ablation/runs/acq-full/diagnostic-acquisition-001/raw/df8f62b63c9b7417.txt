@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection
+Unresolved: whether verifier_exit 101 reflects a verifier-internal crash, an implementation failure surfaced by the verifier, or missing/malformed captured evidence
+Excluded: none
+Locus: unknown

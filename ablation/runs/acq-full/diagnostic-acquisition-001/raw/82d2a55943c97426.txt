@@ -1,0 +1,4 @@
+Candidates: verifier, evidence_collection, implementation, verification_plan, unknown
+Unresolved: Whether verifier_exit=101 indicates the verifier itself crashed (verifier fault), whether it was a deliberate non-zero exit triggered by an implementation or plan problem, or whether the evidence was simply never captured—all are consistent with the available data.
+Excluded: environment(no evidence), authority(no evidence), projection(no evidence), declared_model(no evidence)
+Locus: unknown

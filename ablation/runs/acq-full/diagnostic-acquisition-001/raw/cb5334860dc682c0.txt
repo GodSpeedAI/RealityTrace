@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether verifier_exit=1 indicates a verifier-internal fault, a correctly-detected implementation defect, an evidence-capture gap, or an environmental problem — the context provides no error text, logs, or artifact content to disambiguate.
+Excluded: none — all-zero vector, empty FTS, and metadata-only SQL establish nothing about any specific locus; no alternative can be affirmatively excluded by evidence.
+Locus: unknown

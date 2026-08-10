@@ -1,0 +1,37 @@
+{
+  "actions": [
+    "inspect_environment",
+    "inspect_verifier_config"
+  ],
+  "final_locus": "unknown",
+  "observations": [
+    "[inspect_environment]: {\"env_assignments\": \"(none)\", \"path\": \"default\", \"tmpdir\": \"default\", \"toolchain\": \"available\"}",
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/domainforge && cargo test --offline --message-format json -p domainforge-core corpus\"}"
+  ],
+  "payment_used": 2,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "completion_tokens": 1009,
+      "cost": 1,
+      "latency_ms": 17503.9,
+      "prompt_tokens": 981,
+      "round": 1
+    },
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 2942,
+      "cost": 1,
+      "latency_ms": 61336.9,
+      "prompt_tokens": 533,
+      "round": 2
+    },
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 86139.6,
+      "parse_failed": true,
+      "prompt_tokens": 566,
+      "round": 3
+    }
+  ]
+}

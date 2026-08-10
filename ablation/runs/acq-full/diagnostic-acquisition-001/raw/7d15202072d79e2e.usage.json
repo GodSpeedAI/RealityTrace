@@ -1,0 +1,1 @@
+{"actions_taken": [], "completion_tokens": 0, "condition": "D2", "cost": 0.0, "latency_ms": 62148.1, "payment_used": 0, "prompt_tokens": 0, "reasoning_tokens": 3217, "resolved_model": "glm-5.2", "retries": 0, "rounds": 1, "total_tokens": 4304}

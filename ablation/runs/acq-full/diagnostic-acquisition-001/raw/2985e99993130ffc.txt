@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, verification_plan
+Unresolved: whether verifier_exit=2 was caused by a verifier fault, an implementation failure, an environment problem, or an invalid plan
+Excluded: none
+Locus: unknown

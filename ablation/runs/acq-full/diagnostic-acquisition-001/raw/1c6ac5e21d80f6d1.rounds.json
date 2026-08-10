@@ -1,0 +1,29 @@
+{
+  "actions": [],
+  "final_locus": "evidence_collection",
+  "observations": [],
+  "payment_used": 0,
+  "rounds": [
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 82191.1,
+      "parse_failed": true,
+      "prompt_tokens": 978,
+      "round": 1
+    },
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 83239.3,
+      "parse_failed": true,
+      "prompt_tokens": 147,
+      "round": 2
+    },
+    {
+      "completion_tokens": 521,
+      "latency_ms": 12001.3,
+      "prompt_tokens": 147,
+      "round": 3,
+      "settled": true
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+Looking at this case:
+- **stdin_format**: `df-validate` (a data-frame validation scenario)
+- **verifier_exit**: 1 (verifier ran and reported failure)
+- **Evidence vector**: all zeros, FTS empty — sparse but the verifier did execute and produce a verdict
+
+The verifier executed and returned a non-zero exit code, indicating it ran the validation successfully and found the output non-conformant. In a `df-validate` scenario, the verifier checks the implementation's produced DataFrame against expected format/contract. The failure is that the implementation's output did not pass validation — the verifier correctly caught a defect in the artifact being validated.
+
+Locus: implementation

@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, verification_plan
+Unresolved: Whether verifier_exit=101 indicates the verifier itself crashed/faulted, or the verifier correctly detected and reported an implementation defect via that exit code, or an environment-level fault triggered the abnormal exit.
+Excluded: none — no candidate can be excluded because the evidence (a single exit code and an all-zero vector) does not differentiate among them.
+Locus: unknown

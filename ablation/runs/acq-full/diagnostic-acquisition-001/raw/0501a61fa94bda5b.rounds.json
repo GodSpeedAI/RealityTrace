@@ -1,0 +1,34 @@
+{
+  "actions": [
+    "inspect_verifier_config"
+  ],
+  "final_locus": "unknown",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_missing_fixture\"}"
+  ],
+  "payment_used": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 1881,
+      "cost": 1,
+      "latency_ms": 31869.1,
+      "prompt_tokens": 981,
+      "round": 1
+    },
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 99122.8,
+      "parse_failed": true,
+      "prompt_tokens": 588,
+      "round": 2
+    },
+    {
+      "completion_tokens": 1560,
+      "latency_ms": 36137.5,
+      "prompt_tokens": 241,
+      "round": 3,
+      "settled": true
+    }
+  ]
+}

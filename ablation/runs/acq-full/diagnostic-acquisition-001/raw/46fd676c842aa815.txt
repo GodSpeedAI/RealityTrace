@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment, evidence_collection
+Unresolved: Whether verifier exit code 1 reflects a genuine implementation defect, a verifier/plan defect, an environment problem, or a collection anomaly — no diagnostic content is available to discriminate.
+Excluded: none — the retrieval context provides only structural metadata (case/repo/evidence edges, SQL confirming verifier_exit=1, pytest-progress stdin) with completely empty FTS and a zero vector, yielding zero substantive signal about any locus.
+Locus: unknown

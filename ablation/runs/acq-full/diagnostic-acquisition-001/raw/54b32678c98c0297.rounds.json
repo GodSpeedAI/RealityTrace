@@ -1,0 +1,34 @@
+{
+  "actions": [
+    "inspect_verifier_config"
+  ],
+  "final_locus": "unknown",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/domainforge && cargo test --offline --message-format json -p domainforge-core --test flow_tests corpus_scenario\"}"
+  ],
+  "payment_used": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 1413,
+      "cost": 1,
+      "latency_ms": 24265.0,
+      "prompt_tokens": 975,
+      "round": 1
+    },
+    {
+      "completion_tokens": 2773,
+      "latency_ms": 64907.2,
+      "parse_failed": true,
+      "prompt_tokens": 575,
+      "round": 2
+    },
+    {
+      "completion_tokens": 2059,
+      "latency_ms": 46095.3,
+      "prompt_tokens": 240,
+      "round": 3,
+      "settled": true
+    }
+  ]
+}

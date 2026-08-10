@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment, evidence_collection
+Unresolved: whether verifier_exit=101 reflects a verifier-side crash/fault versus a non-zero verdict caused by implementation behavior, plan/env issues, or missing captured detail; available evidence shows only metadata and a non-zero exit, with no FTS content, zero vector signal, stdout/stderr, expected/actual output, verifier source, or environment logs.
+Excluded: none — no locus is affirmatively excluded by evidence
+Locus: unknown

@@ -1,0 +1,10 @@
+Looking at this failure:
+
+- The build completed successfully (`build-finished`, `success: true`)
+- The test `test_corpus_scenario_assertion_bug` compiled and ran
+- The assertion `left == right` failed with `left: 2` (actual/computed value from the code under test) and `right: 3` (expected value)
+- The test is at `crates/sea-forge-core/tests/corpus_sr1.rs:3`
+
+The code under test produced a value of 2 where 3 was expected. This is a straightforward mismatch between the implementation's behavior and the expected outcome. The verification infrastructure (build, test harness, evidence collection) all functioned correctly — the failure is that the implementation itself returned an incorrect value.
+
+Locus: implementation

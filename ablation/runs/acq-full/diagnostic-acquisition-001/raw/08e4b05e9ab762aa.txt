@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, unknown
+Unresolved: Whether verifier_exit=101 reflects an internal verifier crash, a defect in the implementation under test that the verifier caught, or a downstream failure of evidence capture (all-zero vector, empty FTS) masking the true root cause.
+Excluded: verification_plan(no evidence), projection(no evidence), authority(no evidence), environment(no evidence), declared_model(F-28 not satisfied)
+Locus: unknown

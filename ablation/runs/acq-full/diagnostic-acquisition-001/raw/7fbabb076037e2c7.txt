@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether verifier_exit=2 reflects a verifier-side error, an implementation/test failure, an environment/setup failure, or merely missing captured output/evidence.
+Excluded: none
+Locus: unknown

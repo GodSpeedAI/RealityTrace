@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **SQL**: `verifier_exit: 101` — a non-zero exit code, commonly associated with a crash/panic (exit code 101 is the standard panic exit in Rust and some other runtimes).
+- **FTS**: Empty — no textual evidence was retrieved.
+- **Vector**: All zeros — no meaningful semantic content captured.
+- **Graph**: Only basic provenance nodes; no additional diagnostic links.
+
+The verifier itself terminated abnormally with exit code 101, which is characteristic of a crash or panic within the verifier process rather than a clean "verification failed" result (typically exit code 1). The empty FTS and zero-vector further suggest the verifier failed before it could produce or process meaningful evidence.
+
+Locus: verifier

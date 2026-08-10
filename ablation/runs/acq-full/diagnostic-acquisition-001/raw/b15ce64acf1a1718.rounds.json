@@ -1,0 +1,34 @@
+{
+  "actions": [
+    "inspect_verifier_config"
+  ],
+  "final_locus": "evidence_collection",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-domain corpus_scenario_stale_fixture\"}"
+  ],
+  "payment_used": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 605,
+      "cost": 1,
+      "latency_ms": 14678.5,
+      "prompt_tokens": 981,
+      "round": 1
+    },
+    {
+      "completion_tokens": 970,
+      "latency_ms": 21224.0,
+      "parse_failed": true,
+      "prompt_tokens": 552,
+      "round": 2
+    },
+    {
+      "completion_tokens": 1003,
+      "latency_ms": 19758.4,
+      "prompt_tokens": 242,
+      "round": 3,
+      "settled": true
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+Looking at the evidence for case sr-09:
+
+- **verifier_exit: 101** — A non-standard, high exit code indicating the verifier process itself crashed or encountered an internal error (e.g., unhandled exception/panic), rather than producing a clean pass/fail verdict.
+- The all-zero vector and empty FTS suggest no meaningful verification content was captured, consistent with the verifier failing before or during its run.
+- No signals point to implementation defects, evidence collection issues, or environmental problems; the failure originates in the verifier's own execution.
+
+Locus: verifier

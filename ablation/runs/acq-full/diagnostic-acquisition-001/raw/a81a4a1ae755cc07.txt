@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, implementation, evidence_collection
+Unresolved: Whether verifier_exit 4 reflects a verifier/plan-level usage error, an implementation/test failure, or missing captured output cannot be determined from metadata alone.
+Excluded: none
+Locus: unknown

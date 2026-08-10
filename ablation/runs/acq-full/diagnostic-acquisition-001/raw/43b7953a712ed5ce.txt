@@ -1,0 +1,4 @@
+Candidates: environment, verifier, verification_plan
+Unresolved: whether exit code 127 ("command not found") stems from the verifier binary being absent from PATH (environment), the verifier wrapper itself being misconfigured or broken (verifier), or the verification plan referencing a non-existent command (verification_plan).
+Excluded: declared_model (127-pre-execution), projection (127-pre-execution), implementation (127-pre-execution), authority (127≠permission-denied), evidence_collection (evidence-recorded)
+Locus: unknown

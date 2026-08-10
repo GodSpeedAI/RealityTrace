@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether verifier_exit=2 reflects a verifier/protocol error, an implementation failure surfaced through pytest, an environment execution problem, or merely missing evidence content.
+Excluded: none (no affirmative exclusion evidence)
+Locus: unknown

@@ -1,0 +1,1 @@
+{"actions_taken": ["inspect_source_symbols", "inspect_verifier_config"], "completion_tokens": 0, "condition": "D2", "cost": 0.0, "latency_ms": 135903.0, "payment_used": 2, "prompt_tokens": 0, "reasoning_tokens": 6821, "resolved_model": "glm-5.2", "retries": 0, "rounds": 3, "total_tokens": 28100}

@@ -1,0 +1,9 @@
+Looking at the evidence:
+
+- **verifier_exit: 4** — The verifier process exited with a non-standard, non-zero code (4), indicating the verifier itself encountered an error condition rather than producing a normal pass/fail result.
+- **FTS is empty** and **vector is all zeros** — No meaningful evidence was captured, consistent with the verifier failing before or during execution rather than completing a normal evaluation cycle.
+- The provenance chain (case → evidence → artifact) is intact, so the failure isn't in evidence linkage.
+
+The verifier's own abnormal exit is the root cause — it could not complete its function to produce a verdict.
+
+Locus: verifier

@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, implementation, environment, declared_model
+Unresolved: Whether verifier_exit=101 indicates a verifier-internal fault versus correct detection of a downstream failure (plan/projection/implementation/environment) cannot be determined from an exit code alone with no logs, stderr, or artifacts.
+Excluded: none (no alternative is contradicted by available evidence)
+Locus: unknown

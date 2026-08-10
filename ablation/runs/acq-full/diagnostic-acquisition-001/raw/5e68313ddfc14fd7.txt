@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment
+Unresolved: Whether verifier_exit=1 was caused by a verifier-side fault versus an implementation/model failure detected by the verifier
+Excluded: none established
+Locus: unknown

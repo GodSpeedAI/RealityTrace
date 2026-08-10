@@ -1,0 +1,10 @@
+Looking at the retrieval context for case cep-03:
+
+1. **FTS is empty** — no searchable text content was indexed.
+2. **Vector is all zeros** — no semantic content was captured.
+3. **Verifier ran** (exit code 1), but with no meaningful evidence content available.
+4. The evidence artifact (01KZH8DC0VB749ADZXXD622FCR) exists in the graph and has provenance links, but the actual content was never populated or indexed.
+
+The evidence artifact exists structurally but carries no usable content — both full-text and vector representations are empty. The verifier failed (exit 1) because the evidence it was given was substantively blank.
+
+Locus: evidence_collection

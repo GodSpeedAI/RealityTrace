@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, implementation, environment, evidence_collection
+Unresolved: Whether `verifier_exit=1` reflects a verifier-side fault, a legitimate validation rejection of the implementation, or incomplete/misrecorded evidence.
+Excluded: none
+Locus: unknown

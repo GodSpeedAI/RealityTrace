@@ -1,0 +1,10 @@
+Looking at the provenance for case df-10:
+
+1. **Evidence collection**: Evidence artifact `01KZJ2QWX1Z7GS1JVXRKVGNBBG` was recorded and linked.
+2. **SQL record**: Shows `verifier_exit: 1` — a non-zero exit code from the verifier itself.
+3. **FTS**: Empty, no detailed text evidence captured.
+4. **Vector**: All zeros, indicating no meaningful features were extracted or the verifier produced no usable output.
+
+The root signal is `verifier_exit: 1`. The evidence was collected and passed to the verifier, but the verifier exited abnormally (code 1), meaning the verification step itself failed to execute or terminate correctly. The downstream consequences (empty FTS, zero vector) stem from the verifier not producing valid output. This points to the verifier layer as the causal failure, not evidence collection (which completed) or implementation (which wasn't reached/assessed due to the verifier fault).
+
+Locus: verifier

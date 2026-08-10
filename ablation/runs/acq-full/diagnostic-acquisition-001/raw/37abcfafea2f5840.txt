@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, environment, evidence_collection
+Unresolved: whether verifier_exit=4 reflects a verifier/invocation failure versus an environment or evidence-capture issue
+Excluded: none
+Locus: unknown

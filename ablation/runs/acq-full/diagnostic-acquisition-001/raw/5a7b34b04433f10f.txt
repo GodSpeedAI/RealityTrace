@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, evidence_collection
+Unresolved: Whether verifier_exit=1 reflects a genuine implementation failure, a verifier failure, a bad verification plan, or incomplete evidence
+Excluded: none
+Locus: unknown

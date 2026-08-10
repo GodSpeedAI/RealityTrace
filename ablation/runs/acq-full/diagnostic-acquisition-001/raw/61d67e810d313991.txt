@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment
+Unresolved: Whether verifier_exit=1 indicates the verifier process itself faulted versus the subject implementation failing validation versus an upstream plan/environment defect; the record contains only an exit code and no captured content to discriminate.
+Excluded: (none)
+Locus: unknown

@@ -1,0 +1,27 @@
+{
+  "actions": [
+    "rerun_verifier_isolated"
+  ],
+  "final_locus": "implementation",
+  "observations": [
+    "[rerun_verifier_isolated]: {\"elapsed_s\": 0.6, \"exit_code\": 101, \"isolated_cmd\": \"cd /home/sprime01/projects/domainforge && cargo test --offline  -p domainforge-core --test aggregation_tests test_corpus_scenario_timing_sensitive -- --test-threads=1\", \"isolated_result\": \"failed\", \"summary\": \"\\n\\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s\\n     Running tests/aggregation_tests.rs (target/debug/deps/aggregation_tests-dc6ccaf36430887f)\\nerror: test failed, to rerun pass `-p domainforge-core --test aggregation_tests`\", \"test\": \"test_corpus_scenario_timing_sensitive\"}"
+  ],
+  "payment_used": 5,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "completion_tokens": 613,
+      "cost": 5,
+      "latency_ms": 11868.4,
+      "prompt_tokens": 972,
+      "round": 1
+    },
+    {
+      "completion_tokens": 309,
+      "latency_ms": 10536.0,
+      "prompt_tokens": 615,
+      "round": 2,
+      "settled": true
+    }
+  ]
+}

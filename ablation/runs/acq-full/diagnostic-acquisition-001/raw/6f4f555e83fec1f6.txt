@@ -1,0 +1,4 @@
+Candidates: verification_plan, implementation, verifier
+Unresolved: Is the false assertion a defect in the test specification itself (verification_plan) or in an implementation under test that the test calls?
+Excluded: implementation (no-sut-invoked), verifier (correct-execution), environment (normal-run), evidence_collection (captured), declared_model (n/a)
+Locus: verification_plan

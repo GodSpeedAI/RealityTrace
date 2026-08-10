@@ -1,0 +1,7 @@
+Locus: declared_model
+Actions: inspect_verifier_config, inspect_target_binding, validate_semantic_model
+Payment: 5/7
+Rounds: 4
+Observation[0]: [inspect_verifier_config]: {"direction_rule": "exit_code: 0\u2192valid, nonzero\u2192invalid", "env_assignments": "(none)", "evidence_types": ["conformance_result"], "verifier": "domainforge-validate", "verifier_command": "cd /home/sprime01/projects/sea-rs && /home/sprime01/projects/domainforge-slice0b/target/debug/domainforge validate .sea/interaction/interaction-model.sea"}
+Observation[1]: [inspect_target_binding]: {"all_exist": true, "checked": [{"exists": true, "target": ".sea/interaction/interaction-model.sea"}], "missing_targets": []}
+Observation[2]: [validate_semantic_model]: {"errors": ["Error: Parse failed for .sea/interaction/interaction-model.sea: resolved closure failed graph construction: Undefined entity: UserIntent at 0:0"], "exit_code": 1, "model_file": ".sea/interaction/interaction-model.sea", "valid": false}

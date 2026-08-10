@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, projection, implementation, environment, evidence_collection
+Unresolved: whether verifier_exit=1 reflects a genuine validation failure or an infrastructure/evidence-collection/runtime failure
+Excluded: none
+Locus: unknown

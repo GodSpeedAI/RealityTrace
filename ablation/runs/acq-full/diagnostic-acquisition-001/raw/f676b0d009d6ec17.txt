@@ -1,0 +1,9 @@
+Looking at this case:
+- The `verifier_exit` is 101 (non-zero, indicating failure)
+- The `[fts]` section is completely empty (no text content retrieved)
+- The `vector` is all zeros (no meaningful embedding captured)
+- The graph shows an evidence edge exists, but the indexed content backing that artifact is absent
+
+The evidence artifact was nominally linked, but no searchable text or vector signal was actually captured — the content backing the recorded evidence is missing/empty. This is a failure in gathering and persisting the evidence content itself.
+
+Locus: evidence_collection

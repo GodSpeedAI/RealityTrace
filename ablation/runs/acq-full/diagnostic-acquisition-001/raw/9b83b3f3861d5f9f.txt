@@ -1,0 +1,9 @@
+Looking at the provenance for case sr-08:
+
+- **verifier_exit: 101** — This is a non-zero, non-standard exit code (commonly associated with a process panic/crash, particularly in Rust-based toolchains), indicating the verifier itself terminated abnormally rather than completing a normal verification pass and returning a verdict.
+- **FTS is empty** and **vector is all zeros** — These downstream artifacts show no content was indexed or embedded, consistent with the verifier crashing before producing usable output.
+- The provenance graph links the case to a recorded evidence artifact, but the evidence reflects a broken capture due to the abnormal verifier termination.
+
+The root cause is at the verifier layer: it crashed (exit 101) rather than running to completion.
+
+Locus: verifier

@@ -1,0 +1,4 @@
+Candidates: verifier, evidence_collection, environment, implementation
+Unresolved: Whether the abnormal verifier exit (code 101) and the all-zero evidence vector indicate a crash within the verifier itself, a failure in evidence capture/transmission, or an upstream environment/implementation fault that caused the verifier to terminate abnormally.
+Excluded: (none can be excluded with positive evidence)
+Locus: unknown

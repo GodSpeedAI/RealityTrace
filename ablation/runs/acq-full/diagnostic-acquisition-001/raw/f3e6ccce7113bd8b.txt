@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment
+Unresolved: whether verifier_exit 101 reflects a verifier-side crash, an implementation nonconformance, or another orchestrated failure path
+Excluded: none
+Locus: unknown

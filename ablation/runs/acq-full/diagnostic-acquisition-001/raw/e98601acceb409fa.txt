@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **FTS** is empty — no textual content was indexed.
+- **Vector** is all zeros — no semantic content was captured.
+- **Graph** shows an evidence node exists with an ID, but no meaningful content is attached.
+- **SQL** confirms verifier exited with code 1 (failure), but there's no actual evidence payload to evaluate.
+
+The evidence was nominally recorded (an artifact ID exists), but no actual content was captured or indexed — FTS returned nothing, and the embedding vector is entirely zeroed out. The provenance shows the evidence collection pipeline produced a hollow record with no usable content, which is why the verifier failed.
+
+Locus: evidence_collection

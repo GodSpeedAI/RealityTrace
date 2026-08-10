@@ -1,0 +1,6 @@
+Locus: implementation
+Actions: inspect_verifier_config, inspect_environment
+Payment: 2/7
+Rounds: 3
+Observation[0]: [inspect_verifier_config]: {"direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts", "env_assignments": "(none)", "evidence_types": ["test_result", "execution_log"], "verifier": "cargo-test", "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-domain corpus_scenario_stale_fixture"}
+Observation[1]: [inspect_environment]: {"env_assignments": "(none)", "path": "default", "tmpdir": "default", "toolchain": "available"}

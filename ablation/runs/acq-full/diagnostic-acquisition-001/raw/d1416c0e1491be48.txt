@@ -1,0 +1,4 @@
+Candidates: verifier, environment, implementation, evidence_collection, verification_plan
+Unresolved: whether the verifier exit code 101 reflects a verifier defect versus a failure triggered by the implementation/environment during execution
+Excluded: none
+Locus: unknown

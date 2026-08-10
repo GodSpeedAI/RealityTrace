@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, verification_plan
+Unresolved: whether verifier_exit=101 reflects a verifier-internal failure versus an implementation/environment/plan-triggered failure
+Excluded: evidence_collection(recorded)
+Locus: unknown

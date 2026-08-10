@@ -1,0 +1,9 @@
+Looking at the evidence for cep-04:
+
+- **SQL record** shows `verifier_exit: 4` — a non-zero, non-standard exit code from the verifier.
+- In the pytest context (per `stdin_format: pytest-progress`), exit code 4 indicates a **usage/collection error** at the verifier level — the verifier could not properly run or collect tests.
+- **FTS** is empty and **vector** is all zeros, meaning no meaningful output or signal was captured, consistent with the verifier failing before producing usable results.
+
+The root cause is the verifier itself failing to execute properly (exit code 4), not a downstream issue with the implementation, evidence, or environment.
+
+Locus: verifier

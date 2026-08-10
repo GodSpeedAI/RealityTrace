@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment
+Unresolved: Whether verifier_exit 101 reflects a verifier-side crash/fault versus an implementation-under-test failure versus an environment error — no error body, trace, or message is present to localize the fault.
+Excluded: none — there is no evidence to affirmatively exclude any candidate (no logs, no stack trace, no plan details, no environment metadata; vector is all-zero; artifact has no content shown).
+Locus: unknown

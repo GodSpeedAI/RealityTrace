@@ -1,0 +1,4 @@
+Candidates: verifier, environment
+Unresolved: whether verifier_exit=127 indicates a missing/non-executable verifier command in the runtime environment versus an internal verifier failure
+Excluded: evidence_collection: recorded, declared_model: unmet-friction
+Locus: unknown

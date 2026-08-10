@@ -1,0 +1,9 @@
+Looking at this case:
+
+- **verifier_exit: 101** — a non-zero, abnormal exit code indicating the verifier itself crashed or hit an internal error
+- **FTS section is empty** — no textual evidence was indexed, consistent with the verifier never completing its run
+- **Vector is all zeros** — no meaningful embedding was produced, further confirming the verifier didn't generate usable output
+
+The provenance chain shows the case and evidence artifact exist (graph confirms `df-03 --recorded_evidence--> 01KZJ2NMCSE94MNRKNXJ22P5QQ`), so evidence collection and case registration succeeded. The failure manifests at the verifier level, which exited abnormally (101) before it could produce structured results.
+
+Locus: verifier

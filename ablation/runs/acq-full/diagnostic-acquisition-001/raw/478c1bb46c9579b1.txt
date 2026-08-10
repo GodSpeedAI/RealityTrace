@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, implementation, environment
+Unresolved: whether verifier_exit=4 reflects a verifier/verification_plan invocation fault versus implementation behavior or environment misconfiguration
+Excluded: declared_modelâbarred
+Locus: unknown

@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether verifier_exit=101 reflects a crash within the verifier itself (e.g., panic) versus the verifier legitimately detecting and reporting an implementation failure, with no stdout/stderr/logs provided to distinguish.
+Excluded: verifier(partial), implementation(silent), environment(silent), evidence_collection(silent), verification_plan(silent), projection(silent), authority(silent), declared_model(silent)
+Locus: unknown

@@ -1,0 +1,14 @@
+## Analysis of Case ag-03
+
+**Provenance walk:**
+
+1. **SQL record**: `verifier_exit: 101` — a non-standard, abnormal exit code (not 0 for pass, not a typical 1 for fail). Exit code 101 commonly indicates a runtime panic or unexpected crash in the verifying process.
+2. **FTS**: Completely empty — no text content was extracted or indexed.
+3. **Vector**: All 64 dimensions are `0.0` — no meaningful embedding was produced, indicating the verifier produced no usable output content.
+4. **Graph**: Only bare metadata edges exist (case→repo, case→evidence). No deeper provenance or auxiliary results.
+
+**Causal reasoning:** The evidence artifact exists (has an ID and was stored), but its content is entirely void — zero vector, empty full-text index. The abnormal verifier exit (101) is the proximate cause: the verifier itself crashed or errored during execution, which in turn yielded no meaningful evidence content. The evidence collection pipeline didn't independently fail; rather, the verifier's abnormal termination prevented any valid output from being generated.
+
+The failure originates at the verifier layer.
+
+Locus: verifier

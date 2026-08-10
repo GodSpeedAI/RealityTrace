@@ -1,0 +1,15 @@
+{
+  "actions": [],
+  "final_locus": "verification_plan",
+  "observations": [],
+  "payment_used": 0,
+  "rounds": [
+    {
+      "completion_tokens": 632,
+      "latency_ms": 9929.0,
+      "prompt_tokens": 971,
+      "round": 1,
+      "settled": true
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection, unknown
+Unresolved: whether verifier_exit=101 denotes a verifier-internal failure versus an implementation/environment failure detected by the verifier
+Excluded: none
+Locus: unknown

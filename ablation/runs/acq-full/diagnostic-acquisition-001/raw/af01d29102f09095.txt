@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection
+Unresolved: verifier_exit=101 alone cannot distinguish a verifier-side failure from invalid implementation output or missing captured evidence; no payload, logs, expected/observed values, or artifact content are provided.
+Excluded: none
+Locus: unknown

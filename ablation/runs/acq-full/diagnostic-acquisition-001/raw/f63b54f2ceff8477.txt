@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether verifier_exit=1 reflects a real implementation/test failure versus a verifier, environment, or evidence-collection problem
+Excluded: none
+Locus: unknown

@@ -1,0 +1,4 @@
+Candidates: verifier, evidence_collection, implementation, environment
+Unresolved: Whether the verifier exit code 101 reflects a verifier-side crash, an implementation defect detected by the verifier, or a downstream failure in capturing diagnostic evidence (zero vector, empty fts)
+Excluded: (none excludable — all-zero vector and empty fts provide no positive signal for or against any locus; exit code 101 alone is ambiguous between verifier fault and implementation fault)
+Locus: unknown

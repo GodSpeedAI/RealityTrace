@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: The root cause of the verifier exiting with code 101 (whether it is an internal verifier panic, an environment issue like OOM, or a crash triggered by the implementation under test).
+Excluded: none
+Locus: unknown

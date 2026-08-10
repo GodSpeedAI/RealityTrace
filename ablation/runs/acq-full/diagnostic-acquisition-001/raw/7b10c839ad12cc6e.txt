@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **SQL** shows `verifier_exit: 101` — a non-zero, abnormal exit code (101 typically indicates a panic or crash, not a clean pass/fail verdict like 0 or 1).
+- **Vector** is all zeros, meaning no meaningful verification artifacts or comparisons were produced.
+- **FTS** is empty — no textual evidence was captured.
+- **Graph** only shows basic provenance links, nothing diagnostic.
+
+The verifier process itself terminated abnormally (exit 101) before producing any usable verdict or evidence. The all-zero vector and empty FTS confirm no substantive verification work was completed. The causal failure is that the **verifier** crashed or could not execute its logic — not that the implementation produced wrong output (which would yield a clean exit with a mismatch verdict).
+
+Locus: verifier

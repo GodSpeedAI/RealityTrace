@@ -1,0 +1,4 @@
+Candidates: verifier, environment, implementation
+Unresolved: Whether verifier_exit 101 was caused by a defect in the verifier's own code, an environment configuration failure, or an implementation-triggered error that caused the verifier to crash.
+Excluded: (none — no loci can be excluded by evidence)
+Locus: unknown

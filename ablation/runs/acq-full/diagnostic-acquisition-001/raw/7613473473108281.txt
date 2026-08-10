@@ -1,0 +1,16 @@
+## Analysis of Case cep-10
+
+**Provenance walk:**
+
+1. **Evidence Collection**: Evidence artifact `01KZH8DJTM6HK9TQGARGNDW5DV` was recorded and exists in the graph and SQL stores. The evidence was collected (not missing).
+
+2. **Retrieval State**:
+   - **FTS**: `[]` — completely empty; no searchable text content was indexed.
+   - **Vector**: All 64 dimensions are `0.0` — a null/degenerate embedding with no semantic signal whatsoever.
+   - **SQL**: Metadata captured (`verifier_exit: 1`), confirming the pipeline ran but the verifier failed.
+
+3. **Interpretation**: The evidence artifact exists as a node, but its content was never properly projected into the retrieval indices. The FTS index has zero entries, and the vector embedding is a zero-vector — indicating the transformation/projection from raw artifact to searchable representations failed or produced nothing. The verifier then operated on this empty/null input and exited with code 1.
+
+The root cause is the projection layer: it failed to convert the recorded evidence into usable indexed representations (empty FTS, all-zero vector).
+
+Locus: projection

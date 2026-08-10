@@ -1,0 +1,10 @@
+Looking at the evidence for case sr-04:
+
+- **SQL** shows `verifier_exit: 101` with minimal metadata
+- **FTS** is completely empty — no textual evidence was captured
+- **Vector** is all zeros (64/64 dimensions = 0.0) — no meaningful embedding was produced
+- **Graph** shows only basic structural nodes/edges with no diagnostic content
+
+The evidence pipeline for this case is essentially barren: full-text search returned nothing, and the vector embedding is a null vector. The diagnostic artifacts needed to attribute the verifier failure (exit 101) to any downstream layer (implementation, projection, plan, etc.) were never collected or rendered unusable. The provenance chain breaks at the evidence-gathering stage.
+
+Locus: evidence_collection

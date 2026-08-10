@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: Whether the verifier_exit=1 status was caused by an implementation defect detected by tests, an internal crash within the verifier script, or an environment setup failure.
+Excluded: None
+Locus: unknown

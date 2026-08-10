@@ -1,0 +1,4 @@
+Candidates: environment, implementation, verifier
+Unresolved: Whether verifier_exit=127 reflects a missing verifier command, a missing SUT binary invoked by the verifier, or an unmet runtime dependency in the execution environment.
+Excluded: projection(no-evidence), authority(no-evidence), declared_model(no-evidence), evidence_collection(recorded), verification_plan(no-evidence)
+Locus: unknown

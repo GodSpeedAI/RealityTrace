@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: Whether the verifier crash (exit 101) was caused by an internal verifier bug, an implementation-induced panic during parsing/evaluation, or an environment failure.
+Excluded: none (evidence is insufficient)
+Locus: unknown

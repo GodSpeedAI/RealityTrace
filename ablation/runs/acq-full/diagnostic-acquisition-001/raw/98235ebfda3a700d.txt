@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **SQL** shows `verifier_exit: 101` — a non-zero exit code (101 is commonly a panic/unexpected crash code).
+- **Graph** confirms evidence was recorded and linked properly.
+- **Vector** is all zeros but evidence exists, meaning evidence collection itself completed.
+- No indication of missing authority, malformed declared model, or environment configuration issues.
+
+The failure signal originates from the verifier process itself crashing (exit 101). Evidence was collected and stored, the graph links are intact, and there is no sign of an implementation-specific defect surfacing through normal verification logic. The direct causal layer is the verifier's own failure.
+
+Locus: verifier

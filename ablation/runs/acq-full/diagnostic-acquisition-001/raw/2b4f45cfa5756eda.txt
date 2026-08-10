@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether verifier_exit=4 reflects a verifier-internal crash, an implementation-triggered abort, an environment fault, or merely incomplete evidence capture downstream
+Excluded: (none — vector is zeroed, fts empty, no trace/error text to attribute to any locus)
+Locus: unknown

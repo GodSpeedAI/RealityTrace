@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether verifier_exit:1 indicates the verifier itself malfunctioned, correctly detected an implementation defect, or was unable to run due to environmental/observability issues.
+Excluded: declared_model (insufficient-evidence — F-28 unmet), verification_plan (insufficient-evidence), authority (insufficient-evidence), projection (insufficient-evidence)
+Locus: unknown

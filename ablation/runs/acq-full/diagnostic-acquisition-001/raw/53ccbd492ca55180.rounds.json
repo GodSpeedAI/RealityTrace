@@ -1,0 +1,37 @@
+{
+  "actions": [
+    "inspect_verifier_config",
+    "inspect_environment"
+  ],
+  "final_locus": "verifier",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\"], \"verifier\": \"pytest\", \"verifier_command\": \"cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario\"}",
+    "[inspect_environment]: {\"env_assignments\": \"(none)\", \"path\": \"default\", \"tmpdir\": \"default\", \"toolchain\": \"available\"}"
+  ],
+  "payment_used": 2,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 998,
+      "cost": 1,
+      "latency_ms": 19414.2,
+      "prompt_tokens": 968,
+      "round": 1
+    },
+    {
+      "action": "inspect_environment",
+      "completion_tokens": 1587,
+      "cost": 1,
+      "latency_ms": 29831.5,
+      "prompt_tokens": 537,
+      "round": 2
+    },
+    {
+      "completion_tokens": 1184,
+      "latency_ms": 20199.9,
+      "prompt_tokens": 502,
+      "round": 3,
+      "settled": true
+    }
+  ]
+}

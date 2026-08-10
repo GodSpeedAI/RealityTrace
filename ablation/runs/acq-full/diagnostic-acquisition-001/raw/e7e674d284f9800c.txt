@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: whether verifier exit 101 reflects a verifier-internal failure, an implementation-induced verifier crash, or an environment problem
+Excluded: none
+Locus: unknown

@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment
+Unresolved: whether verifier_exit=101 reflects a verifier-internal fault versus an implementation/plan/environment-induced non-pass
+Excluded: evidence_collection(recorded)
+Locus: unknown

@@ -1,0 +1,9 @@
+Looking at this case:
+
+1. **Build provenance (`[fts]`)**: All compiler artifacts and build scripts show `"fresh": true` — the project and all dependencies compiled successfully with no build errors.
+
+2. **Evidence record (`[sql]`)**: The key datum is `verifier_exit: 101`. Exit code 101 is the standard Rust panic exit code, indicating the verifier process itself crashed/panicked during execution rather than completing its checking and reporting a clean pass/fail.
+
+The build succeeded, evidence was collected, but the verifier itself panicked at runtime. This points to a bug or defect in the verifier code, not in the implementation under test, the environment, or the evidence pipeline.
+
+Locus: verifier

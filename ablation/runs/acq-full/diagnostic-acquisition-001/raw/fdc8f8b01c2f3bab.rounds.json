@@ -1,0 +1,27 @@
+{
+  "actions": [
+    "inspect_environment"
+  ],
+  "final_locus": "environment",
+  "observations": [
+    "[inspect_environment]: {\"env_assignments\": \"PATH=/usr/bin:/bin\", \"path\": \"restricted\", \"tmpdir\": \"default\", \"toolchain\": \"unavailable\"}"
+  ],
+  "payment_used": 1,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "completion_tokens": 608,
+      "cost": 1,
+      "latency_ms": 12487.8,
+      "prompt_tokens": 972,
+      "round": 1
+    },
+    {
+      "completion_tokens": 90,
+      "latency_ms": 2353.2,
+      "prompt_tokens": 491,
+      "round": 2,
+      "settled": true
+    }
+  ]
+}

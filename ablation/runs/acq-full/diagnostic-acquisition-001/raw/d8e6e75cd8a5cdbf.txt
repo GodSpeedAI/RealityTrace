@@ -1,0 +1,5 @@
+Locus: implementation
+Actions: rerun_verifier_isolated
+Payment: 5/7
+Rounds: 2
+Observation[0]: [rerun_verifier_isolated]: {"isolated_result": "compile_error", "summary": "compilation failed \u2014 no test could run", "test": "(none)"}

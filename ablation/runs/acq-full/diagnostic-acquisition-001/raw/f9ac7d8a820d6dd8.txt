@@ -1,0 +1,4 @@
+Candidates: verifier, environment, implementation, unknown
+Unresolved: whether the verifier’s non-zero exit (code 101) reflects an internal verifier fault or a reaction to external inputs, dependencies, or the implementation under test
+Excluded: none
+Locus: unknown

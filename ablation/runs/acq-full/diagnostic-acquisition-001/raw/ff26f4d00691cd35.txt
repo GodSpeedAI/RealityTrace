@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether verifier_exit=101 indicates the verifier itself crashed, the verifier correctly detected an implementation defect, or the environment caused the failure — no error text, stack trace, or log distinguishes these.
+Excluded: (none — no candidate can be affirmatively excluded with the available evidence)
+Locus: unknown

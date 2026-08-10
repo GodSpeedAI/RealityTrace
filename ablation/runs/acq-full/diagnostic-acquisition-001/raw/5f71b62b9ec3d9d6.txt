@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, unknown
+Unresolved: Whether verifier_exit 101 reflects a verifier-internal failure versus a verifier-detected implementation failure
+Excluded: <none> — no evidence distinguishes verifier crash from implementation rejection
+Locus: unknown

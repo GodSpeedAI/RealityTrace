@@ -1,0 +1,7 @@
+Looking at the evidence:
+
+- The verifier exited with code **101**, which is characteristic of a crash/panic (unhandled exception) in the verifier process itself.
+- The FTS and vector sections are empty/all-zero, indicating the verifier did not complete its normal evaluation pipeline.
+- There is no indication of a malformed verification plan, projection error, or implementation-level logic failure — the verifier process itself terminated abnormally before producing a structured verdict.
+
+Locus: verifier

@@ -1,0 +1,32 @@
+## Diagnostic Decomposition
+
+**1. Candidate Enumeration**
+- `implementation` — the code under test produced a value (2) that doesn't match the expected value (3)
+- `declared_model` — the expected value (3) encoded in the test/specification is itself wrong
+- `verification_plan` — the test strategy or assertion design is flawed
+- `projection` — an abstraction/mapping layer produced incorrect output feeding the assertion
+
+**2. Key Unresolved Distinction**
+Is the *actual* value (left=2) wrong because the implementation has a defect, or is the *expected* value (right=3) wrong because the declared specification is incorrect? The raw assertion output alone cannot disambiguate this.
+
+**3. Evidence Assessment**
+- **verifier**: `cargo test` compiled successfully (`build-finished success: true`), executed the test, and reported the failure with proper exit code 101. The verification tool functioned correctly.
+- **environment**: Build completed, dependencies resolved, all artifacts compiled. No environment failures.
+- **authority**: No permission, signature, or authorization errors. Build and test execution proceeded unhindered.
+- **evidence_collection**: Test output, panic message, and assertion details were all captured and recorded faithfully.
+- **implementation**: The test ran against `sea-forge-core` and the assertion `left == right` failed with left=2, right=3 — the code under test produced a value inconsistent with the expectation.
+- **declared_model**: Cannot be confirmed; the expected value 3 could be either correct (making implementation wrong) or incorrect (making the model wrong). No additional evidence distinguishes these.
+- **verification_plan / projection**: No evidence of flawed test orchestration or projection-layer errors; the test compiled and executed in a straightforward manner.
+
+**4. Exclusion by Evidence**
+- `environment`: EXCLUDED — successful compilation and execution
+- `authority`: EXCLUDED — no authorization failures
+- `evidence_collection`: EXCLUDED — full output captured
+- `verifier`: EXCLUDED — cargo test operated correctly
+- `verification_plan`: EXCLUDED — test compiled, ran, and reported cleanly; no orchestration defect visible
+- `projection`: EXCLUDED — no projection-related artifacts or errors in the trace; the failing test is a direct corpus assertion, not a projection-boundary test
+
+**5. Settlement**
+The implementation is the locus: it produced output (2) contradicting the expected value (3). The declared_model alternative cannot be settled because, while verifier and environment are excluded, I lack sufficient evidence to explicitly exclude `implementation` in favor of `declared_model` (and the asymmetric friction rule requires excluding implementation first, which the evidence does not support — the implementation output is the proximate cause of the assertion failure).
+
+Locus: implementation

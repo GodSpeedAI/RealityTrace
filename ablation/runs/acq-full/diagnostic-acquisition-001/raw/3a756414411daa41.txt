@@ -1,0 +1,10 @@
+Looking at the evidence for case cep-05:
+
+- **SQL record**: `verifier_exit: 4` — a non-zero, non-standard exit code from the verifier process itself.
+- **FTS**: Empty (no text content retrieved).
+- **Vector**: All zeros — no meaningful evidence signal.
+- **Graph**: Only basic structural metadata; no substantive diagnostic edges.
+
+The verifier process terminated abnormally with exit code 4. This is not a case where the verifier ran successfully and reported that the implementation failed (which would be a normal verdict). Instead, the verifier itself crashed or errored out — it could not complete its own operation. The empty FTS and zero vector reinforce that no meaningful verification output was produced because the verifier itself failed before it could evaluate anything.
+
+Locus: verifier

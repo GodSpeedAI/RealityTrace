@@ -1,0 +1,9 @@
+Looking at this case:
+
+- **verifier_exit: 101** — This is the Rust panic exit code, indicating the verifier itself crashed.
+- **FTS is empty `[]`** and **vector is all zeros** — No meaningful content was indexed or embedded.
+- **stdin_format: "car-go-json"** — This appears to be an unrecognized or malformed format string (possibly a mangled "cargo-json"), which likely caused the verifier to panic when attempting to parse input it could not handle.
+
+The non-zero verifier exit (101 = panic) is the direct failure signal, and it stems from the verifier encountering an input format it couldn't process. The crash originates in the verifier layer itself.
+
+Locus: verifier

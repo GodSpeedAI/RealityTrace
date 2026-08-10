@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, unknown
+Unresolved: whether verifier_exit=101 denotes an abnormal verifier failure versus a verifier rejection caused by implementation/plan mismatch
+Excluded: none
+Locus: unknown

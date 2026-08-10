@@ -1,0 +1,7 @@
+Locus: unknown
+Actions: inspect_verifier_config, inspect_target_binding, rerun_verifier_isolated
+Payment: 7/7
+Rounds: 4
+Observation[0]: [inspect_verifier_config]: {"direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts", "env_assignments": "(none)", "evidence_types": ["test_result", "execution_log"], "verifier": "cargo-test", "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus"}
+Observation[1]: [inspect_target_binding]: {"all_exist": true, "checked": [{"exists": true, "target": "(default test discovery)"}], "missing_targets": []}
+Observation[2]: [rerun_verifier_isolated]: {"isolated_result": "compile_error", "summary": "compilation failed \u2014 no test could run", "test": "(none)"}

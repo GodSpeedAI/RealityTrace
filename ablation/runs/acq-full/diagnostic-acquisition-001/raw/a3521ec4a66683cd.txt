@@ -1,0 +1,10 @@
+Looking at the provenance for case cep-07:
+
+1. **SQL record** shows `verifier_exit: 2` (non-zero, failure)
+2. **FTS** is completely empty — no searchable text content was captured from the evidence artifact
+3. **Vector** is all zeros — no semantic features were extracted from the evidence
+4. **Graph** shows an evidence artifact (`01KZH8DG55H74ZSKBPBXDBRQKW`) was linked, but its content is effectively void
+
+The evidence artifact exists structurally (it has an ID and graph edges), but its actual content is empty: no full-text index entries and a zeroed embedding vector. The verifier received empty/invalid evidence and exited with code 2 (usage/processing error). The root cause is that the evidence capture pipeline produced no meaningful content — not that the verifier logic, implementation under test, or environment was faulty.
+
+Locus: evidence_collection

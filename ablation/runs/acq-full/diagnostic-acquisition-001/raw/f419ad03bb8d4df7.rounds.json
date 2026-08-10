@@ -1,0 +1,37 @@
+{
+  "actions": [
+    "inspect_verifier_config",
+    "rerun_verifier_isolated"
+  ],
+  "final_locus": "unknown",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_order -- --test-threads=1\"}",
+    "[rerun_verifier_isolated]: {\"elapsed_s\": 0.2, \"exit_code\": 0, \"isolated_cmd\": \"cd /home/sprime01/projects/sea-rs && cargo test --offline  -p sea-forge-core test_corpus_scenario_order_b -- --test-threads=1\", \"isolated_result\": \"passed\", \"summary\": \"     Running unittests src/lib.rs (target/debug/deps/sea_forge_core-2d9b0a5a8ca75840)\\n     Running tests/corpus_sr_order.rs (target/debug/deps/corpus_sr_order-fed18298c338b2b0)\\n     Running tests/origin_ref_boundary.rs (target/debug/deps/origin_ref_boundary-1f4f9e28fff7096d)\\n     Running tests/projection_kind_boundary.rs (target/debug/deps/projection_kind_boundary-c4f45f0dabd58994)\\n     Running tests/version_skew.rs (target/debug/deps/version_skew-5305fd2b1eaf07c3)\", \"test\": \"test_corpus_scenario_order_b\"}"
+  ],
+  "payment_used": 6,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 916,
+      "cost": 1,
+      "latency_ms": 18774.1,
+      "prompt_tokens": 978,
+      "round": 1
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "completion_tokens": 2355,
+      "cost": 5,
+      "latency_ms": 51200.3,
+      "prompt_tokens": 589,
+      "round": 2
+    },
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 70861.4,
+      "parse_failed": true,
+      "prompt_tokens": 735,
+      "round": 3
+    }
+  ]
+}

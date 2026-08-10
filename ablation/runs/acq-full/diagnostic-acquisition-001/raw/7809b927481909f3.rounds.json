@@ -1,0 +1,37 @@
+{
+  "actions": [
+    "inspect_verifier_config",
+    "inspect_environment"
+  ],
+  "final_locus": "verifier",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/domainforge && cargo test --offline --message-format json -p domainforge-core --test flow_tests corpus_scenario_missing_fixture\"}",
+    "[inspect_environment]: {\"env_assignments\": \"(none)\", \"path\": \"default\", \"tmpdir\": \"default\", \"toolchain\": \"available\"}"
+  ],
+  "payment_used": 2,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 591,
+      "cost": 1,
+      "latency_ms": 13823.2,
+      "prompt_tokens": 978,
+      "round": 1
+    },
+    {
+      "action": "inspect_environment",
+      "completion_tokens": 3636,
+      "cost": 1,
+      "latency_ms": 85302.7,
+      "prompt_tokens": 548,
+      "round": 2
+    },
+    {
+      "completion_tokens": 630,
+      "latency_ms": 12992.5,
+      "prompt_tokens": 498,
+      "round": 3,
+      "settled": true
+    }
+  ]
+}

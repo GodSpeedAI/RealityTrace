@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether verifier_exit=2 reflects a verifier/harness error versus an implementation/test failure
+Excluded: none
+Locus: unknown

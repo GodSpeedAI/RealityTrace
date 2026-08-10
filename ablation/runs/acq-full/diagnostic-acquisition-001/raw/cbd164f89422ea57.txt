@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, projection, implementation, environment
+Unresolved: verifier_exit=1 establishes only that the verification run ended unsuccessfully; without stdout/stderr, traceback, plan details, projection outputs, implementation logs, or environment diagnostics, it cannot distinguish verifier error from invalid plan/projection, failing implementation, or environment failure.
+Excluded: none
+Locus: unknown

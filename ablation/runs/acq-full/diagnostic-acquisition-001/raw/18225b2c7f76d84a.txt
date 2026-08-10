@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, environment
+Unresolved: whether verifier_exit=127 originated from a missing command in the runtime environment, an incorrect verifier invocation/path in the plan, or the verifier itself returning 127
+Excluded: none
+Locus: unknown

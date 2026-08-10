@@ -1,0 +1,47 @@
+{
+  "actions": [
+    "inspect_verifier_config",
+    "inspect_target_binding",
+    "rerun_verifier_isolated"
+  ],
+  "final_locus": "unknown",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus\"}",
+    "[inspect_target_binding]: {\"all_exist\": true, \"checked\": [{\"exists\": true, \"target\": \"(default test discovery)\"}], \"missing_targets\": []}",
+    "[rerun_verifier_isolated]: {\"isolated_result\": \"compile_error\", \"summary\": \"compilation failed \\u2014 no test could run\", \"test\": \"(none)\"}"
+  ],
+  "payment_used": 7,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 938,
+      "cost": 1,
+      "latency_ms": 14945.9,
+      "prompt_tokens": 978,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "completion_tokens": 1399,
+      "cost": 1,
+      "latency_ms": 27844.1,
+      "prompt_tokens": 602,
+      "round": 2
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "completion_tokens": 1631,
+      "cost": 5,
+      "latency_ms": 32104.6,
+      "prompt_tokens": 535,
+      "round": 3
+    },
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 79683.1,
+      "parse_failed": true,
+      "prompt_tokens": 313,
+      "round": 4
+    }
+  ]
+}

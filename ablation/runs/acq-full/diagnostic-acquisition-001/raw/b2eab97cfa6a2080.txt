@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection
+Unresolved: whether verifier_exit=1 reflects an implementation test failure, a verifier harness error, or missing/malformed evidence
+Excluded: none
+Locus: unknown

@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, verification_plan, projection
+Unresolved: whether verifier_exit=101 reflects a verifier-side failure versus a valid rejection caused by implementation or environment/plan issues
+Excluded: evidence_collection=recorded, authority=unsupported, declared_model=unsupported
+Locus: unknown

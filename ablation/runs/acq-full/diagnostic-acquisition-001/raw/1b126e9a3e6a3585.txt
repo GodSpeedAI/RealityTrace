@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether the verifier panicked internally (exit 101 being a Rust panic code) versus the implementation failing a verification check versus the cargo JSON evidence stream being malformed/insufficient for the verifier to process — no verifier stderr/stdout or error diagnostic is present to distinguish these.
+Excluded: projection (no evidence of mapping failure), authority (no authorization signals), verification_plan (no plan artifact shown), declared_model (cannot satisfy asymmetric friction: verifier, implementation, and environment not explicitly excluded)
+Locus: unknown

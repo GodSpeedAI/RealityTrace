@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan
+Unresolved: Whether the verifier exit code 1 reflects a verifier-side failure or a legitimate rejection of the subject implementation
+Excluded: none
+Locus: unknown

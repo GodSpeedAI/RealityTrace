@@ -1,0 +1,6 @@
+Locus: evidence_collection
+Actions: rerun_verifier_isolated, inspect_target_binding
+Payment: 6/7
+Rounds: 3
+Observation[0]: [rerun_verifier_isolated]: {"isolated_result": "not_found", "summary": "could not determine isolated test", "test": "(none)"}
+Observation[1]: [inspect_target_binding]: {"all_exist": false, "checked": [{"exists": false, "target": "tests/corpus_sr4_stale.rs"}], "missing_targets": ["tests/corpus_sr4_stale.rs"]}

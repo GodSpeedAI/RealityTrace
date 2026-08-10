@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **SQL**: `verifier_exit: 1` — the verifier ran and returned failure.
+- **FTS**: Completely empty — no text content was indexed.
+- **Vector**: All 64 dimensions are zero — no meaningful semantic features were extracted from any evidence content.
+- **Graph**: Shows a recorded evidence edge exists, so the pipeline attempted to record evidence, but the actual content captured is empty/null.
+
+The evidence artifact was created (an ID exists, a graph edge was written), but its content is effectively void — empty FTS, zero vector. The verifier then failed (exit 1) because it had no meaningful evidence to validate against. The root cause is that evidence was not actually collected or captured properly; the downstream verifier failure is a symptom of receiving empty input.
+
+Locus: evidence_collection

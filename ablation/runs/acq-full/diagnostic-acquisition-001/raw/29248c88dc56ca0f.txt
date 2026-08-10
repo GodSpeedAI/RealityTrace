@@ -1,0 +1,10 @@
+Looking at this case:
+
+- The evidence artifact exists (01KZH8DR4EDQKFBWEEBFJD0WNZ) and the verifier executed, returning exit code 1.
+- The FTS (full-text search) section is completely empty — no textual evidence content was indexed.
+- The vector embedding is entirely zeros (64 dimensions, all 0.0), indicating no meaningful content was embedded from the evidence.
+- Together, these signal that the evidence pipeline captured nothing substantive: the artifact is recorded in the graph and SQL metadata, but the actual evidence payload is empty/null.
+
+The verifier failed (exit 1) because it was handed empty evidence. The root cause is not the verifier logic itself, nor the implementation under test, but the layer that failed to collect and populate evidence content.
+
+Locus: evidence_collection

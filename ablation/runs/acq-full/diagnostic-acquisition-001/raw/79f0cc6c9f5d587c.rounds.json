@@ -1,0 +1,22 @@
+{
+  "actions": [],
+  "final_locus": "environment",
+  "observations": [],
+  "payment_used": 0,
+  "rounds": [
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 86744.2,
+      "parse_failed": true,
+      "prompt_tokens": 978,
+      "round": 1
+    },
+    {
+      "completion_tokens": 555,
+      "latency_ms": 12501.6,
+      "prompt_tokens": 147,
+      "round": 2,
+      "settled": true
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+Looking at the evidence for cep-06:
+
+- `verifier_exit: 2` — a non-zero, error-level exit from the verifier
+- FTS is empty and the vector is all-zeros, indicating no meaningful verifier output was produced
+- The provenance chain terminates at the verifier producing an error exit code rather than valid verification results
+
+The verifier itself crashed/errored (exit code 2), which is the direct cause of the recorded failure. The empty downstream artifacts are consequences of the verifier not completing successfully.
+
+Locus: verifier

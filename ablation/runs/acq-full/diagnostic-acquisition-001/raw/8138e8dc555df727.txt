@@ -1,0 +1,10 @@
+Looking at this failure:
+
+1. The build completed successfully (`build-finished success:true`)
+2. The test `test_corpus_scenario_assertion_bug` panicked with an assertion failure: `left: 2, right: 3`
+3. The test is at `crates/sea-forge-core/tests/corpus_sr1.rs:3:5`
+4. The verifier (test runner) ran correctly and reported the failure properly
+
+The test executed and found that the system under test produced an unexpected value (2 instead of 3). The build infrastructure, test harness, and evidence collection all worked correctly — the code being tested simply does not produce the expected result. This is a defect in the implementation itself.
+
+Locus: implementation

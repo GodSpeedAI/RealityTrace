@@ -1,0 +1,27 @@
+{
+  "actions": [
+    "inspect_verifier_config"
+  ],
+  "final_locus": "implementation",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline --message-format json corpus_scenario\"}"
+  ],
+  "payment_used": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 969,
+      "cost": 1,
+      "latency_ms": 17437.8,
+      "prompt_tokens": 22800,
+      "round": 1
+    },
+    {
+      "completion_tokens": 1080,
+      "latency_ms": 17580.3,
+      "prompt_tokens": 611,
+      "round": 2,
+      "settled": true
+    }
+  ]
+}

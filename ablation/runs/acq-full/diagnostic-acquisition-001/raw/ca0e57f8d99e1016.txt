@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, implementation, evidence_collection
+Unresolved: Whether the incorrect assertion (1+1==3) originates in the test code itself versus a generated verification plan that emitted the assertion.
+Excluded: implementation(no-sut), evidence_collection(faithful), environment(clean), verification_plan(no-plan-shown), declared_model(no-model)
+Locus: verifier

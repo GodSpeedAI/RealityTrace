@@ -1,0 +1,4 @@
+Candidates: environment, verifier, implementation, evidence_collection
+Unresolved: Whether exit 127 reflects a missing command/binary in the runtime environment, a verifier bug invoking a wrong path, or a missing implementation artifact under test — the raw exit code alone cannot disambiguate these.
+Excluded: none (no stderr/stdout/path evidence available to rule any out)
+Locus: unknown

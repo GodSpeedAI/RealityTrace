@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether verifier_exit=1 reflects a genuine defect in a specific component (e.g., implementation, verification_plan) or an infrastructure-level issue, given that the evidence artifact is effectively empty (no FTS content, all-zero vector embedding).
+Excluded: [none excludable — no evidence content available to rule out any locus]
+Locus: unknown

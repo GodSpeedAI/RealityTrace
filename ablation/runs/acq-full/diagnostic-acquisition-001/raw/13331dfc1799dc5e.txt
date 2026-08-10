@@ -1,0 +1,9 @@
+Looking at this case:
+
+- **SQL** records `verifier_exit: 1` with `stdin_format: pytest-progress` — the verifier executed and returned a non-zero exit code.
+- **FTS** is empty and **vector** is all zeros — no meaningful textual content or embedding was captured.
+- **Graph** confirms the provenance chain exists (case → repo → evidence artifact).
+
+The verifier ran (it produced an exit code), but exit code 1 in a `pytest-progress` context means tests were collected and executed, and at least one failed. The verifier performed its function correctly — it detected and reported failure. The root cause lies in the code that was tested: the **implementation** did not satisfy the verification checks.
+
+Locus: implementation

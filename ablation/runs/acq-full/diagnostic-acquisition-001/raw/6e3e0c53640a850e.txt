@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: Whether the non-zero verifier exit code (101) resulted from an unhandled exception within the verifier harness itself, a crash in the implementation under test, or a missing system dependency in the environment.
+Excluded: none
+Locus: unknown

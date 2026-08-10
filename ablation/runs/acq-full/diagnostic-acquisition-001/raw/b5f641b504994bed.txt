@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, implementation, environment
+Unresolved: Whether verifier_exit=4 indicates a verifier internal error versus a captured failure from an implementation/plan mismatch
+Excluded: verifier (exit-code pattern uncharacterized), verification_plan (no plan artifacts shown), implementation (no source/output shown), environment (no env fault shown), declared_model (not explicitly excluded), evidence_collection (no gap shown), authority (no auth signal), projection (no projection signal)
+Locus: unknown

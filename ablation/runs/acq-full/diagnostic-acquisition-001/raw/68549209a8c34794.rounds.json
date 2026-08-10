@@ -1,0 +1,47 @@
+{
+  "actions": [
+    "inspect_verifier_config",
+    "inspect_target_binding",
+    "validate_semantic_model"
+  ],
+  "final_locus": "declared_model",
+  "observations": [
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192valid, nonzero\\u2192invalid\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"conformance_result\"], \"verifier\": \"domainforge-validate\", \"verifier_command\": \"cd /home/sprime01/projects/sea-rs && /home/sprime01/projects/domainforge-slice0b/target/debug/domainforge validate .sea/interaction/interaction-model.sea\"}",
+    "[inspect_target_binding]: {\"all_exist\": true, \"checked\": [{\"exists\": true, \"target\": \".sea/interaction/interaction-model.sea\"}], \"missing_targets\": []}",
+    "[validate_semantic_model]: {\"errors\": [\"Error: Parse failed for .sea/interaction/interaction-model.sea: resolved closure failed graph construction: Undefined entity: UserIntent at 0:0\"], \"exit_code\": 1, \"model_file\": \".sea/interaction/interaction-model.sea\", \"valid\": false}"
+  ],
+  "payment_used": 5,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 1445,
+      "cost": 1,
+      "latency_ms": 27235.2,
+      "prompt_tokens": 968,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "completion_tokens": 1053,
+      "cost": 1,
+      "latency_ms": 25088.9,
+      "prompt_tokens": 572,
+      "round": 2
+    },
+    {
+      "action": "validate_semantic_model",
+      "completion_tokens": 604,
+      "cost": 3,
+      "latency_ms": 13006.2,
+      "prompt_tokens": 498,
+      "round": 3
+    },
+    {
+      "completion_tokens": 796,
+      "latency_ms": 19048.1,
+      "prompt_tokens": 352,
+      "round": 4,
+      "settled": true
+    }
+  ]
+}

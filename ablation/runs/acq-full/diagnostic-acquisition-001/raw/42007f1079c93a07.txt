@@ -1,0 +1,4 @@
+Candidates: verifier, implementation
+Unresolved: Whether verifier_exit=101 reflects a verifier-internal failure/crash or a normal non-pass verdict against the implementation.
+Excluded: none
+Locus: unknown

@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, implementation, environment, evidence_collection, declared_model, unknown
+Unresolved: Whether verifier exit code 101 indicates a defect in the verifier itself, in the artifact/implementation under test, in the surrounding environment, or simply an evidence-collection gap cannot be determined from a bare exit code with no logs, traces, or scenario detail.
+Excluded: none (insufficient evidence to exclude any locus)
+Locus: unknown

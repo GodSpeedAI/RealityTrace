@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment
+Unresolved: verifier_exit=101 establishes only an abnormal verifier-process termination; it does not establish whether the cause was verifier-internal, an invalid/unsupported verification plan, an environment/runtime fault, or implementation-triggered verdict behavior.
+Excluded: none
+Locus: unknown

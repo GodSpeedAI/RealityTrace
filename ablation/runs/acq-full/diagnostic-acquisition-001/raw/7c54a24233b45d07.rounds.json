@@ -1,0 +1,15 @@
+{
+  "actions": [],
+  "final_locus": "unknown",
+  "observations": [],
+  "payment_used": 0,
+  "rounds": [
+    {
+      "completion_tokens": 2070,
+      "latency_ms": 42119.0,
+      "prompt_tokens": 977,
+      "round": 1,
+      "settled": true
+    }
+  ]
+}

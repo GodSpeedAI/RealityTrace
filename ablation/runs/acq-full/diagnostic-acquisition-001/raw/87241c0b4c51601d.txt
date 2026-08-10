@@ -1,0 +1,10 @@
+Looking at the provenance for case df-02:
+
+1. **SQL record** shows `verifier_exit: 101` — a non-zero, abnormal exit code from the verifier itself.
+2. **FTS** is empty — no text content was indexed.
+3. **Vector** is all zeros — no semantic embedding was produced.
+4. **Graph** confirms an evidence artifact was recorded, but the evidence appears void of meaningful content.
+
+The verifier exited abnormally (code 101), which is the direct, observable failure signal. The zero-vector and empty FTS further suggest the verifier could not properly process or validate the evidence artifact. The causal layer is the component that produced the abnormal termination: the verifier itself.
+
+Locus: verifier

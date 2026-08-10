@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **verifier_exit: 4** — The verifier itself exited with code 4 (in pytest, this means a command-line usage error or the verifier tool itself failed to execute properly).
+- The **vector is all zeros** — No meaningful verification signal was captured, consistent with the verifier never running a proper check.
+- **FTS is empty** — No textual evidence was extracted.
+- The provenance graph and SQL show only that evidence was recorded, but nothing about the implementation or projection being faulty.
+
+The root cause is that the verifier failed to run correctly (exit code 4), not that the implementation produced wrong output or that evidence was misprojected. The verification tool itself is what broke.
+
+Locus: verifier

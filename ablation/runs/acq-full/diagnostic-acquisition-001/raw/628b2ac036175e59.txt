@@ -1,0 +1,4 @@
+Candidates: implementation, verifier, environment, evidence_collection
+Unresolved: Whether exit code 101 originates from the project source failing to compile (implementation), the verifier binary itself panicking (verifier), or a problem in the evidence pipeline — no stderr/stdout or compiler error text is available to distinguish.
+Excluded: environment (partially — all dependency artifacts compiled fresh, but absence of full env diagnostics prevents full exclusion), declared_model (not assessable — no declared-model content shown)
+Locus: unknown

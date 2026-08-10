@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **SQL** shows `verifier_exit: 1` (non-zero, indicating the verifier failed)
+- **FTS** is completely empty — no text content was indexed
+- **Vector** is all zeros (64 dimensions of 0.0) — no features were extractable
+- **Graph** shows an evidence artifact exists and is linked, but the artifact appears to contain no usable content
+
+The evidence artifact was nominally recorded (it has an ID and graph edges), but its content is empty or unusable — both the full-text index and the vector representation came back blank. The verifier then failed because it had no meaningful evidence to validate against. The root cause is that the evidence was collected but is empty/uninformative.
+
+Locus: evidence_collection

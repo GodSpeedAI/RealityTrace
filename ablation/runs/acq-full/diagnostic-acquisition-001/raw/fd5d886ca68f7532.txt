@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether the verifier exit code 2 indicates an internal verifier crash, a failure in the implementation under test, or a missing dependency in the environment, as no logs or semantic vectors are available.
+Excluded: None
+Locus: unknown

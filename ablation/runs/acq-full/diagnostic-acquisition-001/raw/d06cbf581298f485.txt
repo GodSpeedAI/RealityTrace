@@ -1,0 +1,9 @@
+Looking at the evidence for case cep-05:
+
+- **FTS**: Empty (no textual evidence captured)
+- **Vector**: All zeros (no meaningful embedding data)
+- **SQL**: `verifier_exit: 4` — the verifier returned an abnormal, non-standard exit code
+
+The verifier exited with code 4, which is neither a pass (0) nor a typical test-failure exit. Combined with the complete absence of meaningful captured evidence (empty FTS, zero vector), this pattern indicates the verifier itself failed to run or complete properly — it could not execute its checks and returned an internal error code rather than a verdict on the implementation.
+
+Locus: verifier

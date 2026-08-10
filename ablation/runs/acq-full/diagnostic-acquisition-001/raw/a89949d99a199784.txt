@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **verifier_exit: 1** — the verifier ran and returned a non-zero exit, signaling failure.
+- **FTS section is empty** — no text content was indexed or searchable.
+- **vector is all zeros** — no semantic features were extracted from the evidence.
+- An evidence ID exists and is linked in the graph, but the actual evidence content appears to be missing or unpopulated.
+
+The evidence artifact was nominally recorded (has an ID and graph edges), but its substantive content is absent (empty FTS, zero vector). The verifier received insufficient/empty evidence and consequently exited with failure. The root cause is that evidence was not properly collected or populated, rather than a defect in the verifier logic, projection, or implementation itself.
+
+Locus: evidence_collection

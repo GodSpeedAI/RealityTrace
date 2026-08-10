@@ -1,0 +1,4 @@
+Candidates: verifier, evidence_collection, environment, unknown
+Unresolved: Whether the verifier itself crashed (verifier_exit=1) versus whether evidence was never meaningfully captured (empty FTS, all-zero vectors) versus an environment issue preventing execution — the evidence cannot distinguish among these.
+Excluded: (none can be excluded by positive evidence)
+Locus: unknown

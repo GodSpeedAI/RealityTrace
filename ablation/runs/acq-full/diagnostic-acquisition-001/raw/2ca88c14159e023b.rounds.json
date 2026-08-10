@@ -1,0 +1,37 @@
+{
+  "actions": [
+    "inspect_environment",
+    "inspect_verifier_config"
+  ],
+  "final_locus": "unknown",
+  "observations": [
+    "[inspect_environment]: {\"env_assignments\": \"(none)\", \"path\": \"default\", \"tmpdir\": \"default\", \"toolchain\": \"available\"}",
+    "[inspect_verifier_config]: {\"direction_rule\": \"exit_code: 0\\u2192supports, nonzero\\u2192contradicts\", \"env_assignments\": \"(none)\", \"evidence_types\": [\"test_result\", \"execution_log\"], \"verifier\": \"cargo-test\", \"verifier_command\": \"cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-domain --test corpus_sr4_stale\"}"
+  ],
+  "payment_used": 2,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "completion_tokens": 1135,
+      "cost": 1,
+      "latency_ms": 17769.8,
+      "prompt_tokens": 972,
+      "round": 1
+    },
+    {
+      "action": "inspect_verifier_config",
+      "completion_tokens": 196,
+      "cost": 1,
+      "latency_ms": 4914.8,
+      "prompt_tokens": 521,
+      "round": 2
+    },
+    {
+      "completion_tokens": 4096,
+      "latency_ms": 73225.5,
+      "parse_failed": true,
+      "prompt_tokens": 579,
+      "round": 3
+    }
+  ]
+}

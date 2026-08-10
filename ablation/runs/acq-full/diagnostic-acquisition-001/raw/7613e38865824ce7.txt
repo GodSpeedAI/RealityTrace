@@ -1,0 +1,10 @@
+Looking at the provenance for sr-12:
+
+1. **SQL** shows `verifier_exit: 1` — the verifier terminated abnormally.
+2. **Vector** is all zeros across 64 dimensions — no meaningful content was embedded.
+3. **FTS** is completely empty — no text was extracted or indexed for this case.
+4. **Graph** confirms an evidence artifact exists (`01KZJ2EXBAYVC75154SZH15569`), but the artifact appears to have no parseable content.
+
+The evidence artifact was registered (evidence_id exists, graph edge present), but its actual content is empty or unparseable — the zero vector and empty FTS confirm nothing was captured. The verifier exited with code 1 because it had no valid evidence to work with. The root cause is that evidence was not properly collected or populated.
+
+Locus: evidence_collection

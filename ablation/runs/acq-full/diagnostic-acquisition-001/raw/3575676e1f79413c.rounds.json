@@ -1,0 +1,37 @@
+{
+  "actions": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding"
+  ],
+  "final_locus": "evidence_collection",
+  "observations": [
+    "[rerun_verifier_isolated]: {\"isolated_result\": \"not_found\", \"summary\": \"could not determine isolated test\", \"test\": \"(none)\"}",
+    "[inspect_target_binding]: {\"all_exist\": false, \"checked\": [{\"exists\": false, \"target\": \"tests/corpus_sr4_stale.rs\"}], \"missing_targets\": [\"tests/corpus_sr4_stale.rs\"]}"
+  ],
+  "payment_used": 6,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "completion_tokens": 755,
+      "cost": 5,
+      "latency_ms": 12999.9,
+      "prompt_tokens": 972,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "completion_tokens": 642,
+      "cost": 1,
+      "latency_ms": 19763.9,
+      "prompt_tokens": 528,
+      "round": 2
+    },
+    {
+      "completion_tokens": 575,
+      "latency_ms": 13618.3,
+      "prompt_tokens": 544,
+      "round": 3,
+      "settled": true
+    }
+  ]
+}

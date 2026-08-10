@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether verifier_exit=101 indicates the verifier itself crashed (verifier locus) versus the verifier correctly executing and reporting an implementation or environment-caused failure (implementation/environment locus) cannot be distinguished without the artifact's content.
+Excluded: none — FTS is empty and the vector is all zeros, so no narrative evidence is available to exclude any candidate by positive evidence.
+Locus: unknown

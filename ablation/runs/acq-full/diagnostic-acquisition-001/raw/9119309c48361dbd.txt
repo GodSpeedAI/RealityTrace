@@ -1,0 +1,4 @@
+Candidates: verifier, verification_plan, implementation, environment
+Unresolved: Whether verifier_exit=4 reflects a verifier/harness usage error, an invocation/plan problem, or an implementation-related test failure.
+Excluded: none
+Locus: unknown

@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: whether verifier_exit=101 reflects a verifier-internal failure versus an implementation/environment failure observed by the verifier; no logs, stdout/stderr, expected/actual comparison, or artifact content is available.
+Excluded: none
+Locus: unknown

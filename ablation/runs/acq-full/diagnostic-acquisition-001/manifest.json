@@ -1,0 +1,38 @@
+{
+  "experiment_id": "diagnostic-acquisition-001",
+  "kind": "diagnostic-acquisition-H-DIAGNOSTIC-ACQUISITION",
+  "derived_from": "Slice 7 \u00a723.2 (H-ATTRIBUTION partially supported)",
+  "parent_report": ".agents/reports/7-sxr-retrieval-ablation.md",
+  "retrieval_substrate": "Arm D (SQL+FTS+graph+vector) frozen from \u00a723.1",
+  "conditions": [
+    "D0",
+    "D1",
+    "D2"
+  ],
+  "reps": 3,
+  "model": {
+    "model_id": "glm-5.2",
+    "provider": "zai-coding-plan",
+    "endpoint": "https://api.z.ai/api/coding/paas/v4",
+    "temperature": 0.0,
+    "context_budget_tokens": 32000,
+    "max_tokens": 4096
+  },
+  "contract_fingerprint": "ad3b80a4888c8acef29968384b982c6c9cb20a480f9ca5b0f786276964936981",
+  "acquisition_budget": {
+    "max_rounds": 3,
+    "max_payment": 7
+  },
+  "probe_catalogue_hash": "a20c53251be6e2faac93b790a8f0b57b3034d3167cd50be5b4e4c52744b466a4",
+  "hypothesis": "H-DIAGNOSTIC-ACQUISITION: D2 active acquisition recovers A_c while preserving A_u, relative to D1 and D0",
+  "hashes": {
+    "corpus_cases": "7612b9881bb807ab208fc02b73982052a451cf436b31e39889a2274a0d794520",
+    "sealed_keys": "10f677535412ef52b3150ca3c28865aec560da970ac2ff27c73b50f40b5c8e17",
+    "acquisition_keys": "8fcb69275313a916594da3065ae916b4f20184be7b6c902a6e918f6b72a2433a",
+    "acquisition_hidden_meta": "dcf75d1340972fd6cb16b594493fae0554ec327a98278a092686a5abf71719e5",
+    "acquisition_reclassifications": "de0ab8e3b8a3bbe7de1eb638a4292db9d2804e63d8c5aafed239279dbe3b6444",
+    "acquisition_probes": "04223b490369e5e58052c780142cad2e7fcc3b9336c977b3c2c635136a1f6f8a",
+    "sxr_git_head": "416105e58c93ba897b11314ad527e954fc98f1d8"
+  },
+  "contract_hash": "4265b25b0d964f4b8af97ccf725d85b2396604ec42e0df7e4860baadc9cb2a51"
+}

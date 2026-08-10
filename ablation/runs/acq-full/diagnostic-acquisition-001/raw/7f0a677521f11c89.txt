@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, verification_plan, environment, evidence_collection
+Unresolved: whether verifier_exit=101 reflects an internal verifier fault, a subject/build/runtime implementation failure, a plan/input mismatch, or merely insufficiently captured output; only the exit code and dependency artifacts are available.
+Excluded: none
+Locus: unknown

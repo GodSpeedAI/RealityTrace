@@ -1,0 +1,5 @@
+Locus: environment
+Actions: inspect_environment
+Payment: 1/7
+Rounds: 2
+Observation[0]: [inspect_environment]: {"env_assignments": "PATH=/usr/bin:/bin", "path": "restricted", "tmpdir": "default", "toolchain": "unavailable"}

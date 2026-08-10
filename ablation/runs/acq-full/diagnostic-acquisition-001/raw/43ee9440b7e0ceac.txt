@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, verification_plan
+Unresolved: Whether verifier_exit 101 reflects a verifier-side crash, an implementation-triggered failure, or an environment/plan defect—no content available to distinguish.
+Excluded: none (cannot exclude any locus with stated evidence; FTS empty, vectors all-zero, only exit code present)
+Locus: unknown

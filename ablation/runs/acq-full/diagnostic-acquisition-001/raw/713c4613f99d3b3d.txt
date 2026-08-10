@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether verifier exit code 101 reflects a crash/fault within the verifier itself, a legitimate failure detected in the implementation under test, or a breakdown in evidence capture that left the root cause unobservable
+Excluded: projection-noartifact, authority-noauthsignal, verification_plan-noplan, declared_model-nomodelsignal
+Locus: unknown
