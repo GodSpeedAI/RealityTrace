@@ -1,0 +1,41 @@
+{
+  "record_type": "zai_provider_preflight",
+  "date": "2026-08-09",
+  "purpose": "§23.2 pre-execution provider substitution Clinepass -> direct Z.ai (GLM-5.2). Model-equivalence + routing preflight per owner directive.",
+  "endpoint": "https://api.z.ai/api/paas/v4",
+  "auth_scheme": "Zhipu/BigModel signed JWT (HS256, header sign_type=SIGN, payload api_key=<id>, exp/timestamp in ms); key format <id>.<secret>",
+  "credentials_probed": {
+    "zai": {"result": "AUTH_FAILED", "http": 401, "code": 1000, "note": "key rejected on both api.z.ai and open.bigmodel.cn; likely invalid/expired"},
+    "zai-coding-plan": {"result": "AUTH_OK", "note": "authenticates; reaches model/balance layer"}
+  },
+  "model_catalog": {
+    "n_models": 8,
+    "glm_models": ["glm-4.5", "glm-4.5-air", "glm-4.6", "glm-4.7", "glm-5", "glm-5-turbo", "glm-5.1", "glm-5.2"],
+    "glm_5_2_listed": true
+  },
+  "glm_5_2_call_attempt": {
+    "requested_model": "glm-5.2",
+    "result": "HTTP 429",
+    "error_code": "1113",
+    "error_message": "Insufficient balance or no resource package. Please recharge.",
+    "resolved_model": null,
+    "routing_metadata_captured": false,
+    "note": "no inference response returned; could not capture resolved model / final serving backend / usage"
+  },
+  "balance_scope": {
+    "all_models_balance_blocked": true,
+    "models_tested": ["glm-4.5-air", "glm-4.6", "glm-5", "glm-5.2"],
+    "all_returned": "HTTP 429 code 1113 insufficient balance",
+    "interpretation": "account-wide balance/package issue on zai-coding-plan, not glm-5.2-specific; will not self-recover without recharge"
+  },
+  "provider_delta_vs_canonical_clinepass": {
+    "canonical_clinepass": {"canonicalSlug": "zai/glm-5.2", "finalProvider": "fireworks", "status": "monthly quota exhausted (resets ~1d21h)"},
+    "direct_zai": {"would_be_final_backend": "Zhipu/Z.ai own infrastructure (NOT fireworks) — plausible CASE A different-backend replication, but UNVERIFIED due to balance wall", "status": "insufficient balance (code 1113)"},
+    "classification": "PREFLIGHT_INCOMPLETE_AT_BALANCE_WALL"
+  },
+  "decision": "STOP. No usable GLM-5.2 serving route currently available (Clinepass quota-exhausted; Z.ai balance-exhausted). External execution-capacity blocker on both routes. Not an experimental/architecture finding. No model/provider switch, no partial runs. §23.2 canonical contract remains frozen, 0/360 units committed.",
+  "resume_options_for_owner": [
+    "recharge the zai-coding-plan Z.ai account, then retry the direct-Z.ai GLM-5.2 route (would also yield the provider-delta classification A/B/C/D)",
+    "wait for Clinepass monthly quota reset (~1d21h) and execute §23.2 via the original canonical Clinepass route unchanged"
+  ]
+}
