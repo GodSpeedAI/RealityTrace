@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment, evidence_collection
+Unresolved: Whether the non-zero verifier exit was caused by an actual implementation/test failure or by a defect in the verifier, evidence capture, or execution environment.
+Excluded: none
+Locus: unknown

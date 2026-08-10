@@ -1,0 +1,4 @@
+Candidates: implementation, environment, verifier
+Unresolved: Whether the verifier exit code 101 stems from a runtime panic in the project implementation, an environment incompatibility (libc build-script emitting `freebsd12` cfg suggests a FreeBSD host that may not match the project's target), or a defect in the verifier itself.
+Excluded: evidence_collection (evidence was captured and is present), authority (no permission/access errors visible), projection (no projection-stage artifacts or errors shown), verification_plan (no plan-specific diagnostics available), declared_model (cannot assess — implementation, environment, and verifier are not each explicitly excluded with stated evidence, so the F-28 gate is not satisfied)
+Locus: unknown

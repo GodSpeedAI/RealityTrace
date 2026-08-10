@@ -1,0 +1,11 @@
+Looking at the evidence for case ag-06:
+
+- **verifier_exit: 101** — a non-zero exit code, specifically 101 (commonly a runtime panic/abort code).
+- **FTS** section is empty — no full-text content was indexed.
+- **Vector** is all zeros — no semantic content was captured.
+- The evidence was collected (artifact exists, graph/SQL rows present), so evidence collection itself functioned.
+- The verifier process itself crashed (exit 101), rather than producing a clean pass/fail judgment.
+
+The recorded failure is a crash of the verifier process itself (exit 101), not a false-negative judgment, missing evidence, or implementation fault. The causal layer is the verifier.
+
+Locus: verifier

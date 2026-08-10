@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: Whether verifier exit code 1 reflects a verifier defect, an implementation failure, or an environment issue
+Excluded: none
+Locus: unknown

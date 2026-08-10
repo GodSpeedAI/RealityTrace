@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, environment
+Unresolved: Whether exit code 101 reflects a verifier-side panic/bug versus a correctly-detected failure in the implementation under test cannot be distinguished from the available evidence.
+Excluded: environment (all dependency crates compiled, all artifacts marked fresh:true), verification_plan (no evidence of plan defects in this context), projection (no evidence), authority (no evidence), evidence_collection (cargo JSON artifacts were successfully captured), declared_model (not reached—verifier and implementation not excluded)
+Locus: unknown

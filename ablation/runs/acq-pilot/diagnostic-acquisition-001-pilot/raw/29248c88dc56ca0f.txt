@@ -1,0 +1,12 @@
+Looking at this case:
+
+- **SQL** shows `verifier_exit: 1` — the verifier ran and returned a failure exit code, indicating the subject under verification failed the checks.
+- **Graph** confirms evidence was recorded and linked properly.
+- **FTS** and **Vector** are empty/zero, meaning the artifact content is minimal, but the provenance chain (case → evidence → artifact) is intact.
+- The verifier executed successfully (it produced an exit code, didn't crash), so the verifier infrastructure worked.
+- The evidence was collected and stored (evidence_id exists, SQL record present).
+- The verifier's non-zero exit is the direct signal that the artifact being verified did not meet the expected criteria.
+
+The failure is not in the verification machinery, evidence pipeline, or environment — the verifier correctly detected and reported a deficiency in the subject artifact.
+
+Locus: implementation

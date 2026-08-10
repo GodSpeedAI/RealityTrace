@@ -1,0 +1,27 @@
+{
+  "actions": [
+    "rerun_verifier_isolated"
+  ],
+  "final_locus": "implementation",
+  "observations": [
+    "[rerun_verifier_isolated]: {\"isolated_result\": \"compile_error\", \"summary\": \"compilation failed \\u2014 no test could run\", \"test\": \"(none)\"}"
+  ],
+  "payment_used": 5,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "completion_tokens": 604,
+      "cost": 5,
+      "latency_ms": 15338.2,
+      "prompt_tokens": 972,
+      "round": 1
+    },
+    {
+      "completion_tokens": 2657,
+      "latency_ms": 61672.1,
+      "prompt_tokens": 498,
+      "round": 2,
+      "settled": true
+    }
+  ]
+}

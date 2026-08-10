@@ -1,0 +1,6 @@
+Locus: environment
+Actions: rerun_verifier_isolated, inspect_permissions
+Payment: 6/7
+Rounds: 3
+Observation[0]: [rerun_verifier_isolated]: {"elapsed_s": 0.6, "exit_code": 1, "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_test_unreadable_fixture", "isolated_result": "failed", "summary": "\ntests/test_import.py:22: PermissionError\n=========================== short test summary info ============================\nFAILED tests/test_import.py::test_corpus_scenario_test_unreadable_fixture - P...\n1 failed in 0.19s", "test": "tests/test_import.py::test_corpus_scenario_test_unreadable_fixture"}
+Observation[1]: [inspect_permissions]: {"all_accessible": false, "checked": [{"mode": "0", "path": "tests/fixtures/sample_settlement_recorded.json", "readable": false, "restrictive": true}, {"mode": "644", "path": "tests/test_import.py", "readable": true, "restrictive": false}], "restrictive_paths": [{"mode": "0", "path": "tests/fixtures/sample_settlement_recorded.json", "readable": false, "restrictive": true}]}

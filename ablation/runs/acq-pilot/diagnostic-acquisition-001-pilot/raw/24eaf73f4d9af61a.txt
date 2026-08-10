@@ -1,0 +1,4 @@
+Candidates: implementation, verifier, environment, evidence_collection, verification_plan
+Unresolved: Whether the verifier exit code 1 reflects a genuine implementation defect versus a failure in the verifier, its plan, the environment, or the evidence-collection process—no artifact content, error messages, stack traces, or test output are available (FTS is empty, vector is all zeros) to distinguish among these.
+Excluded: (none excludable by available evidence)
+Locus: unknown

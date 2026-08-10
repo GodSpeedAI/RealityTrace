@@ -1,0 +1,4 @@
+Candidates: verifier, implementation, evidence_collection, environment
+Unresolved: Whether exit code 101 (a Rust panic convention) originates from a flaw in the verifier's own logic, from the implementation-under-test panicking during verification, or from an environment/runtime issue during evidence collection — no stderr/stdout or panic backtrace is available.
+Excluded: projection (no projection-step evidence present), authority (no authorization-gate evidence), declared_model (no model-spec discrepancy shown), verification_plan (no plan artifact shown)
+Locus: unknown

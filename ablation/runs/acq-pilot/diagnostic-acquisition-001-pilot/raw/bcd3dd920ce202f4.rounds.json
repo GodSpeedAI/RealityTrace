@@ -1,0 +1,37 @@
+{
+  "actions": [
+    "rerun_verifier_isolated",
+    "inspect_permissions"
+  ],
+  "final_locus": "environment",
+  "observations": [
+    "[rerun_verifier_isolated]: {\"elapsed_s\": 0.6, \"exit_code\": 1, \"isolated_cmd\": \"uv run pytest -q tests/test_import.py::test_corpus_scenario_test_unreadable_fixture\", \"isolated_result\": \"failed\", \"summary\": \"\\ntests/test_import.py:22: PermissionError\\n=========================== short test summary info ============================\\nFAILED tests/test_import.py::test_corpus_scenario_test_unreadable_fixture - P...\\n1 failed in 0.19s\", \"test\": \"tests/test_import.py::test_corpus_scenario_test_unreadable_fixture\"}",
+    "[inspect_permissions]: {\"all_accessible\": false, \"checked\": [{\"mode\": \"0\", \"path\": \"tests/fixtures/sample_settlement_recorded.json\", \"readable\": false, \"restrictive\": true}, {\"mode\": \"644\", \"path\": \"tests/test_import.py\", \"readable\": true, \"restrictive\": false}], \"restrictive_paths\": [{\"mode\": \"0\", \"path\": \"tests/fixtures/sample_settlement_recorded.json\", \"readable\": false, \"restrictive\": true}]}"
+  ],
+  "payment_used": 6,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "completion_tokens": 3611,
+      "cost": 5,
+      "latency_ms": 102162.8,
+      "prompt_tokens": 971,
+      "round": 1
+    },
+    {
+      "action": "inspect_permissions",
+      "completion_tokens": 3351,
+      "cost": 1,
+      "latency_ms": 78952.2,
+      "prompt_tokens": 599,
+      "round": 2
+    },
+    {
+      "completion_tokens": 575,
+      "latency_ms": 19972.6,
+      "prompt_tokens": 581,
+      "round": 3,
+      "settled": true
+    }
+  ]
+}

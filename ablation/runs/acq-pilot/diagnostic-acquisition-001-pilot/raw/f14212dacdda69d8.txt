@@ -1,0 +1,10 @@
+Looking at the provenance for cep-09:
+
+- **SQL**: metadata present, `verifier_exit: 1` (verifier ran and reported failure)
+- **Graph**: case and evidence nodes exist with valid edges
+- **FTS**: empty
+- **Vector**: all 64 dimensions are `0.0`
+
+The evidence artifact exists and metadata was captured (SQL + graph have data), so evidence was collected. The verifier executed and produced an exit code. However, the **vector embedding is entirely zero-valued** and FTS is empty — the transformation of evidence into the vector-space representation produced no signal. This is the signature of a projection-layer failure where content exists in raw/metadata form but fails to project into the embedding space.
+
+Locus: projection
