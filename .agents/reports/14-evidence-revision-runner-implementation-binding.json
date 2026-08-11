@@ -1,0 +1,41 @@
+{
+  "bound_files": [
+    "ablation/eval/v2/evidence_revision_run.py",
+    "ablation/eval/v2/provider.py",
+    "ablation/eval/v2/controller.py",
+    "ablation/eval/v2/channel.py",
+    "ablation/eval/v2/dstate.py",
+    "ablation/eval/v2/decision.py",
+    "ablation/eval/v2/execution.py",
+    "ablation/eval/v2/ledger.py",
+    "ablation/eval/v2/legibility.py",
+    "ablation/eval/v2/ids.py",
+    "ablation/eval/v2/case_inputs_v2.py",
+    "ablation/eval/v2/marker_neutralization.py",
+    "ablation/eval/v2/sufficiency.py",
+    "ablation/eval/v2/replication.py",
+    "ablation/eval/v2/validity_revision.py"
+  ],
+  "design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
+  "design_fingerprint_changed": false,
+  "executable_contract_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
+  "executable_fingerprint_changed": false,
+  "existing_release_marker_stale": true,
+  "experiment_id": "evidence-revision-001",
+  "full_authorized": false,
+  "model_calls_performed": 0,
+  "owner_state_changed": false,
+  "pilot_executed": false,
+  "provider_calls_performed": 0,
+  "reviewed_runner_commit": "cf9b28b84a415ef33519e0866536ebd7787d567d",
+  "revision_id": "evidence-revision-001-revision-002",
+  "runner_implementation_schema": "evidence-revision-runner-implementation-v1",
+  "runner_implementation_sha256": "56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066",
+  "test_commit": "e624ef39ab434d0f7984b17e9a363c8b11b3abef",
+  "tests": {
+    "collected": 366,
+    "failed": 0,
+    "passed": 366,
+    "skipped": 0
+  }
+}
