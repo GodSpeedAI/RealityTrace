@@ -287,6 +287,19 @@ class DiagnosticController:
 
             # ── action proposal ──────────────────────────────────────────────
             if d.is_action:
+                # In a harness-source condition the model-visible action field
+                # cannot select evidence.  The frozen evidence-revision arms
+                # all declare action_source="harness" specifically to remove
+                # action selection from the measured construct.  A syntactically
+                # valid action proposal is recorded, but delivery remains the
+                # harness policy's deterministic choice.
+                if self.spec.action_source == "harness":
+                    rr.gate_result = "MODEL_ACTION_IGNORED_HARNESS_CONTROLLED"
+                    state = self._harness_deliver(
+                        state, res, rr, channel, catalogue, observations,
+                        evaluator_discriminating, seed + rnd, acquired_probes)
+                    res.rounds.append(rr)
+                    continue
                 handle = d.selected_action
                 probe = catalogue.probe_of(handle)
                 cost = self.costs[probe]
@@ -401,6 +414,17 @@ class DiagnosticController:
             rr.gate_result = "NO_FURTHER_EVIDENCE"
             return state
         delivery = channel.deliver(remaining, discriminating, seed)
+        if (self.spec.budget_semantics == "ENFORCED"
+                and state.payment_used + delivery.payment_charged
+                > self.spec.max_payment):
+            # Do not silently shrink MASKED_K: doing so would change its
+            # declared consistency-set bound.  The complete policy delivery is
+            # unaffordable, so no observation is delivered and governance
+            # records exhaustion without charging payment.
+            rr.gate_result = "HARNESS_DELIVERY_UNAFFORDABLE"
+            from dataclasses import replace
+            return replace(state, available_actions=(),
+                           governance_state="BUDGET_EXHAUSTED")
         probes = list(delivery.delivered_probes)
         state = state.with_observations(
             delivery.observations, "harness", delivery.payment_charged,
