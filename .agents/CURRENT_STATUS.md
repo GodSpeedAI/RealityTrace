@@ -1,25 +1,29 @@
 # Current status
 
 ## Objective
-Implement the offline-proven runner for frozen `evidence-revision-001` without provider/model calls or scientific changes.
-
-## Worktree
-Branch `main`; unrelated untracked historical outputs under `ablation/runs/` remain untouched.
+Close BLOCKER-01 through BLOCKER-04 for `evidence-revision-001` through an offline owner-authorized scientific revision; do not run or authorize execution.
 
 ## Completed
-- Map: `.agents/reports/10-evidence-revision-runner-map.md`.
-- Runner: `ablation/eval/v2/evidence_revision_run.py`.
-- Central owner/release/stage/hash/client/matrix gate; immutable namespaces.
-- Durable raw-before-parse replay, result binding, checkpoints, idempotent scoring, offline fake.
-- Harness action isolation and enforced-payment conformance fixes.
-- 37 new runner tests; full offline suite 291/291 passing.
-- Readiness artifacts: `.agents/reports/11-evidence-revision-runner-readiness.{md,json}`.
+- New design fingerprint: `3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9` (supersedes `7edd93a3...`).
+- New executable fingerprint: `12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e` (supersedes `557c0dcd...`).
+- Marker-neutral case-input v2 and pre-render probe projection; no primary exclusions.
+- Exact K=3, cost-3–5 MASKED_K policy; exhaustive 43-case feasibility; zero missing/unaffordable/singleton deliveries.
+- Paired evidence-policy seed; R1/R2 and R3/R4 underlying evidence equality proven over 86 pairs each.
+- Revised public-only pilot: 6 cases × 5 arms × 2 repetitions = 60 units.
+- Runner conformed to revised scientific/executable contracts.
+- Reports: `.agents/reports/12-evidence-revision-validity-closure.{md,json}`.
 
 ## Verification
-291 collected/passed; 0 failed; 0 skipped. Model calls 0; provider calls 0. Dry-run passed with fake only. Frozen science and historical evidence unchanged.
+- Full offline suite: 351 collected, 351 passed, 0 failed, 0 skipped.
+- Ten revised artifacts reproduce canonically.
+- Mutation suite rejects marker, arm-seed, singleton, over-budget, missingness, and pair-mismatch regressions.
+- Model calls: 0. Provider calls: 0.
 
-## Blocker
-The authoritative contract lacks exact pilot case selection, repetition count, and per-case model-visible original Question/failure-evidence binding. Unit count, UIDs, and live initial states cannot be invented. Execution remains fail-closed pending owner/Opus adjudication, independently of `FROZEN_NOT_STARTED`.
+## Authority
+- Status: `FROZEN_NOT_STARTED`.
+- `execution_authorized=false`.
+- `additional_provider_calls_authorized=false`.
+- No release token/marker, preflight, pilot, full stage, smoke call, provider call, or model call was created or run.
 
-## Live-only checks
-Route/credentials, returned identity/metadata, finish reason, effective ceiling, optional cost fields, and provider idempotency/reconciliation. No live preflight was run.
+## Worktree
+Unrelated pre-existing untracked outputs under `ablation/runs/` remain untouched.

@@ -1,0 +1,97 @@
+{
+  "additional_provider_calls_authorized": false,
+  "blockers": {
+    "BLOCKER-01": {
+      "evidence": "6894ef508337acab7b409794818d2417a46a0399492b606ca867f79c37186539",
+      "primary_marker_contaminated": [],
+      "status": "CLOSED"
+    },
+    "BLOCKER-02": {
+      "evidence": "cf052b0e691bc65bdb9f889e0a3b69cfdbcfe958440a00cc6f806e8dcd5f9e87",
+      "realized_k": 3,
+      "singleton_equivalent_count": 0,
+      "status": "CLOSED"
+    },
+    "BLOCKER-03": {
+      "evidence": "f185375606e91314aa2bcea443552e49fb373c0456d2a464e83229cd4c6c7e01",
+      "status": "CLOSED",
+      "unaffordable_count": 0
+    },
+    "BLOCKER-04": {
+      "evidence": {
+        "R1_R2": true,
+        "R3_R4": true
+      },
+      "status": "CLOSED"
+    }
+  },
+  "case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
+  "commits": [
+    "1a40669d9e337824132c4b5683f4289bce0d8fa3",
+    "7e7cf516335c986cbea3b67e958931770bdd73b5",
+    "f2196fc4c8df86ddff9fe051970244435e83210a",
+    "3f523bb634da5f009c3ed3797940f6d70f4070ed",
+    "cb6dbbdf8b3495e2b450015ba662b210bf3bc23a",
+    "66c67226673be1eefe53f475b9729df1d67ea5f0",
+    "2da4d90cb4c9dbd147581c831a56050168fdac2d",
+    "f2cc1bc4e3daa7872102efbb834d24c9ae67d74f"
+  ],
+  "design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
+  "executable_contract_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
+  "execution_authorized": false,
+  "experiment_id": "evidence-revision-001",
+  "marker_channel": {
+    "manifest_entries": 45,
+    "model_visible_construction_marker_cases": 0,
+    "primary_marker_contaminated": 0,
+    "primary_source_initial_cases": 7,
+    "primary_source_probe_cases": 12
+  },
+  "masked_k": {
+    "cost_range": [
+      3,
+      5
+    ],
+    "k": 3,
+    "missingness_count": 0,
+    "realized_k_distribution": {
+      "3": 86
+    },
+    "realized_max_leakage_bits": 1.222392,
+    "realized_mean_leakage_bits": 1.16448,
+    "singleton_equivalent_count": 0,
+    "theoretical_leakage_bits": 1.222392,
+    "unaffordable_count": 0
+  },
+  "model_calls_performed": 0,
+  "pair_proof": {
+    "R1_R2_evidence_equal": true,
+    "R3_R4_evidence_equal": true,
+    "mismatches": 0
+  },
+  "pilot": {
+    "cases": [
+      "cep-07",
+      "df-11",
+      "ag-04",
+      "sr-10",
+      "df-06",
+      "cep-05"
+    ],
+    "repetitions": 2,
+    "total_units": 60
+  },
+  "pilot_matrix_sha256": "effd44ec461b8624e4c498b80f40884f1af0d30296b9062bda3a1f090d85a9e3",
+  "primary_population_count": 43,
+  "provider_calls_performed": 0,
+  "revision_id": "evidence-revision-001-revision-002",
+  "status": "FROZEN_NOT_STARTED",
+  "supersedes_design_fingerprint": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
+  "supersedes_executable_fingerprint": "557c0dcd9fe3b354e754074dd8d3e61a635a0bec638c138f592b451fca1083cd",
+  "tests": {
+    "collected": 351,
+    "failed": 0,
+    "passed": 351,
+    "skipped": 0
+  }
+}
