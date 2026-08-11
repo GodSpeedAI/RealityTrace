@@ -1,0 +1,39 @@
+{
+  "commits": [
+    "60f599be77c56dd231c47cca41bf9b362bcc0bbb",
+    "d0f176dce9d96abc9e80bcf71e96e154efc182d1"
+  ],
+  "design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
+  "design_fingerprint_changed": false,
+  "executable_contract_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
+  "executable_fingerprint_changed": false,
+  "existing_release_marker_stale": false,
+  "experiment_id": "evidence-revision-001",
+  "fingerprint_rationale": "runner source and orchestration are excluded from executable_declarations preimage; repair changes no declared field",
+  "full_authorized": false,
+  "live_loop_wired": true,
+  "model_calls_performed": 0,
+  "owner_authorization_commit": "86f77ad6a7a293de215f9fb7059af67fe3e22366",
+  "phase_a": "STATIC_AUTHORIZED",
+  "phase_b": "CLIENT_VALIDATED",
+  "phase_c": "FINAL_AUTHORIZED",
+  "pilot_authorized": true,
+  "pilot_executed": false,
+  "provider_calls_performed": 0,
+  "repair": "two-phase-live-runner-integration",
+  "revision_id": "evidence-revision-001-revision-002",
+  "root_cause": [
+    "client-required gate called provisionally with client=None",
+    "unconditional NotImplementedError after client construction"
+  ],
+  "source_hashes": {
+    "provider": "1f7bfd2ab6d1e86fe344085b38e6359ca0aae43b35ad07cfe76ddd72ff6f9aea",
+    "runner": "96f1fd269a413161818ff37d9923ce132e79bb1f392832523175ca1855501d38"
+  },
+  "tests": {
+    "collected": 362,
+    "failed": 0,
+    "passed": 362,
+    "skipped": 0
+  }
+}
