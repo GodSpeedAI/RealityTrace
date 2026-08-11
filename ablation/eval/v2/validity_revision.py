@@ -52,6 +52,13 @@ EVIDENCE_POLICY = {"R0": "NONE", "R1": "MASKED_K", "R2": "MASKED_K",
 PILOT_NAMESPACE = "pilot:er001-pilot-v2"
 FULL_NAMESPACE = "full:er001-full-v2"
 PILOT_REPETITIONS = 2
+PRIMARY_CASES = (
+    "ag-04", "ag-05", "ag-06", "ag-07", "ag-08", "ag-09", "ag-10",
+    "ag-11", "ag-12", "ag-13", "ag-14", "cep-04", "cep-05", "cep-06",
+    "cep-07", "cep-08", "cep-09", "cep-10", "cep-11", "cep-12", "cep-13",
+    "cep-14", "df-03", "df-04", "df-05", "df-06", "df-07", "df-08",
+    "df-09", "df-10", "df-11", "df-12", "df-15", "sr-03", "sr-04",
+    "sr-05", "sr-06", "sr-07", "sr-08", "sr-09", "sr-10", "sr-11", "sr-12")
 
 
 def _canonical(value) -> str:
@@ -138,7 +145,7 @@ def feasibility_report(observations: dict | None = None,
     observations = observations or neutralized_observations()[0]
     hidden = hidden or _sealed_hidden_meta()
     rows, case_spaces, structural = [], [], []
-    for case_id in primary_population():
+    for case_id in PRIMARY_CASES:
         target = hidden[case_id]["discriminating_probes"][0]
         available = tuple(p for p in PROBES if p in observations[case_id]
                           and p != target)
@@ -192,7 +199,7 @@ def leakage_report(observations: dict | None = None,
                    hidden: dict | None = None, keys: dict | None = None) -> dict:
     observations = observations or neutralized_observations()[0]
     hidden, keys = hidden or _sealed_hidden_meta(), keys or _sealed_keys()
-    cases = primary_population()
+    cases = PRIMARY_CASES
     capable = collections.defaultdict(set)
     for c in cases:
         capable[hidden[c]["discriminating_probes"][0]].add(keys[c]["true_locus"])
@@ -251,7 +258,7 @@ def pair_equality_report(observations: dict | None = None,
     out = {}
     for a, b in (("R1", "R2"), ("R3", "R4")):
         rows = []
-        for c in primary_population():
+        for c in PRIMARY_CASES:
             for rep in range(1, PILOT_REPETITIONS + 1):
                 ca, da = selected_delivery(c, rep, a, observations, hidden)
                 cb, db = selected_delivery(c, rep, b, observations, hidden)
@@ -300,7 +307,7 @@ def _pilot_axes(case_id: str, inputs: dict, source_obs: dict) -> dict:
 def pilot_cases(inputs: dict | None = None) -> tuple[str, ...]:
     inputs = inputs or build_case_inputs_v2()[0]
     source_obs = _probe_observations()
-    cases = primary_population()
+    cases = PRIMARY_CASES
     axes = {c: _pilot_axes(c, inputs, source_obs) for c in cases}
     required = {a: {v[a] for v in axes.values()} for a in next(iter(axes.values()))}
     order = sorted(cases, key=lambda c: _sha(
@@ -342,6 +349,7 @@ def scientific_declarations(case_hash: str, marker_hash: str) -> dict:
                          "answer_key", "model_output"]},
         "unchanged_science": {
             "arms": list(ARMS), "primary_population": PRIMARY_POPULATION,
+            "primary_case_ids": list(PRIMARY_CASES),
             "primary_endpoint": PRIMARY_ENDPOINT,
             "secondary_endpoints": SECONDARY_ENDPOINTS,
             "comparisons": COMPARISONS, "statistical_plan": STATISTICAL_PLAN,
@@ -480,7 +488,7 @@ def build_artifacts() -> dict:
             "R3_R4": pairs["R3_vs_R4"]["underlying_evidence_equal"]}},
         "design_fingerprint": design_fp,
         "executable_contract_fingerprint": executable_fp,
-        "primary_population_count": len(primary_population()),
+        "primary_population_count": len(PRIMARY_CASES),
         "pilot": {"cases": matrix["cases"], "repetitions": PILOT_REPETITIONS,
                   "total_units": matrix["total_units"]},
         "model_calls_performed": 0, "provider_calls_performed": 0,

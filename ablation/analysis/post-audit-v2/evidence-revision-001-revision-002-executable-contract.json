@@ -5,7 +5,7 @@
     "sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b"
   },
   "decoy_policy_version": "masked-k-exact3-affordable-v2",
-  "design_fingerprint": "c3674dc299c1667523243b355774eb2c29460b242a52b216eb0257aeaff231fe",
+  "design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
   "evidence_policy": {
     "R0": "NONE",
     "R1": "MASKED_K",
@@ -13,7 +13,7 @@
     "R3": "FULL",
     "R4": "FULL"
   },
-  "executable_contract_fingerprint": "3c63b6df1aa8b2081d5a595a147b64c60aa8780f281267756cbe016516d1bd6e",
+  "executable_contract_fingerprint": "2f377dd9fc18ec4516bd07d0fe3cf5d069bd4a54a6ec3431d309773b5e2183c2",
   "executable_version": "executable-contract-v2",
   "execution_authorized": false,
   "experiment_id": "evidence-revision-001",
@@ -23,7 +23,7 @@
   "masked_k_feasibility_sha256": "f185375606e91314aa2bcea443552e49fb373c0456d2a464e83229cd4c6c7e01",
   "masked_k_leakage_sha256": "cf052b0e691bc65bdb9f889e0a3b69cfdbcfe958440a00cc6f806e8dcd5f9e87",
   "model_calls_performed": 0,
-  "pilot_matrix_sha256": "ce95cd08808fbfd7e66d3c985188a362371c54c1fcdfa3a3faa1d7af9b8c19d5",
+  "pilot_matrix_sha256": "70eea8a18d86b9cc6304f929cd583a1d094b6ef78427209f8874ba4e997a32bb",
   "pilot_selection": {
     "cases": [
       "cep-07",

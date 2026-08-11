@@ -22,8 +22,8 @@
     },
     "status": "CLOSED"
   },
-  "design_fingerprint": "c3674dc299c1667523243b355774eb2c29460b242a52b216eb0257aeaff231fe",
-  "executable_contract_fingerprint": "3c63b6df1aa8b2081d5a595a147b64c60aa8780f281267756cbe016516d1bd6e",
+  "design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
+  "executable_contract_fingerprint": "2f377dd9fc18ec4516bd07d0fe3cf5d069bd4a54a6ec3431d309773b5e2183c2",
   "execution_authorized": false,
   "model_calls_performed": 0,
   "pilot": {
