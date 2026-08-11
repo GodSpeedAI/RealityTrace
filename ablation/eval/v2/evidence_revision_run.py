@@ -35,11 +35,12 @@ from .case_inputs_v2 import (covariates_for, initial_state_for,
                              load_case_inputs as load_case_inputs_v2)
 from .marker_neutralization import assert_marker_free
 from .validity_revision import (
-    DESIGN_VERSION, EVIDENCE_POLICY, EXECUTABLE_VERSION, FULL_NAMESPACE,
+    DESIGN_VERSION, DIRECT_CANDIDATE_UNIVERSE, EVIDENCE_POLICY,
+    EXECUTABLE_VERSION, FULL_NAMESPACE,
     LEAKAGE_POLICY_VERSION, PILOT_NAMESPACE, PILOT_REPETITIONS,
     PREDECESSOR_DESIGN, PREDECESSOR_EXECUTABLE, build_artifacts,
-    design_fingerprint, neutralized_observations, pair_equality_report,
-    selected_delivery)
+    design_fingerprint, feasibility_report, leakage_report,
+    neutralized_observations, pair_equality_report, selected_delivery)
 from .ids import unit_id
 from .ledger import CommitLedger, CommitViolation
 from .legibility import assert_semantic_equivalence
@@ -54,6 +55,9 @@ RUNNER_SCHEMA = "evidence-revision-runner-v2"
 MATRIX_SCHEMA = "evidence-revision-matrix-v2"
 CALL_SCHEMA = "evidence-revision-call-v1"
 VALID_STAGES = ("pilot", "full")
+FROZEN_REQUESTED_MODEL = "glm-5.2"
+FROZEN_PROVIDER_ROUTE = "zai-coding-plan"
+FROZEN_PROVIDER_ENDPOINT = "https://api.z.ai/api/coding/paas/v4/chat/completions"
 REPO_ROOT = Path(__file__).resolve().parents[3]
 CORPUS = REPO_ROOT / "ablation" / "corpus"
 REVISION_DIR = REPO_ROOT / "ablation" / "analysis" / "post-audit-v2"
@@ -73,6 +77,8 @@ CORPUS_FILES = {
     "sufficiency": CORPUS / "governed-sufficiency-contract.json",
 }
 SOURCE_FILES = {
+    "runner_module": Path(__file__),
+    "provider_module": Path(__file__).with_name("provider.py"),
     "scientific_contract": REVISED_SCIENTIFIC_CONTRACT,
     "executable_contract": REVISED_EXECUTABLE_CONTRACT,
     "pilot_matrix": REVISED_PILOT_MATRIX,
@@ -306,29 +312,48 @@ class GateRequest:
     run_root: Path
     owner_state: Mapping = dataclasses.field(default_factory=lambda: OWNER_STATE)
     observed_fingerprint: str = EXPECTED_EXECUTABLE_FINGERPRINT
+    observed_design_fingerprint: str = EXPECTED_DESIGN_FINGERPRINT
 
 
 class ExecutionGate:
-    """Single, fail-closed gate for every future non-dry provider execution."""
+    """Two-phase fail-closed gate for every non-dry provider execution."""
 
     AUTHORIZED_STATUS = {"pilot": "PILOT_AUTHORIZED", "full": "FULL_AUTHORIZED"}
 
+    @staticmethod
+    def _refuse(failures) -> None:
+        if failures:
+            raise ExecutionRefused("execution refused:\n- " + "\n- ".join(failures))
+
     @classmethod
-    def validate(cls, req: GateRequest) -> dict:
+    def validate_static(cls, req: GateRequest) -> dict:
+        """Phase A: validate all authority/science without touching a client."""
         failures = []
         if req.stage not in VALID_STAGES:
             failures.append("requested stage is invalid")
-        if req.observed_fingerprint != EXPECTED_FINGERPRINT:
-            failures.append("frozen contract fingerprint mismatch")
+        if req.observed_design_fingerprint != EXPECTED_DESIGN_FINGERPRINT:
+            failures.append("frozen design fingerprint mismatch")
+        if req.observed_fingerprint != EXPECTED_EXECUTABLE_FINGERPRINT:
+            failures.append("frozen executable fingerprint mismatch")
         expected_status = cls.AUTHORIZED_STATUS.get(req.stage)
-        if req.owner_state.get("status") != expected_status:
+        owner = req.owner_state
+        if owner.get("status") != expected_status:
             failures.append(f"owner state is not {expected_status}")
-        if req.owner_state.get("execution_authorized") is not True:
+        if owner.get("execution_authorized") is not True:
             failures.append("owner execution authorization is false")
-        if req.owner_state.get("additional_provider_calls_authorized") is not True:
+        if owner.get("additional_provider_calls_authorized") is not True:
             failures.append("owner provider-call authorization is false")
-        if req.owner_state.get("authorized_stage") != req.stage:
+        if owner.get("authorized_stage") != req.stage:
             failures.append("requested stage is not separately authorized")
+        if req.stage == "pilot" and owner.get("full_execution_authorized") is not False:
+            failures.append("pilot authority must leave FULL explicitly unauthorized")
+        if req.stage == "full" and owner.get("full_execution_authorized") is not True:
+            failures.append("FULL execution authorization is false")
+        for key, expected in (
+                ("authorized_design_fingerprint", EXPECTED_DESIGN_FINGERPRINT),
+                ("authorized_executable_fingerprint", EXPECTED_EXECUTABLE_FINGERPRINT)):
+            if owner.get(key) != expected:
+                failures.append(f"owner authorization binding mismatch: {key}")
         if not req.release_token:
             failures.append("release token missing")
         marker = None
@@ -347,43 +372,133 @@ class ExecutionGate:
                 "design_fingerprint": EXPECTED_DESIGN_FINGERPRINT,
                 "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
                 "authorization_state": expected_status,
-                "owner_state_digest": owner_state_digest(req.owner_state),
+                "owner_state_digest": owner_state_digest(owner),
                 "release_token_sha256": _sha256((req.release_token or "").encode()),
                 "corpus_hash": hashes["corpus_hash"],
                 "evidence_action_hash": hashes["evidence_action_hash"],
                 "matrix_sha256": req.matrix.matrix_hash if req.matrix else None,
-                "case_inputs_sha256": (req.matrix.case_inputs_hash
-                                       if req.matrix else None),
+                "case_inputs_sha256": req.matrix.case_inputs_hash if req.matrix else None,
             }
             for key, value in expected_marker.items():
                 if marker.get(key) != value:
                     failures.append(f"release marker binding mismatch: {key}")
-        if req.client is None:
-            failures.append("ModelClient is not configured")
         if req.matrix is None:
             failures.append("frozen stage matrix is unavailable")
-        elif (req.matrix.stage != req.stage or
-              req.matrix.executable_fingerprint != EXPECTED_EXECUTABLE_FINGERPRINT):
-            failures.append("matrix stage/fingerprint mismatch")
-        if not req.run_id or "/" in req.run_id or req.run_id in (".", ".."):
+        else:
+            expected_namespace = PILOT_NAMESPACE if req.stage == "pilot" else FULL_NAMESPACE
+            if req.matrix.stage != req.stage:
+                failures.append("matrix stage mismatch")
+            if req.matrix.namespace != expected_namespace:
+                failures.append("pilot/full namespace separation mismatch")
+            if req.matrix.design_fingerprint != EXPECTED_DESIGN_FINGERPRINT:
+                failures.append("matrix design fingerprint mismatch")
+            if req.matrix.executable_fingerprint != EXPECTED_EXECUTABLE_FINGERPRINT:
+                failures.append("matrix executable fingerprint mismatch")
+            if owner.get("authorized_case_inputs_sha256") != req.matrix.case_inputs_hash:
+                failures.append("owner case-input authorization mismatch")
+            if req.stage == "pilot" and owner.get(
+                    "authorized_pilot_matrix_sha256") != req.matrix.matrix_hash:
+                failures.append("owner pilot-matrix authorization mismatch")
+        if (not req.run_id or "/" in req.run_id or req.run_id in (".", "..")
+                or req.run_id.strip() != req.run_id):
             failures.append("unique run id is invalid")
-        # Contract-owned arm isolation and RAW/LEGIBLE binding are executable checks.
         diffs = arm_difference_report(ARMS.values())
         for pair in ("R1_vs_R2", "R3_vs_R4"):
-            if diffs[pair]["n_declared_differences"] != 1 or not diffs[pair]["isolates_single_variable"]:
+            if (diffs[pair]["n_declared_differences"] != 1
+                    or not diffs[pair]["isolates_single_variable"]):
                 failures.append(f"arm-isolation drift: {pair}")
         try:
             pairs = pair_equality_report()
             for pair in ("R1_vs_R2", "R3_vs_R4"):
                 if not pairs[pair]["underlying_evidence_equal"]:
                     failures.append(f"paired evidence mismatch: {pair}")
+            feasibility = feasibility_report()
+            leakage = leakage_report()
+            if not feasibility["all_cases_feasible"]:
+                failures.append("MASKED_K structural affordability failure")
+            if any(row["selected_k"] != 3 or row["selected_cost"] > 7
+                   for row in feasibility["rows"]):
+                failures.append("MASKED_K exact-K/payment invariant failure")
+            if leakage["missingness_count"] or leakage["singleton_equivalent_count"]:
+                failures.append("MASKED_K missingness/singleton invariant failure")
             assert_semantic_equivalence({"runner_gate": "operational"})
             PromptLeakGuard(PROBES).assert_clean("opaque final transport bytes")
         except Exception as exc:  # pragma: no cover - mutation target
-            failures.append(f"rendering/leak guard not operational: {exc}")
-        if failures:
-            raise ExecutionRefused("execution refused:\n- " + "\n- ".join(failures))
-        return {"authorized": True, "stage": req.stage, "hashes": hashes}
+            failures.append(f"rendering/leak/invariant guard not operational: {exc}")
+        cls._refuse(failures)
+        binding = _sha256(_canonical({
+            "stage": req.stage, "run_id": req.run_id,
+            "owner_state_digest": owner_state_digest(owner),
+            "matrix_hash": req.matrix.matrix_hash,
+            "design": EXPECTED_DESIGN_FINGERPRINT,
+            "executable": EXPECTED_EXECUTABLE_FINGERPRINT}))
+        return {"phase": "STATIC_AUTHORIZED", "authorized": False,
+                "stage": req.stage, "binding": binding, "hashes": hashes}
+
+    @classmethod
+    def validate_client(cls, req: GateRequest, static_result: Mapping) -> dict:
+        """Phase B: local client/config validation; never performs completion."""
+        failures = []
+        if static_result.get("phase") != "STATIC_AUTHORIZED":
+            failures.append("valid static authorization result is absent")
+        client = req.client
+        if client is None:
+            failures.append("ModelClient is not configured")
+        else:
+            if not callable(getattr(client, "complete", None)):
+                failures.append("ModelClient.complete is not implemented")
+            if getattr(client, "model", None) != FROZEN_REQUESTED_MODEL:
+                failures.append("requested model differs from frozen model")
+            if getattr(client, "provider_route", None) != FROZEN_PROVIDER_ROUTE:
+                failures.append("provider route differs from frozen route")
+            if getattr(client, "endpoint", None) != FROZEN_PROVIDER_ENDPOINT:
+                failures.append("provider endpoint differs from frozen route")
+            validator = getattr(client, "validate_local_configuration", None)
+            if not callable(validator):
+                failures.append("local provider configuration validator is absent")
+            else:
+                try:
+                    report = validator()
+                    if report.get("configured") is not True:
+                        failures.append("provider configuration is incomplete")
+                    if report.get("network_requests") != 0:
+                        failures.append("client construction/config validation used network")
+                except Exception as exc:
+                    failures.append(f"provider configuration invalid: {type(exc).__name__}: {exc}")
+        cls._refuse(failures)
+        return {"phase": "CLIENT_VALIDATED", "authorized": False,
+                "stage": req.stage, "binding": static_result["binding"],
+                "client": {"model": client.model,
+                           "provider_route": client.provider_route,
+                           "endpoint": client.endpoint,
+                           "network_requests": 0}}
+
+    @classmethod
+    def finalize(cls, static_result: Mapping,
+                 client_result: Mapping) -> dict:
+        """Phase C: combine matching successful phases into final authority."""
+        failures = []
+        if static_result.get("phase") != "STATIC_AUTHORIZED":
+            failures.append("static authorization is absent")
+        if client_result.get("phase") != "CLIENT_VALIDATED":
+            failures.append("client validation is absent")
+        if static_result.get("binding") != client_result.get("binding"):
+            failures.append("gate phase bindings differ")
+        if static_result.get("stage") != client_result.get("stage"):
+            failures.append("gate phase stages differ")
+        cls._refuse(failures)
+        return {"phase": "FINAL_AUTHORIZED", "authorized": True,
+                "stage": static_result["stage"],
+                "binding": static_result["binding"],
+                "hashes": static_result["hashes"],
+                "client": client_result["client"]}
+
+    @classmethod
+    def validate(cls, req: GateRequest) -> dict:
+        """Compatibility entry point: perform all phases without weakening any."""
+        static = cls.validate_static(req)
+        client = cls.validate_client(req, static)
+        return cls.finalize(static, client)
 
 
 class RunNamespace:
@@ -531,8 +646,16 @@ class DurableReplayClient:
 
 
 class DeterministicFakeClient:
-    """Offline-only scripted client.  It has no network imports or transport."""
+    """Offline-only scripted client. It has no network imports or transport."""
     offline_only = True
+    model = FROZEN_REQUESTED_MODEL
+    provider_route = FROZEN_PROVIDER_ROUTE
+    endpoint = FROZEN_PROVIDER_ENDPOINT
+
+    def validate_local_configuration(self) -> dict:
+        return {"configured": True, "model": self.model,
+                "provider_route": self.provider_route,
+                "endpoint": self.endpoint, "network_requests": 0}
 
     def __init__(self, script=None, provider=None):
         self.script = list(script or [])
@@ -558,11 +681,14 @@ def _unit_binding(stage: str, namespace: str, case_id: str, arm: str, rep: int) 
                                "case_id": case_id, "arm": arm, "rep": rep}))
 
 
-def run_offline_unit(run_dir: Path, client: ModelClient, arm="R1",
+def _run_frozen_unit(run_dir: Path, client: ModelClient, arm="R1",
                      stage="pilot", namespace=PILOT_NAMESPACE, case_id="cep-07",
-                     rep=1, interrupt=None) -> tuple[UnitResult, DurableReplayClient]:
-    """Exercise the complete orchestration with a deterministic injected fake."""
-    if not getattr(client, "offline_only", False):
+                     rep=1, interrupt=None, *, require_offline=False,
+                     endpoint=FROZEN_PROVIDER_ROUTE,
+                     requested_model=FROZEN_REQUESTED_MODEL
+                     ) -> tuple[UnitResult, DurableReplayClient]:
+    """Run one frozen unit through the shared durable orchestration path."""
+    if require_offline and not getattr(client, "offline_only", False):
         raise ExecutionRefused("offline dry-run accepts only offline_only clients")
     if arm not in ARMS:
         raise ExecutionRefused("arm is not frozen")
@@ -599,10 +725,11 @@ def run_offline_unit(run_dir: Path, client: ModelClient, arm="R1",
         assert_marker_free(observations)
     ctrl = DiagnosticController(
         ARMS[arm], LEGACY_CONTRACT, PROBES, DESCRIPTIONS, COSTS, VOCAB,
-        replay, endpoint="offline", requested_model="fake/deterministic",
+        replay, endpoint=endpoint, requested_model=requested_model,
         evidence_selection_policy=EVIDENCE_POLICY[arm], disclosure_k=3,
         masked_candidate_universe=(
-            tuple(PROBES[:6]) if EVIDENCE_POLICY[arm] == "MASKED_K" else ()))
+            DIRECT_CANDIDATE_UNIVERSE
+            if EVIDENCE_POLICY[arm] == "MASKED_K" else ()))
     result = ctrl.run_unit(uid, EXPERIMENT_ID, namespace, case_id, rep,
                            initial["question"], initial["initial_evidence"],
                            observations, discriminating)
@@ -613,6 +740,16 @@ def run_offline_unit(run_dir: Path, client: ModelClient, arm="R1",
     checkpoint.transition(uid, "RESULT_COMMITTED", unit_binding=binding,
                           result_hash=_file_hash(run_dir / "results" / f"{uid}.json"))
     return result, replay
+
+
+def run_offline_unit(run_dir: Path, client: ModelClient, arm="R1",
+                     stage="pilot", namespace=PILOT_NAMESPACE, case_id="cep-07",
+                     rep=1, interrupt=None) -> tuple[UnitResult, DurableReplayClient]:
+    """Exercise the frozen path with a client structurally unable to network."""
+    return _run_frozen_unit(
+        run_dir, client, arm, stage, namespace, case_id, rep, interrupt,
+        require_offline=True, endpoint="offline",
+        requested_model="fake/deterministic")
 
 
 def commit_result(run_dir: Path, result: UnitResult, call_ledger: CommitLedger) -> str:
@@ -715,24 +852,75 @@ def dry_run(output: Path) -> dict:
             "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT}
 
 
-def _live_client():  # pragma: no cover - prohibited during this task
-    """Only the live command may import/instantiate the network client."""
+def _live_client(model=FROZEN_REQUESTED_MODEL):  # pragma: no cover - stubbed in tests
+    """Construct the existing provider adapter; construction performs no I/O."""
     from .provider import ZaiCodingPlanClient
-    return ZaiCodingPlanClient()
+    return ZaiCodingPlanClient(model=model)
 
 
-def _cmd_run(args) -> int:  # pragma: no cover - authorization remains false
-    # Gate evaluation precedes live client construction, so current owner state
-    # cannot even instantiate a network-capable transport.
+def _cmd_run(args) -> int:  # pragma: no cover - exercised with fakes in tests
     matrix = load_frozen_matrix(Path(args.matrix), args.stage, OWNER_STATE)
-    provisional = GateRequest(args.stage, os.getenv("SXR_ABLATION_RELEASE"),
-                              Path(os.environ["SXR_ABLATION_RELEASE_MARKER"])
-                              if os.getenv("SXR_ABLATION_RELEASE_MARKER") else None,
-                              None, matrix, args.run_id, Path(args.output))
-    ExecutionGate.validate(provisional)  # necessarily refuses client=None
-    client = _live_client()
-    ExecutionGate.validate(dataclasses.replace(provisional, client=client))
-    raise NotImplementedError("live unit loop remains unreachable until authorization")
+    provisional = GateRequest(
+        args.stage, os.getenv("SXR_ABLATION_RELEASE"),
+        Path(os.environ["SXR_ABLATION_RELEASE_MARKER"])
+        if os.getenv("SXR_ABLATION_RELEASE_MARKER") else None,
+        None, matrix, args.run_id, Path(args.output))
+
+    # Phase A must complete before a network-capable object even exists.
+    static = ExecutionGate.validate_static(provisional)
+    client = _live_client(model=FROZEN_REQUESTED_MODEL)
+    final_request = dataclasses.replace(provisional, client=client)
+    client_gate = ExecutionGate.validate_client(final_request, static)
+    final = ExecutionGate.finalize(static, client_gate)
+    if final.get("phase") != "FINAL_AUTHORIZED" or final.get("authorized") is not True:
+        raise ExecutionRefused("final authorization result is not authoritative")
+
+    # No filesystem namespace or unit exists before final authorization.
+    namespace_hashes = dict(final["hashes"]["sources"])
+    namespace_hashes.update({
+        "matrix_sha256": matrix.matrix_hash,
+        "case_inputs_sha256": matrix.case_inputs_hash,
+        "owner_state_digest": owner_state_digest(OWNER_STATE),
+        "release_marker_sha256": _file_hash(final_request.release_marker),
+        "release_token_sha256": _sha256(final_request.release_token.encode()),
+        "final_authorization_binding": final["binding"],
+    })
+    ns = RunNamespace(Path(args.output), args.run_id, args.stage,
+                      namespace_hashes)
+    run_dir = ns.create_or_verify()
+    checkpoint = CheckpointStore(run_dir / "checkpoint.json")
+    expected_uids = iter(matrix.uids())
+    completed, resumed = 0, 0
+    for case_id in matrix.cases:
+        for arm in matrix.arms:
+            for rep in range(1, matrix.repetitions + 1):
+                expected_uid = next(expected_uids)
+                status_before = checkpoint.status(expected_uid)
+                result, _ = _run_frozen_unit(
+                    run_dir, client, arm=arm, stage=args.stage,
+                    namespace=matrix.namespace, case_id=case_id, rep=rep,
+                    endpoint=FROZEN_PROVIDER_ROUTE,
+                    requested_model=FROZEN_REQUESTED_MODEL)
+                if result.unit_id != expected_uid:
+                    raise ResumeViolation("unit loop UID differs from frozen matrix")
+                completed += 1
+                resumed += int(status_before in ("RESULT_COMMITTED", "SCORED"))
+                _atomic_json(run_dir / "execution-summary.json", {
+                    "schema": "evidence-revision-execution-summary-v2",
+                    "experiment_id": EXPERIMENT_ID, "stage": args.stage,
+                    "run_id": args.run_id, "matrix_sha256": matrix.matrix_hash,
+                    "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
+                    "units_planned": matrix.total_units,
+                    "units_completed_or_resumed": completed,
+                    "units_resumed": resumed,
+                    "provider_calls_performed": CommitLedger(
+                        str(run_dir / "call-commits.jsonl")).provenance_summary()["verified"],
+                    "model_calls_performed": CommitLedger(
+                        str(run_dir / "call-commits.jsonl")).provenance_summary()["verified"],
+                    "final_authorization_binding": final["binding"]})
+    summary = json.loads((run_dir / "execution-summary.json").read_text())
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
 
 
 def main(argv=None) -> int:

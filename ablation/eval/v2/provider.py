@@ -34,11 +34,27 @@ ENDPOINT = CODING_URL
 
 
 class ZaiCodingPlanClient:
-    """Implements the `controller.ModelClient` protocol."""
+    """Implements the controller client without I/O during construction."""
+
+    provider_route = PROVIDER_ROUTE
+    endpoint = ENDPOINT
 
     def __init__(self, model: str = "glm-5.2", timeout: float = 300.0):
+        # Assignment only: credentials and transport are deliberately untouched
+        # until local validation / the first authorized `complete` call.
         self.model = model
         self.timeout = timeout
+
+    def validate_local_configuration(self) -> dict:
+        """Validate local credential shape without issuing any HTTP request."""
+        key = _read_key()
+        parts = key.split(".")
+        if len(parts) != 2 or not all(parts):
+            raise ModelClientError("zai-coding-plan credential has invalid shape")
+        return {"configured": True, "model": self.model,
+                "provider_route": self.provider_route,
+                "endpoint": self.endpoint,
+                "network_requests": 0}
 
     def complete(self, system: str, user: str, requested_max_tokens: int,
                  temperature: float) -> dict:
