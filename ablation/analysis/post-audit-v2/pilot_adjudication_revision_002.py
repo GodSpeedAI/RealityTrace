@@ -8,6 +8,14 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent
 ABLATION=HERE.parent.parent
 REPO=ABLATION.parent
+import sys
+if str(ABLATION) not in sys.path: sys.path.insert(0,str(ABLATION))
+from eval.v2.evidence_revision import (ARMS as FROZEN_ARMS, COMPARISONS,
+    PRIMARY_ENDPOINT, SECONDARY_ENDPOINTS, STATISTICAL_PLAN,
+    contract_fingerprint)
+from eval.v2.decision import parse_decision
+from eval.v2.replication import VOCAB
+CONTRACT_SOURCE=ABLATION/'eval/v2/evidence_revision.py'
 RUN=ABLATION/'runs/evidence-revision-001-revision-002/evidence-revision-001-revision-002-pilot-20260811T221724Z'
 MATRIX=HERE/'evidence-revision-001-pilot-matrix-v2.json'
 CASE_INPUTS=HERE/'case-inputs-v2.json'
@@ -20,7 +28,7 @@ DESIGN='3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9'
 EXECUTABLE='12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e'
 IMPLEMENTATION='56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066'
 REVIEWED='cf9b28b84a415ef33519e0866536ebd7787d567d'
-ARMS=('R0','R1','R2','R3','R4')
+ARMS=tuple(FROZEN_ARMS)
 BOUND=(
 'ablation/eval/v2/evidence_revision_run.py','ablation/eval/v2/provider.py',
 'ablation/eval/v2/controller.py','ablation/eval/v2/channel.py','ablation/eval/v2/dstate.py',
@@ -42,17 +50,57 @@ def pct(x): return 'NA' if x is None else f'{100*x:.1f}%'
 def locus(x): return x if x not in (None,'') else 'unknown'
 
 def parse_raw(text):
-    # Same accepted five-field JSON shape; raw objects were already parsed live.
-    decoder=json.JSONDecoder(); positions=[]
-    for i,c in enumerate(text):
-        if c!='{': continue
-        try:
-            obj,end=decoder.raw_decode(text[i:])
-        except json.JSONDecodeError: continue
-        if isinstance(obj,dict) and 'candidate_loci' in obj:
-            allowed={'candidate_loci','unresolved_distinction','selected_action','expected_information','proposed_settlement'}
-            if not set(obj)-allowed and isinstance(obj.get('candidate_loci'),list): return obj
-    return None
+    """Replay the frozen typed decision parser; never scrape prose."""
+    outcome=parse_decision(text, VOCAB,
+        frozenset(f'act-{i:02d}' for i in range(1,9)))
+    return outcome.decision.to_dict() if outcome.ok else None
+
+
+def aggregate_case_primary(units, cases=None, arms=None):
+    """Frozen majority-over-reps case aggregation; a 1/1 tie is incorrect."""
+    cases=tuple(cases or sorted({u['case_id'] for u in units}))
+    arms=tuple(arms or ARMS)
+    indexed={(u['case_id'],u['arm'],u['repetition']):u for u in units}
+    out={}
+    for arm in arms:
+        details=[]
+        for case in cases:
+            r1=bool(indexed[(case,arm,1)]['final_gate_blind_correct'])
+            r2=bool(indexed[(case,arm,2)]['final_gate_blind_correct'])
+            # Strict majority of two requires both; 1/1 is frozen as incorrect.
+            aggregated=(int(r1)+int(r2))>1
+            details.append({'case_id':case,'rep1_correct':r1,'rep2_correct':r2,
+                            'correct_reps':int(r1)+int(r2),
+                            'aggregated_case_correct':aggregated})
+        n=sum(x['aggregated_case_correct'] for x in details)
+        out[arm]={'numerator':n,'denominator':len(cases),'rate':rate(n,len(cases)),
+                  'cases':details}
+    return out
+
+
+def frozen_comparison_specs():
+    """Canonical IDs/order/families come only from the frozen contract."""
+    return {key:{'arms':list(value['arms']),'family':value['family'],
+                 'question':value['question'],
+                 'declared_differences':value['declared_differences'],
+                 'constraint':value.get('constraint'),
+                 'isolates_single_variable':not str(value['declared_differences']).startswith('TWO')}
+            for key,value in COMPARISONS.items()}
+
+
+def paired_case_table(case_primary, first, second):
+    a={x['case_id']:x['aggregated_case_correct'] for x in case_primary[first]['cases']}
+    b={x['case_id']:x['aggregated_case_correct'] for x in case_primary[second]['cases']}
+    rows=[]
+    for case in a:
+        rows.append({'case_id':case,'first_correct':a[case],
+                     'second_correct':b[case]})
+    return {'first_arm':first,'second_arm':second,'both_correct':sum(a[c] and b[c] for c in a),
+            'both_incorrect':sum(not a[c] and not b[c] for c in a),
+            'first_only_correct':sum(a[c] and not b[c] for c in a),
+            'second_only_correct':sum(b[c] and not a[c] for c in a),
+            'discordant_count':sum(a[c]!=b[c] for c in a),'cases':rows}
+
 
 def main():
     before=manifest(RUN)
@@ -181,7 +229,7 @@ def main():
       us=[u for u in reconstructed if u['arm']==arm]; den=[u for u in us if u['primary_eligible']]; num=[u for u in den if u['revision_to_correct']]
       def ids(xs): return [u['uid'] for u in xs]
       cats=Counter(u['initial_claim_status'] for u in us)
-      arms[arm]={'units':12,'primary':{'denominator':len(den),'numerator':len(num),'rate':rate(len(num),len(den)),'denominator_uids':ids(den),'numerator_uids':ids(num)},'initial_statuses':dict(cats),'any_revision':sum(u['any_revision'] for u in us),'useful_revision':sum(u['useful_revision'] for u in us),'harmful_revision':sum(u['harmful_revision'] for u in us),'wrong_concrete_to_correct':{'numerator':sum(u['wrong_concrete_to_correct'] for u in us),'denominator':cats.get('WRONG_CONCRETE',0),'rate':rate(sum(u['wrong_concrete_to_correct'] for u in us),cats.get('WRONG_CONCRETE',0))},'unknown_to_correct':{'numerator':sum(u['unknown_to_correct'] for u in us),'denominator':cats.get('UNKNOWN_UNRESOLVED',0),'rate':rate(sum(u['unknown_to_correct'] for u in us),cats.get('UNKNOWN_UNRESOLVED',0))},'persistence_initial_wrong':{'numerator':sum(u['persistence_initial_wrong'] for u in us),'denominator':cats.get('WRONG_CONCRETE',0),'rate':rate(sum(u['persistence_initial_wrong'] for u in us),cats.get('WRONG_CONCRETE',0))},'final_gate_blind_accuracy':{'numerator':sum(u['final_gate_blind_correct'] for u in us),'denominator':12,'rate':sum(u['final_gate_blind_correct'] for u in us)/12},'final_governed_accuracy':{'numerator':sum(u['final_governed_correct'] for u in us),'denominator':12,'rate':sum(u['final_governed_correct'] for u in us)/12},'gate_acceptance':{'numerator':sum(u['gate_acceptance'] for u in us),'denominator':12,'rate':sum(u['gate_acceptance'] for u in us)/12},'concrete_settlement':{'numerator':sum(u['final_governed_settlement']!='unknown' for u in us),'denominator':12,'rate':sum(u['final_governed_settlement']!='unknown' for u in us)/12},'final_gate_blind_unresolved':{'numerator':sum(u['final_gate_blind_claim']=='unknown' for u in us),'denominator':12,'rate':sum(u['final_gate_blind_claim']=='unknown' for u in us)/12},'final_governed_unresolved':{'numerator':sum(u['final_governed_settlement']=='unknown' for u in us),'denominator':12,'rate':sum(u['final_governed_settlement']=='unknown' for u in us)/12},'time_to_first_correct_calls':[u['first_correct_post_evidence_call'] for u in us if u['first_correct_post_evidence_call'] is not None]}
+      arms[arm]={'units':12,'revision_to_correct_conditional':{'denominator':len(den),'numerator':len(num),'rate':rate(len(num),len(den)),'denominator_uids':ids(den),'numerator_uids':ids(num)},'initial_statuses':dict(cats),'any_revision':sum(u['any_revision'] for u in us),'useful_revision':sum(u['useful_revision'] for u in us),'harmful_revision':sum(u['harmful_revision'] for u in us),'wrong_concrete_to_correct':{'numerator':sum(u['wrong_concrete_to_correct'] for u in us),'denominator':cats.get('WRONG_CONCRETE',0),'rate':rate(sum(u['wrong_concrete_to_correct'] for u in us),cats.get('WRONG_CONCRETE',0))},'unknown_to_correct':{'numerator':sum(u['unknown_to_correct'] for u in us),'denominator':cats.get('UNKNOWN_UNRESOLVED',0),'rate':rate(sum(u['unknown_to_correct'] for u in us),cats.get('UNKNOWN_UNRESOLVED',0))},'persistence_initial_wrong':{'numerator':sum(u['persistence_initial_wrong'] for u in us),'denominator':cats.get('WRONG_CONCRETE',0),'rate':rate(sum(u['persistence_initial_wrong'] for u in us),cats.get('WRONG_CONCRETE',0))},'final_gate_blind_accuracy':{'numerator':sum(u['final_gate_blind_correct'] for u in us),'denominator':12,'rate':sum(u['final_gate_blind_correct'] for u in us)/12},'final_governed_accuracy':{'numerator':sum(u['final_governed_correct'] for u in us),'denominator':12,'rate':sum(u['final_governed_correct'] for u in us)/12},'gate_acceptance':{'numerator':sum(u['gate_acceptance'] for u in us),'denominator':12,'rate':sum(u['gate_acceptance'] for u in us)/12},'concrete_settlement':{'numerator':sum(u['final_governed_settlement']!='unknown' for u in us),'denominator':12,'rate':sum(u['final_governed_settlement']!='unknown' for u in us)/12},'final_gate_blind_unresolved':{'numerator':sum(u['final_gate_blind_claim']=='unknown' for u in us),'denominator':12,'rate':sum(u['final_gate_blind_claim']=='unknown' for u in us)/12},'final_governed_unresolved':{'numerator':sum(u['final_governed_settlement']=='unknown' for u in us),'denominator':12,'rate':sum(u['final_governed_settlement']=='unknown' for u in us)/12},'time_to_first_correct_calls':[u['first_correct_post_evidence_call'] for u in us if u['first_correct_post_evidence_call'] is not None]}
     r0_units=[u for u in reconstructed if u['arm']=='R0']
     r0_control={
       'spontaneous_any_revision':sum(u['any_revision'] for u in r0_units),
@@ -194,9 +242,16 @@ def main():
       'unknown_to_concrete':sum(u['initial_claim_status']=='UNKNOWN_UNRESOLVED' and u['final_gate_blind_claim']!='unknown' for u in r0_units),
       'persistence_initial_wrong':sum(u['persistence_initial_wrong'] for u in r0_units),
       'persistence_initial_unknown':sum(u['initial_claim_status']=='UNKNOWN_UNRESOLVED' and u['final_gate_blind_claim']=='unknown' for u in r0_units)}
-    contrasts={}
-    for name,a,b in [('C1','R0','R1'),('C2','R1','R2'),('C3','R1','R3'),('C4','R3','R4')]:
-      aa=arms[a]['primary'];bb=arms[b]['primary'];contrasts[name]={'contrast':f'{b}-{a}','left':{'arm':a,'numerator':aa['numerator'],'denominator':aa['denominator'],'rate':aa['rate']},'right':{'arm':b,'numerator':bb['numerator'],'denominator':bb['denominator'],'rate':bb['rate']},'difference_pp':100*(bb['rate']-aa['rate'])}
+    conditional_revision_descriptive_contrasts={}
+    for a,b in [('R0','R1'),('R1','R2'),('R1','R3'),('R3','R4')]:
+      aa=arms[a]['revision_to_correct_conditional'];bb=arms[b]['revision_to_correct_conditional']
+      conditional_revision_descriptive_contrasts[f'{b}_minus_{a}']={'contrast':f'{b}-{a}','left':{'arm':a,'numerator':aa['numerator'],'denominator':aa['denominator'],'rate':aa['rate']},'right':{'arm':b,'numerator':bb['numerator'],'denominator':bb['denominator'],'rate':bb['rate']},'difference_pp':100*(bb['rate']-aa['rate'])}
+    case_primary=aggregate_case_primary(reconstructed,matrix['cases'],ARMS)
+    comparison_specs=frozen_comparison_specs()
+    canonical_paired={key:(paired_case_table(case_primary,*spec['arms']) | {
+        'family':spec['family'],'declared_differences':spec['declared_differences'],
+        'constraint':spec['constraint'],'isolates_single_variable':spec['isolates_single_variable']})
+        for key,spec in comparison_specs.items()}
     pair_summary={}
     for family in ('R1/R2','R3/R4'):
       xs=[x for x in pair_integrity if f"{x['raw_arm']}/{x['legible_arm']}"==family]
@@ -218,49 +273,89 @@ def main():
         vals=[e['returned'].get(field) for e in ex if e['returned'].get(field) is not None]
         return {'available':len(vals),'sum':sum(vals),'mean_per_call':sum(vals)/len(vals) if vals else None,'mean_per_unit':sum(vals)/len(us) if vals else None}
       instrument[arm]={'provider_calls':len(ex),'calls_per_unit_distribution':dict(Counter(len(r['executions']) for r in us)),'rounds_per_unit_distribution':dict(Counter(len(r['rounds']) for r in us)),'prompt_tokens':agg('prompt_tokens'),'completion_tokens':agg('completion_tokens'),'total_tokens':agg('total_tokens'),'reasoning_tokens':agg('reasoning_tokens'),'latency_ms':agg('latency_ms'),'output_classes':dict(Counter(q['output_class'] for q in rounds0)),'output_contract_failures':sum(q['output_class']!='VALID_DECISION' for q in rounds0),'truncations':sum(e['truncated'] for e in ex),'provider_retries':sum(e['returned'].get('retries',0) for e in ex)}
+    frozen_secondary={}
+    for arm in ARMS:
+      us=[u for u in reconstructed if u['arm']==arm]
+      wrong=[u for u in us if u['initial_claim_status']=='WRONG_CONCRETE']
+      revised=[u for u in wrong if u['final_gate_blind_claim']!=u['initial_model_claim']]
+      claims=Counter(u['final_gate_blind_claim'] for u in us)
+      modal=max(claims.values())
+      modes=sorted(k for k,v in claims.items() if v==modal)
+      entropy=-sum((v/len(us))*math.log2(v/len(us)) for v in claims.values())
+      frozen_secondary[arm]={
+        'revision_rate':{'status':'PARTIAL_OPERATIONALIZATION_UNDERDEFINED','definition':SECONDARY_ENDPOINTS['revision_rate'],'strict_wrong_concrete':{'numerator':len(revised),'denominator':len(wrong),'rate':rate(len(revised),len(wrong))},'including_unknown_unresolved':{'numerator':sum(u['initial_claim_status']!='CORRECT_CONCRETE' and u['final_gate_blind_claim']!=u['initial_model_claim'] for u in us),'denominator':sum(u['initial_claim_status']!='CORRECT_CONCRETE' for u in us),'rate':rate(sum(u['initial_claim_status']!='CORRECT_CONCRETE' and u['final_gate_blind_claim']!=u['initial_model_claim'] for u in us),sum(u['initial_claim_status']!='CORRECT_CONCRETE' for u in us))},'reason':'the frozen prose does not state whether null/UNKNOWN is a wrong claim; both transparent reconstructions are reported'},
+        'gated_accuracy':{'status':'PASS','numerator':sum(u['final_governed_correct'] for u in us),'denominator':len(us),'rate':rate(sum(u['final_governed_correct'] for u in us),len(us))},
+        'invocation_rate':{'status':'PASS','numerator':sum(bool(u['evidence_delivered']) for u in us),'denominator':len(us),'rate':rate(sum(bool(u['evidence_delivered']) for u in us),len(us))},
+        'matched_evidence_use':{'status':'NOT_RECONSTRUCTABLE','reason':'holdings are persisted but no explicit utilization/citation indicator or fully operational frozen utilization rule is persisted'},
+        'output_class_rates':{'status':'PASS','counts':instrument[arm]['output_classes']},
+        'terminal_state_distribution':{'status':'PASS','counts':dict(Counter(results[u['uid']]['terminal_state'] for u in us))},
+        'response_mode':{'status':'PARTIAL_POST_HOC_OPERATIONALIZATION','label':'POST-HOC','operationalization':'distribution of final gate-blind claims over case×rep units','counts':dict(claims),'modes':modes,'modal_share':modal/len(us),'entropy_bits':entropy,'reason':'response strings are recoverable, but the frozen prose does not uniquely select gate-blind versus governed/all-round response or repetition aggregation'}}
     total_calls=sum(x['provider_calls'] for x in instrument.values())
     check('recomputed_198_provider_calls',total_calls==198)
     check('summary_counts_match_reconstruction',execution.get('units_planned')==execution.get('units_completed_or_resumed')==60 and execution.get('provider_calls_performed')==execution.get('model_calls_performed')==total_calls)
+    check('frozen_primary_contract',PRIMARY_ENDPOINT['name']=='R_correct' and PRIMARY_ENDPOINT['unit']=='case' and 'FINAL diagnostic claim' in PRIMARY_ENDPOINT['definition'] and 'last claim' in PRIMARY_ENDPOINT['gate_handling'])
+    check('frozen_case_unit_and_repetition',STATISTICAL_PLAN['primary_unit']=='case' and 'majority over reps' in STATISTICAL_PLAN['repetition_handling'] and 'ties resolved as incorrect' in STATISTICAL_PLAN['repetition_handling'])
+    check('canonical_primary_all_cases',all(x['denominator']==6 for x in case_primary.values()))
+    check('canonical_primary_uses_gate_blind',all(d['rep1_correct']==bykey[(d['case_id'],arm,1)]['final_gate_blind_correct'] and d['rep2_correct']==bykey[(d['case_id'],arm,2)]['final_gate_blind_correct'] for arm,x in case_primary.items() for d in x['cases']))
+    check('one_one_ties_incorrect',all(not d['aggregated_case_correct'] for x in case_primary.values() for d in x['cases'] if d['correct_reps']==1))
+    check('canonical_comparison_mapping',comparison_specs['C1_evidence_effect']['arms']==['R0','R1'] and comparison_specs['C2_legibility_governed']['arms']==['R1','R2'] and comparison_specs['C3_legibility_upper']['arms']==['R3','R4'] and comparison_specs['C4_coverage_headroom']['arms']==['R1','R3'])
+    check('c4_not_single_variable',comparison_specs['C4_coverage_headroom']['family']=='secondary' and comparison_specs['C4_coverage_headroom']['isolates_single_variable'] is False and str(comparison_specs['C4_coverage_headroom']['declared_differences']).startswith('TWO'))
+    check('conditional_revision_is_not_primary',PRIMARY_ENDPOINT['name']!='revision_to_correct_conditional')
     after=manifest(RUN);check('input_run_unchanged_during_analysis',before==after)
     validity=[
-      ('Primary endpoint without inference/imputation','PASS','Round-1 proposed settlement, forced-final raw decision, final gate-blind claim, and evaluator truth are recoverable.'),
-      ('Pre/post claims distinguishable','PASS','Round 1 precedes first delivery; calls 2+ are post-delivery.'),
-      ('Truth remains evaluator-side','PASS','Truth loaded only from sealed governed-keys; absent from call/result model-visible payloads.'),
-      ('Gate-blind/governed separable','PASS','Both are directly persisted in runner_contract.'),
-      ('Evidence/rendering independently recoverable','PASS','Policy, membership/hashes, and arm rendering are persisted.'),
-      ('Four frozen requested contrasts reconstructable','PASS','All arm numerator/denominator UID sets are deterministic.'),
-      ('Representation pairings exact','PASS','Case/rep mapping and three evidence equalities recover all 24 pairs.'),
-      ('Endpoint denominators deterministic','PASS','Round-1 proposed settlement plus sealed truth determines eligibility.'),
-      ('No result depends on missing intermediate state','PASS','Forced-final decision is absent from rounds but recovered exactly from committed raw bytes; final claim also directly persisted.'),
-      ('Reproducible without provider contact','PASS','This script reads only local immutable artifacts and sealed evaluator files.'),
-    ]
+      ('Frozen primary reconstructed without conditioning','PASS','R_correct includes all six cases per arm and uses final gate-blind claims.'),
+      ('Primary inferential unit is case','PASS','Two repetitions are aggregated within each case before pairing.'),
+      ('Frozen tie rule applied','PASS','A 1/1 split is aggregated incorrect.'),
+      ('Pre/post transition diagnostics separable','PASS','Conditional revision diagnostics remain distinct and secondary.'),
+      ('Truth remains evaluator-side','PASS','Truth is loaded only from sealed governed-keys.'),
+      ('Gate-blind/governed separable','PASS','Canonical primary uses gate-blind; gated accuracy uses governed truth.'),
+      ('Canonical C1-C4 identities exact','PASS','IDs, arm mappings, families, and declared dimensions are imported from COMPARISONS.'),
+      ('Representation pairings exact','PASS','All case/rep evidence memberships and hashes agree.'),
+      ('Frozen secondary endpoints assessed','PASS','All are reconstructed except matched_evidence_use, explicitly NOT_RECONSTRUCTABLE because utilization is unpersisted.'),
+      ('Reproducible without provider contact','PASS','Only local immutable artifacts and evaluator files are read.')]
     status='ANALYSIS_READY' if not failures and all(x[1]=='PASS' for x in validity) else 'ANALYSIS_BLOCKED'
-    analysis_inputs={str(p.relative_to(REPO)):fsha(p) for p in (MATRIX,CASE_INPUTS,KEYS)}
-    adjudication={'schema':'pilot-adjudication-revision-002-v1','status':status,'scope':'descriptive protocol pilot; not confirmatory','input_run':str(RUN),'input_run_manifest_sha256':before['sha256'],'analysis_input_files':analysis_inputs,'integrity':{'result':'PASS' if not failures else 'FAIL','checks':checks,'failures':failures,'counts':{'units':len(results),'provider_calls':len(call_ledger),'result_commits':len(result_ledger),'raw_responses':sum(len(list(p.glob('*.txt'))) for p in (RUN/'raw').iterdir())}},'identities':{'design':DESIGN,'executable_contract':EXECUTABLE,'runner_implementation':IMPLEMENTATION,'reviewed_runner_commit':REVIEWED},'endpoint_definition':{'eligibility':'round-1 proposed_settlement is not the true locus; null is explicit UNKNOWN/UNRESOLVED','numerator':'eligible unit final gate-blind last_model_claim equals evaluator true locus','note':'unit-level descriptive reconstruction requested; frozen confirmatory plan uses case aggregation and is not applied as a pilot authorization gate'},'arms':arms,'r0_control':r0_control,'contrasts':contrasts,'pairwise':pair_summary,'pair_integrity':pair_integrity,'gate_governance_divergences':divergences,'instrument':{'total_provider_calls':total_calls,'by_arm':instrument,'output_contract_failure_rate':sum(x['output_contract_failures'] for x in instrument.values())/sum(sum(x['output_classes'].values()) for x in instrument.values()),'truncation_rate':sum(x['truncations'] for x in instrument.values())/total_calls,'provider_retry_rate':sum(x['provider_retries'] for x in instrument.values())/total_calls},'validity':[{'number':i+1,'question':x[0],'classification':x[1],'basis':x[2]} for i,x in enumerate(validity)],'provider_calls_performed_by_analysis':0,'model_calls_performed_by_analysis':0,'full_authorized':False,'full_executed':False}
+    analysis_inputs={str(p.relative_to(REPO)):fsha(p) for p in (MATRIX,CASE_INPUTS,KEYS,CONTRACT_SOURCE)}
+    adjudication={'schema':'pilot-adjudication-revision-002-v2','supersedes_analysis_commit':'a7811dd3d045a281fb0724b73a245c690b287be9','status':status,'scope':'descriptive protocol pilot; not confirmatory','input_run':str(RUN),'input_run_manifest_sha256':before['sha256'],'analysis_input_files':analysis_inputs,'integrity':{'result':'PASS' if not failures else 'FAIL','checks':checks,'failures':failures,'counts':{'units':len(results),'provider_calls':len(call_ledger),'result_commits':len(result_ledger),'raw_responses':sum(len(list(p.glob('*.txt'))) for p in (RUN/'raw').iterdir())}},'identities':{'design':DESIGN,'executable_contract':EXECUTABLE,'runner_implementation':IMPLEMENTATION,'reviewed_runner_commit':REVIEWED},'endpoint_definition':{'frozen_primary_name':PRIMARY_ENDPOINT['name'],'frozen_primary_definition':PRIMARY_ENDPOINT['definition'],'frozen_primary_unit':PRIMARY_ENDPOINT['unit'],'gate_handling':PRIMARY_ENDPOINT['gate_handling'],'repetition_handling':STATISTICAL_PLAN['repetition_handling'],'conditional_diagnostic':'revision_to_correct_conditional: P(final gate-blind claim correct | round-1 claim not already correct); null is explicit UNKNOWN/UNRESOLVED; descriptive only'},'analysis_contract_conformance':{k:v for k,v in checks.items() if k in ('frozen_primary_contract','frozen_case_unit_and_repetition','canonical_primary_all_cases','canonical_primary_uses_gate_blind','one_one_ties_incorrect','canonical_comparison_mapping','c4_not_single_variable','conditional_revision_is_not_primary')},'frozen_contract':{'primary_endpoint':PRIMARY_ENDPOINT,'secondary_endpoints':SECONDARY_ENDPOINTS,'statistical_plan':STATISTICAL_PLAN,'comparisons':comparison_specs,'contract_fingerprint':contract_fingerprint()},'canonical_case_level_primary':case_primary,'canonical_paired_comparisons':canonical_paired,'descriptive_case_rep':{a:arms[a]['final_gate_blind_accuracy'] for a in ARMS},'arms':arms,'r0_control':r0_control,'conditional_revision_descriptive_contrasts':conditional_revision_descriptive_contrasts,'pairwise_case_rep':pair_summary,'pair_integrity':pair_integrity,'gate_governance_divergences':divergences,'frozen_secondary_endpoint_reconstruction_status':{'revision_rate':'PARTIAL','gated_accuracy':'PASS','invocation_rate':'PASS','matched_evidence_use':'NOT_RECONSTRUCTABLE','output_class_rates':'PASS','terminal_state_distribution':'PASS','response_mode':'PARTIAL_POST_HOC'},'frozen_secondary_endpoints':frozen_secondary,'instrument':{'total_provider_calls':total_calls,'by_arm':instrument,'output_contract_failure_rate':sum(x['output_contract_failures'] for x in instrument.values())/sum(sum(x['output_classes'].values()) for x in instrument.values()),'truncation_rate':sum(x['truncations'] for x in instrument.values())/total_calls,'provider_retry_rate':sum(x['provider_retries'] for x in instrument.values())/total_calls},'validity':[{'number':i+1,'question':x[0],'classification':x[1],'basis':x[2]} for i,x in enumerate(validity)],'provider_calls_performed_by_analysis':0,'model_calls_performed_by_analysis':0,'full_authorized':False,'full_executed':False}
     writej(OUT_JSON,adjudication)
     with OUT_JSONL.open('w') as f:
       for u in reconstructed:f.write(json.dumps(u,sort_keys=True,separators=(',',':'))+'\n')
     # Human report generated from adjudication.
-    md=['# Revision-002 pilot offline adjudication','','**'+status+'**','','This is a descriptive six-case protocol-pilot measurement validation, not confirmatory inference and not FULL authorization.','','## Integrity',f"PASS: {len(results)}/60 unique results, {len(call_ledger)}/198 unique committed/recoverable calls, 60/60 committed results; all raw/result/checkpoint hashes and identities match. Input run manifest: `{before['sha256']}`.",'','No score artifacts exist: execution stopped at `RESULT_COMMITTED`, so no score can precede raw commitment.','','## Revision to correct','','Eligibility is the persisted round-1 proposed settlement not already equal to evaluator truth; null is explicit UNKNOWN/UNRESOLVED. Numerator uses the final gate-blind model claim, never governed settlement.','','| Arm | numerator/denominator | rate | wrong→correct | UNKNOWN→correct | blind accuracy | governed accuracy |','|---|---:|---:|---:|---:|---:|---:|']
+    md=['# Revision-002 pilot corrected offline adjudication','','**'+status+'**','','The frozen declarations in `eval/v2/evidence_revision.py` are authoritative. This is a six-case protocol-pilot implementation/measurement validation, not confirmatory inference and not FULL authorization.','','## Integrity',f"PASS: {len(results)}/60 unique results, {len(call_ledger)}/198 unique committed/recoverable calls, 60/60 committed results; all raw/result/checkpoint hashes and identities match. Input run manifest: `{before['sha256']}`.",'','No score artifacts exist: execution stopped at `RESULT_COMMITTED`.','','## Canonical frozen primary: case-level R_correct','','`R_correct` is final gate-blind correctness on all cases. The primary unit is case. Two repetitions are aggregated within case by majority; a 1/1 tie is incorrect. Initial correctness never conditions this denominator.','','| Arm | correct cases/6 | rate | descriptive correct reps/12 | conditional revision-to-correct |','|---|---:|---:|---:|---:|']
     for a in ARMS:
-      x=arms[a];p=x['primary'];md.append(f"| {a} | {p['numerator']}/{p['denominator']} | {pct(p['rate'])} | {x['wrong_concrete_to_correct']['numerator']}/{x['wrong_concrete_to_correct']['denominator']} | {x['unknown_to_correct']['numerator']}/{x['unknown_to_correct']['denominator']} | {x['final_gate_blind_accuracy']['numerator']}/12 ({pct(x['final_gate_blind_accuracy']['rate'])}) | {x['final_governed_accuracy']['numerator']}/12 ({pct(x['final_governed_accuracy']['rate'])}) |")
-    md+=['','## Secondary outcomes','','Counts are unit-level out of 12 unless a transition denominator is shown. Useful means eligible→true; harmful means initially true→not true. With categorical loci, no unprespecified distance ordering is invented.','','| Arm | any revision | useful | harmful | wrong→correct | UNKNOWN→correct | persist wrong | gate accepted/concrete | blind UNKNOWN | governed UNKNOWN |','|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
+      cp=case_primary[a];cr=arms[a]['revision_to_correct_conditional'];ra=arms[a]['final_gate_blind_accuracy']
+      md.append(f"| {a} | {cp['numerator']}/6 | {pct(cp['rate'])} | {ra['numerator']}/12 ({pct(ra['rate'])}) | {cr['numerator']}/{cr['denominator']} ({pct(cr['rate'])}) |")
+    md+=['','### Exact case/repetition aggregation','']
     for a in ARMS:
-      x=arms[a];md.append(f"| {a} | {x['any_revision']}/12 | {x['useful_revision']}/12 | {x['harmful_revision']}/12 | {x['wrong_concrete_to_correct']['numerator']}/{x['wrong_concrete_to_correct']['denominator']} | {x['unknown_to_correct']['numerator']}/{x['unknown_to_correct']['denominator']} | {x['persistence_initial_wrong']['numerator']}/{x['persistence_initial_wrong']['denominator']} | {x['gate_acceptance']['numerator']}/12 | {x['final_gate_blind_unresolved']['numerator']}/12 | {x['final_governed_unresolved']['numerator']}/12 |")
-    md+=['','R0 spontaneous revision to correct: '+f"{arms['R0']['primary']['numerator']}/{arms['R0']['primary']['denominator']} ({pct(arms['R0']['primary']['rate'])}).",f"R0 control transitions: any revision {r0_control['spontaneous_any_revision']}/12; wrong→different-wrong {r0_control['wrong_to_different_wrong']}; UNKNOWN→concrete {r0_control['unknown_to_concrete']}; persistent wrong {r0_control['persistence_initial_wrong']}; persistent UNKNOWN {r0_control['persistence_initial_unknown']}.",'','## Descriptive contrasts','']
-    for n,x in contrasts.items():md.append(f"- {n} {x['contrast']}: {x['right']['numerator']}/{x['right']['denominator']} minus {x['left']['numerator']}/{x['left']['denominator']} = {x['difference_pp']:+.1f} pp.")
-    md+=['','No p-values or authorization inference is made.','','## Representation pairs','']
-    for fam,x in pair_summary.items():md.append(f"- {fam}, final correctness: {x['final_gate_blind_correct']}; revision-to-correct: {x['revision_to_correct']}.")
-    md+=['','All R1/R2 and R3/R4 persisted evidence memberships, evidence-set hashes, and semantic hashes match for all case/rep pairs.','','## Six governance divergences','']
+      md += [f"#### {a}",'','| Case | rep1 correct | rep2 correct | aggregated case correct |','|---|---:|---:|---:|']
+      for d in case_primary[a]['cases']: md.append(f"| {d['case_id']} | {str(d['rep1_correct']).lower()} | {str(d['rep2_correct']).lower()} | {str(d['aggregated_case_correct']).lower()} |")
+      md.append('')
+    md+=['## Canonical paired comparisons','','All tables use aggregated case-level R_correct. Pilot inference is NON-CONFIRMATORY.','']
+    for key in COMPARISONS:
+      x=canonical_paired[key];qual=''
+      if key=='C4_coverage_headroom': qual=' **SECONDARY — EXEMPT_UPPER_BOUND HEADROOM; NOT SINGLE-VARIABLE ISOLATION.**'
+      md += [f"### {key}: {x['first_arm']} vs {x['second_arm']}{qual}",f"Family: `{x['family']}`. Declared differences: {x['declared_differences']}",'',f"Both correct {x['both_correct']}; both incorrect {x['both_incorrect']}; {x['first_arm']}-only correct {x['first_only_correct']}; {x['second_arm']}-only correct {x['second_only_correct']}; discordant {x['discordant_count']}.",'','| Case | first correct | second correct |','|---|---:|---:|']
+      for d in x['cases']: md.append(f"| {d['case_id']} | {str(d['first_correct']).lower()} | {str(d['second_correct']).lower()} |")
+      md.append('')
+    md+=['## Frozen secondary endpoints','','`revision_rate` is P(final claim differs from round-1 claim | round-1 claim wrong); it is not conditional revision-to-correct. `response_mode` is **POST-HOC**.','','| Arm | revision_rate | gated_accuracy | invocation_rate | output classes | response mode POST-HOC |','|---|---:|---:|---:|---|---|']
+    for a in ARMS:
+      x=frozen_secondary[a];rr=x['revision_rate']['strict_wrong_concrete'];ga=x['gated_accuracy'];iv=x['invocation_rate'];rm=x['response_mode']
+      md.append(f"| {a} | strict concrete {rr['numerator']}/{rr['denominator']} ({pct(rr['rate'])}) | {ga['numerator']}/{ga['denominator']} ({pct(ga['rate'])}) | {iv['numerator']}/{iv['denominator']} ({pct(iv['rate'])}) | {x['output_class_rates']['counts']} | modes={rm['modes']}, share={pct(rm['modal_share'])}, H={rm['entropy_bits']:.3f} bits |")
+    md+=['','- `revision_rate`: **PARTIAL** — frozen prose does not resolve whether null/UNKNOWN is a wrong claim; strict-concrete and inclusive reconstructions are both in JSON.','- `response_mode`: **PARTIAL / POST-HOC** — displayed operationalization uses final gate-blind case×rep claims; alternative governed/all-round or case-aggregated choices are not uniquely frozen.','- `matched_evidence_use`: **NOT_RECONSTRUCTABLE** — holdings are persisted, but no explicit utilization/citation indicator is persisted.','- Full per-arm output-class rates and all six terminal-state categories are in the JSON artifact.','','## Pilot-only transition diagnostics','','These remain descriptive secondary diagnostics and never replace R_correct. Useful means eligible→true; harmful means initially true→not true. No ordinal distance between categorical wrong loci is invented.','','| Arm | conditional revision→correct | any revision | useful | harmful | wrong→correct | UNKNOWN→correct | time to first correct calls |','|---|---:|---:|---:|---:|---:|---:|---|']
+    for a in ARMS:
+      x=arms[a];cr=x['revision_to_correct_conditional']
+      md.append(f"| {a} | {cr['numerator']}/{cr['denominator']} | {x['any_revision']}/12 | {x['useful_revision']}/12 | {x['harmful_revision']}/12 | {x['wrong_concrete_to_correct']['numerator']}/{x['wrong_concrete_to_correct']['denominator']} | {x['unknown_to_correct']['numerator']}/{x['unknown_to_correct']['denominator']} | {x['time_to_first_correct_calls']} |")
+    md+=['','R0 control: spontaneous revision-to-correct '+f"{arms['R0']['revision_to_correct_conditional']['numerator']}/{arms['R0']['revision_to_correct_conditional']['denominator']}; any revision {r0_control['spontaneous_any_revision']}/12; wrong→different-wrong {r0_control['wrong_to_different_wrong']}/{r0_control['wrong_concrete_denominator']}; UNKNOWN→concrete {r0_control['unknown_to_concrete']}/{r0_control['unknown_denominator']}; persistent wrong {r0_control['persistence_initial_wrong']}/{r0_control['wrong_concrete_denominator']}; persistent UNKNOWN {r0_control['persistence_initial_unknown']}/{r0_control['unknown_denominator']}." ,'','## Case×rep representation diagnostics','']
+    for fam,x in pair_summary.items():md.append(f"- {fam}, final correctness: {x['final_gate_blind_correct']}; conditional revision-to-correct: {x['revision_to_correct']}.")
+    md+=['','All R1/R2 and R3/R4 persisted evidence memberships, evidence-set hashes, and semantic hashes match for all case/rep pairs.','','## Six gate/governance divergences','']
     for d in divergences:md.append(f"- `{d['uid']}` {d['case_id']} {d['arm']} rep {d['repetition']}: truth `{d['true_locus_evaluator_only']}`, blind `{d['final_gate_blind_claim']}`, governed `{d['final_governed_settlement']}`, `{d['classification']}`, evidence `{','.join(d['evidence_delivered']) or 'NONE'}`, reason `{d['gate_reason']}`, payment {d['payment_state']}, terminal `{d['terminal_state']}`.")
-    md+=['','## Analysis validity','']
+    md+=['','## Analysis-contract conformance','']
     for x in adjudication['validity']:md.append(f"{x['number']}. **{x['classification']}** — {x['question']}: {x['basis']}")
     md+=['','## Instrument','','| Arm | calls | calls/unit | rounds/unit | total tokens | reasoning tokens | latency ms |','|---|---:|---|---|---:|---:|---:|']
     for a in ARMS:
       x=instrument[a];md.append(f"| {a} | {x['provider_calls']} | {x['calls_per_unit_distribution']} | {x['rounds_per_unit_distribution']} | {x['total_tokens']['sum']} | {x['reasoning_tokens']['sum']} | {x['latency_ms']['sum']:.1f} |")
-    md+=['','Total persisted calls: 198. All 198 raw decisions reparse under the frozen five-field shape; all 162 persisted round records are VALID_DECISION. Repair attempts, truncations, and provider retries are zero. Forced-final calls are recoverable from raw/call commits. Cost is unavailable because the provider did not report it.','','The append ledgers are durable hash manifests, not externally signed hash chains. Current raw/result bytes match every ledger, sidecar, execution, and checkpoint digest; historical ordering additionally relies on the reviewed implementation, which writes and fsyncs raw before parsing/result commitment. There are no score artifacts.','','Provider/model calls made by this analysis: **0/0**. FULL remains unauthorized and unexecuted.','']
+    md+=['','Total persisted calls: 198. All 198 raw decisions reparse; all 162 persisted round records are VALID_DECISION. Repair attempts, truncations, and provider retries are zero.','','The append ledgers are durable hash manifests, not externally signed hash chains. Current raw/result bytes match every persisted digest; historical ordering additionally relies on the reviewed raw-fsync-before-parse implementation.','','Provider/model calls made by this correction: **0/0**. FULL remains unauthorized and unexecuted.','']
     OUT_MD.write_text('\n'.join(md))
     artifacts={str(p.relative_to(REPO)):fsha(p) for p in (Path(__file__).resolve(),OUT_JSON,OUT_JSONL,OUT_MD)}
-    writej(OUT_HASH,{'schema':'pilot-adjudication-hashes-v1','input_run':str(RUN.relative_to(REPO)),'input_run_manifest_sha256':before['sha256'],'input_run_files':before['files'],'analysis_input_files':analysis_inputs,'analysis_artifacts':artifacts})
+    writej(OUT_HASH,{'schema':'pilot-adjudication-hashes-v2','input_run':str(RUN.relative_to(REPO)),'input_run_manifest_sha256':before['sha256'],'input_run_files':before['files'],'analysis_input_files':analysis_inputs,'analysis_artifacts':artifacts})
     print(status)
 if __name__=='__main__':main()

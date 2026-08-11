@@ -1,8 +1,43 @@
 {
+  "analysis_contract_conformance": {
+    "c4_not_single_variable": {
+      "detail": null,
+      "pass": true
+    },
+    "canonical_comparison_mapping": {
+      "detail": null,
+      "pass": true
+    },
+    "canonical_primary_all_cases": {
+      "detail": null,
+      "pass": true
+    },
+    "canonical_primary_uses_gate_blind": {
+      "detail": null,
+      "pass": true
+    },
+    "conditional_revision_is_not_primary": {
+      "detail": null,
+      "pass": true
+    },
+    "frozen_case_unit_and_repetition": {
+      "detail": null,
+      "pass": true
+    },
+    "frozen_primary_contract": {
+      "detail": null,
+      "pass": true
+    },
+    "one_one_ties_incorrect": {
+      "detail": null,
+      "pass": true
+    }
+  },
   "analysis_input_files": {
     "ablation/analysis/post-audit-v2/case-inputs-v2.json": "11d47c6812a4087783c56cf038ff54822e0c6fccab99e61b484f7e07318dd3cb",
     "ablation/analysis/post-audit-v2/evidence-revision-001-pilot-matrix-v2.json": "ac1f4665e9bf01971744768c860f16df6b4c3ceb3464b3938a6848e781068f3c",
-    "ablation/corpus/governed-keys.json": "3b1fa60c10832a34520ff1e6b6d9c7258535b2f28f7e238555228dcfdf96bf28"
+    "ablation/corpus/governed-keys.json": "3b1fa60c10832a34520ff1e6b6d9c7258535b2f28f7e238555228dcfdf96bf28",
+    "ablation/eval/v2/evidence_revision.py": "fb5f8516ffae99af1318878b0d2c82de7b9dc595a9642c08e3afa12b1dbc0810"
   },
   "arms": {
     "R0": {
@@ -48,7 +83,7 @@
         "numerator": 0,
         "rate": 0.0
       },
-      "primary": {
+      "revision_to_correct_conditional": {
         "denominator": 7,
         "denominator_uids": [
           "1fa530b313c22108",
@@ -126,7 +161,7 @@
         "numerator": 0,
         "rate": 0.0
       },
-      "primary": {
+      "revision_to_correct_conditional": {
         "denominator": 8,
         "denominator_uids": [
           "d2ff366eea550104",
@@ -209,7 +244,7 @@
         "numerator": 0,
         "rate": 0.0
       },
-      "primary": {
+      "revision_to_correct_conditional": {
         "denominator": 8,
         "denominator_uids": [
           "d3290c29c1013838",
@@ -290,7 +325,7 @@
         "numerator": 1,
         "rate": 1.0
       },
-      "primary": {
+      "revision_to_correct_conditional": {
         "denominator": 8,
         "denominator_uids": [
           "d782b14da4382cf4",
@@ -377,7 +412,7 @@
         "numerator": 1,
         "rate": 1.0
       },
-      "primary": {
+      "revision_to_correct_conditional": {
         "denominator": 9,
         "denominator_uids": [
           "b950e62127e96e2b",
@@ -426,8 +461,437 @@
       }
     }
   },
-  "contrasts": {
-    "C1": {
+  "canonical_case_level_primary": {
+    "R0": {
+      "cases": [
+        {
+          "aggregated_case_correct": false,
+          "case_id": "cep-07",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "df-11",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "ag-04",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "sr-10",
+          "correct_reps": 1,
+          "rep1_correct": false,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "df-06",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "cep-05",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        }
+      ],
+      "denominator": 6,
+      "numerator": 0,
+      "rate": 0.0
+    },
+    "R1": {
+      "cases": [
+        {
+          "aggregated_case_correct": false,
+          "case_id": "cep-07",
+          "correct_reps": 1,
+          "rep1_correct": false,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "df-11",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "ag-04",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": true,
+          "case_id": "sr-10",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": true,
+          "case_id": "df-06",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "cep-05",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        }
+      ],
+      "denominator": 6,
+      "numerator": 2,
+      "rate": 0.3333333333333333
+    },
+    "R2": {
+      "cases": [
+        {
+          "aggregated_case_correct": false,
+          "case_id": "cep-07",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "df-11",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "ag-04",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": true,
+          "case_id": "sr-10",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "df-06",
+          "correct_reps": 1,
+          "rep1_correct": false,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "cep-05",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        }
+      ],
+      "denominator": 6,
+      "numerator": 1,
+      "rate": 0.16666666666666666
+    },
+    "R3": {
+      "cases": [
+        {
+          "aggregated_case_correct": true,
+          "case_id": "cep-07",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "df-11",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "ag-04",
+          "correct_reps": 1,
+          "rep1_correct": false,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": true,
+          "case_id": "sr-10",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": true,
+          "case_id": "df-06",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "cep-05",
+          "correct_reps": 1,
+          "rep1_correct": false,
+          "rep2_correct": true
+        }
+      ],
+      "denominator": 6,
+      "numerator": 3,
+      "rate": 0.5
+    },
+    "R4": {
+      "cases": [
+        {
+          "aggregated_case_correct": true,
+          "case_id": "cep-07",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "df-11",
+          "correct_reps": 0,
+          "rep1_correct": false,
+          "rep2_correct": false
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "ag-04",
+          "correct_reps": 1,
+          "rep1_correct": false,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": true,
+          "case_id": "sr-10",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": false,
+          "case_id": "df-06",
+          "correct_reps": 1,
+          "rep1_correct": false,
+          "rep2_correct": true
+        },
+        {
+          "aggregated_case_correct": true,
+          "case_id": "cep-05",
+          "correct_reps": 2,
+          "rep1_correct": true,
+          "rep2_correct": true
+        }
+      ],
+      "denominator": 6,
+      "numerator": 3,
+      "rate": 0.5
+    }
+  },
+  "canonical_paired_comparisons": {
+    "C1_evidence_effect": {
+      "both_correct": 0,
+      "both_incorrect": 4,
+      "cases": [
+        {
+          "case_id": "cep-07",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "df-11",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "ag-04",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "sr-10",
+          "first_correct": false,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-06",
+          "first_correct": false,
+          "second_correct": true
+        },
+        {
+          "case_id": "cep-05",
+          "first_correct": false,
+          "second_correct": false
+        }
+      ],
+      "constraint": null,
+      "declared_differences": "disclosure policy only",
+      "discordant_count": 2,
+      "family": "primary",
+      "first_arm": "R0",
+      "first_only_correct": 0,
+      "isolates_single_variable": true,
+      "second_arm": "R1",
+      "second_only_correct": 2
+    },
+    "C2_legibility_governed": {
+      "both_correct": 1,
+      "both_incorrect": 4,
+      "cases": [
+        {
+          "case_id": "cep-07",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "df-11",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "ag-04",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "sr-10",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-06",
+          "first_correct": true,
+          "second_correct": false
+        },
+        {
+          "case_id": "cep-05",
+          "first_correct": false,
+          "second_correct": false
+        }
+      ],
+      "constraint": null,
+      "declared_differences": "observation rendering only",
+      "discordant_count": 1,
+      "family": "primary",
+      "first_arm": "R1",
+      "first_only_correct": 1,
+      "isolates_single_variable": true,
+      "second_arm": "R2",
+      "second_only_correct": 0
+    },
+    "C3_legibility_upper": {
+      "both_correct": 2,
+      "both_incorrect": 2,
+      "cases": [
+        {
+          "case_id": "cep-07",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-11",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "ag-04",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "sr-10",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-06",
+          "first_correct": true,
+          "second_correct": false
+        },
+        {
+          "case_id": "cep-05",
+          "first_correct": false,
+          "second_correct": true
+        }
+      ],
+      "constraint": null,
+      "declared_differences": "observation rendering only",
+      "discordant_count": 2,
+      "family": "primary",
+      "first_arm": "R3",
+      "first_only_correct": 1,
+      "isolates_single_variable": true,
+      "second_arm": "R4",
+      "second_only_correct": 1
+    },
+    "C4_coverage_headroom": {
+      "both_correct": 2,
+      "both_incorrect": 3,
+      "cases": [
+        {
+          "case_id": "cep-07",
+          "first_correct": false,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-11",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "ag-04",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "sr-10",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-06",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "cep-05",
+          "first_correct": false,
+          "second_correct": false
+        }
+      ],
+      "constraint": "R3 is an EXEMPT_UPPER_BOUND; this comparison bounds headroom and may not be reported as controller performance, affordable navigation, or payment optimality",
+      "declared_differences": "TWO \u2014 disclosure AND budget_semantics. This comparison does NOT isolate a single variable and may never be described as if it did (audit A-06).",
+      "discordant_count": 1,
+      "family": "secondary",
+      "first_arm": "R1",
+      "first_only_correct": 0,
+      "isolates_single_variable": false,
+      "second_arm": "R3",
+      "second_only_correct": 1
+    }
+  },
+  "conditional_revision_descriptive_contrasts": {
+    "R1_minus_R0": {
       "contrast": "R1-R0",
       "difference_pp": 23.214285714285715,
       "left": {
@@ -443,7 +907,7 @@
         "rate": 0.375
       }
     },
-    "C2": {
+    "R2_minus_R1": {
       "contrast": "R2-R1",
       "difference_pp": 0.0,
       "left": {
@@ -459,7 +923,7 @@
         "rate": 0.375
       }
     },
-    "C3": {
+    "R3_minus_R1": {
       "contrast": "R3-R1",
       "difference_pp": 12.5,
       "left": {
@@ -475,7 +939,7 @@
         "rate": 0.5
       }
     },
-    "C4": {
+    "R4_minus_R3": {
       "contrast": "R4-R3",
       "difference_pp": 27.77777777777778,
       "left": {
@@ -492,10 +956,458 @@
       }
     }
   },
+  "descriptive_case_rep": {
+    "R0": {
+      "denominator": 12,
+      "numerator": 1,
+      "rate": 0.08333333333333333
+    },
+    "R1": {
+      "denominator": 12,
+      "numerator": 5,
+      "rate": 0.4166666666666667
+    },
+    "R2": {
+      "denominator": 12,
+      "numerator": 3,
+      "rate": 0.25
+    },
+    "R3": {
+      "denominator": 12,
+      "numerator": 8,
+      "rate": 0.6666666666666666
+    },
+    "R4": {
+      "denominator": 12,
+      "numerator": 8,
+      "rate": 0.6666666666666666
+    }
+  },
   "endpoint_definition": {
-    "eligibility": "round-1 proposed_settlement is not the true locus; null is explicit UNKNOWN/UNRESOLVED",
-    "note": "unit-level descriptive reconstruction requested; frozen confirmatory plan uses case aggregation and is not applied as a pilot authorization gate",
-    "numerator": "eligible unit final gate-blind last_model_claim equals evaluator true locus"
+    "conditional_diagnostic": "revision_to_correct_conditional: P(final gate-blind claim correct | round-1 claim not already correct); null is explicit UNKNOWN/UNRESOLVED; descriptive only",
+    "frozen_primary_definition": "the unit's FINAL diagnostic claim names the true locus, evaluated on the primary population",
+    "frozen_primary_name": "R_correct",
+    "frozen_primary_unit": "case",
+    "gate_handling": "scored on the model's last claim, independent of the sufficiency gate's verdict, so the endpoint measures the model and not the rule",
+    "repetition_handling": "repetitions aggregated within case before pairing (majority over reps; ties resolved as incorrect); (case, rep) pairing may be reported alongside but never alone \u2014 pseudo-replication, audit A-05"
+  },
+  "frozen_contract": {
+    "comparisons": {
+      "C1_evidence_effect": {
+        "arms": [
+          "R0",
+          "R1"
+        ],
+        "constraint": null,
+        "declared_differences": "disclosure policy only",
+        "family": "primary",
+        "isolates_single_variable": true,
+        "question": "does delivering evidence at all change the final diagnostic claim? This is the direct test of H-EVIDENCE-REVISION."
+      },
+      "C2_legibility_governed": {
+        "arms": [
+          "R1",
+          "R2"
+        ],
+        "constraint": null,
+        "declared_differences": "observation rendering only",
+        "family": "primary",
+        "isolates_single_variable": true,
+        "question": "does rendering the SAME evidence legibly change final accuracy under the governed budget?"
+      },
+      "C3_legibility_upper": {
+        "arms": [
+          "R3",
+          "R4"
+        ],
+        "constraint": null,
+        "declared_differences": "observation rendering only",
+        "family": "primary",
+        "isolates_single_variable": true,
+        "question": "the same legibility contrast with evidence coverage at its upper bound, so a null in C2 cannot be attributed to there being too little evidence to render"
+      },
+      "C4_coverage_headroom": {
+        "arms": [
+          "R1",
+          "R3"
+        ],
+        "constraint": "R3 is an EXEMPT_UPPER_BOUND; this comparison bounds headroom and may not be reported as controller performance, affordable navigation, or payment optimality",
+        "declared_differences": "TWO \u2014 disclosure AND budget_semantics. This comparison does NOT isolate a single variable and may never be described as if it did (audit A-06).",
+        "family": "secondary",
+        "isolates_single_variable": false,
+        "question": "how much of the remaining gap is attributable to evidence coverage rather than to revision?"
+      }
+    },
+    "contract_fingerprint": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
+    "primary_endpoint": {
+      "construct": null,
+      "definition": "the unit's FINAL diagnostic claim names the true locus, evaluated on the primary population",
+      "gate_handling": "scored on the model's last claim, independent of the sufficiency gate's verdict, so the endpoint measures the model and not the rule",
+      "name": "R_correct",
+      "unit": "case"
+    },
+    "secondary_endpoints": {
+      "gated_accuracy": "correct AND gate-qualifying evidence held",
+      "invocation_rate": "units with >= 1 acquisition",
+      "matched_evidence_use": "utilisation on units where both arms held evidence",
+      "output_class_rates": "VALID_DECISION / OUTPUT_TRUNCATED / MODEL_OUTPUT_CONTRACT_FAILURE / PARSER_FAILURE, reported separately and never collapsed into 'incorrect'",
+      "response_mode": "modal share and entropy \u2014 labelled POST-HOC, not a test",
+      "revision_rate": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result.",
+      "terminal_state_distribution": "all six Terminal values, per arm"
+    },
+    "statistical_plan": {
+      "alpha": 0.05,
+      "interval": "Wilson score, 95%",
+      "mandatory_covariates": [
+        "per-arm output-truncation rate",
+        "per-arm MODEL_OUTPUT_CONTRACT_FAILURE rate"
+      ],
+      "multiple_comparisons": "three primary comparisons; the family and its size are reported with every p-value",
+      "p_value_floor": "never reported as 0; underflow reported as p < 1e-15",
+      "paired_test": "McNemar, exact binomial when b + c < 25",
+      "prespecified_effect_threshold_pp": 10,
+      "primary_unit": "case",
+      "repetition_handling": "repetitions aggregated within case before pairing (majority over reps; ties resolved as incorrect); (case, rep) pairing may be reported alongside but never alone \u2014 pseudo-replication, audit A-05",
+      "sided": "two-sided"
+    }
+  },
+  "frozen_secondary_endpoint_reconstruction_status": {
+    "gated_accuracy": "PASS",
+    "invocation_rate": "PASS",
+    "matched_evidence_use": "NOT_RECONSTRUCTABLE",
+    "output_class_rates": "PASS",
+    "response_mode": "PARTIAL_POST_HOC",
+    "revision_rate": "PARTIAL",
+    "terminal_state_distribution": "PASS"
+  },
+  "frozen_secondary_endpoints": {
+    "R0": {
+      "gated_accuracy": {
+        "denominator": 12,
+        "numerator": 0,
+        "rate": 0.0,
+        "status": "PASS"
+      },
+      "invocation_rate": {
+        "denominator": 12,
+        "numerator": 0,
+        "rate": 0.0,
+        "status": "PASS"
+      },
+      "matched_evidence_use": {
+        "reason": "holdings are persisted but no explicit utilization/citation indicator or fully operational frozen utilization rule is persisted",
+        "status": "NOT_RECONSTRUCTABLE"
+      },
+      "output_class_rates": {
+        "counts": {
+          "VALID_DECISION": 36
+        },
+        "status": "PASS"
+      },
+      "response_mode": {
+        "counts": {
+          "evidence_collection": 1,
+          "projection": 1,
+          "unknown": 10
+        },
+        "entropy_bits": 0.8166890883150209,
+        "label": "POST-HOC",
+        "modal_share": 0.8333333333333334,
+        "modes": [
+          "unknown"
+        ],
+        "operationalization": "distribution of final gate-blind claims over case\u00d7rep units",
+        "reason": "response strings are recoverable, but the frozen prose does not uniquely select gate-blind versus governed/all-round response or repetition aggregation",
+        "status": "PARTIAL_POST_HOC_OPERATIONALIZATION"
+      },
+      "revision_rate": {
+        "definition": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result.",
+        "including_unknown_unresolved": {
+          "denominator": 7,
+          "numerator": 3,
+          "rate": 0.42857142857142855
+        },
+        "reason": "the frozen prose does not state whether null/UNKNOWN is a wrong claim; both transparent reconstructions are reported",
+        "status": "PARTIAL_OPERATIONALIZATION_UNDERDEFINED",
+        "strict_wrong_concrete": {
+          "denominator": 1,
+          "numerator": 1,
+          "rate": 1.0
+        }
+      },
+      "terminal_state_distribution": {
+        "counts": {
+          "BUDGET_EXHAUSTED_GATE_REJECTED": 2,
+          "BUDGET_EXHAUSTED_SETTLED": 10
+        },
+        "status": "PASS"
+      }
+    },
+    "R1": {
+      "gated_accuracy": {
+        "denominator": 12,
+        "numerator": 5,
+        "rate": 0.4166666666666667,
+        "status": "PASS"
+      },
+      "invocation_rate": {
+        "denominator": 12,
+        "numerator": 12,
+        "rate": 1.0,
+        "status": "PASS"
+      },
+      "matched_evidence_use": {
+        "reason": "holdings are persisted but no explicit utilization/citation indicator or fully operational frozen utilization rule is persisted",
+        "status": "NOT_RECONSTRUCTABLE"
+      },
+      "output_class_rates": {
+        "counts": {
+          "VALID_DECISION": 36
+        },
+        "status": "PASS"
+      },
+      "response_mode": {
+        "counts": {
+          "environment": 2,
+          "evidence_collection": 2,
+          "implementation": 1,
+          "unknown": 7
+        },
+        "entropy_bits": 1.6140054628542204,
+        "label": "POST-HOC",
+        "modal_share": 0.5833333333333334,
+        "modes": [
+          "unknown"
+        ],
+        "operationalization": "distribution of final gate-blind claims over case\u00d7rep units",
+        "reason": "response strings are recoverable, but the frozen prose does not uniquely select gate-blind versus governed/all-round response or repetition aggregation",
+        "status": "PARTIAL_POST_HOC_OPERATIONALIZATION"
+      },
+      "revision_rate": {
+        "definition": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result.",
+        "including_unknown_unresolved": {
+          "denominator": 8,
+          "numerator": 4,
+          "rate": 0.5
+        },
+        "reason": "the frozen prose does not state whether null/UNKNOWN is a wrong claim; both transparent reconstructions are reported",
+        "status": "PARTIAL_OPERATIONALIZATION_UNDERDEFINED",
+        "strict_wrong_concrete": {
+          "denominator": 1,
+          "numerator": 1,
+          "rate": 1.0
+        }
+      },
+      "terminal_state_distribution": {
+        "counts": {
+          "BUDGET_EXHAUSTED_SETTLED": 10,
+          "CONCRETE_SETTLEMENT": 2
+        },
+        "status": "PASS"
+      }
+    },
+    "R2": {
+      "gated_accuracy": {
+        "denominator": 12,
+        "numerator": 3,
+        "rate": 0.25,
+        "status": "PASS"
+      },
+      "invocation_rate": {
+        "denominator": 12,
+        "numerator": 12,
+        "rate": 1.0,
+        "status": "PASS"
+      },
+      "matched_evidence_use": {
+        "reason": "holdings are persisted but no explicit utilization/citation indicator or fully operational frozen utilization rule is persisted",
+        "status": "NOT_RECONSTRUCTABLE"
+      },
+      "output_class_rates": {
+        "counts": {
+          "VALID_DECISION": 36
+        },
+        "status": "PASS"
+      },
+      "response_mode": {
+        "counts": {
+          "declared_model": 1,
+          "environment": 1,
+          "evidence_collection": 2,
+          "projection": 1,
+          "unknown": 7
+        },
+        "entropy_bits": 1.780672129520887,
+        "label": "POST-HOC",
+        "modal_share": 0.5833333333333334,
+        "modes": [
+          "unknown"
+        ],
+        "operationalization": "distribution of final gate-blind claims over case\u00d7rep units",
+        "reason": "response strings are recoverable, but the frozen prose does not uniquely select gate-blind versus governed/all-round response or repetition aggregation",
+        "status": "PARTIAL_POST_HOC_OPERATIONALIZATION"
+      },
+      "revision_rate": {
+        "definition": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result.",
+        "including_unknown_unresolved": {
+          "denominator": 8,
+          "numerator": 6,
+          "rate": 0.75
+        },
+        "reason": "the frozen prose does not state whether null/UNKNOWN is a wrong claim; both transparent reconstructions are reported",
+        "status": "PARTIAL_OPERATIONALIZATION_UNDERDEFINED",
+        "strict_wrong_concrete": {
+          "denominator": 1,
+          "numerator": 1,
+          "rate": 1.0
+        }
+      },
+      "terminal_state_distribution": {
+        "counts": {
+          "BUDGET_EXHAUSTED_GATE_REJECTED": 1,
+          "BUDGET_EXHAUSTED_SETTLED": 7,
+          "CONCRETE_SETTLEMENT": 4
+        },
+        "status": "PASS"
+      }
+    },
+    "R3": {
+      "gated_accuracy": {
+        "denominator": 12,
+        "numerator": 8,
+        "rate": 0.6666666666666666,
+        "status": "PASS"
+      },
+      "invocation_rate": {
+        "denominator": 12,
+        "numerator": 12,
+        "rate": 1.0,
+        "status": "PASS"
+      },
+      "matched_evidence_use": {
+        "reason": "holdings are persisted but no explicit utilization/citation indicator or fully operational frozen utilization rule is persisted",
+        "status": "NOT_RECONSTRUCTABLE"
+      },
+      "output_class_rates": {
+        "counts": {
+          "VALID_DECISION": 27
+        },
+        "status": "PASS"
+      },
+      "response_mode": {
+        "counts": {
+          "declared_model": 2,
+          "environment": 2,
+          "evidence_collection": 2,
+          "implementation": 2,
+          "projection": 1,
+          "unknown": 1,
+          "verification_plan": 2
+        },
+        "entropy_bits": 2.7516291673878226,
+        "label": "POST-HOC",
+        "modal_share": 0.16666666666666666,
+        "modes": [
+          "declared_model",
+          "environment",
+          "evidence_collection",
+          "implementation",
+          "verification_plan"
+        ],
+        "operationalization": "distribution of final gate-blind claims over case\u00d7rep units",
+        "reason": "response strings are recoverable, but the frozen prose does not uniquely select gate-blind versus governed/all-round response or repetition aggregation",
+        "status": "PARTIAL_POST_HOC_OPERATIONALIZATION"
+      },
+      "revision_rate": {
+        "definition": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result.",
+        "including_unknown_unresolved": {
+          "denominator": 8,
+          "numerator": 6,
+          "rate": 0.75
+        },
+        "reason": "the frozen prose does not state whether null/UNKNOWN is a wrong claim; both transparent reconstructions are reported",
+        "status": "PARTIAL_OPERATIONALIZATION_UNDERDEFINED",
+        "strict_wrong_concrete": {
+          "denominator": 1,
+          "numerator": 0,
+          "rate": 0.0
+        }
+      },
+      "terminal_state_distribution": {
+        "counts": {
+          "BUDGET_EXHAUSTED_GATE_REJECTED": 1,
+          "BUDGET_EXHAUSTED_SETTLED": 2,
+          "CONCRETE_SETTLEMENT": 9
+        },
+        "status": "PASS"
+      }
+    },
+    "R4": {
+      "gated_accuracy": {
+        "denominator": 12,
+        "numerator": 8,
+        "rate": 0.6666666666666666,
+        "status": "PASS"
+      },
+      "invocation_rate": {
+        "denominator": 12,
+        "numerator": 12,
+        "rate": 1.0,
+        "status": "PASS"
+      },
+      "matched_evidence_use": {
+        "reason": "holdings are persisted but no explicit utilization/citation indicator or fully operational frozen utilization rule is persisted",
+        "status": "NOT_RECONSTRUCTABLE"
+      },
+      "output_class_rates": {
+        "counts": {
+          "VALID_DECISION": 27
+        },
+        "status": "PASS"
+      },
+      "response_mode": {
+        "counts": {
+          "declared_model": 2,
+          "environment": 1,
+          "evidence_collection": 2,
+          "implementation": 2,
+          "verification_plan": 3,
+          "verifier": 2
+        },
+        "entropy_bits": 2.5220552088742005,
+        "label": "POST-HOC",
+        "modal_share": 0.25,
+        "modes": [
+          "verification_plan"
+        ],
+        "operationalization": "distribution of final gate-blind claims over case\u00d7rep units",
+        "reason": "response strings are recoverable, but the frozen prose does not uniquely select gate-blind versus governed/all-round response or repetition aggregation",
+        "status": "PARTIAL_POST_HOC_OPERATIONALIZATION"
+      },
+      "revision_rate": {
+        "definition": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result.",
+        "including_unknown_unresolved": {
+          "denominator": 9,
+          "numerator": 8,
+          "rate": 0.8888888888888888
+        },
+        "reason": "the frozen prose does not state whether null/UNKNOWN is a wrong claim; both transparent reconstructions are reported",
+        "status": "PARTIAL_OPERATIONALIZATION_UNDERDEFINED",
+        "strict_wrong_concrete": {
+          "denominator": 1,
+          "numerator": 0,
+          "rate": 0.0
+        }
+      },
+      "terminal_state_distribution": {
+        "counts": {
+          "BUDGET_EXHAUSTED_GATE_REJECTED": 2,
+          "BUDGET_EXHAUSTED_SETTLED": 1,
+          "CONCRETE_SETTLEMENT": 9
+        },
+        "status": "PASS"
+      }
+    }
   },
   "full_authorized": false,
   "full_executed": false,
@@ -884,6 +1796,10 @@
         "pass": true
       },
       "arm_evidence_policy": {
+        "detail": null,
+        "pass": true
+      },
+      "c4_not_single_variable": {
         "detail": null,
         "pass": true
       },
@@ -2475,6 +3391,18 @@
         "detail": null,
         "pass": true
       },
+      "canonical_comparison_mapping": {
+        "detail": null,
+        "pass": true
+      },
+      "canonical_primary_all_cases": {
+        "detail": null,
+        "pass": true
+      },
+      "canonical_primary_uses_gate_blind": {
+        "detail": null,
+        "pass": true
+      },
       "case_input_binding": {
         "detail": null,
         "pass": true
@@ -2727,11 +3655,23 @@
         "detail": null,
         "pass": true
       },
+      "conditional_revision_is_not_primary": {
+        "detail": null,
+        "pass": true
+      },
       "design_fingerprint": {
         "detail": null,
         "pass": true
       },
       "executable_fingerprint": {
+        "detail": null,
+        "pass": true
+      },
+      "frozen_case_unit_and_repetition": {
+        "detail": null,
+        "pass": true
+      },
+      "frozen_primary_contract": {
         "detail": null,
         "pass": true
       },
@@ -3484,6 +4424,10 @@
           "note": "live pilot stopped at RESULT_COMMITTED; no score artifacts exist",
           "score_artifacts": 0
         },
+        "pass": true
+      },
+      "one_one_ties_incorrect": {
+        "detail": null,
         "pass": true
       },
       "prompt_guard:009ab9d5a598d055:call:001": {
@@ -5930,7 +6874,7 @@
       "repetition": 2
     }
   ],
-  "pairwise": {
+  "pairwise_case_rep": {
     "R1/R2": {
       "final_gate_blind_correct": {
         "both_correct": 3,
@@ -5985,66 +6929,67 @@
     "wrong_to_different_wrong": 0,
     "wrong_to_unknown": 1
   },
-  "schema": "pilot-adjudication-revision-002-v1",
+  "schema": "pilot-adjudication-revision-002-v2",
   "scope": "descriptive protocol pilot; not confirmatory",
   "status": "ANALYSIS_READY",
+  "supersedes_analysis_commit": "a7811dd3d045a281fb0724b73a245c690b287be9",
   "validity": [
     {
-      "basis": "Round-1 proposed settlement, forced-final raw decision, final gate-blind claim, and evaluator truth are recoverable.",
+      "basis": "R_correct includes all six cases per arm and uses final gate-blind claims.",
       "classification": "PASS",
       "number": 1,
-      "question": "Primary endpoint without inference/imputation"
+      "question": "Frozen primary reconstructed without conditioning"
     },
     {
-      "basis": "Round 1 precedes first delivery; calls 2+ are post-delivery.",
+      "basis": "Two repetitions are aggregated within each case before pairing.",
       "classification": "PASS",
       "number": 2,
-      "question": "Pre/post claims distinguishable"
+      "question": "Primary inferential unit is case"
     },
     {
-      "basis": "Truth loaded only from sealed governed-keys; absent from call/result model-visible payloads.",
+      "basis": "A 1/1 split is aggregated incorrect.",
       "classification": "PASS",
       "number": 3,
+      "question": "Frozen tie rule applied"
+    },
+    {
+      "basis": "Conditional revision diagnostics remain distinct and secondary.",
+      "classification": "PASS",
+      "number": 4,
+      "question": "Pre/post transition diagnostics separable"
+    },
+    {
+      "basis": "Truth is loaded only from sealed governed-keys.",
+      "classification": "PASS",
+      "number": 5,
       "question": "Truth remains evaluator-side"
     },
     {
-      "basis": "Both are directly persisted in runner_contract.",
+      "basis": "Canonical primary uses gate-blind; gated accuracy uses governed truth.",
       "classification": "PASS",
-      "number": 4,
+      "number": 6,
       "question": "Gate-blind/governed separable"
     },
     {
-      "basis": "Policy, membership/hashes, and arm rendering are persisted.",
-      "classification": "PASS",
-      "number": 5,
-      "question": "Evidence/rendering independently recoverable"
-    },
-    {
-      "basis": "All arm numerator/denominator UID sets are deterministic.",
-      "classification": "PASS",
-      "number": 6,
-      "question": "Four frozen requested contrasts reconstructable"
-    },
-    {
-      "basis": "Case/rep mapping and three evidence equalities recover all 24 pairs.",
+      "basis": "IDs, arm mappings, families, and declared dimensions are imported from COMPARISONS.",
       "classification": "PASS",
       "number": 7,
+      "question": "Canonical C1-C4 identities exact"
+    },
+    {
+      "basis": "All case/rep evidence memberships and hashes agree.",
+      "classification": "PASS",
+      "number": 8,
       "question": "Representation pairings exact"
     },
     {
-      "basis": "Round-1 proposed settlement plus sealed truth determines eligibility.",
-      "classification": "PASS",
-      "number": 8,
-      "question": "Endpoint denominators deterministic"
-    },
-    {
-      "basis": "Forced-final decision is absent from rounds but recovered exactly from committed raw bytes; final claim also directly persisted.",
+      "basis": "All are reconstructed except matched_evidence_use, explicitly NOT_RECONSTRUCTABLE because utilization is unpersisted.",
       "classification": "PASS",
       "number": 9,
-      "question": "No result depends on missing intermediate state"
+      "question": "Frozen secondary endpoints assessed"
     },
     {
-      "basis": "This script reads only local immutable artifacts and sealed evaluator files.",
+      "basis": "Only local immutable artifacts and evaluator files are read.",
       "classification": "PASS",
       "number": 10,
       "question": "Reproducible without provider contact"

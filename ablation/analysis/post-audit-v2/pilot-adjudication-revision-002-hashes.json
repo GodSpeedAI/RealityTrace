@@ -1,14 +1,15 @@
 {
   "analysis_artifacts": {
-    "ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.json": "12ab704f21f096898b12302c122ef88ef9c09346895f8af2e8cfb7e8eff36d6e",
-    "ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.md": "65e6a0f91484d792cd534ea8e91d3f0f582608b69247ecb14982f2d48e3f90bf",
+    "ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.json": "e565bb2ac26041c175ef9d7c0bddf65bfb7d08eb5ff226a856c83c20f0f24ca0",
+    "ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.md": "28b4dfad1713d4852046449681f1cb554055fd5962684574da50cb80e8ae97d2",
     "ablation/analysis/post-audit-v2/pilot-unit-reconstruction-revision-002.jsonl": "3deede495bed6cdebb6948e15b1f8422d62187513b98deb037db255e81c1767d",
-    "ablation/analysis/post-audit-v2/pilot_adjudication_revision_002.py": "9208b4b35229b1d36655973199eb8c0d1e3ac39ff828461dd3542528c765d1ab"
+    "ablation/analysis/post-audit-v2/pilot_adjudication_revision_002.py": "66e3b4400d52a0aa47aff14cb77f3943b2101edfc32a092598ca8499514e0879"
   },
   "analysis_input_files": {
     "ablation/analysis/post-audit-v2/case-inputs-v2.json": "11d47c6812a4087783c56cf038ff54822e0c6fccab99e61b484f7e07318dd3cb",
     "ablation/analysis/post-audit-v2/evidence-revision-001-pilot-matrix-v2.json": "ac1f4665e9bf01971744768c860f16df6b4c3ceb3464b3938a6848e781068f3c",
-    "ablation/corpus/governed-keys.json": "3b1fa60c10832a34520ff1e6b6d9c7258535b2f28f7e238555228dcfdf96bf28"
+    "ablation/corpus/governed-keys.json": "3b1fa60c10832a34520ff1e6b6d9c7258535b2f28f7e238555228dcfdf96bf28",
+    "ablation/eval/v2/evidence_revision.py": "fb5f8516ffae99af1318878b0d2c82de7b9dc595a9642c08e3afa12b1dbc0810"
   },
   "input_run": "ablation/runs/evidence-revision-001-revision-002/evidence-revision-001-revision-002-pilot-20260811T221724Z",
   "input_run_files": {
@@ -475,5 +476,5 @@
     "run.json": "2be01bcdf2320c8f07b800000dcb5ed1057365b09ccc9ba304b25dede32cc989"
   },
   "input_run_manifest_sha256": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
-  "schema": "pilot-adjudication-hashes-v1"
+  "schema": "pilot-adjudication-hashes-v2"
 }
