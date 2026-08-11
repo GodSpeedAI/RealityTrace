@@ -27,7 +27,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .channel import AnswerLeak, DisclosurePolicy, PromptLeakGuard, leakage_bound
+from .channel import PromptLeakGuard, leakage_bound
 from .controller import HARNESS_DEFAULTED, Terminal
 from .ledger import CommitViolation
 from .sufficiency import TRUE

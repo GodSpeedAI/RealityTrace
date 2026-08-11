@@ -11,8 +11,6 @@
   "scorer_version": "post-audit-v2",
   "source_artifacts": {
     "corpus/acquisition-hidden-meta.json": "dcf75d1340972fd6cb16b594493fae0554ec327a98278a092686a5abf71719e5",
-    "corpus/acquisition-keys.json": "8fcb69275313a916594da3065ae916b4f20184be7b6c902a6e918f6b72a2433a",
-    "corpus/governed-keys.json": "3b1fa60c10832a34520ff1e6b6d9c7258535b2f28f7e238555228dcfdf96bf28",
     "runs/acq-full/diagnostic-acquisition-001/scored/": "dir:540:9e92f22c238a6e2ea51f4cd688672a8c2d65fbb9d625aeaa2be1356d9359e7dd",
     "runs/attribution-002/attribution-002/matrix.json": "b4b9f4432d0e260d15d14518e5b75482351e8b555d28d5209981a9c24969b809",
     "runs/attribution-002/attribution-002/scoring/attribution-002/": "dir:360:1f9a596d445472958155348e2f8641e2ea89e0870c639b5cee7345ad0f66a159",

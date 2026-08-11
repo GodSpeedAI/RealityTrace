@@ -12,7 +12,6 @@ from __future__ import annotations
 import json
 import os
 import sys
-from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(HERE)))

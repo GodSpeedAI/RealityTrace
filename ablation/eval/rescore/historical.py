@@ -337,7 +337,6 @@ def rescore_s232() -> dict:
 def rescore_acquisition() -> dict:
     exp = os.path.join(RUNS, "acq-full", "diagnostic-acquisition-001")
     scored = load_dir(os.path.join(exp, "scored"))
-    keys = load_json(os.path.join(CORPUS, "acquisition-keys.json"))
     meta = load_json(os.path.join(CORPUS, "acquisition-hidden-meta.json"))
 
     per = defaultdict(lambda: {"n": 0, "det": 0, "det_correct": 0,
@@ -449,7 +448,6 @@ def rescore_acquisition() -> dict:
 def rescore_governed() -> dict:
     exp = os.path.join(RUNS, "gov-full", "governed-diagnostic-acquisition-001")
     scored = load_dir(os.path.join(exp, "scored"))
-    keys = load_json(os.path.join(CORPUS, "governed-keys.json"))
     meta = load_json(os.path.join(CORPUS, "acquisition-hidden-meta.json"))
 
     records = []
@@ -488,7 +486,6 @@ def rescore_governed() -> dict:
         units = [r for r in records if r["condition"] == cond]
         det = [r for r in units if r["feasible_det"]]
         unk = [r for r in units if r["is_unknown_case"]]
-        acted = [r for r in det if r["actions"]]
         eligible = [r for r in det if r["discriminating"]]
         eligible_acted = [r for r in eligible if r["actions"]]
         with_ev = [r for r in det if r["has_discrim"]]

@@ -42,7 +42,7 @@ from typing import Protocol
 
 from .channel import (DisclosurePolicy, ObservationChannel, PromptLeakGuard,
                       unit_seed)
-from .decision import ParseStatus, parse_decision, repair_request
+from .decision import parse_decision, repair_request
 from .dstate import DiagnosticState
 from .execution import (EffectiveCeilingDetector, OutputClass, classify_output,
                         record_from_provider)
