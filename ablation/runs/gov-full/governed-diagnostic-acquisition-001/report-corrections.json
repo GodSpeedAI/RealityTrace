@@ -1,0 +1,357 @@
+{
+  "changed_claims": [
+    {
+      "corrected": "V A_c_feasible = 28/129 = 21.7%",
+      "reason": "v1 had wrong numerator; actual correct count is 28",
+      "v1_claim": "V A_c_feasible = 17/129 = 13.2%"
+    },
+    {
+      "corrected": "V A_c_all_det = 29/159 = 18.2%",
+      "reason": "v1 used 180 (incl UNKNOWN) as denominator for 'all determinate'",
+      "v1_claim": "V all det = 39/180 = 21.7%"
+    },
+    {
+      "corrected": "G A_use = 14/19",
+      "reason": "v1 had wrong raw counts; same percentage by coincidence",
+      "v1_claim": "G A_use = 56/76"
+    },
+    {
+      "corrected": "b=51, c=23",
+      "reason": "v1 had wrong discordant pair counts",
+      "v1_claim": "McNemar b=26, c=7 for G vs V invocation"
+    },
+    {
+      "corrected": "73 MODEL_OUTPUT_CONTRACT_FAILURE + 4 PREMATURE_SETTLEMENT_NO_ACQUISITION",
+      "reason": "73/77 involve Z.ai API empty content (infrastructure); 4/77 produced valid content but attempted settlement without acquisition",
+      "v1_claim": "77 SUFFICIENCY_DETECTION_FAILURE \u2014 model returns empty/unparseable content"
+    },
+    {
+      "corrected": "action selection is a major upstream bottleneck; evidence interpretation is a second major bottleneck (O A_use = 46.9%)",
+      "reason": "O condition shows model fails to metabolize correct evidence >50% of the time",
+      "v1_claim": "action selection is the primary/sole bottleneck"
+    },
+    {
+      "corrected": "p = 9.0\u00d710\u207b\u00b9\u2070",
+      "reason": "exact McNemar p-value available",
+      "v1_claim": "p\u22480.0000 for O vs G"
+    },
+    {
+      "corrected": "1 unit with 0 model calls (oracle NoneType): c096c6b111e05554 (O/cep-12/rep3); 97 additional CONTRACT_FAILURE terminal states from code-path bug (loop exits via continue after MAX_ROUNDS)",
+      "reason": "v1 conflated oracle selector failure with CONTRACT_FAILURE code-path default",
+      "v1_claim": "1/540 units defaulted (CONTRACT_FAILURE)"
+    }
+  ],
+  "corrected_metrics": {
+    "G": {
+      "A_c_all_det": {
+        "changed": false,
+        "denominator": 159,
+        "numerator": 17,
+        "value": 0.1069
+      },
+      "A_c_feasible": {
+        "changed": false,
+        "denominator": 129,
+        "numerator": 17,
+        "value": 0.1318
+      },
+      "A_select_any": {
+        "changed": true,
+        "denominator": 129,
+        "numerator": 19,
+        "v1_reported": {
+          "denominator": 64,
+          "error": "wrong raw counts and denominator, 8/64=12.5% not 14.7%",
+          "numerator": 8,
+          "value": 0.147
+        },
+        "value": 0.1473
+      },
+      "A_select_first": {
+        "changed": true,
+        "denominator": 129,
+        "numerator": 6,
+        "v1_reported": {
+          "denominator": 64,
+          "error": "wrong raw counts, coincidentally correct percentage",
+          "numerator": 3,
+          "value": 0.047
+        },
+        "value": 0.0465
+      },
+      "A_u": {
+        "changed": false,
+        "denominator": 21,
+        "mechanism_note": "achieved via BUDGET_EXHAUSTED/CONTRACT_FAILURE default, not voluntary TERMINAL_UNKNOWN",
+        "numerator": 21,
+        "value": 1.0
+      },
+      "A_use": {
+        "changed": true,
+        "denominator": 19,
+        "numerator": 14,
+        "v1_reported": {
+          "denominator": 76,
+          "error": "wrong raw counts, coincidentally correct percentage",
+          "numerator": 56,
+          "value": 0.737
+        },
+        "value": 0.7368
+      },
+      "invocation": {
+        "changed": false,
+        "denominator": 180,
+        "numerator": 74,
+        "value": 0.4111
+      }
+    },
+    "O": {
+      "A_c_all_det": {
+        "changed": false,
+        "denominator": 159,
+        "numerator": 60,
+        "value": 0.3774
+      },
+      "A_c_feasible": {
+        "changed": false,
+        "denominator": 129,
+        "numerator": 60,
+        "value": 0.4651
+      },
+      "A_select_any": {
+        "changed": false,
+        "denominator": 129,
+        "numerator": 128,
+        "value": 0.9922
+      },
+      "A_select_first": {
+        "changed": false,
+        "denominator": 129,
+        "numerator": 128,
+        "value": 0.9922
+      },
+      "A_u": {
+        "changed": false,
+        "denominator": 21,
+        "mechanism_note": "all 21 via CONTRACT_FAILURE default",
+        "numerator": 21,
+        "value": 1.0
+      },
+      "A_use": {
+        "changed": false,
+        "denominator": 128,
+        "numerator": 60,
+        "value": 0.4688
+      },
+      "invocation": {
+        "changed": false,
+        "denominator": 180,
+        "numerator": 179,
+        "value": 0.9944
+      }
+    },
+    "V": {
+      "A_c_all_det": {
+        "changed": true,
+        "denominator": 159,
+        "numerator": 29,
+        "v1_reported": {
+          "denominator": 180,
+          "error": "wrong numerator, denominator included UNKNOWN cases",
+          "numerator": 39,
+          "value": 0.217
+        },
+        "value": 0.1824
+      },
+      "A_c_feasible": {
+        "changed": true,
+        "denominator": 129,
+        "numerator": 28,
+        "v1_reported": {
+          "denominator": 129,
+          "error": "wrong numerator and value in v1 table",
+          "numerator": 17,
+          "value": 0.132
+        },
+        "value": 0.2171
+      },
+      "A_select_any": {
+        "changed": true,
+        "denominator": 129,
+        "numerator": 12,
+        "v1_reported": {
+          "denominator": 51,
+          "error": "wrong raw counts and denominator",
+          "numerator": 4,
+          "value": 0.093
+        },
+        "value": 0.093
+      },
+      "A_select_first": {
+        "changed": true,
+        "denominator": 129,
+        "numerator": 5,
+        "v1_reported": {
+          "denominator": 51,
+          "error": "wrong raw counts, coincidentally correct percentage",
+          "numerator": 2,
+          "value": 0.039
+        },
+        "value": 0.0388
+      },
+      "A_u": {
+        "changed": false,
+        "denominator": 21,
+        "numerator": 4,
+        "value": 0.1905
+      },
+      "A_use": {
+        "changed": true,
+        "denominator": 12,
+        "numerator": 12,
+        "v1_reported": {
+          "note": "v1 said 'n=4', actual n=12",
+          "value": 1.0
+        },
+        "value": 1.0
+      },
+      "invocation": {
+        "changed": false,
+        "denominator": 180,
+        "numerator": 46,
+        "value": 0.2556
+      }
+    }
+  },
+  "corrected_paired_statistics": {
+    "G_vs_V_correct_all_det": {
+      "G_rate": 0.1069,
+      "V_rate": 0.1824,
+      "changed": false,
+      "diff_pp": -7.5,
+      "mcnemar_b": 11,
+      "mcnemar_c": 23,
+      "n": 159,
+      "note": "new comparison not in v1",
+      "p": 0.0592
+    },
+    "G_vs_V_correct_feasible": {
+      "G_rate": 0.1318,
+      "V_rate": 0.2171,
+      "changed": false,
+      "diff_pp": -8.5,
+      "mcnemar_b": 11,
+      "mcnemar_c": 22,
+      "n": 129,
+      "p": 0.0817
+    },
+    "G_vs_V_invocation": {
+      "G_rate": 0.4111,
+      "V_rate": 0.2556,
+      "changed": true,
+      "diff_pp": 15.6,
+      "mcnemar_b": 51,
+      "mcnemar_c": 23,
+      "n": 180,
+      "p": 0.0017,
+      "v1_reported": {
+        "b": 26,
+        "c": 7,
+        "error": "wrong b/c counts"
+      }
+    },
+    "G_vs_V_unknown_preservation": {
+      "G_rate": 1.0,
+      "V_rate": 0.19,
+      "changed": false,
+      "diff_pp": 81.0,
+      "mcnemar_b": 17,
+      "mcnemar_c": 0,
+      "n": 21,
+      "note": "new comparison not in v1",
+      "p": 1.5e-05
+    },
+    "O_vs_G_correct_feasible": {
+      "G_rate": 0.1318,
+      "O_rate": 0.4651,
+      "changed": true,
+      "diff_pp": 33.3,
+      "mcnemar_b": 45,
+      "mcnemar_c": 2,
+      "n": 129,
+      "p": 9e-10,
+      "v1_reported": {
+        "p": "\u22480.0000"
+      }
+    },
+    "O_vs_V_correct_feasible": {
+      "O_rate": 0.4651,
+      "V_rate": 0.2171,
+      "changed": false,
+      "diff_pp": 24.8,
+      "mcnemar_b": 44,
+      "mcnemar_c": 12,
+      "n": 129,
+      "note": "new comparison not in v1",
+      "p": 3.4e-05
+    }
+  },
+  "no_rerun_assertion": {
+    "analyzer_unchanged": true,
+    "assertion": "No model-backed experiments were rerun. All corrections are analysis/report-level only.",
+    "corpus_unchanged": true,
+    "frozen_contracts_unchanged": true,
+    "raw_outputs_unchanged": true,
+    "scorer_unchanged": true
+  },
+  "raw_result_hashes": {
+    "n_scored_files": 540,
+    "n_trajectory_files": 540,
+    "n_txt_files": 540,
+    "n_usage_files": 540,
+    "no_duplicates": true,
+    "no_missing": true,
+    "uid_sets_match": true
+  },
+  "report_version": 2,
+  "source_experiment": {
+    "contract_fingerprint": "1608c4654b3bdbc7",
+    "experiment_id": "governed-diagnostic-acquisition-001",
+    "model": "glm-5.2",
+    "n_conditions": 3,
+    "n_units": 540,
+    "provider": "Z.ai GLM Coding Plan",
+    "reps": 3
+  },
+  "unchanged_claims": [
+    "H-GOVERNED-ACQUISITION: NOT SUPPORTED",
+    "H-GA-INVOCATION: FAIL (+15.6pp < 30pp threshold)",
+    "H-GA-SELECTION: FAIL (4.7% < 25%, 14.7% < 40%)",
+    "H-GA-UTILIZATION: FAIL (O A_use = 46.9% < 50%)",
+    "Gate prevents 100% of unsupported concrete settlements in G/O",
+    "O vs G +33.3pp improvement (p < 0.0001)",
+    "G A_select_first = 4.7% \u2014 model cannot navigate probe space",
+    "All 540 units used max_tokens=8192 (uniform protocol)",
+    "Gate negative control passes (0 UNKNOWN false-positive signals)",
+    "Oracle isolation verified (no hidden data leakage)"
+  ],
+  "units_excluded_or_defaulted": [
+    {
+      "case_id": "cep-12",
+      "condition": "O",
+      "counts_as": "incorrect (true_locus=authority, final=unknown)",
+      "included_in_metrics": true,
+      "issue": "Oracle selector returned None (NoneType bug); 0 model calls; defaulted to unknown",
+      "rep": 3,
+      "unit_id": "c096c6b111e05554"
+    }
+  ],
+  "units_reclassified": {
+    "basis": "Raw trajectory inspection of all 77 units: 73/77 had \u22651 Z.ai API call with empty content (completion_tokens=0, reasoning_tokens>1000). 4/77 had valid content but proposed concrete locus without acquiring any probe.",
+    "reclassification": {
+      "MODEL_OUTPUT_CONTRACT_FAILURE": 73,
+      "PREMATURE_SETTLEMENT_NO_ACQUISITION": 4
+    },
+    "v1_SUFFICIENCY_DETECTION_FAILURE": 77
+  }
+}
