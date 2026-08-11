@@ -1,0 +1,5 @@
+{"candidate_loci": ["implementation", "environment"],
+ "unresolved_distinction": "self-test",
+ "selected_action": "act-03",
+ "expected_information": "self-test",
+ "proposed_settlement": null}

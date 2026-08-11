@@ -294,14 +294,26 @@ def test_replication_validation_passes_end_to_end_with_zero_model_calls(tmp_path
     assert r["status"] == "PREPARED — NOT STARTED"
 
 
-def test_replication_declares_r0_leakage_rather_than_hiding_it(tmp_path):
+def test_replication_declares_bounded_leakage_rather_than_hiding_it(tmp_path):
+    """Every frozen arm reports its own leakage bound.
+
+    R1/R2 use MASKED_K, which is NOT answer-isolated: the delivered set narrows
+    the adversary's consistency set to k. That is a real, bounded leak and the
+    harness must state it rather than let the suite's green tick imply it away.
+    R0 (nothing delivered) and R3/R4 (everything delivered) are answer-isolated
+    because their delivered set does not depend on the locus at all.
+    """
     from ..v2 import replication
     r = replication.validate(str(tmp_path))
     bounds = r["per_arm_disclosure_bound"]
-    assert bounds["R0"]["answer_isolated"] is False
-    assert bounds["R1"]["answer_isolated"] is True
+    assert bounds["R0"]["answer_isolated"] is True
+    assert bounds["R1"]["answer_isolated"] is False
+    assert bounds["R2"]["answer_isolated"] is False
     assert bounds["R3"]["answer_isolated"] is True
-    assert "R2" in r["subsumed_arms"]
+    assert bounds["R4"]["answer_isolated"] is True
+    assert bounds["R1"]["bits_disclosed"] > 0
+    assert bounds["R3"]["bits_disclosed"] == 0
+    assert "context-preserved" in r["subsumed_arms"]
 
 
 def test_observation_rendering_is_a_real_manipulation():
@@ -318,5 +330,6 @@ def test_observation_rendering_is_a_real_manipulation():
     lab = DiagnosticState(**base, observation_rendering="labelled_structural"
                           ).with_observations([_O()], "harness", 1, ())
     assert '{"all_accessible": false' in raw.render()
-    assert "all_accessible = false" in lab.render()
+    assert "every referenced path was readable: no" in lab.render()
+    assert "file mode: 600" in lab.render()
     assert raw.digest() != lab.digest()

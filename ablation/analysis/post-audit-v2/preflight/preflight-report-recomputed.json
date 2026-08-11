@@ -1,0 +1,47 @@
+{
+  "ceiling": {
+    "calls": 2,
+    "calls_at_or_above_ceiling": 0,
+    "ceiling_evidence": "none",
+    "claim_permitted": "requested 8192; observed maximum 7914; 0 truncated call(s); no call was truncated, so the requested limit is not contradicted by these data",
+    "effective_ceiling": 8192,
+    "max_completion_tokens_observed": 7914,
+    "requested_max_tokens": [
+      8192
+    ],
+    "route_ceiling_below_request": false,
+    "silent_calls_at_observed_maximum": 0,
+    "truncated_calls": 0
+  },
+  "derived_from": {
+    "original_model_calls": 2,
+    "path": "preflight-report.json",
+    "sha256": "434c9bc35ae7603603d3d06cec20a19a0be76573273cad1088b1f04c82f04b95"
+  },
+  "effective_ceiling_to_freeze": 8192,
+  "evidence_class": "DIRECT OBSERVATION (2 live provider calls)",
+  "finding": "The historical 4096-token completion ceiling was the REQUESTED parameter, not a provider cap. Against the same endpoint and model, a single call returned 7914 completion tokens with finish_reason='stop' at max_tokens=8192. No call in the preflight was truncated. Owner decision \u00a73's contingency \u2014 'if the effective provider ceiling remains 4096, freeze that as the actual experimental constraint' \u2014 is therefore NOT triggered: 8192 is genuinely in force and must be recorded as such.",
+  "model_calls_performed": 0,
+  "note": "Ceiling section recomputed offline from the persisted execution records of the live preflight. No provider contact. The source report is unmodified.",
+  "observed_max_completion_tokens": 7914,
+  "preflight": "evidence-revision-001",
+  "recompute_version": "ceiling-detector-v2",
+  "requested_max_tokens": 8192,
+  "scope_limit": "Two calls establish that >4096 is achievable on this route. They do not establish that 8192 is reachable \u2014 no call was truncated, so the true cap is unobserved and only bounded below at 7914.",
+  "scored": false,
+  "supersedes": {
+    "field": "ceiling",
+    "original": {
+      "calls": 2,
+      "calls_at_or_above_ceiling": 0,
+      "claim_permitted": "requested 8192; observed maximum 7914; the route imposed a lower ceiling \u2014 do NOT claim the requested value governed the run",
+      "effective_ceiling": 7914,
+      "max_completion_tokens_observed": 7914,
+      "requested_max_tokens": [
+        8192
+      ],
+      "route_ceiling_below_request": true
+    },
+    "reason": "the previous detector inferred a route ceiling from max_observed < requested_max alone, so a call that returned 7914 tokens with finish_reason='stop' was misread as a 7914-token cap"
+  }
+}

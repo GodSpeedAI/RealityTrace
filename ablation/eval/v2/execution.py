@@ -181,6 +181,15 @@ class EffectiveCeilingDetector:
     max_observed: int = 0
     at_ceiling: int = 0
     calls: int = 0
+    #: completion-token values seen on calls where the provider reported NO
+    #: finish_reason. The historical client discarded finish_reason, so this is
+    #: the only channel in which the 4096 ceiling was ever visible.
+    silent_completions: Counter = field(default_factory=Counter)
+
+    #: How many calls must share the same maximum completion-token value, with
+    #: no finish_reason and nothing above it, before that value is treated as a
+    #: route ceiling. One call stopping at a round number proves nothing.
+    CLUSTER_MIN = 2
 
     def observe(self, record: ModelExecutionRecord) -> None:
         self.calls += 1
@@ -189,12 +198,41 @@ class EffectiveCeilingDetector:
             self.max_observed = max(self.max_observed, record.completion_tokens)
             if record.hit_requested_ceiling or record.truncated:
                 self.at_ceiling += 1
+            if record.finish_reason is None:
+                self.silent_completions[record.completion_tokens] += 1
+
+    def _cluster_at_max(self) -> int:
+        """Calls pinned at the observed maximum with no reported finish reason."""
+        return self.silent_completions.get(self.max_observed, 0)
 
     def report(self) -> dict:
         requested_max = max(self.requested) if self.requested else 0
-        ceiling_below_request = (self.calls > 0
-                                 and self.max_observed > 0
-                                 and self.max_observed < requested_max)
+        below_request = 0 < self.max_observed < requested_max
+
+        # Two admissible truncation signatures, and only two.
+        #
+        #  (a) EXPLICIT — the provider said `length`, or a call reached the
+        #      requested ceiling. Direct observation.
+        #
+        #  (b) CLUSTERED — several calls stop at exactly the same value, that
+        #      value is the maximum ever observed, it is strictly below the
+        #      request, and the provider reported no finish reason for them.
+        #      This is the historical signature: 270 gov-full calls at exactly
+        #      4096 against a request of 8192, with zero calls above and a
+        #      client that discarded finish_reason. Without (b) the detector
+        #      would be blind to precisely the defect it exists to catch.
+        #
+        # Neither fires for a model that merely stopped early: the live
+        # preflight's 7914 completion tokens with finish_reason='stop' against a
+        # request of 8192 has no truncation and no silent cluster, and was
+        # briefly misreported as a route ceiling before (a) required truncation.
+        explicit = self.at_ceiling > 0 and below_request
+        cluster = self._cluster_at_max()
+        clustered = cluster >= self.CLUSTER_MIN and below_request
+        ceiling_below_request = explicit or clustered
+        evidence = ("explicit_truncation" if explicit
+                    else "clustered_silent_maximum" if clustered else "none")
+
         return {
             "calls": self.calls,
             "requested_max_tokens": sorted(self.requested),
@@ -203,10 +241,18 @@ class EffectiveCeilingDetector:
             "route_ceiling_below_request": ceiling_below_request,
             "effective_ceiling": (self.max_observed if ceiling_below_request
                                   else requested_max),
+            "truncated_calls": self.at_ceiling,
+            "ceiling_evidence": evidence,
+            "silent_calls_at_observed_maximum": cluster,
             "claim_permitted": (
                 f"requested {requested_max}; observed maximum "
-                f"{self.max_observed}"
+                f"{self.max_observed}; {self.at_ceiling} truncated call(s)"
                 + ("; the route imposed a lower ceiling — do NOT claim the "
-                   "requested value governed the run" if ceiling_below_request
-                   else "")),
+                   "requested value governed the run" if explicit
+                   else f"; {cluster} calls stopped at exactly "
+                        f"{self.max_observed} with no finish_reason and none "
+                        f"above it — do NOT claim the requested value governed "
+                        f"the run" if clustered
+                   else "; no call was truncated, so the requested limit is "
+                        "not contradicted by these data")),
         }

@@ -1,0 +1,162 @@
+{
+  "all_passed": true,
+  "ceiling": {
+    "calls": 2,
+    "calls_at_or_above_ceiling": 0,
+    "claim_permitted": "requested 8192; observed maximum 7914; the route imposed a lower ceiling \u2014 do NOT claim the requested value governed the run",
+    "effective_ceiling": 7914,
+    "max_completion_tokens_observed": 7914,
+    "requested_max_tokens": [
+      8192
+    ],
+    "route_ceiling_below_request": true
+  },
+  "checks": [
+    {
+      "check": "provider_resolves_glm_5_2",
+      "detail": "provider returned resolved_model='glm-5.2'",
+      "evidence": {
+        "generation_id_present": true,
+        "provider_route": "zai-coding-plan",
+        "resolved_model": "glm-5.2"
+      },
+      "passed": true
+    },
+    {
+      "check": "raw_output_persisted_before_parse",
+      "detail": "raw artifact committed and content-verified before parsing",
+      "evidence": {
+        "raw_hash": "0dc26b7fe4ff5cb9bbb1009280b0c78f01b864c0ba9940be317d8e5582e74aa4"
+      },
+      "passed": true
+    },
+    {
+      "check": "structured_decision_parses",
+      "detail": "parse status VALID: ",
+      "evidence": {
+        "decision": {
+          "candidate_loci": [
+            "implementation",
+            "environment"
+          ],
+          "expected_information": "self-test",
+          "proposed_settlement": null,
+          "selected_action": "act-03",
+          "unresolved_distinction": "self-test"
+        },
+        "response_preview": "{\"candidate_loci\": [\"implementation\", \"environment\"],\n \"unresolved_distinction\": \"self-test\",\n \"selected_action\": \"act-03\",\n \"expected_information\": \"self-test\",\n \"proposed_settlement\": null}"
+      },
+      "passed": true
+    },
+    {
+      "check": "requested_completion_limit_observable",
+      "detail": "requested 8192, provider reported completion_tokens=102",
+      "evidence": {
+        "completion_tokens": 102,
+        "prompt_tokens": 111,
+        "requested_max_tokens": 8192
+      },
+      "passed": true
+    },
+    {
+      "check": "finish_reason_captured",
+      "detail": "finish_reason='stop'",
+      "evidence": {
+        "finish_reason": "stop"
+      },
+      "passed": true
+    },
+    {
+      "check": "completion_ceiling_established",
+      "detail": "output above 4096 tokens is achievable",
+      "evidence": {
+        "above_4096": true,
+        "ceiling_report": {
+          "calls": 2,
+          "calls_at_or_above_ceiling": 0,
+          "claim_permitted": "requested 8192; observed maximum 7914; the route imposed a lower ceiling \u2014 do NOT claim the requested value governed the run",
+          "effective_ceiling": 7914,
+          "max_completion_tokens_observed": 7914,
+          "requested_max_tokens": [
+            8192
+          ],
+          "route_ceiling_below_request": true
+        },
+        "completion_tokens": 7914,
+        "finish_reason": "stop"
+      },
+      "passed": true
+    }
+  ],
+  "effective_ceiling_to_freeze": 8192,
+  "execution_records": [
+    {
+      "call_num": 1,
+      "hit_requested_ceiling": false,
+      "raw_hash": "0dc26b7fe4ff5cb9bbb1009280b0c78f01b864c0ba9940be317d8e5582e74aa4",
+      "raw_len": 191,
+      "requested": {
+        "endpoint": "https://api.z.ai/api/coding/paas/v4/chat/completions",
+        "max_tokens": 8192,
+        "model": "glm-5.2",
+        "temperature": 0.0
+      },
+      "returned": {
+        "completion_tokens": 102,
+        "cost": null,
+        "finish_reason": "stop",
+        "generation_id": "2026081122032523ed3d871233469e",
+        "latency_ms": 3236.8,
+        "prompt_tokens": 111,
+        "provider_route": "zai-coding-plan",
+        "reasoning_tokens": 54,
+        "resolved_model": "glm-5.2",
+        "retries": 0,
+        "total_tokens": 213
+      },
+      "truncated": false,
+      "unavailable_fields": [
+        "cost"
+      ],
+      "unavailable_reason": "provider_did_not_report"
+    },
+    {
+      "call_num": 2,
+      "hit_requested_ceiling": false,
+      "raw_hash": "d2e84e03a8b38d70d6499ed8e757bd229d41992d843f94d863588393beb8548c",
+      "raw_len": 11892,
+      "requested": {
+        "endpoint": "https://api.z.ai/api/coding/paas/v4/chat/completions",
+        "max_tokens": 8192,
+        "model": "glm-5.2",
+        "temperature": 0.0
+      },
+      "returned": {
+        "completion_tokens": 7914,
+        "cost": null,
+        "finish_reason": "stop",
+        "generation_id": "202608112203282c9b0f5fd8e149e6",
+        "latency_ms": 79874.7,
+        "prompt_tokens": 88,
+        "provider_route": "zai-coding-plan",
+        "reasoning_tokens": 54,
+        "resolved_model": "glm-5.2",
+        "retries": 0,
+        "total_tokens": 8002
+      },
+      "truncated": false,
+      "unavailable_fields": [
+        "cost"
+      ],
+      "unavailable_reason": "provider_did_not_report"
+    }
+  ],
+  "model_calls_performed": 2,
+  "n_checks": 6,
+  "n_pass": 6,
+  "note": "NON-SCORED provider smoke test. No case, no key, no score.",
+  "observed_max_completion_tokens": 7914,
+  "preflight": "evidence-revision-001",
+  "requested_max_tokens": 8192,
+  "scored": false
+}

@@ -3,32 +3,138 @@
     "R0_vs_R1": {
       "differences": {
         "disclosure": {
-          "R0": "MASKED_K",
-          "R1": "FULL"
+          "R0": "NONE",
+          "R1": "MASKED_K"
         }
       },
       "isolates_single_variable": true,
       "n_declared_differences": 1
     },
-    "R0_vs_R3": {
+    "R0_vs_R2": {
       "differences": {
         "disclosure": {
-          "R0": "MASKED_K",
-          "R3": "FULL"
+          "R0": "NONE",
+          "R2": "MASKED_K"
         },
         "observation_rendering": {
           "R0": "raw_json",
-          "R3": "labelled_structural"
+          "R2": "labelled_structural"
         }
       },
       "isolates_single_variable": false,
       "n_declared_differences": 2
     },
-    "R1_vs_R3": {
+    "R0_vs_R3": {
+      "differences": {
+        "budget_semantics": {
+          "R0": "ENFORCED",
+          "R3": "EXEMPT_UPPER_BOUND"
+        },
+        "disclosure": {
+          "R0": "NONE",
+          "R3": "FULL"
+        }
+      },
+      "isolates_single_variable": false,
+      "n_declared_differences": 2
+    },
+    "R0_vs_R4": {
+      "differences": {
+        "budget_semantics": {
+          "R0": "ENFORCED",
+          "R4": "EXEMPT_UPPER_BOUND"
+        },
+        "disclosure": {
+          "R0": "NONE",
+          "R4": "FULL"
+        },
+        "observation_rendering": {
+          "R0": "raw_json",
+          "R4": "labelled_structural"
+        }
+      },
+      "isolates_single_variable": false,
+      "n_declared_differences": 3
+    },
+    "R1_vs_R2": {
       "differences": {
         "observation_rendering": {
           "R1": "raw_json",
-          "R3": "labelled_structural"
+          "R2": "labelled_structural"
+        }
+      },
+      "isolates_single_variable": true,
+      "n_declared_differences": 1
+    },
+    "R1_vs_R3": {
+      "differences": {
+        "budget_semantics": {
+          "R1": "ENFORCED",
+          "R3": "EXEMPT_UPPER_BOUND"
+        },
+        "disclosure": {
+          "R1": "MASKED_K",
+          "R3": "FULL"
+        }
+      },
+      "isolates_single_variable": false,
+      "n_declared_differences": 2
+    },
+    "R1_vs_R4": {
+      "differences": {
+        "budget_semantics": {
+          "R1": "ENFORCED",
+          "R4": "EXEMPT_UPPER_BOUND"
+        },
+        "disclosure": {
+          "R1": "MASKED_K",
+          "R4": "FULL"
+        },
+        "observation_rendering": {
+          "R1": "raw_json",
+          "R4": "labelled_structural"
+        }
+      },
+      "isolates_single_variable": false,
+      "n_declared_differences": 3
+    },
+    "R2_vs_R3": {
+      "differences": {
+        "budget_semantics": {
+          "R2": "ENFORCED",
+          "R3": "EXEMPT_UPPER_BOUND"
+        },
+        "disclosure": {
+          "R2": "MASKED_K",
+          "R3": "FULL"
+        },
+        "observation_rendering": {
+          "R2": "labelled_structural",
+          "R3": "raw_json"
+        }
+      },
+      "isolates_single_variable": false,
+      "n_declared_differences": 3
+    },
+    "R2_vs_R4": {
+      "differences": {
+        "budget_semantics": {
+          "R2": "ENFORCED",
+          "R4": "EXEMPT_UPPER_BOUND"
+        },
+        "disclosure": {
+          "R2": "MASKED_K",
+          "R4": "FULL"
+        }
+      },
+      "isolates_single_variable": false,
+      "n_declared_differences": 2
+    },
+    "R3_vs_R4": {
+      "differences": {
+        "observation_rendering": {
+          "R3": "raw_json",
+          "R4": "labelled_structural"
         }
       },
       "isolates_single_variable": true,
@@ -38,7 +144,9 @@
   "arms": {
     "R0": "R0",
     "R1": "R1",
-    "R3": "R3"
+    "R2": "R2",
+    "R3": "R3",
+    "R4": "R4"
   },
   "client": "deterministic stub; no network transport is imported here",
   "contract_repair": {
@@ -75,7 +183,7 @@
         "passed": true
       },
       {
-        "detail": "6 calls uniform",
+        "detail": "12 calls uniform",
         "evidence": {
           "endpoint": "injected-client",
           "requested_max_tokens": "8192",
@@ -92,7 +200,7 @@
         "passed": true
       },
       {
-        "detail": "6 prompts clean; delivery carries 0 bits",
+        "detail": "12 prompts clean; delivery carries 0 bits",
         "evidence": {
           "answer_isolated": true,
           "bits_disclosed": 0.0,
@@ -104,11 +212,11 @@
         "passed": true
       },
       {
-        "detail": "3 verified content chains",
+        "detail": "5 verified content chains",
         "evidence": {
-          "total": 3,
+          "total": 5,
           "unverifiable": 0,
-          "verified": 3
+          "verified": 5
         },
         "name": "raw_before_score",
         "passed": true
@@ -128,20 +236,34 @@
   "no_fall_through_terminal": true,
   "per_arm_disclosure_bound": {
     "R0": {
+      "answer_isolated": true,
+      "bits_disclosed": 0.0,
+      "loci_consistent_with_delivery": 8,
+      "n_actions": 8,
+      "policy": "NONE"
+    },
+    "R1": {
       "answer_isolated": false,
       "bits_disclosed": 1.415,
       "loci_consistent_with_delivery": 3,
       "n_actions": 8,
       "policy": "MASKED_K"
     },
-    "R1": {
+    "R2": {
+      "answer_isolated": false,
+      "bits_disclosed": 1.415,
+      "loci_consistent_with_delivery": 3,
+      "n_actions": 8,
+      "policy": "MASKED_K"
+    },
+    "R3": {
       "answer_isolated": true,
       "bits_disclosed": 0.0,
       "loci_consistent_with_delivery": 8,
       "n_actions": 8,
       "policy": "FULL"
     },
-    "R3": {
+    "R4": {
       "answer_isolated": true,
       "bits_disclosed": 0.0,
       "loci_consistent_with_delivery": 8,
@@ -152,12 +274,12 @@
   "provenance": {
     "all_have_provider_resolved_model": true,
     "no_manufactured_zeros": true,
-    "records": 6
+    "records": 12
   },
   "state_continuity": {
-    "prompts_checked": 6,
+    "prompts_checked": 12,
     "prompts_missing_required_state": 0,
-    "prompts_retaining_initial_evidence": 6
+    "prompts_retaining_initial_evidence": 12
   },
   "statistical_plan": {
     "interval": "Wilson score, 95%",
@@ -170,7 +292,7 @@
   },
   "status": "PREPARED \u2014 NOT STARTED",
   "subsumed_arms": {
-    "R2": "context-preserved: state continuity is now an invariant of every arm (see dstate.REQUIRED_ROUND_STATE and the negative test), so it cannot be a between-arm manipulation."
+    "context-preserved": "state continuity became a harness invariant of every arm, so it can no longer be a between-arm manipulation; deleting an invariant to recreate an arm would be a regression, not an experiment"
   },
   "sufficiency_contract": {
     "extended_language_adopted": false,
@@ -188,8 +310,10 @@
     "revision_rate": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result (0/63 historically)."
   },
   "termination": {
-    "R0": "CONCRETE_SETTLEMENT",
+    "R0": "BUDGET_EXHAUSTED_GATE_REJECTED",
     "R1": "CONCRETE_SETTLEMENT",
-    "R3": "CONCRETE_SETTLEMENT"
+    "R2": "CONCRETE_SETTLEMENT",
+    "R3": "CONCRETE_SETTLEMENT",
+    "R4": "CONCRETE_SETTLEMENT"
   }
 }

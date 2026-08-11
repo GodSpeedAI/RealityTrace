@@ -190,19 +190,16 @@ class DiagnosticState:
         return "\n".join(parts)
 
     def _render_payload(self, payload: dict) -> str:
+        """Delegates to the frozen legibility contract (eval/v2/legibility.py).
+
+        Both renderings are pure functions of the same payload, which is what
+        makes the R1/R2 and R3/R4 contrasts a manipulation of representation
+        only (owner decision §7).
+        """
+        from .legibility import render_legible, render_raw
         if self.observation_rendering == "labelled_structural":
-            lines = []
-            for k in sorted(payload):
-                v = json.dumps(payload[k], sort_keys=True, default=str)
-                if len(v) > OBSERVATION_RENDER_LIMIT:
-                    v = v[:OBSERVATION_RENDER_LIMIT] + "… [truncated]"
-                lines.append(f"      {k} = {v}")
-            return "\n".join(lines) or "      (no fields reported)"
-        blob = json.dumps(payload, sort_keys=True, default=str)
-        if len(blob) > OBSERVATION_RENDER_LIMIT:
-            blob = (blob[:OBSERVATION_RENDER_LIMIT]
-                    + f"… [truncated at {OBSERVATION_RENDER_LIMIT} chars]")
-        return f"      {blob}"
+            return render_legible(payload, OBSERVATION_RENDER_LIMIT)
+        return render_raw(payload, OBSERVATION_RENDER_LIMIT)
 
     def digest(self) -> str:
         return hashlib.sha256(self.render().encode()).hexdigest()

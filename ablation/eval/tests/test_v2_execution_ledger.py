@@ -153,3 +153,60 @@ def test_ledger_reloads_and_summarises_provenance(tmp_path):
     assert again.provenance_summary() == {"total": 2, "verified": 1,
                                           "unverifiable": 1}
     assert json.loads(open(p).readline())["hash_provenance"] == HASH_VERIFIED
+
+
+def test_no_ceiling_inferred_when_nothing_was_truncated():
+    """False positive found by the live preflight: 7914 completion tokens with
+    finish_reason='stop' against a request of 8192 is a model that stopped, not
+    a capped route."""
+    det = EffectiveCeilingDetector()
+    det.observe(rec(1, 8192, {"completion_tokens": 7914, "finish_reason": "stop"}))
+    r = det.report()
+    assert r["route_ceiling_below_request"] is False
+    assert r["truncated_calls"] == 0
+    assert "no call was truncated" in r["claim_permitted"]
+
+
+def test_a_single_silent_call_at_a_round_number_is_not_a_ceiling():
+    """The clustered signature must need a cluster. One call stopping at 4096
+    with no finish_reason is indistinguishable from a model that stopped."""
+    det = EffectiveCeilingDetector()
+    det.observe(rec(1, 8192, {"completion_tokens": 4096}))
+    r = det.report()
+    assert r["route_ceiling_below_request"] is False
+    assert r["ceiling_evidence"] == "none"
+
+
+def test_clustered_silent_maximum_is_the_historical_signature():
+    """Distinguishes the two admissible signatures: the historical detection is
+    NOT explicit truncation — zero calls reported finish_reason at all."""
+    det = EffectiveCeilingDetector()
+    for i in range(270):
+        det.observe(rec(i, 8192, {"completion_tokens": 4096}))
+    r = det.report()
+    assert r["ceiling_evidence"] == "clustered_silent_maximum"
+    assert r["truncated_calls"] == 0
+    assert r["silent_calls_at_observed_maximum"] == 270
+
+
+def test_a_cluster_below_the_observed_maximum_is_not_a_ceiling():
+    """Many calls at 4096 prove nothing once a call has exceeded 4096 — the
+    route demonstrably permits more."""
+    det = EffectiveCeilingDetector()
+    for i in range(270):
+        det.observe(rec(i, 8192, {"completion_tokens": 4096}))
+    det.observe(rec(999, 8192, {"completion_tokens": 7914,
+                                "finish_reason": "stop"}))
+    r = det.report()
+    assert r["route_ceiling_below_request"] is False
+    assert r["silent_calls_at_observed_maximum"] == 0
+
+
+def test_ceiling_inferred_only_from_actual_truncation():
+    det = EffectiveCeilingDetector()
+    det.observe(rec(1, 8192, {"completion_tokens": 4096, "finish_reason": "length"}))
+    det.observe(rec(2, 8192, {"completion_tokens": 900, "finish_reason": "stop"}))
+    r = det.report()
+    assert r["route_ceiling_below_request"] is True
+    assert r["truncated_calls"] == 1
+    assert r["effective_ceiling"] == 4096

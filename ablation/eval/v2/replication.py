@@ -6,20 +6,16 @@ client here and no `__main__` path that contacts a provider: `validate()`
 exercises the whole instrument against a deterministic stub and emits the
 evidence for `HARNESS-VALIDATION-REPORT.md`.
 
-The arms below are the instrument's four-way decomposition for the audit's
-recommended next experiment. They are NOT a frozen scientific hypothesis: no
-thresholds, no predictions and no verdict rule are declared here. Freezing
-those is a separate owner act.
+The arm set is imported from `evidence_revision`, which is where the frozen
+scientific decisions live. This module declares no threshold, no prediction and
+no verdict rule; it only demonstrates that the instrument behaves as specified
+on every frozen arm.
 
-    R0  control          bounded-disclosure channel, raw JSON observations
-    R1  de-identified    answer-isolated channel (R-01), raw JSON observations
-    R3  legibility       answer-isolated channel, labelled structural rendering
-
-The audit proposed a fourth arm, R2 "context-preserved". Implementing R-02
-removed it: state continuity is now a HARNESS INVARIANT asserted on every
-rendered prompt in every arm, so it can no longer be a between-arm
-manipulation. Deleting an invariant to recreate an arm would be a regression,
-not an experiment. This is recorded rather than quietly dropped.
+The audit proposed a "context-preserved" arm. Implementing R-02 removed it:
+state continuity is now a HARNESS INVARIANT asserted on every rendered prompt
+in every arm, so it can no longer be a between-arm manipulation. Deleting an
+invariant to recreate an arm would be a regression, not an experiment. This is
+recorded rather than quietly dropped.
 
 Usage:  uv run --python 3.12 -m eval.v2.replication   # validation only
 """
@@ -92,27 +88,10 @@ DESCRIPTIONS = {
         "declared direction rule."),
 }
 
-ARMS = {
-    "R0": ConditionSpec(name="R0", action_source="harness", schema_visible=True,
-                        gated=True, disclosure=DisclosurePolicy.MASKED_K,
-                        budget_semantics="EXEMPT_UPPER_BOUND",
-                        observation_rendering="raw_json"),
-    "R1": ConditionSpec(name="R1", action_source="harness", schema_visible=True,
-                        gated=True, disclosure=DisclosurePolicy.FULL,
-                        budget_semantics="EXEMPT_UPPER_BOUND",
-                        observation_rendering="raw_json"),
-    "R3": ConditionSpec(name="R3", action_source="harness", schema_visible=True,
-                        gated=True, disclosure=DisclosurePolicy.FULL,
-                        budget_semantics="EXEMPT_UPPER_BOUND",
-                        observation_rendering="labelled_structural"),
-}
-
-#: R2 was proposed by the audit and is subsumed by the R-02 repair.
-SUBSUMED_ARMS = {
-    "R2": ("context-preserved: state continuity is now an invariant of every "
-           "arm (see dstate.REQUIRED_ROUND_STATE and the negative test), so it "
-           "cannot be a between-arm manipulation."),
-}
+#: Single source of truth. The arm set is a FROZEN SCIENTIFIC DECISION and
+#: lives in `evidence_revision`. Validation exercises whatever is frozen there,
+#: rather than a second copy that could drift away from it.
+from eval.v2.evidence_revision import ARMS, SUBSUMED_ARMS      # noqa: E402
 
 #: Metrics the instrument now supports, with the construct each measures.
 #: `A_use` as historically reported is deliberately absent: the matched-pair
@@ -229,10 +208,10 @@ def validate(tmpdir: str) -> dict:
             {"namespace": "er-full", "run_id": "r-f",
              "checkpoint_store": "/f/m.jsonl", "artifact_dir": "/f/raw",
              "unit_ids": [unit_id(EXPERIMENT_ID, "er-full", "cep-12", "R1", 1, "fp")]}),
-        # Checked against R1/R3's policy. R0 deliberately uses MASKED_K to
-        # reproduce a bounded version of the audited channel; its leakage is
-        # disclosed in per_arm_disclosure_bound and it is NOT covered by this
-        # check passing.
+        # Checked against the FULL policy (R3/R4), the only one that is
+        # answer-isolated by construction. R1/R2 use MASKED_K, whose leakage is
+        # bounded and DISCLOSED in per_arm_disclosure_bound; it is not covered
+        # by this check passing, and must not be reported as if it were.
         check_oracle_isolation(prompts_seen, PROBES, DisclosurePolicy.FULL,
                                len(PROBES)),
         check_raw_before_score(ledger, [r.unit_id for r in results.values()]),

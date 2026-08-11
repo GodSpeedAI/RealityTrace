@@ -33,15 +33,21 @@ Repair — two independent mechanisms
 2. **Disclosure policy on the delivered SET.** What the model receives is a set
    of observations whose membership must not be a function of the true locus.
 
+       NONE       nothing is delivered: the no-new-evidence control (R0).
        FULL       every action's observation is delivered, for every unit.
                   The delivered set is identical across all units, so it
                   carries exactly zero information about the locus. This is the
-                  genuine evidence-utilization upper bound.
+                  genuine evidence-coverage upper bound.
        MASKED_K   the evaluator-discriminating observation plus (k-1) decoys
                   drawn by a locus-independent RNG. Leakage is bounded and
                   reported: the adversary's consistency set has size k.
-       SINGLE     the legacy behaviour. Consistency set of size 1 — full
-                  disclosure. Refused unless explicitly acknowledged unsafe.
+       SINGLE     exactly one evaluator-selected discriminating observation.
+                  The NAME leak is closed by opaque handles, but the delivered
+                  SET still narrows the adversary's candidate set to 1, so its
+                  selection leakage is declared rather than denied. It is a
+                  legitimate mechanistic upper-bound arm and must never be read
+                  as action-selection capability. Requires an explicit
+                  acknowledgement so the choice is always deliberate.
 
 `leakage_bound()` reports the consistency-set size and bits disclosed, and is
 asserted by the integrity suite rather than argued in prose.
@@ -63,8 +69,13 @@ HANDLE_PREFIX = "act-"
 
 
 class DisclosurePolicy(str, Enum):
+    #: deliver nothing — the no-new-evidence control (R0)
+    NONE = "NONE"
     FULL = "FULL"
     MASKED_K = "MASKED_K"
+    #: exactly one evaluator-selected discriminating observation, delivered
+    #: through an opaque handle. Upper-bound/mechanistic: the EVALUATOR chose
+    #: it, so it must never be read as action-selection capability.
     SINGLE = "SINGLE"
 
 
@@ -175,11 +186,18 @@ class ObservationChannel:
     def __init__(self, catalogue: ActionCatalogue, costs: dict,
                  policy: DisclosurePolicy = DisclosurePolicy.FULL,
                  k: int = 3, acknowledge_unsafe: bool = False):
+        # SINGLE is an evidence-availability policy, not a naming policy. With
+        # opaque handles the delivered SET still narrows the adversary's
+        # candidate set to 1, so its leakage is declared, not denied. It is a
+        # legitimate mechanistic upper-bound arm precisely because the audit's
+        # separate defect -- printing the canonical probe NAME -- is closed by
+        # ActionCatalogue and PromptLeakGuard. `acknowledge_unsafe` remains
+        # required so its selection leakage is always an explicit choice.
         if policy is DisclosurePolicy.SINGLE and not acknowledge_unsafe:
             raise UnsafeDisclosure(
-                "DisclosurePolicy.SINGLE reproduces the audited oracle leak "
-                "(consistency set of size 1). Pass acknowledge_unsafe=True only "
-                "to reproduce the defect in a regression test.")
+                "DisclosurePolicy.SINGLE narrows the adversary consistency set "
+                "to 1. Pass acknowledge_unsafe=True to declare it as a "
+                "mechanistic upper-bound arm or to reproduce the legacy defect.")
         self.catalogue = catalogue
         self.costs = costs
         self.policy = policy
@@ -189,6 +207,12 @@ class ObservationChannel:
         """Select and render the observation set for one delivery event."""
         probes = list(self.catalogue.probe_ids)
         discriminating = [p for p in discriminating if p in observations]
+
+        if self.policy is DisclosurePolicy.NONE:
+            return Delivery(observations=(), delivered_probes=(),
+                            policy=self.policy, payment_charged=0,
+                            consistency_set_size=len(probes),
+                            n_actions=len(probes))
 
         if self.policy is DisclosurePolicy.FULL:
             chosen = [p for p in probes if p in observations]
@@ -223,7 +247,7 @@ def leakage_bound(policy: DisclosurePolicy, n_actions: int, k: int = 3) -> dict:
     distinguish between. `bits_disclosed` is the reduction in log2 of that set
     relative to complete ignorance.
     """
-    if policy is DisclosurePolicy.FULL:
+    if policy in (DisclosurePolicy.FULL, DisclosurePolicy.NONE):
         consistent = n_actions
     elif policy is DisclosurePolicy.MASKED_K:
         consistent = min(k, n_actions)
