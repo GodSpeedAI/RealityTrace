@@ -1,0 +1,630 @@
+{
+  "answer_channel_report": {
+    "construction_marker_channel": {
+      "delivered_evidence": {
+        "carrier": "rerun_verifier_isolated",
+        "cases": [
+          "ag-09",
+          "ag-11",
+          "ag-13",
+          "ag-14",
+          "cep-09",
+          "cep-11",
+          "cep-12",
+          "cep-13",
+          "cep-14",
+          "df-08",
+          "sr-09",
+          "sr-10"
+        ],
+        "n_cases": 12
+      },
+      "differential_across_arms": true,
+      "initial_context": {
+        "cases": [
+          "cep-09",
+          "cep-11",
+          "cep-12",
+          "cep-13",
+          "cep-14",
+          "sr-09",
+          "sr-10"
+        ],
+        "n_cases": 7
+      },
+      "see": "BLOCKER-01"
+    },
+    "discriminating_capable_probes": [
+      "inspect_environment",
+      "inspect_fixture_integrity",
+      "inspect_permissions",
+      "inspect_source_symbols",
+      "inspect_target_binding",
+      "validate_semantic_model"
+    ],
+    "handle_identity_channel": "0 bits ACROSS units \u2014 handles are a per-unit permutation seeded from public coordinates only. Within a unit the schema discloses handle -> description, which is why membership carries the bound.",
+    "legibility_pair_evidence_identity": {
+      "R1_vs_R2::as_implemented": {
+        "different_evidence": 80,
+        "identical_evidence": false,
+        "rate": 0.9302,
+        "unit_pairs": 86
+      },
+      "R1_vs_R2::required": {
+        "different_evidence": 0,
+        "identical_evidence": true,
+        "rate": 0.0,
+        "unit_pairs": 86
+      },
+      "R3_vs_R4::as_implemented": {
+        "different_evidence": 0,
+        "identical_evidence": true,
+        "rate": 0.0,
+        "unit_pairs": 86
+      },
+      "R3_vs_R4::required": {
+        "different_evidence": 0,
+        "identical_evidence": true,
+        "rate": 0.0,
+        "unit_pairs": 86
+      }
+    },
+    "measured_in": "locus space \u2014 log2(n_loci) - log2(candidate loci)",
+    "never_discriminating_probes": [
+      "inspect_verifier_config",
+      "rerun_verifier_isolated"
+    ],
+    "ordering_channel": "0 bits beyond membership \u2014 deliveries are re-sorted into canonical probe order, which is identical for every unit",
+    "per_arm": {
+      "R0": {
+        "bound_holds": true,
+        "declared": {
+          "answer_isolated": true,
+          "bits_disclosed": 0.0,
+          "loci_consistent_with_delivery": 8,
+          "n_actions": 8,
+          "policy": "NONE"
+        },
+        "declared_locus_bits": 0.0,
+        "delivered_set_constant_across_units": true,
+        "delivery_failure_rate": 0.0,
+        "delivery_failure_rate_by_locus": {},
+        "delivery_failures": 0,
+        "n_observations_constant": true,
+        "policy": "NONE",
+        "realized_membership_bits": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "R1": {
+        "bound_holds": false,
+        "declared": {
+          "answer_isolated": false,
+          "bits_disclosed": 1.415,
+          "loci_consistent_with_delivery": 3,
+          "n_actions": 8,
+          "policy": "MASKED_K"
+        },
+        "declared_locus_bits": 1.2224,
+        "delivered_set_constant_across_units": false,
+        "delivery_failure_rate": 0.0698,
+        "delivery_failure_rate_by_locus": {
+          "authority": 0.0833,
+          "declared_model": 0.375,
+          "environment": 0.0714,
+          "evidence_collection": 0.0,
+          "implementation": 0.05,
+          "projection": 0.0,
+          "verification_plan": 0.0
+        },
+        "delivery_failures": 6,
+        "n_observations_constant": true,
+        "policy": "MASKED_K",
+        "realized_candidate_locus_set": {
+          "distribution": {
+            "1": 4,
+            "2": 28,
+            "3": 35,
+            "4": 19
+          },
+          "max": 4,
+          "min": 1
+        },
+        "realized_membership_bits": {
+          "max": 2.8074,
+          "mean": 1.3949,
+          "min": 0.8074
+        }
+      },
+      "R2": {
+        "bound_holds": false,
+        "declared": {
+          "answer_isolated": false,
+          "bits_disclosed": 1.415,
+          "loci_consistent_with_delivery": 3,
+          "n_actions": 8,
+          "policy": "MASKED_K"
+        },
+        "declared_locus_bits": 1.2224,
+        "delivered_set_constant_across_units": false,
+        "delivery_failure_rate": 0.0698,
+        "delivery_failure_rate_by_locus": {
+          "authority": 0.0833,
+          "declared_model": 0.375,
+          "environment": 0.0714,
+          "evidence_collection": 0.0,
+          "implementation": 0.05,
+          "projection": 0.0,
+          "verification_plan": 0.0
+        },
+        "delivery_failures": 6,
+        "n_observations_constant": true,
+        "policy": "MASKED_K",
+        "realized_candidate_locus_set": {
+          "distribution": {
+            "1": 4,
+            "2": 28,
+            "3": 35,
+            "4": 19
+          },
+          "max": 4,
+          "min": 1
+        },
+        "realized_membership_bits": {
+          "max": 2.8074,
+          "mean": 1.3949,
+          "min": 0.8074
+        }
+      },
+      "R3": {
+        "bound_holds": true,
+        "declared": {
+          "answer_isolated": true,
+          "bits_disclosed": 0.0,
+          "loci_consistent_with_delivery": 8,
+          "n_actions": 8,
+          "policy": "FULL"
+        },
+        "declared_locus_bits": 0.0,
+        "delivered_set_constant_across_units": true,
+        "delivery_failure_rate": 0.0,
+        "delivery_failure_rate_by_locus": {
+          "authority": 0.0,
+          "declared_model": 0.0,
+          "environment": 0.0,
+          "evidence_collection": 0.0,
+          "implementation": 0.0,
+          "projection": 0.0,
+          "verification_plan": 0.0
+        },
+        "delivery_failures": 0,
+        "n_observations_constant": true,
+        "policy": "FULL",
+        "realized_candidate_locus_set": {
+          "distribution": {
+            "7": 86
+          },
+          "max": 7,
+          "min": 7
+        },
+        "realized_membership_bits": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "R4": {
+        "bound_holds": true,
+        "declared": {
+          "answer_isolated": true,
+          "bits_disclosed": 0.0,
+          "loci_consistent_with_delivery": 8,
+          "n_actions": 8,
+          "policy": "FULL"
+        },
+        "declared_locus_bits": 0.0,
+        "delivered_set_constant_across_units": true,
+        "delivery_failure_rate": 0.0,
+        "delivery_failure_rate_by_locus": {
+          "authority": 0.0,
+          "declared_model": 0.0,
+          "environment": 0.0,
+          "evidence_collection": 0.0,
+          "implementation": 0.0,
+          "projection": 0.0,
+          "verification_plan": 0.0
+        },
+        "delivery_failures": 0,
+        "n_observations_constant": true,
+        "policy": "FULL",
+        "realized_candidate_locus_set": {
+          "distribution": {
+            "7": 86
+          },
+          "max": 7,
+          "min": 7
+        },
+        "realized_membership_bits": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      }
+    },
+    "population": {
+      "n_cases": 43,
+      "n_loci": 7,
+      "prior_bits": 2.8074
+    },
+    "probe_to_loci": {
+      "inspect_environment": [
+        "environment"
+      ],
+      "inspect_fixture_integrity": [
+        "evidence_collection"
+      ],
+      "inspect_permissions": [
+        "authority"
+      ],
+      "inspect_source_symbols": [
+        "implementation"
+      ],
+      "inspect_target_binding": [
+        "verification_plan"
+      ],
+      "validate_semantic_model": [
+        "declared_model",
+        "projection"
+      ]
+    },
+    "rendering_channel": "0 bits \u2014 `legibility.assert_semantic_equivalence` hash-binds RAW and LEGIBLE to the same payload and rejects any locus term the raw form did not already contain"
+  },
+  "blockers": {
+    "BLOCKER-01": {
+      "class": "CORPUS_CONSTRUCTION_ARTEFACT",
+      "finding": "the corpus scenarios were built by injecting a NAMED fault, and the injected test's name survives into the public verifier stream as `test_corpus_scenario_<fault>`. On the primary population the marker appears in the model-visible initial context for 7 of 43 cases, and in the probe payloads (carried entirely by `rerun_verifier_isolated`) for 12 of 43. Every marker maps to exactly one true locus.",
+      "found_by": "completing the per-case input binding (owner \u00a73)",
+      "mandatory_handling": "marker presence is a MANDATORY STRATIFIER of the primary endpoint: R_correct must be reported separately for the marker-free and marker-bearing strata, and the pooled figure may not be reported alone",
+      "measured": "I(locus ; initial-context marker set) = 0.481 of 2.689 bits",
+      "not_done": "the corpus is NOT cleaned. Rewriting evidence to remove the markers would change the stimulus, invalidate comparability with the historical chain, and is a scientific change nobody authorized. It is declared per case instead.",
+      "owner_decision_required": true,
+      "recorded_as": "`construction_markers` and `answer_bearing_marker_present` on every case in the frozen binding",
+      "title": "injected-fault names are visible in the public failure evidence",
+      "why_it_matters": "the exposure is DIFFERENTIAL across arms. R0 sees 7 cases' markers; R3/R4 always deliver `rerun_verifier_isolated` and so see 12; R1/R2 see them only when the decoy draw includes that probe. C1 (R0 vs R1) therefore partly measures whether the model reads an injected fault name, not whether it revises a claim."
+    },
+    "BLOCKER-02": {
+      "class": "DECLARED_BOUND_IS_NOT_A_BOUND",
+      "finding": "`leakage_bound` reports the consistency set as k = 3, i.e. 1.415 bits. But only 6 of the 8 probes are ever the discriminating one on this population \u2014 `rerun_verifier_isolated` and `inspect_verifier_config` never are \u2014 so an adversary who knows the policy discards decoys drawn from those two. The realized candidate set is |delivered n discriminating-capable|, which is 1 or 2 in the majority of unit-deliveries.",
+      "found_by": "rechecking answer-channel capacity (owner \u00a75)",
+      "measured": "on the primary population at the frozen seed scope, over 43 cases x 2 repetitions: the candidate LOCUS set is size 1 in 4 of 86 deliveries, 2 in 28, 3 in 35, 4 in 19. Against a 2.807-bit prior (7 loci) the declared bound is 1.222 bits; realized leakage runs 0.807 to 2.807 bits, mean 1.395. In the 4 tail deliveries membership determines the locus outright \u2014 SINGLE's leak, which owner \u00a76 excluded from the experiment.",
+      "not_done": "the intervention is NOT altered. Restricting decoys to discriminating-capable probes, or raising k, would change what R1/R2 deliver and therefore change C1 and C2. That is a scientific revision, not a repair.",
+      "owner_decision_required": true,
+      "title": "MASKED_K's realized membership leakage exceeds its declared bound"
+    },
+    "BLOCKER-03": {
+      "class": "MISSING_OBSERVATIONS_ARE_AN_ANSWER_CHANNEL",
+      "finding": "MASKED_K charges the full cost of the delivered set. With decoys drawn uniformly, the set can cost 9 against `max_payment = 7`, and the controller then delivers NOTHING rather than shrink the set (which would silently change the declared bound). The unit proceeds with no new evidence \u2014 behaviourally the R0 control.",
+      "found_by": "rechecking answer-channel capacity (owner \u00a75)",
+      "mandatory_handling": "delivery success is a MANDATORY COVARIATE, and C1/C2 must report the delivery-failure rate per arm alongside the effect",
+      "measured": "6 of 86 R1/R2 unit-deliveries (7.0%) on the primary population at the frozen seed scope. The rate is locus-correlated because the discriminating probe's cost varies by locus: declared_model fails 37.5% of the time (its discriminating probe, `validate_semantic_model`, costs 3), against 8.3% for authority, 7.1% for environment, 5.0% for implementation and 0% for evidence_collection, projection and verification_plan.",
+      "not_done": "neither the budget nor the decoy draw is changed. Owner \u00a71 froze `max_payment = 7` and forbids raising it.",
+      "owner_decision_required": true,
+      "title": "MASKED_K delivery fails, locus-correlated, and collapses R1/R2 to R0",
+      "why_it_matters": "'no evidence was delivered' is itself informative about the locus, and it dilutes C1 with units in which the treatment did not occur. An intention-to-treat analysis would understate the evidence effect; a per-protocol analysis would condition on a locus-correlated variable."
+    },
+    "BLOCKER-04": {
+      "affects": [
+        "C2_legibility_governed"
+      ],
+      "class": "IMPLEMENTATION_CONTRADICTS_A_FROZEN_OWNER_DECISION",
+      "does_not_affect": [
+        "C3_legibility_upper",
+        "C1_evidence_effect"
+      ],
+      "finding": "`unit_seed` takes the CONDITION NAME, so R1 and R2 seed different decoy draws and different handle permutations. Measured on the primary population at the frozen namespace: R1 and R2 receive DIFFERENT delivered evidence in 80 of 86 unit pairs (93.0%). R3 and R4 agree in 86 of 86, because FULL delivers everything and has no draw to diverge.",
+      "found_by": "rechecking answer-channel capacity (owner \u00a75, \u00a77)",
+      "owner_decision_required": true,
+      "the_fix_is_specified_not_applied": "`DELIVERY_SEED_SCOPE` freezes the requirement \u2014 the seed key must be the legibility PAIR, not the arm. Applying it changes which decoys R1 receives, so it is left to owner adjudication rather than done here; nothing has run, so nothing is invalidated by deciding either way.",
+      "title": "R1 and R2 do not receive the same evidence, so C2 does not isolate rendering",
+      "why_it_matters": "owner \u00a77 froze that R2 delivers exactly the evidence R1 delivers, and C2 is declared a PRIMARY comparison that isolates rendering. As implemented it varies rendering AND the evidence set at once, so C2 measures neither cleanly. `arm_difference_report` cannot see this: the two specs differ in exactly one DECLARED field, and the divergence lives in the seed, not in the spec."
+    }
+  },
+  "case_input_binding": {
+    "answer_metadata_excluded": "no key file and no hidden evaluator metadata is read; `assert_no_answer_metadata` checks the built document for their field names",
+    "arm_invariance_proof": "`assert_arm_invariant_initial_state` renders the binding through the real `DiagnosticState` for every arm and compares bytes",
+    "arm_invariant": true,
+    "artifact": "analysis/post-audit-v2/case-inputs-v1.json",
+    "bound_fields": [
+      "question",
+      "failure_evidence",
+      "initial_context",
+      "initial_evidence"
+    ],
+    "case_inputs_sha256": "521dd42ff152b564be2a1d3c4daca9a80538b5ec734cb0d973b9f110b42a9dd9",
+    "context_profile": "arm-D-four-capability/store-v1/pack-v1 @ 32,000 tokens",
+    "continuity": "`DiagnosticState` carries `question` and `initial_evidence` into EVERY round (R-02, `REQUIRED_ROUND_STATE`), and the runner asserts `missing_state_sections` is empty on the final transport prompt of every call",
+    "module": "eval/v2/case_inputs.py",
+    "schema": "case-input-v1",
+    "why_the_historical_packer": "reusing the frozen `pack-v1` rule keeps the model-visible context comparable with the historical chain; inventing a fresh truncation rule would silently change what the experiment shows the model"
+  },
+  "delivery_seed_scope": {
+    "basis": "owner \u00a77",
+    "implemented": false,
+    "requirement": "the MASKED_K decoy draw and the handle permutation must be identical for both members of a legibility pair",
+    "see": "BLOCKER-04",
+    "seed_key": {
+      "R0": "R0",
+      "R1": "GOVERNED",
+      "R2": "GOVERNED",
+      "R3": "UPPER",
+      "R4": "UPPER"
+    }
+  },
+  "design_fingerprint": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
+  "design_fingerprint_recomputed": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
+  "disclosure_parameters": {
+    "MASKED_K": {
+      "constant_across_arms": true,
+      "constant_across_cases": true,
+      "constant_across_repetitions": true,
+      "frozen_at": "the value already in force; no behaviour changes",
+      "k": 3,
+      "previously": "IMPLICIT \u2014 ObservationChannel's constructor default"
+    }
+  },
+  "evidence_selection": {
+    "R0": {
+      "deployable_navigation": false,
+      "selector": "none \u2014 no evidence is delivered"
+    },
+    "R1": {
+      "class": "MECHANISTIC_UPPER_BOUND_UNDER_ENFORCED_BUDGET",
+      "deployable_navigation": false,
+      "selector": "EVALUATOR (sealed discriminating probe + decoys)"
+    },
+    "R2": {
+      "class": "MECHANISTIC_UPPER_BOUND_UNDER_ENFORCED_BUDGET",
+      "deployable_navigation": false,
+      "selector": "EVALUATOR (sealed discriminating probe + decoys)"
+    },
+    "R3": {
+      "class": "EXEMPT_UPPER_BOUND",
+      "deployable_navigation": false,
+      "selector": "NONE \u2014 every observation is delivered to every unit"
+    },
+    "R4": {
+      "class": "EXEMPT_UPPER_BOUND",
+      "deployable_navigation": false,
+      "selector": "NONE \u2014 every observation is delivered to every unit"
+    }
+  },
+  "executable_contract_fingerprint": "557c0dcd9fe3b354e754074dd8d3e61a635a0bec638c138f592b451fca1083cd",
+  "executable_version": "executable-contract-v1",
+  "experiment_id": "evidence-revision-001",
+  "fingerprint_relationship": {
+    "basis": "every completed field is frozen at the value the instrument already had, so no previously obtainable result changes. The three BLOCKERS are newly IDENTIFIED defects in inputs and in a declared bound; identifying a defect is not changing the design, and none of them has been repaired here.",
+    "fields_added_or_clarified": {
+      "DELIVERY_SEED_SCOPE": "COMPLETION \u2014 owner \u00a77 already required that a legibility pair receive identical evidence; the seed scope that delivers it was never written down. Recording the requirement changes nothing on its own; see BLOCKER-04.",
+      "EVIDENCE_SELECTION / deployable_navigation=False on R1/R2": "CLARIFICATION \u2014 restates owner \u00a74 as a field; no behaviour changes",
+      "MASKED_K k = 3": "COMPLETION \u2014 was an implicit constructor default",
+      "MASKED_K vs SINGLE": "ADJUDICATION \u2014 the machine contract already said MASKED_K and is unchanged; the owner-facing prose that said SINGLE is corrected",
+      "per-case input binding": "COMPLETION \u2014 was assembled ad hoc",
+      "pilot case selection": "COMPLETION \u2014 was absent",
+      "pilot repetitions = 2": "COMPLETION \u2014 was absent"
+    },
+    "if_a_blocker_is_repaired": "repairing BLOCKER-01, -02 or -03 WOULD change the intervention or the stimulus. That would be a scientific revision requiring a new experiment id, not a new fingerprint on this one.",
+    "new": {
+      "does_not_supersede": "the design fingerprint's role as the identity of the frozen science",
+      "identifies": "the science PLUS the execution semantics a runner must match: k, the pilot matrix, the case-input binding, and the MASKED_K adjudication",
+      "name": "executable_contract_fingerprint",
+      "supersedes_for": "anything that executes"
+    },
+    "previously_frozen_scientific_meaning_changed": false,
+    "prior": {
+      "identifies": "the frozen SCIENCE \u2014 arms, population, endpoints, comparisons, statistical plan",
+      "name": "design_fingerprint",
+      "status": "PRESERVED, UNCHANGED, still returned by `evidence_revision.contract_fingerprint()`",
+      "value": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3"
+    }
+  },
+  "governance_class": {
+    "R0": "NO_EVIDENCE_CONTROL",
+    "R1": "GOVERNED",
+    "R2": "GOVERNED",
+    "R3": "EXEMPT_UPPER_BOUND",
+    "R4": "EXEMPT_UPPER_BOUND"
+  },
+  "masked_k_mechanism": {
+    "handles": "opaque per-unit handles carry no CROSS-unit semantics, but the action schema prints each handle's description, so within a unit the model can map handle -> probe. The defence is the delivered SET, not the handle.",
+    "hidden_evaluator_metadata_participates": true,
+    "membership_encodes_answer_information": true,
+    "membership_varies_across_cases": true,
+    "ordering": "delivery is re-sorted into canonical probe order, which is fixed across cases, so ordering adds nothing beyond membership",
+    "selection": "the delivered set is the ONE evaluator-discriminating observation (from the sealed `acquisition-hidden-meta.json`) plus k-1 decoys drawn by `random.Random(seed)` where the seed is derived only from (experiment, namespace, case, arm, rep) \u2014 public run coordinates"
+  },
+  "masked_k_vs_single": {
+    "both_are_evaluator_selected": "MASKED_K's core observation is chosen using sealed evaluator metadata. Like SINGLE, it is MECHANISTIC / UPPER-BOUND and must never be read as deployable navigation or action-selection capability.",
+    "canonical_machine_term": "MASKED_K",
+    "difference": "SINGLE isolates the answer to one action; MASKED_K is a bounded-leak relaxation that hides it among k. They differ in the SIZE of the declared answer channel, not merely in wording, so substituting one for the other would change the experiment.",
+    "human_facing_terminology_corrected": true,
+    "masked_k": {
+      "declared_bits": 1.415,
+      "declared_consistency_set": 3,
+      "delivered": "the discriminating observation plus k-1 = 2 decoys",
+      "status_in_this_experiment": "the R1/R2 intervention"
+    },
+    "not_a_rename": true,
+    "resolution": "B \u2014 MASKED_K and SINGLE are scientifically DIFFERENT",
+    "single": {
+      "adversary_consistency_set": 1,
+      "declared_bits": 3.0,
+      "delivered": "exactly one evaluator-selected discriminating observation",
+      "status_in_this_experiment": "NOT an arm. Owner \u00a76 confines it to a deterministic regression fixture."
+    },
+    "which_belongs": "MASKED_K. The authoritative frozen arms already say MASKED_K, and owner \u00a76 forbids SINGLE as an arm. The prior owner-facing prose that said SINGLE was the error; the machine contract was right, and preserving MASKED_K rather than guessing was correct."
+  },
+  "model_calls_performed": 0,
+  "owner_state": {
+    "additional_provider_calls_authorized": false,
+    "adjudication_is_not_authorization": "discussion or adjudication of the power question does not constitute permission to execute",
+    "execution_authorized": false,
+    "original_10pp_threshold_preserved": true,
+    "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
+    "provider_calls_to_date": {
+      "non_scored_preflight": 2,
+      "note": "the two non-scored preflight calls were declared sufficient; no further provider contact of any kind is authorized \u2014 not pilot, preflight, smoke, scored, unscored validation, or capability checks",
+      "scored": 0
+    },
+    "remedies_declined_by_owner": [
+      "raising or lowering the prespecified threshold",
+      "enlarging the corpus",
+      "running the experiment as an estimation exercise"
+    ],
+    "status": "FROZEN_NOT_STARTED"
+  },
+  "pilot_cases": [
+    "cep-07",
+    "df-11",
+    "ag-04",
+    "cep-14",
+    "sr-10",
+    "df-06",
+    "cep-05",
+    "df-09"
+  ],
+  "pilot_matrix": {
+    "arms": [
+      "R0",
+      "R1",
+      "R2",
+      "R3",
+      "R4"
+    ],
+    "cases": [
+      "cep-07",
+      "df-11",
+      "ag-04",
+      "cep-14",
+      "sr-10",
+      "df-06",
+      "cep-05",
+      "df-09"
+    ],
+    "n_arms": 5,
+    "n_cases": 8,
+    "namespace": "pilot:er001-pilot-v1",
+    "repetitions": 2,
+    "stage": "pilot",
+    "total_units": 80
+  },
+  "pilot_repetition_rationale": {
+    "not_a_power_remedy": "owner \u00a712 option (d): repetitions do NOT help the power problem, because the inferential unit is the case and repetitions add no discordant pairs",
+    "smallest_that_can_expose": "execution instability, provider nondeterminism, persistence/resume defects, output-contract instability",
+    "value": 2,
+    "why_not_one": "a single sample has nothing to disagree with",
+    "why_not_three": "a third repetition buys precision on a rate the pilot may not report; it is cost without a protocol question"
+  },
+  "pilot_repetitions": 2,
+  "pilot_selection": {
+    "answer_blindness": "every axis is a public property: `cases.jsonl` metadata, a public string scan of the public evidence, or the payment implied by the frozen costs and the public unit seed. No key file and no hidden evaluator metadata participates in selection, and no model output does either \u2014 the selection is computable before any call exists.",
+    "coverage_axes": {
+      "delivered_evidence_marker": "2 values \u2014 with and without a marker in the probe payloads",
+      "initial_context_marker": "2 values \u2014 with and without an injected-fault name in the model-visible initial context (BLOCKER-01)",
+      "masked_k_delivery_affordable": "2 values \u2014 exercises BOTH the normal MASKED_K delivery path and the HARNESS_DELIVERY_UNAFFORDABLE path (BLOCKER-03)",
+      "repo": "4 values \u2014 exercises every repository and stdin dialect source",
+      "stdin_format": "3 values \u2014 exercises every evidence payload shape",
+      "verifier_exit": "5 values \u2014 exercises every recorded exit class, including the exit-127 adjudicated cases"
+    },
+    "namespace": "pilot:er001-pilot-v1",
+    "not_tuned": "the hash ordering fixes the walk before any coverage decision is made, so no case can be swapped in to make an arm look better; the resulting locus mix is an incidental consequence and is reported as unbalanced rather than presented as a sample",
+    "purpose": "PROTOCOL AND INSTRUMENT VALIDATION ONLY. The pilot is not an estimate of anything. It is not powered, it is not locus-balanced, and no scientific quantity may be reported from it.",
+    "rule": "1. Start from the frozen primary population (43 gate-feasible determinate cases). 2. Order every case by sha256('evidence-revision-001|pilot-selection-v1|<case_id>'), ascending. The ordering key is a constant string and the case id \u2014 nothing tunable, nothing learned. 3. Walk that order and accept a case if and only if it introduces a value not yet covered on any coverage axis. 4. Stop at the first case where every axis is saturated.",
+    "rule_id": "pilot-selection-v1"
+  },
+  "pilot_unit_ids": [
+    "1aae05d409141ac0",
+    "a100e4caf4045d93",
+    "2b5ac52f592151ed",
+    "59320e2bd1d030b0",
+    "5f5c04e4dcf2c2bc",
+    "f1dabd0537d6a34b",
+    "b9a0318326588aef",
+    "00065b6e91106f5c",
+    "858e4d54101bd027",
+    "941583e39f9a654e",
+    "57e8d82e09dae174",
+    "b7c0d1156b6455f0",
+    "4f10d9ef3b7f487a",
+    "b2fe3f55a76eec43",
+    "3e22cbede4ff069a",
+    "94965680f79a7239",
+    "ffdf90bc24bc5999",
+    "cb8435fb766b40e4",
+    "ac5362b7426232a2",
+    "7d6241c02c453e08",
+    "5d03674ffd6558d3",
+    "946626a116ce66d4",
+    "6600045d6f586cf8",
+    "430d6a5a8045e6db",
+    "defd50fcf1a5689b",
+    "01f08ee51def6702",
+    "bd2cb255aafbff86",
+    "fb56b7b741c36ea1",
+    "41179d0fb47cb08f",
+    "f35ec019603c32d2",
+    "ab7f8a5826192dd8",
+    "c4d7e222e912f36e",
+    "a0cf2dbcf42ee524",
+    "19f6cc6170d6d680",
+    "e23594d2ec982374",
+    "e3166d38095ae592",
+    "654e040d877ae1fb",
+    "acbf249d1b50afd0",
+    "3d92eeabfef14754",
+    "4367f323d2f272e1",
+    "a9d082ae35faad9a",
+    "ee261a614b5fa0c4",
+    "58493ca827a68cbe",
+    "022ba8e420449e15",
+    "b8f6a754ec8f83d6",
+    "415ed1e093014a36",
+    "acd253e59d5b87e0",
+    "ce3d36b5c39e9b9d",
+    "29c626c92792fdf7",
+    "bdf4162ea21f4535",
+    "3782efe71766422f",
+    "0d612de3a1659cd6",
+    "c14b8ea8c66ff783",
+    "8e6f0dd71944c83f",
+    "ce18b54548c9a7c0",
+    "ea18146343456396",
+    "56e4bfb06178ae7c",
+    "c54d7357c1696362",
+    "d1fac77c3d0d075f",
+    "35e927da1be9b8c0",
+    "09e4caa0a7d8dc33",
+    "2abd5376357afae2",
+    "34249d8eff888ba9",
+    "aafb6e17a5e277f9",
+    "7696b43c1ea581f1",
+    "4154718a68ff7ff3",
+    "a072706accac46f1",
+    "4251dd7e6aaa3993",
+    "5f11b62d1ae41ce3",
+    "ffac94a940e6153a",
+    "99073c58d13e575d",
+    "8a4cf5efa9800ef8",
+    "8e1082525d692f0a",
+    "ba42bf214898cc53",
+    "3a38a0202a3fc519",
+    "1c85aca664cf0c14",
+    "34dd3bf12b5ea150",
+    "26613312a4fafe2a",
+    "e30141646a0aadfa",
+    "cc4b435f0f085b8c"
+  ],
+  "provider_calls_performed": 0,
+  "status": "FROZEN_NOT_STARTED \u2014 EXECUTION NOT AUTHORIZED"
+}
