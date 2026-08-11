@@ -130,10 +130,10 @@ def test_matrix_inspection_is_deterministic_and_contract_complete():
     assert a == b
     assert a["design_fingerprint"] == EXPECTED_DESIGN_FINGERPRINT
     assert a["executable_contract_fingerprint"] == EXPECTED_EXECUTABLE_FINGERPRINT
-    assert a["cases"] == ["cep-07", "df-11", "ag-04", "cep-14", "sr-10", "df-06", "cep-05"]
+    assert a["cases"] == ["cep-07", "df-11", "ag-04", "sr-10", "df-06", "cep-05"]
     assert a["arms"] == list(ARMS)
-    assert a["repetitions"] == 2 and a["total_units"] == 70
-    assert len(a["uids"]) == 70 and a["executable"] is True
+    assert a["repetitions"] == 2 and a["total_units"] == 60
+    assert len(a["uids"]) == 60 and a["executable"] is True
     assert a["blocker"] is None
 
 

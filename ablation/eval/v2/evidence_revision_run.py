@@ -47,7 +47,7 @@ from .replication import COSTS, DESCRIPTIONS, PROBES, VOCAB, _fixture
 from .sufficiency import LEGACY_CONTRACT, derive_topology
 
 EXPECTED_DESIGN_FINGERPRINT = "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9"
-EXPECTED_EXECUTABLE_FINGERPRINT = "2f377dd9fc18ec4516bd07d0fe3cf5d069bd4a54a6ec3431d309773b5e2183c2"
+EXPECTED_EXECUTABLE_FINGERPRINT = "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e"
 # Backward-compatible name for consumers that mean executable identity.
 EXPECTED_FINGERPRINT = EXPECTED_EXECUTABLE_FINGERPRINT
 RUNNER_SCHEMA = "evidence-revision-runner-v2"

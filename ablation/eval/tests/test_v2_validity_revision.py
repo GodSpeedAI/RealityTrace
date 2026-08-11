@@ -165,13 +165,13 @@ def test_pilot_selection_is_deterministic_public_only(monkeypatch):
         raise AssertionError("sealed data reached pilot selection")
     monkeypatch.setattr(revision, "_sealed_keys", forbidden)
     monkeypatch.setattr(revision, "_sealed_hidden_meta", forbidden)
-    expected = ("cep-07", "df-11", "ag-04", "cep-14", "sr-10", "df-06", "cep-05")
+    expected = ("cep-07", "df-11", "ag-04", "sr-10", "df-06", "cep-05")
     assert revision.pilot_cases() == revision.pilot_cases() == expected
 
 
 def test_pilot_matrix_is_deterministic_complete_and_stage_disjoint():
     a = inspect_matrix("pilot"); b = inspect_matrix("pilot")
-    assert a == b and a["total_units"] == 70 and len(set(a["uids"])) == 70
+    assert a == b and a["total_units"] == 60 and len(set(a["uids"])) == 60
     full = {unit_id("evidence-revision-001", FULL_NAMESPACE, case, arm, rep,
                     EXPECTED_EXECUTABLE_FINGERPRINT)
             for case in a["cases"] for arm in a["arms"]
