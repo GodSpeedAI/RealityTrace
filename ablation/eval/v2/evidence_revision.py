@@ -426,18 +426,29 @@ def power_analysis(alpha: float = 0.05) -> dict:
 #: therefore ACKNOWLEDGED AND UNRESOLVED, not closed. The design and the power
 #: analysis remain available for later adjudication.
 OWNER_STATE = {
-    "status": "FROZEN_NOT_STARTED",
-    "execution_authorized": False,
-    "additional_provider_calls_authorized": False,
+    "status": "PILOT_AUTHORIZED",
+    "execution_authorized": True,
+    "additional_provider_calls_authorized": True,
+    "authorized_stage": "pilot",
+    "authorization_scope": "FROZEN_EVIDENCE_REVISION_001_REVISION_002_PILOT_ONLY",
+    "authorized_design_fingerprint":
+        "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
+    "authorized_executable_fingerprint":
+        "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
+    "authorized_case_inputs_sha256":
+        "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
+    "authorized_pilot_matrix_sha256":
+        "effd44ec461b8624e4c498b80f40884f1af0d30296b9062bda3a1f090d85a9e3",
+    "full_execution_authorized": False,
+    "pilot_complete": False,
     "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
     "original_10pp_threshold_preserved": True,
     "provider_calls_to_date": {
         "scored": 0,
         "non_scored_preflight": 2,
-        "note": ("the two non-scored preflight calls were declared sufficient; "
-                 "no further provider contact of any kind is authorized — not "
-                 "pilot, preflight, smoke, scored, unscored validation, or "
-                 "capability checks"),
+        "note": ("additional provider calls are authorized only for the frozen "
+                 "revision-002 60-unit pilot; no smoke, preflight, full-stage, "
+                 "or other provider call is authorized"),
     },
     "remedies_declined_by_owner": (
         "raising or lowering the prespecified threshold",
@@ -445,8 +456,8 @@ OWNER_STATE = {
         "running the experiment as an estimation exercise",
     ),
     "adjudication_is_not_authorization": (
-        "discussion or adjudication of the power question does not constitute "
-        "permission to execute"),
+        "this authorization applies only to the exact frozen pilot identified "
+        "above and does not authorize FULL execution"),
 }
 
 #: Owner §12 requires a STOP if the power analysis finds the prespecified
