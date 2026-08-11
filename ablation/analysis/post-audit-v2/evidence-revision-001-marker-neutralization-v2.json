@@ -1,0 +1,771 @@
+{
+  "contaminated_primary_cases": [],
+  "deterministic": true,
+  "entries": [
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-01",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "6e7ffea8c4ee068de07b2d8d47e461da5843d019878eb3346a73fa0a7815cf29",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8D9A39DJY4NJCPM8WKFQC",
+      "source_identifiers": [
+        "test_corpus_scenario_test_assertion_bug"
+      ],
+      "source_sha256": "595ab7ef44156c1d361fd366f022f7477ef98ffb06527756ed9e3f8d4539b834"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-02",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "8bb71cfc206a3be23c539078c55beefcffb06f834ae7c76953d7b5d655be513b",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8DAKFYQZSTMVASQ8D2FJF",
+      "source_identifiers": [
+        "test_corpus_scenario_test_assertion_bug"
+      ],
+      "source_sha256": "131687a2093446c6dd3431180744299795b08921feeedffa17c1622615d82e74"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-03",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "c12b6fc56d16542a7cca1d353dfd84d6cae129349d099dd354eadfbd3347a160",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8DC0VB749ADZXXD622FCR",
+      "source_identifiers": [
+        "test_corpus_scenario_test_assertion_bug"
+      ],
+      "source_sha256": "fefd8ac29ab54b2c5f84c53a5824ebc57d04bd4cda54c8e56847813217cd317b"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-09",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "d697a44c8d3bad505664e5b3d2b4c41e6e941bd8df18347b452553802e0b264d",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8DJ7MGYQSNNX6HV6S7FDQ",
+      "source_identifiers": [
+        "test_corpus_scenario_tmpdir_unavailable"
+      ],
+      "source_sha256": "6beee07ad2d67d03b10c045950ed6e17fc9b346e99269725cd95b2fdbebbeb22"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-11",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "8acab10a8f15c0f4fc547cb4bebbd6c28ad4ae83b40926b1b287c90490cd01d2",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8DKTH72X0QJ6BAVKHMYAQ",
+      "source_identifiers": [
+        "test_corpus_scenario_test_unreadable_fixture"
+      ],
+      "source_sha256": "e55ec971eddbdc1d78bed85c915a006bcc78af032450bb62dd2a0349acb207ae"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-12",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "669c5b1a82fd4cec9a8ad1d994209855edcedec895b52b7fb3ce761c4260f460",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8DMV6QEMCNDTD47E7X795",
+      "source_identifiers": [
+        "test_corpus_scenario_test_unreadable_fixture_dir"
+      ],
+      "source_sha256": "f61a0194fe01c7438e6111469e2d8597f5576e971d5e6e501932b63ace6a8340"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-13",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "63846a1f0840b289a94ffe3eaba6ad58c82903e89e7513e6e03d6a3c78900458",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8DNYGMVXZFP0D7XMX8XYK",
+      "source_identifiers": [
+        "test_corpus_scenario_test_missing_fixture"
+      ],
+      "source_sha256": "ccd0fb4b3d64bf3752c15f2d378b5ebe548283907c7850eb3029fbcf1380caa4"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-14",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "74310b63068c882a3258f59c05f7c98b4b1153cc48932d4ef52150da8c56bdc1",
+      "occurrences": 3,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8DQ38BXPC51SBR1E44AVZ",
+      "source_identifiers": [
+        "test_corpus_scenario_test_stale_fixture"
+      ],
+      "source_sha256": "ef6bdbfc4d796c86c0b54e5bc3519337f61bdff7a71ce6b61a13137f132db35c"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "cep-15",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "38e0e3663fa98cd46a8d1a7ba4b26cc1d6f30b500aeb858063b72d9cddf1363f",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZH8DR4EDQKFBWEEBFJD0WNZ",
+      "source_identifiers": [
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "a1745af27211bf7102232112752120499c1ef8ea7f6ba20535e3eb2fc51b0cb9"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "sr-01",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "ab86a860a1f62a78c13b37a79abccaef9dde63e69dc67bb70835477a024c750b",
+      "occurrences": 4,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZJ2EAR77YH1BNS24FA393J5",
+      "source_identifiers": [
+        "test_corpus_scenario_assertion_bug"
+      ],
+      "source_sha256": "56e903328f9fd75da048964326d9b573a94ab51defa53d31d844e42e944b619f"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "sr-02",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "bb13206e6ecb98928ce7f083fe15b8e4ee0629a19fec5e804986b865361f6522",
+      "occurrences": 4,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZJ2EBZK2113SET1Z7W8DWBT",
+      "source_identifiers": [
+        "test_corpus_scenario_assertion_bug"
+      ],
+      "source_sha256": "303c0220fd07ed3860e1b9bf146df6ec27758a908303011b88fc757938c5d12a"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "sr-09",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "b718c0160541f98c5d0432e4d8e8c6ecf8403c05ada76e59c596e9486e1eb249",
+      "occurrences": 4,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZJ2ESWACJWQ1Q9NNNBZ6XP1",
+      "source_identifiers": [
+        "test_corpus_scenario_missing_fixture"
+      ],
+      "source_sha256": "49717ce56b043d65836f2363844dd69fb828596ad409ca6823f60a0f98b2c9f1"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "sr-10",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "3f7694b333f05783f067ae15866efc4e911f3e439f2ea9be39c60097313d417e",
+      "occurrences": 4,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZJ2EV4SMHQQ2Y2N0CWH7164",
+      "source_identifiers": [
+        "test_corpus_scenario_stale_fixture"
+      ],
+      "source_sha256": "2d35de1680b14a349251038e3505451b83c3f8893616e4697a8eb80ef9fba9f0"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "sr-13",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "9d729925ddf4f6e23443fe3360d4b28dcdd7a9f71378188723448b06e527443e",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZJ2EYGR9A978ZG137KZHQ3R",
+      "source_identifiers": [
+        "test_corpus_scenario_order_a",
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "4fd65c21ae7100a0e892a43ba4fbf585a6bc6d19c7e9e8c2a78bfee5f0cb3584"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "sr-14",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "1f11a0a509ec7fa33fc3cf9f674f39cb4f7e6fa7fa172fccf68d86a5743e1e14",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZJ2EZN5PB32QP4W8HC0S8EC",
+      "source_identifiers": [
+        "test_corpus_scenario_order_a",
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "b97be629f78a4930b3fdf106b7a4216f3111c052a118cfced1d8ba6526a54fd3"
+    },
+    {
+      "artifact_kind": "case_initial_evidence",
+      "case_id": "sr-15",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_text accepts text only and imports no corpus key/hidden-metadata module",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "5cacacd2af6dec39aea53e420fdc101c966f474436d2cfc187afa8cb93c78f52",
+      "occurrences": 5,
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; exit status, trace, paths, messages, and behavioral evidence remain byte-identical",
+      "source_artifact_identity": "01KZJ2F0SP4H4EVNF66122MHXE",
+      "source_identifiers": [
+        "test_corpus_scenario_order_a",
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "4371b14d3186a4215d92e7900849f5dbddcdcb83debb6c561fb69dd12312722d"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "ag-01",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "7941cb684f49641d33c17688e7391051393afcc8f2eb8211007f9834ab27522d",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:ag-01:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_assertion_bug"
+      ],
+      "source_sha256": "46dff45f65326c5c8b72b3808a7129b698bdfa0728f43c51ce444fb1656c23a7"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "ag-02",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "f7445e918cf7a86ae4c734237dc9cd8d3c558cecb02c1aafd988410786eb24ca",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:ag-02:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_assertion_bug_integration"
+      ],
+      "source_sha256": "b2fb628634756cc28b70b406e4c237811df633c42b95ffef587e82d89da81d6c"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "ag-03",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "7941cb684f49641d33c17688e7391051393afcc8f2eb8211007f9834ab27522d",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:ag-03:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_wrong_expectation"
+      ],
+      "source_sha256": "716212a26a73452995546f8ce7b07fdefbb1e77c5a98059e37dbbfd174975bac"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "ag-09",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "1f5d192760ddb500fe5d28b578352cad008b7e360bac1c9313bb3de0cb3db0f5",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:ag-09:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_config_env"
+      ],
+      "source_sha256": "50af5315952b3a0ab92a2bb8f4efe2b71b915be13ce292fcc7080e5c042bc73b"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "ag-11",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "7941cb684f49641d33c17688e7391051393afcc8f2eb8211007f9834ab27522d",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:ag-11:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_unreadable_fixture"
+      ],
+      "source_sha256": "a4b260d70c0bb8903b00e724fa7d5dadaea1aa1178a4a3ecf411f2c6b6b1c0b0"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "ag-13",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "7941cb684f49641d33c17688e7391051393afcc8f2eb8211007f9834ab27522d",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:ag-13:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_missing_fixture"
+      ],
+      "source_sha256": "3c453e71bc9235f4f8d939ae6707063d98aac51bc9e7ca20f98739786c65ebec"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "ag-14",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "36997d6edc3daf624e47cc568d922523a4744435d3b74d1e24cf53b9a1368d36",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:ag-14:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_stale_fixture"
+      ],
+      "source_sha256": "054e533862af613322c6ee00bc565ef0a2030ceb73c8a24e56169f59a606a091"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "ag-15",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "2bb3f5bc689d0c73fbad2c35d04d5cdfecad734cc5ab1d1ff3dd46bbdca43ed6",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:ag-15:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "15658c57b1b1ecc1e5d02f2cbf91eb146f6b54815b19cf6d562a10a69ad5f7d8"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-01",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "27f998708144cf3476a023b1afe1811baf39441a081e7b45f2db54e9bbe36aab",
+      "occurrences": 3,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-01:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_test_assertion_bug"
+      ],
+      "source_sha256": "b6064b52c96f1b1744a061b91431f5e620e8b2eba2e6752ddf3453ac2fb25f9f"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-02",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "30e518cfa5b4cd282206c68a2b3fbda413b652dea7f13d4d57228a303880fe4b",
+      "occurrences": 3,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-02:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_test_assertion_bug"
+      ],
+      "source_sha256": "9a3fb71093db05cdef64c9ff48f548e16babf1c08be57c7fa1d5dfeedefc4f09"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-03",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "27f998708144cf3476a023b1afe1811baf39441a081e7b45f2db54e9bbe36aab",
+      "occurrences": 3,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-03:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_test_assertion_bug"
+      ],
+      "source_sha256": "b6064b52c96f1b1744a061b91431f5e620e8b2eba2e6752ddf3453ac2fb25f9f"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-09",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "ec152b507d2e1d36e6921567ce16b60de4d11bd4e9a7e6f205e9fe0aebc41173",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-09:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_tmpdir_unavailable"
+      ],
+      "source_sha256": "314db79805c2d124f6cefa7f65626b660be553a3b12d5c33b37eb75c91d6a60f"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-11",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "9764743582d06769da15a0afdda1e2acd37ccbf19f41339d4c643f166b3d60e5",
+      "occurrences": 3,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-11:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_test_unreadable_fixture"
+      ],
+      "source_sha256": "de02c8e639943dfd0829f93b1787298a4737f90001832e2429ab76662f5284b2"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-12",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "e547f156025ebbaa42ff591f312c41656b2a5c7891e9be948cf1424de2e8e199",
+      "occurrences": 3,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-12:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_test_unreadable_fixture_dir"
+      ],
+      "source_sha256": "8f2059969e0070534f184ed347b408a1c6865fbb345c74174755ede90b3b04c4"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-13",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "432080de6c4045d87e1309624915ffc77e8fcee82c12d7ec830ac7f4d0c11d61",
+      "occurrences": 3,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-13:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_test_missing_fixture"
+      ],
+      "source_sha256": "9da3098486e10188471405a127c93348a05e24b7168e7eb74124052bc0187dc0"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-14",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "e43ab2a13cb35fdc1d391b77f23e59ec5f1ac35b41ba680ea3fbfc27e54f4f21",
+      "occurrences": 3,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-14:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_test_stale_fixture"
+      ],
+      "source_sha256": "612fb9a6f28e1a931969132da93bb2248c6f2ae4db9940144fce4cef64a58af2"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "cep-15",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "50910433afeb5e78afc3b2577c1989f6c2f1002c0a7fccadcec4c66019b31785",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:cep-15:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "6e5ede85f7a6a0e5d099f67b23b967e7336232263b97652d4b0497cb1456a2e5"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "df-01",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "14f8d0f179716824718504d3053de0c355b8a5a768f0620072116f72a1ab59f8",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:df-01:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_assertion_bug"
+      ],
+      "source_sha256": "d881751c071ffcaf59eb18c3c1ed985422bc07292b0d3b58be96a3a99d7024a3"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "df-02",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "6cb7f91506dc33526bfa1eaf8e74fbfa8ce26f9db0f8049e6f3d1fc12305bef7",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:df-02:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_assertion_bug"
+      ],
+      "source_sha256": "57a7be0e3127f0327d13ca3c2bbbe562d2afebe5e05500aa4c46bea9007418b4"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "df-08",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "304e12ab565fb87d0c38b2b2e17a22e29f7bdcfa00d314171ef122ea240f7f21",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:df-08:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_missing_fixture"
+      ],
+      "source_sha256": "17f7c410e3b3c33d4e8d5be05a9c171c50f4cd86a389ac6273d9d58285f6a8bc"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "df-13",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "ee50e89ff8b8361bc8ea671763aa934a529aa5c9128255120e74ea3da1f57793",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:df-13:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "59f0dfad9483963dfa191b7707af63318fb57d0fbd284c409d44585f62a9a09f"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "df-14",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "d2e1a15f8e61599d474709f2cdb51e1a64337232d491ba2f17b9756bfdc02a20",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:df-14:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_timing_sensitive"
+      ],
+      "source_sha256": "d6cc45d52ee281695e2e61797bf75e625c8aaf09a20390cab479b5bf44c5d09d"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "sr-01",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "01f00a19716ecb4f5933bc6674b086c11a11c57cc6a2a3b4a9f54ef4dbe5097b",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:sr-01:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_assertion_bug"
+      ],
+      "source_sha256": "57328369d060c4fde5140727d9bb967d62b6dfa5dd17710f39657a8a6f26c6c8"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "sr-02",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "e190f54a003842a1ff82f1118de4992b49332078910f36757d690aacdc981411",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:sr-02:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_assertion_bug"
+      ],
+      "source_sha256": "28ac9330a979b9f5450253c71eeba52827d33044da2a0b1bae63eb0c9e0aa9fd"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "sr-09",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "5d826b679b9c61e27890d748fdd11289fce17d1dad2d3053e60971e027051db6",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:sr-09:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_missing_fixture"
+      ],
+      "source_sha256": "0c1f7a018e0865cbdc0afac25527ee8a7357b04bb5040d3e6018c87398d7490c"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "sr-10",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "0293a6afe38d94607160d9480318ddebeba604d7fcca99b6d77a01ef286a0470",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:sr-10:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_stale_fixture"
+      ],
+      "source_sha256": "486d3b38d1de3b10cd978fa728aa4ad51f6f5392627b5bfce6ad256d0cde6168"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "sr-13",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "bba31d83d6836e09bfd61d5cabf6032a898241e7463854bde3845f275eb1d642",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:sr-13:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "f5cd687d46c4c95f81a504dad85622ca3071fadcc37bfa18aade38d78cc3a631"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "sr-14",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "bba31d83d6836e09bfd61d5cabf6032a898241e7463854bde3845f275eb1d642",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:sr-14:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "f5cd687d46c4c95f81a504dad85622ca3071fadcc37bfa18aade38d78cc3a631"
+    },
+    {
+      "artifact_kind": "probe_payload",
+      "case_id": "sr-15",
+      "exact_transformation": "replace every full injected-test identifier with test_observed_failure",
+      "key_blindness_proof": "neutralize_payload accepts the public payload only; no locus/key/hidden metadata/model output is an argument",
+      "marker_class": "INJECTED_TEST_IDENTIFIER",
+      "neutralized_sha256": "bba31d83d6836e09bfd61d5cabf6032a898241e7463854bde3845f275eb1d642",
+      "occurrences": 2,
+      "probe": "rerun_verifier_isolated",
+      "replacement": "test_observed_failure",
+      "semantic_preservation_rationale": "only the benchmark-manufacturing test identifier changes; result, exit, command shape, summary and behavioral fields remain",
+      "source_artifact_identity": "acquisition-probes.jsonl:sr-15:rerun_verifier_isolated",
+      "source_identifiers": [
+        "test_corpus_scenario_order_b"
+      ],
+      "source_sha256": "f5cd687d46c4c95f81a504dad85622ca3071fadcc37bfa18aade38d78cc3a631"
+    }
+  ],
+  "experiment_id": "evidence-revision-001",
+  "key_blind": true,
+  "locus_blind": true,
+  "manifest_sha256": "6894ef508337acab7b409794818d2417a46a0399492b606ca867f79c37186539",
+  "marker_class": "INJECTED_TEST_IDENTIFIER",
+  "model_calls_performed": 0,
+  "model_output_blind": true,
+  "primary_disposition": "NEUTRALIZED_BEFORE_RENDERING",
+  "provider_calls_performed": 0,
+  "replacement": "test_observed_failure",
+  "revision_id": "evidence-revision-001-revision-002",
+  "schema": "marker-neutralization-manifest-v1",
+  "transformation_version": "construction-marker-neutralization-v1"
+}
