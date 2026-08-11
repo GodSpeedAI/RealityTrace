@@ -46,7 +46,8 @@
   },
   "unresolved_contract_blockers": [
     "exact frozen pilot case selection absent",
-    "frozen pilot repetition count absent"
+    "frozen pilot repetition count absent",
+    "per-case model-visible original Question/failure-evidence binding absent"
   ],
   "unresolved_live_checks": [
     "provider route/credential availability",

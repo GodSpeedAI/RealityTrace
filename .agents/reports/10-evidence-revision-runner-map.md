@@ -19,7 +19,7 @@ Frozen design fingerprint: `7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306d
 | Scoring interface | controller `UnitResult` plus existing analysis contracts | Preserve only; runner emits analysis-ready event/result artifact | Explicit scorable handoff is missing |
 | Pilot/full UID separation | `eval.v2.ids.unit_id` | As-is | Stage-specific namespace construction and collision check are missing |
 | Stage authorization and release token/marker | owner state exists; no evidence-revision release gate exists | Owner state as-is | Genuine implementation gap; one centralized execution gate required |
-| Frozen pilot matrix | **not present in the frozen Python contract or emitted JSON** | Cannot infer without changing science | **Owner-adjudication blocker:** exact pilot case IDs and repetition count are absent. Runner may inspect/verify a frozen matrix once supplied, but must not invent one. |
+| Frozen pilot matrix | **not present in the frozen Python contract or emitted JSON** | Cannot infer without changing science | **Owner-adjudication blocker:** exact pilot case IDs, repetition count, and per-case model-visible original Question/failure-evidence binding are absent. Runner may inspect/verify a frozen matrix once supplied, but must not invent them. |
 
 Implementation policy: compose the frozen modules, add only orchestration, and fail closed on the unresolved pilot-matrix contract gap. The apparent R1/R2 `SINGLE` wording in the implementation request conflicts with the authoritative contract, whose arms use `MASKED_K`; the authoritative contract wins and will not be changed.
 

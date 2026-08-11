@@ -19,7 +19,7 @@ Branch `main`; unrelated untracked historical outputs under `ablation/runs/` rem
 291 collected/passed; 0 failed; 0 skipped. Model calls 0; provider calls 0. Dry-run passed with fake only. Frozen science and historical evidence unchanged.
 
 ## Blocker
-The authoritative contract lacks exact pilot case selection and repetition count. Unit count and UIDs cannot be invented. Execution remains fail-closed pending owner/Opus adjudication, independently of `FROZEN_NOT_STARTED`.
+The authoritative contract lacks exact pilot case selection, repetition count, and per-case model-visible original Question/failure-evidence binding. Unit count, UIDs, and live initial states cannot be invented. Execution remains fail-closed pending owner/Opus adjudication, independently of `FROZEN_NOT_STARTED`.
 
 ## Live-only checks
 Route/credentials, returned identity/metadata, finish reason, effective ceiling, optional cost fields, and provider idempotency/reconciliation. No live preflight was run.

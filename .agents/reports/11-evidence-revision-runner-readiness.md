@@ -33,13 +33,14 @@ Crash tests cover before call, after provider result, after raw commit/hash/mani
 
 ## Pilot matrix blocker
 
-The contract owns 43 eligible base cases and arms R0–R4, but records neither the exact pilot case selection nor repetition count in the Python or emitted JSON contract. Inventing either would change science.
+The contract owns 43 eligible base cases and arms R0–R4, but records neither the exact pilot case selection nor repetition count in the Python or emitted JSON contract. It also does not bind the per-case model-visible original Question/failure-evidence bytes needed to initialize `DiagnosticState`. Inventing any of these would change the executed instrument.
 
 - eligible base: **43 cases**
 - arms: **5**
 - repetitions: **not specified**
 - pilot unit count: **not determinable**
 - pilot UIDs: **not constructible**
+- per-case initial-state input binding: **not frozen**
 
 The safe inspection command prints the derived 43 cases, imported arms, hashes, and blocker. Arbitrary matrix files are rejected unless their identity is frozen. This is an owner/Opus contract-adjudication blocker, not a live check. The task prose called R1/R2 `SINGLE`, but the authoritative frozen contract uses `MASKED_K`; the runner preserves the authoritative definition.
 
