@@ -21,6 +21,7 @@ import dataclasses
 import hashlib
 import json
 import os
+import subprocess
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
@@ -97,6 +98,28 @@ SOURCE_FILES = {
     "ledger_module": Path(__file__).with_name("ledger.py"),
 }
 
+# Separate from scientific/executable identity: these are the payment-bearing
+# implementation files whose exact bytes the owner reviews and releases.
+RUNNER_IMPLEMENTATION_FILES = (
+    "ablation/eval/v2/evidence_revision_run.py",
+    "ablation/eval/v2/provider.py",
+    "ablation/eval/v2/controller.py",
+    "ablation/eval/v2/channel.py",
+    "ablation/eval/v2/dstate.py",
+    "ablation/eval/v2/decision.py",
+    "ablation/eval/v2/execution.py",
+    "ablation/eval/v2/ledger.py",
+    "ablation/eval/v2/legibility.py",
+    "ablation/eval/v2/ids.py",
+    "ablation/eval/v2/case_inputs_v2.py",
+    "ablation/eval/v2/marker_neutralization.py",
+    "ablation/eval/v2/sufficiency.py",
+    "ablation/eval/v2/replication.py",
+    "ablation/eval/v2/validity_revision.py",
+)
+RUNNER_IMPLEMENTATION_SCHEMA = "evidence-revision-runner-implementation-v1"
+
+
 
 class ExecutionRefused(RuntimeError):
     """A centralized execution-gate failure."""
@@ -121,6 +144,50 @@ def _file_hash(path: Path) -> str:
 def _canonical(value) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"),
                       default=str).encode()
+
+
+def runner_implementation_manifest(root: Path = REPO_ROOT) -> dict:
+    """Canonical byte identity of all payment-bearing runner implementation."""
+    files = {}
+    for relative in RUNNER_IMPLEMENTATION_FILES:
+        path = root / relative
+        if not path.is_file():
+            raise ExecutionRefused(f"bound runner implementation file missing: {relative}")
+        files[relative] = _file_hash(path)
+    return {"schema": RUNNER_IMPLEMENTATION_SCHEMA, "files": files}
+
+
+def runner_implementation_sha256(root: Path = REPO_ROOT) -> str:
+    return _sha256(_canonical(runner_implementation_manifest(root)))
+
+
+def runner_implementation_sha256_at_commit(commit: str,
+                                            root: Path = REPO_ROOT) -> str:
+    """Reconstruct the bound manifest from a locally reviewed Git commit."""
+    if (len(commit) != 40 or any(c not in "0123456789abcdef" for c in commit)):
+        raise ExecutionRefused("reviewed_runner_commit is not a full lowercase SHA")
+    files = {}
+    for relative in RUNNER_IMPLEMENTATION_FILES:
+        try:
+            payload = subprocess.check_output(
+                ["git", "-C", str(root), "show", f"{commit}:{relative}"],
+                stderr=subprocess.DEVNULL)
+        except (OSError, subprocess.CalledProcessError) as exc:
+            raise ExecutionRefused(
+                f"reviewed runner commit cannot resolve {relative}") from exc
+        files[relative] = _sha256(payload)
+    return _sha256(_canonical(
+        {"schema": RUNNER_IMPLEMENTATION_SCHEMA, "files": files}))
+
+
+def latest_runner_implementation_commit(root: Path = REPO_ROOT) -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "-C", str(root), "log", "-1", "--format=%H", "--",
+             *RUNNER_IMPLEMENTATION_FILES], text=True,
+            stderr=subprocess.DEVNULL).strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise ExecutionRefused("cannot resolve reviewed runner commit") from exc
 
 
 def _atomic_json(path: Path, value) -> None:
@@ -365,6 +432,7 @@ class ExecutionGate:
             except (OSError, json.JSONDecodeError):
                 failures.append("release marker is not valid JSON")
         hashes = frozen_hashes()
+        implementation_sha = runner_implementation_sha256()
         if marker is not None:
             expected_marker = {
                 "experiment_id": EXPERIMENT_ID,
@@ -378,10 +446,19 @@ class ExecutionGate:
                 "evidence_action_hash": hashes["evidence_action_hash"],
                 "matrix_sha256": req.matrix.matrix_hash if req.matrix else None,
                 "case_inputs_sha256": req.matrix.case_inputs_hash if req.matrix else None,
+                "runner_implementation_sha256": implementation_sha,
             }
             for key, value in expected_marker.items():
                 if marker.get(key) != value:
                     failures.append(f"release marker binding mismatch: {key}")
+            reviewed_commit = marker.get("reviewed_runner_commit")
+            try:
+                reviewed_sha = runner_implementation_sha256_at_commit(
+                    reviewed_commit or "")
+                if reviewed_sha != implementation_sha:
+                    failures.append("reviewed runner commit does not bind current implementation")
+            except ExecutionRefused as exc:
+                failures.append(str(exc))
         if req.matrix is None:
             failures.append("frozen stage matrix is unavailable")
         else:
@@ -431,9 +508,14 @@ class ExecutionGate:
             "owner_state_digest": owner_state_digest(owner),
             "matrix_hash": req.matrix.matrix_hash,
             "design": EXPECTED_DESIGN_FINGERPRINT,
-            "executable": EXPECTED_EXECUTABLE_FINGERPRINT}))
+            "executable": EXPECTED_EXECUTABLE_FINGERPRINT,
+            "runner_implementation_sha256": implementation_sha,
+            "reviewed_runner_commit": marker.get("reviewed_runner_commit")
+                if marker else None}))
         return {"phase": "STATIC_AUTHORIZED", "authorized": False,
-                "stage": req.stage, "binding": binding, "hashes": hashes}
+                "stage": req.stage, "binding": binding, "hashes": hashes,
+                "runner_implementation_sha256": implementation_sha,
+                "reviewed_runner_commit": marker["reviewed_runner_commit"]}
 
     @classmethod
     def validate_client(cls, req: GateRequest, static_result: Mapping) -> dict:
@@ -884,6 +966,8 @@ def _cmd_run(args) -> int:  # pragma: no cover - exercised with fakes in tests
         "release_marker_sha256": _file_hash(final_request.release_marker),
         "release_token_sha256": _sha256(final_request.release_token.encode()),
         "final_authorization_binding": final["binding"],
+        "runner_implementation_sha256": static["runner_implementation_sha256"],
+        "reviewed_runner_commit": static["reviewed_runner_commit"],
     })
     ns = RunNamespace(Path(args.output), args.run_id, args.stage,
                       namespace_hashes)
