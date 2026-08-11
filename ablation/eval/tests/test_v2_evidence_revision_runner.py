@@ -16,7 +16,8 @@ from ..v2.evidence_revision import ARMS, OWNER_STATE, contract_fingerprint
 from ..v2.evidence_revision_run import (
     COSTS, DESCRIPTIONS, EXPECTED_DESIGN_FINGERPRINT,
     EXPECTED_EXECUTABLE_FINGERPRINT, EXPECTED_FINGERPRINT, EXPERIMENT_ID,
-    PILOT_NAMESPACE, PROBES, REVISED_CASE_INPUTS, VOCAB,
+    FULL_NAMESPACE, PILOT_NAMESPACE, PROBES, REVISED_CASE_INPUTS,
+    REVISED_PILOT_MATRIX, VOCAB, _cmd_run, _live_client,
     CheckpointStore, DeterministicFakeClient, DurableReplayClient, ExecutionGate,
     ExecutionRefused, FrozenMatrix, GateRequest, InjectedInterruption,
     ResumeViolation, RunNamespace, _fixture, dry_run, eligible_cases,
@@ -31,16 +32,29 @@ from ..v2.sufficiency import LEGACY_CONTRACT
 
 
 def _authorized(stage="pilot"):
-    return dict(OWNER_STATE, status=("PILOT_AUTHORIZED" if stage == "pilot" else "FULL_AUTHORIZED"),
-                execution_authorized=True, additional_provider_calls_authorized=True,
-                authorized_stage=stage)
+    state = dict(OWNER_STATE)
+    state.update(status=("PILOT_AUTHORIZED" if stage == "pilot" else "FULL_AUTHORIZED"),
+                 execution_authorized=True,
+                 additional_provider_calls_authorized=True,
+                 authorized_stage=stage)
+    return state
+
+
+def _unauthorized():
+    state = dict(OWNER_STATE)
+    state.update(status="FROZEN_NOT_STARTED", execution_authorized=False,
+                 additional_provider_calls_authorized=False,
+                 authorized_stage=None)
+    return state
 
 
 def _matrix(stage="pilot"):
-    case_hash = json.loads(REVISED_CASE_INPUTS.read_text())["case_inputs_sha256"]
-    return FrozenMatrix(stage, f"{stage}:synthetic", ("cep-01",), tuple(ARMS), 1,
+    frozen = json.loads(REVISED_PILOT_MATRIX.read_text())
+    namespace = PILOT_NAMESPACE if stage == "pilot" else FULL_NAMESPACE
+    return FrozenMatrix(stage, namespace, ("cep-01",), tuple(ARMS), 1,
                         EXPECTED_DESIGN_FINGERPRINT,
-                        EXPECTED_EXECUTABLE_FINGERPRINT, case_hash, "matrix-hash")
+                        EXPECTED_EXECUTABLE_FINGERPRINT,
+                        frozen["case_inputs_sha256"], frozen["matrix_sha256"])
 
 
 def _marker(tmp_path, owner, token, stage="pilot", mutate=None):
@@ -71,9 +85,10 @@ def _request(tmp_path, *, stage="pilot", owner=OWNER_STATE, token="fake-token",
 
 
 def test_owner_state_unauthorized_refuses_even_with_token_and_marker(tmp_path):
-    marker = _marker(tmp_path, OWNER_STATE, "fake-token")
+    owner = _unauthorized()
+    marker = _marker(tmp_path, owner, "fake-token")
     with pytest.raises(ExecutionRefused, match="owner state"):
-        ExecutionGate.validate(_request(tmp_path, marker=marker))
+        ExecutionGate.validate(_request(tmp_path, owner=owner, marker=marker))
 
 
 def test_wrong_contract_fingerprint_refused(tmp_path):
@@ -85,10 +100,11 @@ def test_wrong_contract_fingerprint_refused(tmp_path):
 
 
 def test_release_token_or_marker_alone_cannot_bypass_owner(tmp_path):
-    marker = _marker(tmp_path, OWNER_STATE, "fake-token")
+    owner = _unauthorized()
+    marker = _marker(tmp_path, owner, "fake-token")
     for token, mark in (("fake-token", None), (None, marker), ("fake-token", marker)):
         with pytest.raises(ExecutionRefused):
-            ExecutionGate.validate(_request(tmp_path, token=token, marker=mark))
+            ExecutionGate.validate(_request(tmp_path, owner=owner, token=token, marker=mark))
 
 
 def test_valid_synthetic_pilot_authorization_passes_single_gate(tmp_path):
@@ -109,12 +125,14 @@ def test_pilot_authorization_and_completion_cannot_unlock_full(tmp_path):
                                         marker=marker, matrix=_matrix("full")))
 
 
-def test_full_requires_separate_owner_authorization(tmp_path):
+def test_full_remains_refused_while_full_authorization_is_false(tmp_path):
     owner = _authorized("full")
+    owner["full_execution_authorized"] = False
     marker = _marker(tmp_path, owner, "full-token", stage="full")
-    assert ExecutionGate.validate(_request(tmp_path, stage="full", owner=owner,
-                                           token="full-token", marker=marker,
-                                           matrix=_matrix("full")))["stage"] == "full"
+    with pytest.raises(ExecutionRefused, match="FULL execution authorization is false"):
+        ExecutionGate.validate(_request(tmp_path, stage="full", owner=owner,
+                                        token="full-token", marker=marker,
+                                        matrix=_matrix("full")))
 
 
 def test_contract_arms_are_imported_not_duplicated():

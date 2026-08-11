@@ -22,13 +22,14 @@ def test_status_is_frozen_and_not_started():
     assert er.freeze()["model_calls_performed"] == 0
 
 
-def test_owner_state_records_the_adjudication_exactly():
-    """The owner accepted the power finding and declined every remedy. This is
-    the recorded state; nothing may proceed from it without authorization."""
+def test_owner_state_records_pilot_only_authorization_exactly():
+    """The later governance commit authorizes only revision-002 PILOT."""
     s = er.OWNER_STATE
-    assert s["status"] == "FROZEN_NOT_STARTED"
-    assert s["execution_authorized"] is False
-    assert s["additional_provider_calls_authorized"] is False
+    assert s["status"] == "PILOT_AUTHORIZED"
+    assert s["execution_authorized"] is True
+    assert s["additional_provider_calls_authorized"] is True
+    assert s["authorized_stage"] == "pilot"
+    assert s["full_execution_authorized"] is False
     assert s["power_issue"] == "OWNER_ACKNOWLEDGED_UNRESOLVED"
     assert s["original_10pp_threshold_preserved"] is True
     assert s["provider_calls_to_date"]["scored"] == 0

@@ -15,6 +15,7 @@ The tests fall into three groups:
 
 import inspect
 import json
+from pathlib import Path
 
 import pytest
 
@@ -373,16 +374,18 @@ def test_blocker_one_is_recorded_per_case_rather_than_cleaned(inputs):
         "mandatory_handling"]
 
 
-def test_owner_execution_remains_disabled():
-    doc = xc.executable_contract()
-    assert doc["status"].startswith("FROZEN_NOT_STARTED")
-    assert doc["owner_state"]["execution_authorized"] is False
-    assert doc["owner_state"]["additional_provider_calls_authorized"] is False
-    assert doc["owner_state"]["power_issue"] == "OWNER_ACKNOWLEDGED_UNRESOLVED"
-    assert doc["owner_state"]["original_10pp_threshold_preserved"] is True
+def test_predecessor_executable_artifact_records_its_freeze_time_state():
+    artifact = json.loads(Path(xc.EXECUTABLE_ARTIFACT).read_text())
+    assert artifact["status"].startswith("FROZEN_NOT_STARTED")
+    assert artifact["owner_state"]["execution_authorized"] is False
+    assert artifact["owner_state"]["additional_provider_calls_authorized"] is False
+    assert artifact["owner_state"]["power_issue"] == "OWNER_ACKNOWLEDGED_UNRESOLVED"
+    assert artifact["owner_state"]["original_10pp_threshold_preserved"] is True
     assert xc.pilot_matrix_document()["execution_authorized"] is False
 
 
-def test_completing_the_contract_did_not_authorize_anything():
+def test_later_owner_state_authorizes_pilot_but_not_full():
     assert er.OWNER_STATE["adjudication_is_not_authorization"]
-    assert er.OWNER_STATE["execution_authorized"] is False
+    assert er.OWNER_STATE["execution_authorized"] is True
+    assert er.OWNER_STATE["authorized_stage"] == "pilot"
+    assert er.OWNER_STATE["full_execution_authorized"] is False

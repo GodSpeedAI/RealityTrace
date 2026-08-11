@@ -214,8 +214,9 @@ def test_runner_validates_new_executable_fingerprint_and_remains_forbidden():
     report = inspect_matrix("pilot")
     assert report["design_fingerprint"] == EXPECTED_DESIGN_FINGERPRINT
     assert report["executable_contract_fingerprint"] == EXPECTED_EXECUTABLE_FINGERPRINT
-    assert OWNER_STATE["execution_authorized"] is False
-    assert OWNER_STATE["additional_provider_calls_authorized"] is False
+    assert OWNER_STATE["execution_authorized"] is True
+    assert OWNER_STATE["authorized_stage"] == "pilot"
+    assert OWNER_STATE["full_execution_authorized"] is False
 
 
 def test_revision_modules_have_no_network_or_provider_transport_import():
