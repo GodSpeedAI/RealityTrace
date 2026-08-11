@@ -1,7 +1,7 @@
 {
   "case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
   "design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
-  "executable_contract_fingerprint": "2f377dd9fc18ec4516bd07d0fe3cf5d069bd4a54a6ec3431d309773b5e2183c2",
+  "executable_contract_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
   "execution_authorization_unchanged": true,
   "owner_authorized_changes": {
     "BLOCKER-01": "marker-neutral semantic projection before either renderer",
@@ -9,7 +9,7 @@
     "BLOCKER-03": "complete feasibility enumeration and deterministic affordable selection at max_payment=7",
     "BLOCKER-04": "paired evidence-policy seed excludes arm and rendering"
   },
-  "pilot_matrix_sha256": "70eea8a18d86b9cc6304f929cd583a1d094b6ef78427209f8874ba4e997a32bb",
+  "pilot_matrix_sha256": "effd44ec461b8624e4c498b80f40884f1af0d30296b9062bda3a1f090d85a9e3",
   "power_state_unchanged": true,
   "revision_id": "evidence-revision-001-revision-002",
   "schema": "evidence-revision-lineage-v2",

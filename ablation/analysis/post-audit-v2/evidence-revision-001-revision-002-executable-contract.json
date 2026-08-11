@@ -13,7 +13,7 @@
     "R3": "FULL",
     "R4": "FULL"
   },
-  "executable_contract_fingerprint": "2f377dd9fc18ec4516bd07d0fe3cf5d069bd4a54a6ec3431d309773b5e2183c2",
+  "executable_contract_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
   "executable_version": "executable-contract-v2",
   "execution_authorized": false,
   "experiment_id": "evidence-revision-001",
@@ -23,13 +23,12 @@
   "masked_k_feasibility_sha256": "f185375606e91314aa2bcea443552e49fb373c0456d2a464e83229cd4c6c7e01",
   "masked_k_leakage_sha256": "cf052b0e691bc65bdb9f889e0a3b69cfdbcfe958440a00cc6f806e8dcd5f9e87",
   "model_calls_performed": 0,
-  "pilot_matrix_sha256": "70eea8a18d86b9cc6304f929cd583a1d094b6ef78427209f8874ba4e997a32bb",
+  "pilot_matrix_sha256": "effd44ec461b8624e4c498b80f40884f1af0d30296b9062bda3a1f090d85a9e3",
   "pilot_selection": {
     "cases": [
       "cep-07",
       "df-11",
       "ag-04",
-      "cep-14",
       "sr-10",
       "df-06",
       "cep-05"

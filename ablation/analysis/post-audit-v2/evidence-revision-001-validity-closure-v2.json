@@ -23,7 +23,7 @@
     "status": "CLOSED"
   },
   "design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
-  "executable_contract_fingerprint": "2f377dd9fc18ec4516bd07d0fe3cf5d069bd4a54a6ec3431d309773b5e2183c2",
+  "executable_contract_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
   "execution_authorized": false,
   "model_calls_performed": 0,
   "pilot": {
@@ -31,13 +31,12 @@
       "cep-07",
       "df-11",
       "ag-04",
-      "cep-14",
       "sr-10",
       "df-06",
       "cep-05"
     ],
     "repetitions": 2,
-    "total_units": 70
+    "total_units": 60
   },
   "primary_population_count": 43,
   "provider_calls_performed": 0,

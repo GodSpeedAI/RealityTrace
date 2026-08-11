@@ -23,8 +23,9 @@ from .executable_contract import (_probe_observations, _sealed_hidden_meta,
                                   _sealed_keys, primary_population)
 from .ids import unit_id
 from .legibility import render_legible, render_raw
-from .marker_neutralization import (MARKER_CLASS, NEUTRALIZATION_VERSION,
-                                    REPLACEMENT, assert_marker_free,
+from .marker_neutralization import (MARKER_CLASS, MARKER_RE,
+                                    NEUTRALIZATION_VERSION, REPLACEMENT,
+                                    assert_marker_free,
                                     canonical_sha256, neutralize_payload)
 from .replication import COSTS, PROBES
 
@@ -292,23 +293,24 @@ def pair_equality_report(observations: dict | None = None,
     return out
 
 
-def _pilot_axes(case_id: str, inputs: dict, source_obs: dict) -> dict:
+def _pilot_axes(case_id: str, inputs: dict, revised_obs: dict) -> dict:
+    """pilot-selection-v1 axes evaluated on the revised public model view."""
     row = inputs["cases"][case_id]["public_metadata"]
-    cov = inputs["cases"][case_id]["non_model_visible_covariates"]
-    source_probe_marker = any("test_corpus_scenario_" in _canonical(v)
-                              for v in source_obs[case_id].values())
+    initial_marker = bool(MARKER_RE.search(inputs["cases"][case_id]["initial_evidence"]))
+    delivered_marker = any(MARKER_RE.search(_canonical(v))
+                           for v in revised_obs[case_id].values())
     return {"repo": row["repo"], "stdin_format": row["stdin_format"],
             "verifier_exit": row["verifier_exit"],
-            "source_initial_marker": cov["source_marker_present"],
-            "source_probe_marker": source_probe_marker,
+            "initial_context_marker": initial_marker,
+            "delivered_evidence_marker": delivered_marker,
             "masked_k_delivery_affordable": True}
 
 
 def pilot_cases(inputs: dict | None = None) -> tuple[str, ...]:
     inputs = inputs or build_case_inputs_v2()[0]
-    source_obs = _probe_observations()
+    revised_obs = neutralized_observations()[0]
     cases = PRIMARY_CASES
-    axes = {c: _pilot_axes(c, inputs, source_obs) for c in cases}
+    axes = {c: _pilot_axes(c, inputs, revised_obs) for c in cases}
     required = {a: {v[a] for v in axes.values()} for a in next(iter(axes.values()))}
     order = sorted(cases, key=lambda c: _sha(
         f"{EXPERIMENT_ID}|pilot-selection-v1|{c}"))
