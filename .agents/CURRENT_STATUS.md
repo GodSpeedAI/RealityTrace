@@ -1,29 +1,43 @@
 # Current status
 
 ## Objective
-Bind the already-authorized revision-002 PILOT release to the exact reviewed payment-bearing runner implementation without changing science, executable declarations, or owner state.
+Offline-adjudicate the completed `evidence-revision-001` revision-002 PILOT for forensic integrity and endpoint reconstructability without provider contact, experimental execution, scientific changes, or FULL authorization.
 
-## Completed
-- Added canonical 15-file runner implementation manifest/hash.
-- Current implementation hash: `56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066`.
-- Reviewed bound-source commit: `cf9b28b84a415ef33519e0866536ebd7787d567d`.
-- Phase A requires marker implementation hash and reviewed commit before client construction.
-- Gate reconstructs reviewed commit bytes and compares them with current worktree bytes.
-- Run namespace persists the implementation hash and reviewed commit.
-- Report: `.agents/reports/14-evidence-revision-runner-implementation-binding.{md,json}`.
+## Disposition
+**ANALYSIS_READY**. All required primary inputs, requested contrasts, representation pairs, and gate-blind/governed outcomes reconstruct from the frozen local artifacts without imputation or provider contact.
 
-## Identity
-- Design unchanged: `3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9`.
-- Executable contract unchanged: `12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e`.
-- Implementation identity is separate: `56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066`.
+## Integrity
+- 60/60 unique frozen UIDs and `RESULT_COMMITTED` results verified.
+- 198/198 unique provider-call identities, raw files, sidecars, call-ledger entries, execution bindings, and provenance records verified.
+- All result-ledger and checkpoint hashes match current result bytes.
+- Canonical matrix/case input, design, executable, runner implementation, and reviewed-commit bindings match.
+- All R1/R2 and R3/R4 evidence memberships, evidence-set hashes, and semantic hashes match by case+rep.
+- No score artifacts exist; the completed pilot stopped at `RESULT_COMMITTED`.
+- Input run manifest SHA-256: `ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13`.
 
-## Verification
-- Full offline suite: 366 collected/passed; 0 failed; 0 skipped.
-- Model calls: 0. Provider calls: 0. Pilot units run: 0.
-- FULL remains unauthorized.
+## Primary descriptive reconstruction
+- R0: 1/7 (14.3%)
+- R1: 3/8 (37.5%)
+- R2: 3/8 (37.5%)
+- R3: 4/8 (50.0%)
+- R4: 7/9 (77.8%)
 
-## Owner action required
-The existing marker is stale because it predates the required implementation fields. Owner must regenerate only the marker using the existing secret token after reviewing `cf9b28b84a415ef33519e0866536ebd7787d567d`. Owner state and token do not change.
+Requested contrasts: C1 +23.2 pp; C2 0.0 pp; C3 +12.5 pp; C4 +27.8 pp. Protocol-pilot description only; no confirmation, threshold movement, or authorization consequence.
+
+## Verification and calls
+- Deterministic analysis rerun produced byte-identical artifacts and did not change the input run manifest.
+- Complete offline suite: 366 passed, 0 failed, 0 skipped.
+- Provider/model calls by analysis: 0/0.
+- Experimental units run by analysis: 0.
+- FULL authorized/executed: false/false.
+
+## Artifacts and commit
+- `ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.md`
+- `ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.json`
+- `ablation/analysis/post-audit-v2/pilot-unit-reconstruction-revision-002.jsonl`
+- `ablation/analysis/post-audit-v2/pilot-adjudication-revision-002-hashes.json`
+- `ablation/analysis/post-audit-v2/pilot_adjudication_revision_002.py`
+- Analysis commit: `a7811dd3d045a281fb0724b73a245c690b287be9`.
 
 ## Worktree
-Unrelated pre-existing untracked outputs under `ablation/runs/` remain untouched.
+The completed run and unrelated historical untracked run directories remain untouched.
