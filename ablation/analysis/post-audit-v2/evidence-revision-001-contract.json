@@ -307,7 +307,7 @@
       "question": "how much of the remaining gap is attributable to evidence coverage rather than to revision?"
     }
   },
-  "contract_fingerprint": "08d8dcc8f008b59286ede84f6376b8c16258d5891e0b15bc02f0cdf384e93dd7",
+  "contract_fingerprint": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
   "exclusions": {
     "c096c6b111e05554": {
       "disposition": "EXCLUDED_FROM_CORRECTED_CAUSAL_ANALYSIS",
@@ -316,6 +316,13 @@
     }
   },
   "experiment_id": "evidence-revision-001",
+  "fingerprint_provenance": {
+    "design_fingerprint": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
+    "freeze_time_status_string": "FROZEN \u2014 AWAITING EXECUTION AUTHORIZATION",
+    "published_at_freeze": "08d8dcc8f008b59286ede84f6376b8c16258d5891e0b15bc02f0cdf384e93dd7",
+    "recomputed_under_original_definition": "08d8dcc8f008b59286ede84f6376b8c16258d5891e0b15bc02f0cdf384e93dd7",
+    "why_they_differ": "definition change only: `status` and `owner_state` are governance fields and are excluded from the design identity. No design field changed."
+  },
   "hypothesis": "When a controller holds evidence that contradicts its current diagnostic claim, it revises the claim. The historical chain observed 0/63 revisions and never tested this directly, because the acquisition channel, the action identity, the state continuity and the termination path all differed between the arms that were compared.",
   "hypothesis_id": "H-EVIDENCE-REVISION",
   "instrument_version": "instrument-v2",
@@ -339,6 +346,24 @@
     "production-controller performance",
     "payment optimality"
   ],
+  "owner_state": {
+    "additional_provider_calls_authorized": false,
+    "adjudication_is_not_authorization": "discussion or adjudication of the power question does not constitute permission to execute",
+    "execution_authorized": false,
+    "original_10pp_threshold_preserved": true,
+    "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
+    "provider_calls_to_date": {
+      "non_scored_preflight": 2,
+      "note": "the two non-scored preflight calls were declared sufficient; no further provider contact of any kind is authorized \u2014 not pilot, preflight, smoke, scored, unscored validation, or capability checks",
+      "scored": 0
+    },
+    "remedies_declined_by_owner": [
+      "raising or lowering the prespecified threshold",
+      "enlarging the corpus",
+      "running the experiment as an estimation exercise"
+    ],
+    "status": "FROZEN_NOT_STARTED"
+  },
   "pilot": {
     "gate": "owner \u00a714: if the protocol passes the pilot, STOP before full execution and return the frozen pilot assurance summary",
     "integrity_suite_must_pass": "gate_negative_control, model_uniformity, pilot_full_separation, oracle_isolation, raw_before_score, parse_failure_behaviour"
@@ -432,7 +457,7 @@
     "repetition_handling": "repetitions aggregated within case before pairing (majority over reps; ties resolved as incorrect); (case, rep) pairing may be reported alongside but never alone \u2014 pseudo-replication, audit A-05",
     "sided": "two-sided"
   },
-  "status": "FROZEN \u2014 AWAITING EXECUTION AUTHORIZATION",
+  "status": "FROZEN_NOT_STARTED \u2014 EXECUTION NOT AUTHORIZED",
   "stop_condition": {
     "clause": "owner \u00a712: 'If you believe 10pp is statistically or scientifically inappropriate after power analysis on the final eligible case count, STOP BEFORE LIVE EXECUTION and return the power/effect-size argument for owner adjudication.'",
     "finding": "10pp is underpowered on this population. The design detects 10pp with roughly one chance in four at best, and closer to one in eight on the cases actually eligible to improve.",

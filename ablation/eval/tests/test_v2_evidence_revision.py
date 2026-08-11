@@ -17,8 +17,32 @@ from ..v2.controller import arm_difference_report
 # ── the contract is frozen and self-describing ───────────────────────────────
 
 def test_status_is_frozen_and_not_started():
-    assert "FROZEN" in er.STATUS and "AWAITING EXECUTION" in er.STATUS
+    assert er.STATUS.startswith("FROZEN_NOT_STARTED")
+    assert "NOT AUTHORIZED" in er.STATUS
     assert er.freeze()["model_calls_performed"] == 0
+
+
+def test_owner_state_records_the_adjudication_exactly():
+    """The owner accepted the power finding and declined every remedy. This is
+    the recorded state; nothing may proceed from it without authorization."""
+    s = er.OWNER_STATE
+    assert s["status"] == "FROZEN_NOT_STARTED"
+    assert s["execution_authorized"] is False
+    assert s["additional_provider_calls_authorized"] is False
+    assert s["power_issue"] == "OWNER_ACKNOWLEDGED_UNRESOLVED"
+    assert s["original_10pp_threshold_preserved"] is True
+    assert s["provider_calls_to_date"]["scored"] == 0
+    assert s["provider_calls_to_date"]["non_scored_preflight"] == 2
+    assert er.contract()["owner_state"] == s
+
+
+def test_the_declined_remedies_are_recorded_as_declined():
+    declined = er.OWNER_STATE["remedies_declined_by_owner"]
+    assert any("threshold" in d for d in declined)
+    assert any("corpus" in d for d in declined)
+    assert any("estimation exercise" in d for d in declined)
+    # and the threshold the owner preserved is still the one in the plan
+    assert er.STATISTICAL_PLAN["prespecified_effect_threshold_pp"] == 10
 
 
 def test_module_imports_no_network_transport():
@@ -39,6 +63,24 @@ def test_fingerprint_does_not_depend_on_derived_analysis(monkeypatch):
     """Power is computed FROM the contract; it is not an input to it."""
     before = er.contract_fingerprint()
     monkeypatch.setattr(er, "power_analysis", lambda alpha=0.05: {"x": 1})
+    assert er.contract_fingerprint() == before
+
+
+def test_the_design_has_not_moved_since_the_freeze():
+    """The fingerprint's DEFINITION changed when the authorization decision was
+    recorded. The design did not. Recomputing under the original definition
+    must still yield the value published at freeze time."""
+    assert (er.freeze_time_fingerprint()
+            == er.FINGERPRINT_PROVENANCE["published_at_freeze"])
+    assert (er.contract_fingerprint()
+            == er.FINGERPRINT_PROVENANCE["design_fingerprint"])
+
+
+def test_fingerprint_does_not_move_when_authorization_state_changes(monkeypatch):
+    """The fingerprint identifies the DESIGN. Granting or withholding execution
+    is a governance act and must not look like a change to the science."""
+    before = er.contract_fingerprint()
+    monkeypatch.setitem(er.OWNER_STATE, "execution_authorized", True)
     assert er.contract_fingerprint() == before
 
 

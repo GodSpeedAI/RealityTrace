@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 """FROZEN SCIENTIFIC CONTRACT — `evidence-revision-001`.
 
-STATUS: FROZEN — AWAITING EXECUTION AUTHORIZATION.
+STATUS: FROZEN_NOT_STARTED. EXECUTION IS NOT AUTHORIZED, and no further
+provider call of any kind is authorized — see `OWNER_STATE`.
+
 This module declares. It does not execute. There is no provider client here and
 no `__main__` path that contacts one; `freeze()` emits the contract document and
 `power_analysis()` computes the design's sensitivity from first principles.
+
+The power question is OWNER_ACKNOWLEDGED_UNRESOLVED: the owner accepted that
+10pp is underpowered and declined every remedy, so the 10pp threshold stands
+unchanged and the design and its power analysis are held for later
+adjudication.
 
 Everything below is fixed by owner decision at freeze time. Nothing here may be
 changed after the pilot — in particular no threshold, no population, no
@@ -46,7 +53,7 @@ from eval.v2.semantics import METRIC_CONSTRUCT                    # noqa: E402
 from eval.v2.sufficiency import LEGACY_CONTRACT                   # noqa: E402
 
 EXPERIMENT_ID = "evidence-revision-001"
-STATUS = "FROZEN — AWAITING EXECUTION AUTHORIZATION"
+STATUS = "FROZEN_NOT_STARTED — EXECUTION NOT AUTHORIZED"
 HYPOTHESIS_ID = "H-EVIDENCE-REVISION"
 
 HYPOTHESIS = (
@@ -411,6 +418,37 @@ def power_analysis(alpha: float = 0.05) -> dict:
     }
 
 
+#: Owner adjudication of the §12 STOP, recorded verbatim in effect.
+#:
+#: The owner accepted the finding that 10pp is underpowered, and declined every
+#: remedy: the threshold stays, the corpus is not enlarged, and the experiment
+#: is not to be run as an estimation exercise yet. The power question is
+#: therefore ACKNOWLEDGED AND UNRESOLVED, not closed. The design and the power
+#: analysis remain available for later adjudication.
+OWNER_STATE = {
+    "status": "FROZEN_NOT_STARTED",
+    "execution_authorized": False,
+    "additional_provider_calls_authorized": False,
+    "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
+    "original_10pp_threshold_preserved": True,
+    "provider_calls_to_date": {
+        "scored": 0,
+        "non_scored_preflight": 2,
+        "note": ("the two non-scored preflight calls were declared sufficient; "
+                 "no further provider contact of any kind is authorized — not "
+                 "pilot, preflight, smoke, scored, unscored validation, or "
+                 "capability checks"),
+    },
+    "remedies_declined_by_owner": (
+        "raising or lowering the prespecified threshold",
+        "enlarging the corpus",
+        "running the experiment as an estimation exercise",
+    ),
+    "adjudication_is_not_authorization": (
+        "discussion or adjudication of the power question does not constitute "
+        "permission to execute"),
+}
+
 #: Owner §12 requires a STOP if the power analysis finds the prespecified
 #: threshold inappropriate. It does.
 STOP_CONDITION = {
@@ -502,6 +540,7 @@ def contract() -> dict:
         "statistical_plan": STATISTICAL_PLAN,
         "power_analysis": power_analysis(),
         "stop_condition": STOP_CONDITION,
+        "owner_state": OWNER_STATE,
         "preflight": PREFLIGHT,
         "pilot": PILOT,
         "sufficiency_contract": {
@@ -519,6 +558,41 @@ def contract_fingerprint() -> str:
     """Identity of the frozen contract. Any change to any frozen field moves it."""
     doc = contract()
     doc.pop("power_analysis", None)      # derived, not a frozen input
+    # Governance state, not design inputs. An authorization decision must not
+    # look like a change to the scientific design — the fingerprint identifies
+    # the DESIGN, and the design has not moved since the freeze. Both fields
+    # remain in the emitted document; they are simply not part of its identity.
+    doc.pop("owner_state", None)
+    doc.pop("status", None)
+    return hashlib.sha256(
+        json.dumps(doc, sort_keys=True, default=str).encode()).hexdigest()
+
+
+#: The fingerprint's DEFINITION changed once, when the owner's authorization
+#: decision was recorded: `status` and `owner_state` were removed from it so a
+#: governance act cannot masquerade as a change to the science. The design
+#: itself did not move, and that is checkable rather than asserted — recomputing
+#: the contract under the original definition still yields the freeze-time
+#: value. `test_the_design_has_not_moved_since_the_freeze` does exactly that.
+FINGERPRINT_PROVENANCE = {
+    "design_fingerprint": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
+    "published_at_freeze": "08d8dcc8f008b59286ede84f6376b8c16258d5891e0b15bc02f0cdf384e93dd7",
+    "why_they_differ": ("definition change only: `status` and `owner_state` are "
+                        "governance fields and are excluded from the design "
+                        "identity. No design field changed."),
+    "freeze_time_status_string": "FROZEN — AWAITING EXECUTION AUTHORIZATION",
+}
+
+
+def freeze_time_fingerprint() -> str:
+    """Recompute the contract under the ORIGINAL fingerprint definition.
+
+    Exists so the claim 'the design has not moved' is verified, not repeated.
+    """
+    doc = contract()
+    doc.pop("power_analysis", None)
+    doc.pop("owner_state", None)
+    doc["status"] = FINGERPRINT_PROVENANCE["freeze_time_status_string"]
     return hashlib.sha256(
         json.dumps(doc, sort_keys=True, default=str).encode()).hexdigest()
 
@@ -526,6 +600,9 @@ def contract_fingerprint() -> str:
 def freeze() -> dict:
     doc = contract()
     doc["contract_fingerprint"] = contract_fingerprint()
+    doc["fingerprint_provenance"] = dict(
+        FINGERPRINT_PROVENANCE,
+        recomputed_under_original_definition=freeze_time_fingerprint())
     doc["model_calls_performed"] = 0
     return doc
 
