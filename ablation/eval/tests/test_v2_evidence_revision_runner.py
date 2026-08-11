@@ -14,7 +14,9 @@ from ..v2.controller import DiagnosticController
 from ..v2.decision import ParseStatus
 from ..v2.evidence_revision import ARMS, OWNER_STATE, contract_fingerprint
 from ..v2.evidence_revision_run import (
-    COSTS, DESCRIPTIONS, EXPECTED_FINGERPRINT, EXPERIMENT_ID, PROBES, VOCAB,
+    COSTS, DESCRIPTIONS, EXPECTED_DESIGN_FINGERPRINT,
+    EXPECTED_EXECUTABLE_FINGERPRINT, EXPECTED_FINGERPRINT, EXPERIMENT_ID,
+    PILOT_NAMESPACE, PROBES, REVISED_CASE_INPUTS, VOCAB,
     CheckpointStore, DeterministicFakeClient, DurableReplayClient, ExecutionGate,
     ExecutionRefused, FrozenMatrix, GateRequest, InjectedInterruption,
     ResumeViolation, RunNamespace, _fixture, dry_run, eligible_cases,
@@ -31,24 +33,29 @@ from ..v2.sufficiency import LEGACY_CONTRACT
 def _authorized(stage="pilot"):
     return dict(OWNER_STATE, status=("PILOT_AUTHORIZED" if stage == "pilot" else "FULL_AUTHORIZED"),
                 execution_authorized=True, additional_provider_calls_authorized=True,
-                authorized_stage=stage,
-                **{f"{stage}_matrix_hash": "matrix-hash"})
+                authorized_stage=stage)
 
 
 def _matrix(stage="pilot"):
-    return FrozenMatrix(stage, ("cep-01",), tuple(ARMS), 1,
-                        EXPECTED_FINGERPRINT, "matrix-hash")
+    case_hash = json.loads(REVISED_CASE_INPUTS.read_text())["case_inputs_sha256"]
+    return FrozenMatrix(stage, f"{stage}:synthetic", ("cep-01",), tuple(ARMS), 1,
+                        EXPECTED_DESIGN_FINGERPRINT,
+                        EXPECTED_EXECUTABLE_FINGERPRINT, case_hash, "matrix-hash")
 
 
 def _marker(tmp_path, owner, token, stage="pilot", mutate=None):
     hashes = frozen_hashes()
+    matrix = _matrix(stage)
     doc = {"experiment_id": EXPERIMENT_ID, "stage": stage,
-           "contract_fingerprint": EXPECTED_FINGERPRINT,
+           "design_fingerprint": EXPECTED_DESIGN_FINGERPRINT,
+           "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
            "authorization_state": "PILOT_AUTHORIZED" if stage == "pilot" else "FULL_AUTHORIZED",
            "owner_state_digest": owner_state_digest(owner),
            "release_token_sha256": hashlib.sha256(token.encode()).hexdigest(),
            "corpus_hash": hashes["corpus_hash"],
-           "evidence_action_hash": hashes["evidence_action_hash"]}
+           "evidence_action_hash": hashes["evidence_action_hash"],
+           "matrix_sha256": matrix.matrix_hash,
+           "case_inputs_sha256": matrix.case_inputs_hash}
     if mutate:
         doc.update(mutate)
     path = tmp_path / "release.json"
@@ -118,21 +125,22 @@ def test_contract_arms_are_imported_not_duplicated():
     assert '"R1": ConditionSpec' not in text
 
 
-def test_matrix_inspection_is_deterministic_and_exposes_contract_gap():
+def test_matrix_inspection_is_deterministic_and_contract_complete():
     a, b = inspect_matrix("pilot"), inspect_matrix("pilot")
     assert a == b
-    assert a["contract_fingerprint"] == EXPECTED_FINGERPRINT
-    assert len(a["cases"]) == 43 == len(eligible_cases())
+    assert a["design_fingerprint"] == EXPECTED_DESIGN_FINGERPRINT
+    assert a["executable_contract_fingerprint"] == EXPECTED_EXECUTABLE_FINGERPRINT
+    assert a["cases"] == ["cep-07", "df-11", "ag-04", "cep-14", "sr-10", "df-06", "cep-05"]
     assert a["arms"] == list(ARMS)
-    assert a["repetitions"] is None and a["total_units"] is None
-    assert a["uids"] == [] and a["executable"] is False
-    assert "FROZEN_CONTRACT_GAP" in a["blocker"]
+    assert a["repetitions"] == 2 and a["total_units"] == 70
+    assert len(a["uids"]) == 70 and a["executable"] is True
+    assert a["blocker"] is None
 
 
 def test_arbitrary_matrix_file_cannot_become_frozen_by_existence(tmp_path):
     p = tmp_path / "matrix.json"
     p.write_text(json.dumps({"schema": "evidence-revision-matrix-v1"}))
-    with pytest.raises(ExecutionRefused, match="does not freeze"):
+    with pytest.raises(ExecutionRefused, match="canonical hash mismatch"):
         load_frozen_matrix(p, "pilot", OWNER_STATE)
 
 
@@ -265,7 +273,7 @@ def test_full_governance_and_payment_are_explicit_in_result(tmp_path):
 
 def test_full_membership_is_invariant_across_truth_independent_units(tmp_path):
     out = []
-    for i, case in enumerate(("case-a", "case-b")):
+    for i, case in enumerate(("cep-07", "df-11")):
         result, _ = run_offline_unit(tmp_path / str(i), DeterministicFakeClient(),
                                      arm="R3", case_id=case)
         first_delivery = next(r.delivery for r in result.rounds if r.delivery)
@@ -404,8 +412,10 @@ def test_governed_harness_delivery_never_overdraws_frozen_budget(tmp_path):
                          "proposed_settlement": "verifier"})
     result, _ = run_offline_unit(tmp_path, DeterministicFakeClient([settle] * 6))
     assert result.payment_used <= ARMS["R1"].max_payment
-    assert any(r.gate_result == "HARNESS_DELIVERY_UNAFFORDABLE"
-               for r in result.rounds)
+    assert not any(r.gate_result == "HARNESS_DELIVERY_UNAFFORDABLE"
+                   for r in result.rounds)
+    delivered = [r for r in result.rounds if r.delivery]
+    assert len(delivered) == 1 and len(delivered[0].handles_delivered) == 3
 
 def test_contract_module_remains_transport_free():
     source = (Path(__file__).parents[1] / "v2" / "evidence_revision.py").read_text()
