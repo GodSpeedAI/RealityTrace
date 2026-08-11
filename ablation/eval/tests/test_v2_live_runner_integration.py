@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -14,8 +15,10 @@ from ..v2.evidence_revision import ARMS, OWNER_STATE
 from ..v2.evidence_revision_run import (
     EXPECTED_DESIGN_FINGERPRINT, EXPECTED_EXECUTABLE_FINGERPRINT,
     DeterministicFakeClient, ExecutionGate, ExecutionRefused, GateRequest,
-    REVISED_PILOT_MATRIX, frozen_hashes, load_frozen_matrix,
-    owner_state_digest)
+    REVISED_PILOT_MATRIX, RUNNER_IMPLEMENTATION_FILES, frozen_hashes,
+    latest_runner_implementation_commit, load_frozen_matrix,
+    owner_state_digest, runner_implementation_sha256,
+    runner_implementation_sha256_at_commit)
 
 TOKEN = "offline-test-release-token"
 
@@ -37,6 +40,8 @@ def _marker(tmp_path: Path, *, mutate=None) -> Path:
         "evidence_action_hash": hashes["evidence_action_hash"],
         "matrix_sha256": matrix.matrix_hash,
         "case_inputs_sha256": matrix.case_inputs_hash,
+        "runner_implementation_sha256": runner_implementation_sha256(),
+        "reviewed_runner_commit": latest_runner_implementation_commit(),
     }
     if mutate: doc.update(mutate)
     path = tmp_path / "release.json"
@@ -180,3 +185,55 @@ def test_runner_repair_does_not_move_frozen_science_or_executable_identity():
     assert EXPECTED_EXECUTABLE_FINGERPRINT == \
         "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e"
     assert tuple(ARMS) == ("R0", "R1", "R2", "R3", "R4")
+
+
+def test_exact_reviewed_runner_implementation_binding_passes(tmp_path):
+    marker = _marker(tmp_path)
+    static = ExecutionGate.validate_static(_request(tmp_path, marker))
+    expected_commit = "cf9b28b84a415ef33519e0866536ebd7787d567d"
+    assert static["runner_implementation_sha256"] == runner_implementation_sha256()
+    assert static["reviewed_runner_commit"] == expected_commit
+    assert latest_runner_implementation_commit() == expected_commit
+    assert runner_implementation_sha256_at_commit(expected_commit) == \
+        runner_implementation_sha256()
+
+
+def test_bound_source_byte_changes_implementation_identity(tmp_path):
+    root = tmp_path / "repo"
+    for relative in RUNNER_IMPLEMENTATION_FILES:
+        source = runner.REPO_ROOT / relative
+        target = root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+    baseline = runner_implementation_sha256(root)
+    target = root / "ablation/eval/v2/provider.py"
+    target.write_bytes(target.read_bytes() + b"# mutation\n")
+    assert runner_implementation_sha256(root) != baseline
+    assert baseline == runner_implementation_sha256()
+
+
+def test_implementation_mismatch_refuses_before_client_construction(
+        tmp_path, monkeypatch):
+    marker = _marker(tmp_path)
+    constructed = []
+    monkeypatch.setattr(runner, "runner_implementation_sha256", lambda: "0" * 64)
+    monkeypatch.setattr(runner, "_live_client",
+                        lambda **kw: constructed.append(kw) or DeterministicFakeClient())
+    monkeypatch.setenv("SXR_ABLATION_RELEASE", TOKEN)
+    monkeypatch.setenv("SXR_ABLATION_RELEASE_MARKER", str(marker))
+    args = argparse.Namespace(stage="pilot", matrix=str(REVISED_PILOT_MATRIX),
+                              run_id="implementation-mismatch",
+                              output=str(tmp_path / "output"))
+    with pytest.raises(ExecutionRefused, match="runner_implementation_sha256"):
+        runner._cmd_run(args)
+    assert constructed == []
+    assert not (tmp_path / "output").exists()
+
+
+def test_implementation_identity_is_separate_from_scientific_identities():
+    assert runner_implementation_sha256() == \
+        "56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066"
+    assert EXPECTED_DESIGN_FINGERPRINT == \
+        "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9"
+    assert EXPECTED_EXECUTABLE_FINGERPRINT == \
+        "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e"

@@ -21,8 +21,9 @@ from ..v2.evidence_revision_run import (
     CheckpointStore, DeterministicFakeClient, DurableReplayClient, ExecutionGate,
     ExecutionRefused, FrozenMatrix, GateRequest, InjectedInterruption,
     ResumeViolation, RunNamespace, _fixture, dry_run, eligible_cases,
-    frozen_hashes, inspect_matrix, load_frozen_matrix, owner_state_digest,
-    run_offline_unit, score_committed_result)
+    frozen_hashes, inspect_matrix, latest_runner_implementation_commit,
+    load_frozen_matrix, owner_state_digest, run_offline_unit,
+    runner_implementation_sha256, score_committed_result)
 from ..v2.execution import OutputClass
 from ..v2.ids import unit_id
 from ..v2.ledger import CommitViolation
@@ -69,7 +70,9 @@ def _marker(tmp_path, owner, token, stage="pilot", mutate=None):
            "corpus_hash": hashes["corpus_hash"],
            "evidence_action_hash": hashes["evidence_action_hash"],
            "matrix_sha256": matrix.matrix_hash,
-           "case_inputs_sha256": matrix.case_inputs_hash}
+           "case_inputs_sha256": matrix.case_inputs_hash,
+           "runner_implementation_sha256": runner_implementation_sha256(),
+           "reviewed_runner_commit": latest_runner_implementation_commit()}
     if mutate:
         doc.update(mutate)
     path = tmp_path / "release.json"
