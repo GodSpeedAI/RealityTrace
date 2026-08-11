@@ -1,0 +1,132 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 4,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1586,
+      "latency_ms": 21144.5,
+      "prompt_tokens": 22091,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Exit code 101 is characteristic of a Rust compilation or runtime error, but it is unclear whether the err"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 642,
+      "latency_ms": 10547.0,
+      "prompt_tokens": 607,
+      "response_preview": "{\n  \"candidate_loci\": [\"verification_plan\", \"implementation\"],\n  \"unresolved_distinction\": \"Exit code 101 could still come from a bad Cargo test target binding (e.g., --test flow_tests does not resolv"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 249,
+      "latency_ms": 3685.7,
+      "prompt_tokens": 534,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The test target exists and the verifier command is known, so the exit code 101 must stem from a compile or runtime defect in t"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1133,
+      "latency_ms": 15258.6,
+      "prompt_tokens": 375,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verification_plan\", \"verifier\"], \"unresolved_distinction\": \"Whether the failure originates from a defect in the implementation code at the symbol level ("
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 3020,
+      "latency_ms": 46285.2,
+      "prompt_tokens": 503,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"verifier\"], \"unresolved_distinction\": \"Whether the verifier configuration itself is wrong or the verification plan directs it at an invalid target/path or evi"
+    }
+  ],
+  "case_id": "df-01",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/flow_tests.rs"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/domainforge && cargo test --offline --message-format json -p domainforge-core --test flow_tests corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 3
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_source_symbols",
+      "round": 3,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 4
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "b1dee75589ebaa2d",
+  "unknown_premature": 0
+}

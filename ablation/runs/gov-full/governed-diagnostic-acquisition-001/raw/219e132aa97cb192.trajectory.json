@@ -1,0 +1,124 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_environment",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 3,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1413,
+      "latency_ms": 19180.6,
+      "prompt_tokens": 974,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"verifier_exit=1 indicates the verifier ran and reported failure, but with no trace content (empty F"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 864,
+      "latency_ms": 12040.5,
+      "prompt_tokens": 590,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"implementation\", \"verifier\"],\n  \"unresolved_distinction\": \"The verifier command references a built binary at target/debug/domainforge and a target .sea f"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 3942,
+      "latency_ms": 67857.0,
+      "prompt_tokens": 540,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether the empty trace and exit 1 are due to referenced binary/fixture paths not resolving in the working "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1150,
+      "latency_ms": 20002.5,
+      "prompt_tokens": 319,
+      "response_preview": "Locus: evidence_collection"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 4096,
+      "latency_ms": 73938.0,
+      "prompt_tokens": 377,
+      "response_preview": ""
+    }
+  ],
+  "case_id": "df-12",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "examples/namespaces/finance/cashflow.sea"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192valid, nonzero\u2192invalid",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "conformance_result"
+      ],
+      "verifier": "domainforge-validate",
+      "verifier_command": "cd /home/sprime01/projects/domainforge && /home/sprime01/projects/domainforge-slice0b/target/debug/domainforge validate examples/namespaces/finance/cashflow.sea"
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [
+    {
+      "locus": "evidence_collection",
+      "round": 4
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 3
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "evidence_collection"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "219e132aa97cb192",
+  "unknown_premature": 0
+}

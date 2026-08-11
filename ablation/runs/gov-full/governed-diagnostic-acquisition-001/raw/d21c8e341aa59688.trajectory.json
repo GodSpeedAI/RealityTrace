@@ -1,0 +1,107 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1557,
+      "latency_ms": 23029.9,
+      "prompt_tokens": 19597,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Whether the computed value (left=2) is wrong due to a defect in the code under test, or the expected valu"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 469,
+      "latency_ms": 9011.5,
+      "prompt_tokens": 375,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"evidence_collection\", \"verification_plan\", \"unknown\"], \"unresolved_distinction\": \"Whether the failure stems from a genuine defect in the implementation c"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 586,
+      "latency_ms": 12083.8,
+      "prompt_tokens": 512,
+      "response_preview": "{\"candidate_loci\": [\"evidence_collection\", \"verification_plan\", \"unknown\"], \"unresolved_distinction\": \"Whether the absence of referenced source symbols indicates an evidence-collection failure in the "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 4096,
+      "latency_ms": 79917.6,
+      "prompt_tokens": 565,
+      "response_preview": ""
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 3411,
+      "latency_ms": 65740.1,
+      "prompt_tokens": 272,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "sr-01",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_source_symbols",
+      "round": 1,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "d21c8e341aa59688",
+  "unknown_premature": 0
+}

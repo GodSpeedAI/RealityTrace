@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 929,
+      "latency_ms": 13195.8,
+      "prompt_tokens": 677,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"evidence_collection\", \"verifier\"], \"unresolved_distinction\": \"The verifier exited 1 (typical of test failures pointing to implementation), but the eviden"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 357,
+      "latency_ms": 6300.5,
+      "prompt_tokens": 276,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"None remaining; restricted PATH and unavailable toolchain explain the verifier exit and empty/zero evidence artifacts.\", \"settle\": \"envir"
+    }
+  ],
+  "case_id": "cep-10",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "486d4670660bb3ee",
+  "unknown_premature": 1
+}

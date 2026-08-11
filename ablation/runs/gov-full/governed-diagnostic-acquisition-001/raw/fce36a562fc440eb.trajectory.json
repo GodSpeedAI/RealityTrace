@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1571,
+      "latency_ms": 19521.2,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Whether exit code 101 reflects a verifier infrastructure error (e.g., crash, misconfiguration) or the verifie"
+    }
+  ],
+  "case_id": "sr-13",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "fce36a562fc440eb",
+  "unknown_premature": 0
+}

@@ -1,0 +1,159 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 332,
+      "latency_ms": 5381.8,
+      "prompt_tokens": 687,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"A non-zero verifier exit (101) could indicate a verifier-side crash, an implementation runtime fail"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 346,
+      "latency_ms": 6098.2,
+      "prompt_tokens": 345,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The restrictive unreadable src/lib.rs is sufficient to explain the verifier failure, so the implementation/verifier alternatives are no l"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1013,
+      "latency_ms": 16517.0,
+      "prompt_tokens": 234,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"Target binding exists, so the failure is not due to missing targets; the restrictive/unreadable source remains the best explanation.\", \"s"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 530,
+      "latency_ms": 12419.2,
+      "prompt_tokens": 227,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"Target binding exists and no symbols are referenced in the failure trace, so the failure is not attributable to missing implementation/de"
+    }
+  ],
+  "case_id": "ag-12",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "0",
+          "path": "src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        },
+        {
+          "mode": "644",
+          "path": "src/main.rs",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "644",
+          "path": "tests/fixtures/example.py",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    },
+    {
+      "locus": "environment",
+      "round": 3
+    },
+    {
+      "locus": "environment",
+      "round": 4
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_permissions",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "environment"
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "75e21115de30b12d",
+  "unknown_premature": 0
+}

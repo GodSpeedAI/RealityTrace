@@ -1,0 +1,134 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1066,
+      "latency_ms": 22350.0,
+      "prompt_tokens": 680,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine implementation/test failure or a malfunct"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 117,
+      "latency_ms": 3764.9,
+      "prompt_tokens": 339,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"Isolated rerun reproduces AssertionError at test line 21, eliminating verifier, environment, and evidence_collection as causes"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 392,
+      "latency_ms": 10096.9,
+      "prompt_tokens": 231,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"None; the test target exists and prior rerun rules out verifier, environment, and evidence_collection.\", \"settle\": \"implementation\"}\nL"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 238,
+      "latency_ms": 5868.7,
+      "prompt_tokens": 222,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"Probe returned no symbols to inspect, so it neither confirms nor refutes implementation; prior reruns ruled out verifier, environment,"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 576,
+      "latency_ms": 13022.0,
+      "prompt_tokens": 332,
+      "response_preview": "Candidates: verifier, implementation\nExcluded: implementation(no-source-symbol), environment(no-env-error), evidence_collection(sufficient-isolated-rerun), authority(not-applicable), declared_model(no"
+    }
+  ],
+  "case_id": "cep-02",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.5,
+      "exit_code": 1,
+      "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_test_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\ntests/test_import.py:21: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_import.py::test_corpus_scenario_test_assertion_bug - assert...\n1 failed in 0.16s",
+      "test": "tests/test_import.py::test_corpus_scenario_test_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    },
+    {
+      "locus": "implementation",
+      "round": 3
+    },
+    {
+      "locus": "implementation",
+      "round": 4
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 4,
+      "settlement_rejected": "implementation"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "bab9c962042e618b",
+  "unknown_premature": 1
+}

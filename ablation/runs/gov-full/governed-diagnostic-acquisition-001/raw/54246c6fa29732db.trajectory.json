@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2560,
+      "latency_ms": 45459.5,
+      "prompt_tokens": 978,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"No unresolved distinction remains: verifier_exit=101 directly indicates an abnormal verifier-process exit, and there is no re"
+    }
+  ],
+  "case_id": "sr-03",
+  "condition": "V",
+  "final_locus": "verifier",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "54246c6fa29732db",
+  "unknown_premature": 0
+}

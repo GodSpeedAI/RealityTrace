@@ -1,0 +1,97 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 593,
+      "latency_ms": 19676.7,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Whether verifier exit 1 reflects a genuine implementation/test failure or a misconfigured verification command/pl"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1038,
+      "latency_ms": 23052.2,
+      "prompt_tokens": 535,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verification_plan\"],\n  \"unresolved_distinction\": \"Whether the verifier command's target (tests/test_import.py with filter corpus_scenario) resolves to"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 113909.6,
+      "prompt_tokens": 502,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"None remaining: the referenced target exists, so the nonzero verifier exit is best attributed to the implementation"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1353,
+      "latency_ms": 36761.5,
+      "prompt_tokens": 264,
+      "response_preview": "Locus: evidence_collection"
+    }
+  ],
+  "case_id": "cep-15",
+  "condition": "V",
+  "final_locus": "evidence_collection",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "evidence_collection",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "3c26ac48b22829b4",
+  "unknown_premature": 0
+}

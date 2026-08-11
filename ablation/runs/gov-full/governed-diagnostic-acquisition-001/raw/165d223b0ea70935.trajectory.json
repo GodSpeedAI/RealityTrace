@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 513,
+      "latency_ms": 8901.9,
+      "prompt_tokens": 677,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\", \"evidence_collection\", \"environment\"], \"unresolved_distinction\": \"We only know verifier_exit=1 with an all-zero semantic vector (no error text"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 222,
+      "latency_ms": 4709.8,
+      "prompt_tokens": 291,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The probe reveals the toolchain is unavailable and PATH is restricted to /usr/bin:/bin. This explains the verifier exiting with c"
+    }
+  ],
+  "case_id": "cep-10",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "165d223b0ea70935",
+  "unknown_premature": 1
+}

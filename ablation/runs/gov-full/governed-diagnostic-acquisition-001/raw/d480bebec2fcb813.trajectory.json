@@ -1,0 +1,71 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1587,
+      "latency_ms": 47817.8,
+      "prompt_tokens": 968,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a verifier-side failure/crash or a verifier correctly rejecting an implementation defect."
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 478,
+      "latency_ms": 13204.9,
+      "prompt_tokens": 573,
+      "response_preview": "{\"candidate_loci\": [\"declared_model\"], \"unresolved_distinction\": \"None; isolated verifier parse failure identifies an invalid semantic model artifact referencing an undefined entity.\", \"selected_actio"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 343,
+      "latency_ms": 14747.2,
+      "prompt_tokens": 377,
+      "response_preview": "{\"candidate_loci\": [\"declared_model\", \"verification_plan\", \"evidence_collection\", \"unknown\"], \"unresolved_distinction\": \"Whether the declared semantic model is actually invalid/misregistered, or wheth"
+    }
+  ],
+  "case_id": "sr-12",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 1,
+      "isolated_cmd": "cd /home/sprime01/projects/sea-rs && /home/sprime01/projects/domainforge-slice0b/target/debug/domainforge validate .sea/interaction/interaction-model.sea",
+      "isolated_result": "failed",
+      "summary": "Error: Parse failed for .sea/interaction/interaction-model.sea: resolved closure failed graph construction: Undefined entity: UserIntent at 0:0",
+      "test": "(validate)"
+    }
+  },
+  "payment_used": 5,
+  "premature_attempts": [
+    {
+      "locus": "declared_model",
+      "round": 2
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "declared_model"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "d480bebec2fcb813",
+  "unknown_premature": 0
+}

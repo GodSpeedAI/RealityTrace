@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3863,
+      "latency_ms": 107232.8,
+      "prompt_tokens": 974,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine df-validate failure of the implementation, "
+    }
+  ],
+  "case_id": "df-12",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "5868b22f0b4e9f04",
+  "unknown_premature": 0
+}

@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 74719.2,
+      "prompt_tokens": 972,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 511,
+      "latency_ms": 10313.0,
+      "prompt_tokens": 147,
+      "response_preview": "Locus: evidence_collection"
+    }
+  ],
+  "case_id": "ag-07",
+  "condition": "V",
+  "final_locus": "evidence_collection",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "evidence_collection",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "52f727ae26eda178",
+  "unknown_premature": 0
+}

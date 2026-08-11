@@ -1,0 +1,134 @@
+{
+  "acquired_probes": [
+    "inspect_fixture_integrity",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 949,
+      "latency_ms": 13204.4,
+      "prompt_tokens": 687,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Whether the sparse/empty evidence (all-zero vector, no FTS content) is because the verifier crashed at e"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 118,
+      "latency_ms": 2764.7,
+      "prompt_tokens": 264,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": null, \"settle\": \"environment\"}\n```\nLocus: environment"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 560,
+      "latency_ms": 10649.3,
+      "prompt_tokens": 209,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"Previous environment hypothesis is not supported, and no other locus is indicated by available evidence.\", \"settle\": \"unknown\"}\nLocus: unknow"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 281,
+      "latency_ms": 5125.1,
+      "prompt_tokens": 219,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No symbols referenced in the failure trace, so source inspection provides no evidence toward any locus.\", \"settle\": \"unknown\"}\nLocus: unknown"
+    }
+  ],
+  "case_id": "sr-09",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_fixture_integrity": {
+      "checked": [
+        "data/corpus-v999.json"
+      ],
+      "missing": [
+        "data/corpus-v999.json"
+      ],
+      "ok": [],
+      "stale": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    },
+    {
+      "locus": "environment",
+      "round": 2
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "465e5642c9678e27",
+  "unknown_premature": 2
+}

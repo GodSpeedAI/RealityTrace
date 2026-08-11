@@ -1,0 +1,7 @@
+Locus: evidence_collection
+Terminal: BUDGET_EXHAUSTED
+Actions: inspect_verifier_config, inspect_target_binding
+Payment: 2/7
+Rounds: 3
+Premature attempts: 0
+Unknown premature: 0

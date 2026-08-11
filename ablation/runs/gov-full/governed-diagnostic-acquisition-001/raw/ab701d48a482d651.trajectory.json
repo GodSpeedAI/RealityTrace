@@ -1,0 +1,37 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3695,
+      "latency_ms": 82838.5,
+      "prompt_tokens": 972,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"environment\", \"implementation\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a fault in the verifier/verification plan/toolchain"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 85520.6,
+      "prompt_tokens": 371,
+      "response_preview": ""
+    }
+  ],
+  "case_id": "ag-07",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "ab701d48a482d651",
+  "unknown_premature": 1
+}

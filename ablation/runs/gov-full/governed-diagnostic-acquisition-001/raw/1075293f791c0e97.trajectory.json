@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2729,
+      "latency_ms": 59181.8,
+      "prompt_tokens": 978,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects an internal verifier failure, an implementation/test failure sur"
+    }
+  ],
+  "case_id": "ag-08",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "1075293f791c0e97",
+  "unknown_premature": 0
+}

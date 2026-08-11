@@ -1,0 +1,138 @@
+{
+  "acquired_probes": [
+    "inspect_fixture_integrity",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 590,
+      "latency_ms": 10772.4,
+      "prompt_tokens": 684,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 indicates a verifier-side crash, an implementation failure under scenario df-8, o"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 174,
+      "latency_ms": 3373.1,
+      "prompt_tokens": 255,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The required fixture data/corpus-v999.json is missing from the environment, which explains the failure (verifier_exit=101) as a m"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2071,
+      "latency_ms": 35606.0,
+      "prompt_tokens": 249,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The probe confirms the target test file exists but does not address the missing data/corpus-v999.json fixture; the environment explanatio"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 559,
+      "latency_ms": 9717.4,
+      "prompt_tokens": 232,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The probe found no referenced symbols to inspect, so it neither supports nor undermines the missing-fixture explanation; the environment "
+    }
+  ],
+  "case_id": "df-08",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_fixture_integrity": {
+      "checked": [
+        "data/corpus-v999.json"
+      ],
+      "missing": [
+        "data/corpus-v999.json"
+      ],
+      "ok": [],
+      "stale": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/flow_tests.rs"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    },
+    {
+      "locus": "environment",
+      "round": 3
+    },
+    {
+      "locus": "environment",
+      "round": 4
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "environment"
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "a289fd5d63a0afb1",
+  "unknown_premature": 1
+}

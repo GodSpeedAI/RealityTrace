@@ -1,0 +1,61 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 579,
+      "latency_ms": 11840.8,
+      "prompt_tokens": 684,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects an internal verifier failure, an implementation-triggered verifi"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 539,
+      "latency_ms": 10381.3,
+      "prompt_tokens": 234,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The expected symbol from_cli is absent from the implementation source, indicating an implementation defect rather than verifier or evi"
+    }
+  ],
+  "case_id": "ag-08",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "from_cli"
+      ],
+      "missing": [
+        "from_cli"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "af240e517c89d4d5",
+  "unknown_premature": 1
+}

@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1108,
+      "latency_ms": 22748.3,
+      "prompt_tokens": 975,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verifier\"],\n  \"unresolved_distinction\": \"Verifier exit code 127 conventionally signals 'command not found'. The unresolved distinction is whether the req"
+    }
+  ],
+  "case_id": "sr-07",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "a12a50bf12e68f52",
+  "unknown_premature": 0
+}

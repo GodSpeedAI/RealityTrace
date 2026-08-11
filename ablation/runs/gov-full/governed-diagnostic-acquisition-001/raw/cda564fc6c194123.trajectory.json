@@ -1,0 +1,56 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1030,
+      "latency_ms": 15046.7,
+      "prompt_tokens": 22091,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Whether exit code 101 (Rust panic) originates from the implementation under test panicking during verific"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 569,
+      "latency_ms": 10135.5,
+      "prompt_tokens": 507,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The referenced target exists, so the exit code 101 panic is most consistent with the implementation under test panicking during verifi"
+    }
+  ],
+  "case_id": "df-01",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/flow_tests.rs"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "cda564fc6c194123",
+  "unknown_premature": 0
+}

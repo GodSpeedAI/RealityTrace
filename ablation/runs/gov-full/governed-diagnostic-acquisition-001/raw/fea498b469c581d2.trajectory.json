@@ -1,0 +1,64 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 875,
+      "latency_ms": 12579.1,
+      "prompt_tokens": 678,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"verification_plan\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 represents a verifier-internal error/crash (verifier locus) ve"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 772,
+      "latency_ms": 11571.2,
+      "prompt_tokens": 302,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": \"The probe confirms that tests/corpus_sr4_stale.rs \u2014 referenced by the target binding \u2014 does not exist. The 'stale' qualifie"
+    }
+  ],
+  "case_id": "sr-04",
+  "condition": "O",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/corpus_sr4_stale.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/corpus_sr4_stale.rs"
+      ]
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "fea498b469c581d2",
+  "unknown_premature": 1
+}

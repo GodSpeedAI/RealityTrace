@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3052,
+      "latency_ms": 56892.0,
+      "prompt_tokens": 687,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\", \"verification_plan\"], \"unresolved_distinction\": \"Whether verifier_exit=127 reflects a missing/unavailable verifier executable or dependency in the runtim"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 303,
+      "latency_ms": 6449.7,
+      "prompt_tokens": 253,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"\", \"settle\": \"environment\"}\nLocus: environment"
+    }
+  ],
+  "case_id": "df-06",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "95723787a4ec2e29",
+  "unknown_premature": 0
+}

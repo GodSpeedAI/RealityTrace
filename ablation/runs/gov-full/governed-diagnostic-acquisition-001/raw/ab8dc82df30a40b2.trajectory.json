@@ -1,0 +1,66 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1148,
+      "latency_ms": 15321.2,
+      "prompt_tokens": 687,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"The verifier exited with code 101 (commonly a panic/crash code, e.g., in Rust), but without error l"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 260,
+      "latency_ms": 4612.5,
+      "prompt_tokens": 300,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The probe confirms the implementation-under-test is missing a required symbol `from_concept`. The verifier likely crashed when"
+    }
+  ],
+  "case_id": "df-05",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "from_concept"
+      ],
+      "missing": [
+        "from_concept"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "ab8dc82df30a40b2",
+  "unknown_premature": 0
+}

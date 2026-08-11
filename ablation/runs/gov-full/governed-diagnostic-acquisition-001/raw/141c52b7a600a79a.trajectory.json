@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 121450.7,
+      "prompt_tokens": 975,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1854,
+      "latency_ms": 54000.3,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: environment, evidence_collection\nExcluded: verifier:uninvolved, verification_plan:uninvolved, projection:uninvolved, implementation:uninvolved, authority:uninvolved, declared_model:uninvol"
+    }
+  ],
+  "case_id": "sr-06",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "environment",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "141c52b7a600a79a",
+  "unknown_premature": 0
+}

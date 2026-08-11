@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1001,
+      "latency_ms": 18564.4,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"The evidence shows only that the verifier exited nonzero; it does not reveal whether the verifier/configuration itself fai"
+    }
+  ],
+  "case_id": "cep-10",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "f4fd4ac31273ddc6",
+  "unknown_premature": 0
+}

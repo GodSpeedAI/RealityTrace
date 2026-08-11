@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 87869.5,
+      "prompt_tokens": 977,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 571,
+      "latency_ms": 11640.3,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: evidence_collection, environment, authority\nExcluded: verifier(no checks run), verification_plan(no plan failure shown), projection(no mapping attempted), implementation(no system output a"
+    }
+  ],
+  "case_id": "cep-05",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "0a53740d3543f9a2",
+  "unknown_premature": 0
+}

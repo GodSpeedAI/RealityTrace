@@ -1,0 +1,87 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "validate_semantic_model",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1580,
+      "latency_ms": 30050.7,
+      "prompt_tokens": 980,
+      "response_preview": "{\n  \"candidate_loci\": [\n    \"verifier\",\n    \"verification_plan\",\n    \"implementation\",\n    \"environment\"\n  ],\n  \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a verifier/configuration/env"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2108,
+      "latency_ms": 39774.4,
+      "prompt_tokens": 557,
+      "response_preview": "{\"candidate_loci\": [\"declared_model\", \"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether verifier_exit=1 is due to an invalid declared semantic model cashflow.sea or a genuine defect in"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 402,
+      "latency_ms": 7299.8,
+      "prompt_tokens": 536,
+      "response_preview": "{\"candidate_loci\": [\"declared_model\"], \"unresolved_distinction\": \"The declared model references an undefined entity, so the failure is attributable to the declared semantic model rather than verifier "
+    }
+  ],
+  "case_id": "df-09",
+  "condition": "G",
+  "final_locus": "declared_model",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192valid, nonzero\u2192invalid",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "conformance_result"
+      ],
+      "verifier": "domainforge-validate",
+      "verifier_command": "cd /home/sprime01/projects/domainforge && /home/sprime01/projects/domainforge-slice0b/target/debug/domainforge validate examples/namespaces/finance/cashflow.sea"
+    },
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Parse failed for examples/namespaces/finance/cashflow.sea: resolved closure failed graph construction: Undefined entity: NoSuchCustomerForCorpus at 0:0"
+      ],
+      "exit_code": 1,
+      "model_file": "examples/namespaces/finance/cashflow.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "validate_semantic_model",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "6761d4f64e4fd926",
+  "unknown_premature": 0
+}

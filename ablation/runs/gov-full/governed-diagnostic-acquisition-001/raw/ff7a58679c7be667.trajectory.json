@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 685,
+      "latency_ms": 12440.0,
+      "prompt_tokens": 678,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"Whether exit code 127 (conventionally 'command not found') stems from the runtime environment lacking a required executable/d"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 986,
+      "latency_ms": 17324.4,
+      "prompt_tokens": 250,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"\", \"settle\": \"environment\"}\nLocus: environment"
+    }
+  ],
+  "case_id": "ag-10",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 1
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "ff7a58679c7be667",
+  "unknown_premature": 0
+}

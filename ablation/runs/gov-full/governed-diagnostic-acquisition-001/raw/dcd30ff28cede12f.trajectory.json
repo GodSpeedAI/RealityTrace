@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 73889.4,
+      "prompt_tokens": 972,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 618,
+      "latency_ms": 10552.3,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: environment, evidence_collection, authority\nExcluded: verifier (no verification attempt observed), verification_plan (plan existed: 3 rounds, 7 payments), projection (not reached), impleme"
+    }
+  ],
+  "case_id": "df-15",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "environment",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "dcd30ff28cede12f",
+  "unknown_premature": 0
+}

@@ -1,0 +1,37 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1648,
+      "latency_ms": 51094.0,
+      "prompt_tokens": 974,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"environment\", \"unknown\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=1 reflects an implementation/test failure, a verifier/environment fai"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 122268.1,
+      "prompt_tokens": 371,
+      "response_preview": ""
+    }
+  ],
+  "case_id": "cep-12",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "aa2f3cc92e4a11ea",
+  "unknown_premature": 1
+}

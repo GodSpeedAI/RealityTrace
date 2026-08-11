@@ -1,0 +1,139 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 785,
+      "latency_ms": 11466.0,
+      "prompt_tokens": 684,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\n    \"verifier\",\n    \"environment\",\n    \"implementation\"\n  ],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 indicates the verifier itself crashed/errored (verif"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 385,
+      "latency_ms": 8192.9,
+      "prompt_tokens": 333,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The restrictive/unreadable source file is an environmental access-control issue, though logs are still absent to confirm it caused verifi"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1087,
+      "latency_ms": 17816.8,
+      "prompt_tokens": 235,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"Target binding is valid, so the failure is not due to missing test targets, but there is still no direct evidence that the unreadable/res"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 988,
+      "latency_ms": 17206.1,
+      "prompt_tokens": 240,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No referenced symbols or missing symbols were found, so there is no evidence isolating environment vs verifier/implementation/evidence_collec"
+    }
+  ],
+  "case_id": "sr-08",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "0",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "8e517ef52a644dc1",
+  "unknown_premature": 3
+}

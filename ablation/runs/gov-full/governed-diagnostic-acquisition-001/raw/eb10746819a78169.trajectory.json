@@ -1,0 +1,66 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1319,
+      "latency_ms": 26860.7,
+      "prompt_tokens": 975,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"environment\", \"implementation\"],\n  \"unresolved_distinction\": \"Exit code 101 with empty evidence (zero vectors, no FTS content) could mean the verifier itsel"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 123937.1,
+      "prompt_tokens": 530,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 428,
+      "latency_ms": 12070.1,
+      "prompt_tokens": 176,
+      "response_preview": "Candidates: unknown, evidence_collection, environment\nExcluded: environment (defaults), verifier (none), verification_plan (none), projection (none), implementation (none), authority (none), declared_"
+    }
+  ],
+  "case_id": "sr-15",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 2
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "eb10746819a78169",
+  "unknown_premature": 0
+}

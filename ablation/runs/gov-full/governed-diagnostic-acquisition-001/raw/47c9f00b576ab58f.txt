@@ -1,0 +1,7 @@
+Locus: unknown
+Terminal: UNKNOWN_SETTLEMENT
+Actions: inspect_source_symbols, inspect_verifier_config
+Payment: 2/7
+Rounds: 2
+Premature attempts: 0
+Unknown premature: 0

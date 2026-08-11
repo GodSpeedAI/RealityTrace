@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 70535.0,
+      "prompt_tokens": 981,
+      "response_preview": "{\"candidate_loci\":[\"verifier\",\"environment\",\"implementation\"],\"unresolved_distinction\":\"Whether verifier_exit=101 reflects a verifier/internal crash, an unusable environment/toolchain, or an implement"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 558,
+      "latency_ms": 9569.5,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: evidence_collection, verifier, verification_plan, environment\nExcluded: authority (no permission issue indicated), implementation (no code/exec failure shown), projection (no projection co"
+    }
+  ],
+  "case_id": "df-04",
+  "condition": "V",
+  "final_locus": "evidence_collection",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "evidence_collection",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "b792a4265e6302fb",
+  "unknown_premature": 0
+}

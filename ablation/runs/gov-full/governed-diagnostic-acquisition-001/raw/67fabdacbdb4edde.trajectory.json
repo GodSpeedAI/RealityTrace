@@ -1,0 +1,60 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1116,
+      "latency_ms": 32453.4,
+      "prompt_tokens": 683,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"verifier_exit=1 could indicate a verifier/harness failure or an expected rejection of the implement"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 531,
+      "latency_ms": 15056.9,
+      "prompt_tokens": 280,
+      "response_preview": "{\"candidate_loci\": [\"declared_model\"], \"unresolved_distinction\": \"\", \"settle\": \"declared_model\"}\nLocus: declared_model"
+    }
+  ],
+  "case_id": "sr-11",
+  "condition": "O",
+  "final_locus": "declared_model",
+  "observations": {
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Parse failed for .sea/interaction/interaction-model.sea: resolved closure failed graph construction: Grammar error: Undefined subject role 'NoSuchRoleForCorpus'"
+      ],
+      "exit_code": 1,
+      "model_file": ".sea/interaction/interaction-model.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "67fabdacbdb4edde",
+  "unknown_premature": 1
+}

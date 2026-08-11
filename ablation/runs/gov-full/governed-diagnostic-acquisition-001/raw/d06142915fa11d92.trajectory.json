@@ -1,0 +1,37 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2059,
+      "latency_ms": 52417.4,
+      "prompt_tokens": 974,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a failing implementation under a valid pytest verifier, or a faulty verifi"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 590,
+      "latency_ms": 13580.7,
+      "prompt_tokens": 371,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "cep-09",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "d06142915fa11d92",
+  "unknown_premature": 1
+}

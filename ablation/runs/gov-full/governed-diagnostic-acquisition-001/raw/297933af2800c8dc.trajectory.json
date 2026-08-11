@@ -1,0 +1,57 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3204,
+      "latency_ms": 54211.6,
+      "prompt_tokens": 978,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-internal failure, a bad verification com"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1061,
+      "latency_ms": 18329.9,
+      "prompt_tokens": 512,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"Isolated verifier rerun fails at compilation, indicating the implementation under verification does not build rather than a verifier r"
+    }
+  ],
+  "case_id": "ag-08",
+  "condition": "G",
+  "final_locus": "implementation",
+  "observations": {
+    "rerun_verifier_isolated": {
+      "isolated_result": "compile_error",
+      "summary": "compilation failed \u2014 no test could run",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 5,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "297933af2800c8dc",
+  "unknown_premature": 0
+}

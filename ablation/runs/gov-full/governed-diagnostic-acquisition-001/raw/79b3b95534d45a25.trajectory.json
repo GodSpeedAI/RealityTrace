@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 838,
+      "latency_ms": 28462.9,
+      "prompt_tokens": 1535,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"verifier\", \"implementation\"], \"unresolved_distinction\": \"Whether the failed verifier exit is due to an incorrect assertion/expected value in the verification "
+    }
+  ],
+  "case_id": "cep-01",
+  "condition": "V",
+  "final_locus": "verification_plan",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "79b3b95534d45a25",
+  "unknown_premature": 0
+}

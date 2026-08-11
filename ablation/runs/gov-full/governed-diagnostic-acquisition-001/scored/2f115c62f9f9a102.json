@@ -1,0 +1,51 @@
+{
+  "acquired_any": true,
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "action_ids": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "budget_exhausted": true,
+  "case_id": "sr-01",
+  "condition": "O",
+  "correct_use": false,
+  "diag_success": false,
+  "discrim_selected_any": true,
+  "discriminating_probes": [
+    "rerun_verifier_isolated"
+  ],
+  "exact_correct": false,
+  "failure_locus": "TRUE_HORIZON_EXHAUSTION",
+  "final_locus": "unknown",
+  "first_action": "rerun_verifier_isolated",
+  "first_is_discrim": true,
+  "gate_infeasible": true,
+  "governed_safe_concrete": 0,
+  "has_discrim_evidence": [
+    "rerun_verifier_isolated"
+  ],
+  "is_determinate": true,
+  "is_unknown_case": false,
+  "latency_ms": 144015.9,
+  "model_calls": 4,
+  "num_actions": 3,
+  "payment_used": 7,
+  "premature_attempts": 1,
+  "reasoning_tokens": 6951,
+  "rep": 2,
+  "rounds_before_first": 0,
+  "scoring_version": "gov-scorer-1",
+  "semantic_model_fp": false,
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "total_tokens": 27897,
+  "true_locus": "verifier",
+  "unit_id": "2f115c62f9f9a102",
+  "unknown_correct": false,
+  "unknown_premature": 2,
+  "unsupported_concrete": false
+}

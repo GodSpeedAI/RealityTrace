@@ -1,0 +1,52 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 715,
+      "latency_ms": 10290.4,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\", \"verifier\", \"verification_plan\"], \"unresolved_distinction\": \"Exit code 127 conventionally means 'command not found'\u2014but it is unclear whether the missing com"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 301,
+      "latency_ms": 6348.2,
+      "prompt_tokens": 517,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": null, \"selected_action\": null, \"expected_information\": null, \"settle\": \"environment\"}\nLocus: environment"
+    }
+  ],
+  "case_id": "df-06",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "da49f55ba7e1ad35",
+  "unknown_premature": 0
+}

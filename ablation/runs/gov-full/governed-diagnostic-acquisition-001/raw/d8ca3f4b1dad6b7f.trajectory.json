@@ -1,0 +1,61 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 660,
+      "latency_ms": 9763.2,
+      "prompt_tokens": 680,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"environment\", \"implementation\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"The sole signal is verifier_exit=2 in a pytest-progress scenario. Exit "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1209,
+      "latency_ms": 14767.6,
+      "prompt_tokens": 303,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The missing 'cep.scoring' symbol indicates that the implementation artifact is incomplete or missing entirely, which perfectly explain"
+    }
+  ],
+  "case_id": "cep-06",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "cep.scoring"
+      ],
+      "missing": [
+        "cep.scoring"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "d8ca3f4b1dad6b7f",
+  "unknown_premature": 1
+}

@@ -1,0 +1,60 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 592,
+      "latency_ms": 11204.9,
+      "prompt_tokens": 680,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"verifier_exit=1 could indicate an intended validation failure in the implementation, a verifier/har"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 727,
+      "latency_ms": 11418.3,
+      "prompt_tokens": 282,
+      "response_preview": "Looking at this observation, the verifier is now clearly doing its job: it parsed the model file, attempted graph construction, and found a specific, legitimate validation error \u2014 \"Undefined entity: C"
+    }
+  ],
+  "case_id": "df-10",
+  "condition": "O",
+  "final_locus": "declared_model",
+  "observations": {
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Parse failed for examples/namespaces/finance/cashflow.sea: resolved closure failed graph construction: Undefined entity: Customer at 0:0"
+      ],
+      "exit_code": 1,
+      "model_file": "examples/namespaces/finance/cashflow.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "validate_semantic_model",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "d80f0bf864fd8007",
+  "unknown_premature": 0
+}

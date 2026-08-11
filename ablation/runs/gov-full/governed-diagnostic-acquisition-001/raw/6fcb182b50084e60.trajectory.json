@@ -1,0 +1,64 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1398,
+      "latency_ms": 39807.2,
+      "prompt_tokens": 674,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"verifier_exit=1 shows a non-success validation run, but there is no captured output,"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1985,
+      "latency_ms": 57038.5,
+      "prompt_tokens": 301,
+      "response_preview": "{\"candidate_loci\": [\"declared_model\"], \"unresolved_distinction\": \"None; the validator produced a structured TOML parse error in the model registry, indicating the declared model artifact is invalid ra"
+    }
+  ],
+  "case_id": "df-11",
+  "condition": "O",
+  "final_locus": "declared_model",
+  "observations": {
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Failed to parse registry: TOML parse error at line 10, column 14",
+        "|",
+        "10 | patterns = [",
+        "|              ^",
+        "invalid array"
+      ],
+      "exit_code": 1,
+      "model_file": "examples/namespaces/finance/cashflow.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "6fcb182b50084e60",
+  "unknown_premature": 1
+}

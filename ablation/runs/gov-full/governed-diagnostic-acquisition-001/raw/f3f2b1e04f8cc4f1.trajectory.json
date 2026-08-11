@@ -1,0 +1,81 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2129,
+      "latency_ms": 37718.1,
+      "prompt_tokens": 978,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a crash/internal failure of the verifier itself, a propagated failure fr"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3728,
+      "latency_ms": 65115.0,
+      "prompt_tokens": 506,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether the compile_error is due to a missing/broken build toolchain or working directory problem, versus a genuine com"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 643,
+      "latency_ms": 8449.5,
+      "prompt_tokens": 489,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\"],\n  \"unresolved_distinction\": \"Resolved: the environment and toolchain are healthy, so the compile error is attributable to the implementation itself rather tha"
+    }
+  ],
+  "case_id": "df-07",
+  "condition": "G",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "rerun_verifier_isolated": {
+      "isolated_result": "compile_error",
+      "summary": "compilation failed \u2014 no test could run",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "f3f2b1e04f8cc4f1",
+  "unknown_premature": 0
+}

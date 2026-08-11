@@ -1,0 +1,96 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 716,
+      "latency_ms": 17394.1,
+      "prompt_tokens": 687,
+      "response_preview": "```json\n{\"candidate_loci\": [\"evidence_collection\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"The all-zero embedding vector and empty FTS section suggest evidence_collection captured no me"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2131,
+      "latency_ms": 37412.1,
+      "prompt_tokens": 288,
+      "response_preview": "```json\n{\"candidate_loci\": [\"evidence_collection\", \"verifier\"], \"unresolved_distinction\": \"The probe confirms the implementation has the symbol new_with_namespace, eliminating implementation as the ca"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1472,
+      "latency_ms": 30389.2,
+      "prompt_tokens": 329,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": \"The missing default test-discovery target binding explains why evidence collection produced empty outputs; evidence_collection is d"
+    }
+  ],
+  "case_id": "df-04",
+  "condition": "O",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "new_with_namespace"
+      ],
+      "missing": [],
+      "present": [
+        "new_with_namespace"
+      ]
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": [
+        "(default test discovery)"
+      ]
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [
+    {
+      "locus": "evidence_collection",
+      "round": 2
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "evidence_collection"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "ab913038df499bb7",
+  "unknown_premature": 1
+}

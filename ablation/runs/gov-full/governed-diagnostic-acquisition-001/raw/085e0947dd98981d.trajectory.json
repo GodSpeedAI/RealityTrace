@@ -1,0 +1,111 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 804,
+      "latency_ms": 12284.0,
+      "prompt_tokens": 681,
+      "response_preview": "Based on the retrieval context provided:\n\n**Observations from evidence:**\n- `verifier_exit: 101` \u2014 non-zero exit, commonly indicating a runtime crash/panic rather than a clean assertion failure\n- Vect"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 289,
+      "latency_ms": 6040.0,
+      "prompt_tokens": 438,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"The isolated rerun still exits 101 with a concrete test failure, so this is not environment. However, we cannot de"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 567,
+      "latency_ms": 8812.1,
+      "prompt_tokens": 282,
+      "response_preview": "{\"candidate_loci\":[\"verifier\",\"implementation\"],\"unresolved_distinction\":\"Default test discovery exists, but the probe gives no expected-vs-actual details for the failing assertion, so it still cannot"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 571,
+      "latency_ms": 10337.7,
+      "prompt_tokens": 242,
+      "response_preview": "{\"candidate_loci\":[\"verifier\",\"implementation\"],\"unresolved_distinction\":\"The source-symbol probe found no referenced symbols, so it provides no evidence to distinguish an over-strict/malformed verifi"
+    }
+  ],
+  "case_id": "sr-02",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/sea-rs && cargo test --offline  -p sea-forge-domain test_corpus_scenario_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "See https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields for more information.\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src/lib.rs (target/debug/deps/sea_forge_domain-fc68c08271312e03)\n     Running tests/corpus_sr2.rs (target/debug/deps/corpus_sr2-81ddfb041c8fcdf3)\nerror: test failed, to rerun pass `-p sea-forge-domain --test corpus_sr2`",
+      "test": "test_corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "rerun_verifier_isolated",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "085e0947dd98981d",
+  "unknown_premature": 1
+}

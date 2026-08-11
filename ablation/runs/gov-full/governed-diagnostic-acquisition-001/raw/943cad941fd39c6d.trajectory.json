@@ -1,0 +1,138 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 575,
+      "latency_ms": 13858.3,
+      "prompt_tokens": 677,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"environment\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=4 reflects a verifier-side failure/usage error versus an environment or evidence-collection miscon"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 419,
+      "latency_ms": 11159.9,
+      "prompt_tokens": 241,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"Resolved: the referenced test file tests/test_import.py does not exist in the environment, confirming an environment/checkout iss"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 338,
+      "latency_ms": 7680.0,
+      "prompt_tokens": 233,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"none\", \"settle\": \"environment\"}\nLocus: environment"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 328,
+      "latency_ms": 8680.6,
+      "prompt_tokens": 206,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No environmental abnormalities were found, and no other locus is currently indicated.\", \"settle\": \"unknown\"}\nLocus: unknown"
+    }
+  ],
+  "case_id": "cep-04",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "tests/fixtures/sample_settlement_recorded.json",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": [
+        "tests/test_import.py"
+      ]
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    },
+    {
+      "locus": "environment",
+      "round": 3
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "943cad941fd39c6d",
+  "unknown_premature": 2
+}

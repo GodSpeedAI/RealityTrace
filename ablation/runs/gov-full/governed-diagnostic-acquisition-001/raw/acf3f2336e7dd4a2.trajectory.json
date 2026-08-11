@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1214,
+      "latency_ms": 19732.3,
+      "prompt_tokens": 975,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"The verifier exited with code 101 and the captured evidence is essentially empty (all-zero vec"
+    }
+  ],
+  "case_id": "sr-15",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "acf3f2336e7dd4a2",
+  "unknown_premature": 0
+}

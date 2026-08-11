@@ -1,0 +1,82 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 775,
+      "latency_ms": 9834.3,
+      "prompt_tokens": 1535,
+      "response_preview": "Looking at this failure:\n\n**Test content:** `assert 1 + 1 == 3` \u2014 a self-contained assertion that 2 equals 3, which is mathematically false. No implementation code is invoked; the test directly assert"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2629,
+      "latency_ms": 35585.7,
+      "prompt_tokens": 376,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"evidence_collection\", \"verifier\"], \"unresolved_distinction\": \"Whether the sufficiency gap stems from a mis-specified sufficiency contract or required-evidence"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 71107.6,
+      "prompt_tokens": 558,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 2081,
+      "latency_ms": 34734.9,
+      "prompt_tokens": 229,
+      "response_preview": "Candidates: unknown\nExcluded: verifier:configured-only, verification_plan:untested, projection:unobserved, implementation:unobserved, environment:none, authority:unobserved, evidence_collection:budget"
+    }
+  ],
+  "case_id": "cep-01",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "verification_plan",
+      "round": 1
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 1,
+      "settlement_rejected": "verification_plan"
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 2
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "c411a27104f0fd22",
+  "unknown_premature": 0
+}

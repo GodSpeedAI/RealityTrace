@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 74213.3,
+      "prompt_tokens": 981,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1858,
+      "latency_ms": 28388.3,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: environment, evidence_collection\nExcluded: verifier(no-error), verification_plan(no-plan-detail), projection(unmentioned), implementation(unmentioned), authority(no-auth), declared_model(u"
+    }
+  ],
+  "case_id": "df-04",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "environment",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "8166423ed4cf4d51",
+  "unknown_premature": 0
+}

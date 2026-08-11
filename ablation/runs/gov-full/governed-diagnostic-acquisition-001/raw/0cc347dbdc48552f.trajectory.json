@@ -1,0 +1,111 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 495,
+      "latency_ms": 8547.6,
+      "prompt_tokens": 677,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"environment\"],\n  \"unresolved_distinction\": \"The only available signal is verifier_exit=1 (non-zero), but no test outp"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1476,
+      "latency_ms": 24215.3,
+      "prompt_tokens": 373,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"The isolated rerun reproduces a plain AssertionError at tests/test_import.py:21, confirming the failure is real an"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 893,
+      "latency_ms": 18235.0,
+      "prompt_tokens": 327,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"The probe only confirms tests/test_import.py exists; it does not reveal the assertion expression or intended behavior, so "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 220,
+      "latency_ms": 5214.2,
+      "prompt_tokens": 235,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"The probe returned no symbols referenced in the failure trace, so there is nothing to inspect for correctness or p"
+    }
+  ],
+  "case_id": "cep-03",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.5,
+      "exit_code": 1,
+      "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_test_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\ntests/test_import.py:21: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_import.py::test_corpus_scenario_test_assertion_bug - assert...\n1 failed in 0.15s",
+      "test": "tests/test_import.py::test_corpus_scenario_test_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "0cc347dbdc48552f",
+  "unknown_premature": 3
+}

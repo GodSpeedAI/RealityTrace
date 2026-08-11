@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 377,
+      "latency_ms": 8692.0,
+      "prompt_tokens": 681,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"verifier_exit=127 (command not found) could mean the verifier script/binary itself is missing or mis-declared (verifi"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 582,
+      "latency_ms": 13870.1,
+      "prompt_tokens": 277,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"Probe shows restricted PATH and unavailable toolchain, explaining exit 127 / command not found for the verifier entry point.\", \"settle\": "
+    }
+  ],
+  "case_id": "sr-07",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "702bde6f347db41c",
+  "unknown_premature": 1
+}

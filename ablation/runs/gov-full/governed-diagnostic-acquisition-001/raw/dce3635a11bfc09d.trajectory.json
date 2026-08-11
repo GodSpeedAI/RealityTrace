@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 100422.9,
+      "prompt_tokens": 969,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"environment\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"The only observed signal is verifier_exit=101 with empty/zero-vector evidence, "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1063,
+      "latency_ms": 22575.8,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: evidence_collection, environment, verification_plan\nExcluded: verifier:none, projection:none, implementation:none, authority:none, declared_model:none\nLocus: evidence_collection"
+    }
+  ],
+  "case_id": "ag-05",
+  "condition": "V",
+  "final_locus": "evidence_collection",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "evidence_collection",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "dce3635a11bfc09d",
+  "unknown_premature": 0
+}

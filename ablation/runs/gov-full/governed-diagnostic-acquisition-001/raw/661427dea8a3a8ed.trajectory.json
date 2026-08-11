@@ -1,0 +1,65 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1594,
+      "latency_ms": 20272.0,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"],\n  \"unresolved_distinction\": \"Exit code 101 typically signals a panic or hard crash. The key question is whether the crash o"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 406,
+      "latency_ms": 6860.0,
+      "prompt_tokens": 371,
+      "response_preview": "```json\n{\"candidate_loci\": [\"evidence_collection\", \"verification_plan\"], \"unresolved_distinction\": \"Whether the UNKNOWN declaration was premature due to insufficient evidence gathering (evidence_colle"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1402,
+      "latency_ms": 18960.4,
+      "prompt_tokens": 506,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The isolated rerun produced a compile error, indicating the code under test cannot build; this points to a defect in the implementatio"
+    }
+  ],
+  "case_id": "df-05",
+  "condition": "G",
+  "final_locus": "implementation",
+  "observations": {
+    "rerun_verifier_isolated": {
+      "isolated_result": "compile_error",
+      "summary": "compilation failed \u2014 no test could run",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 5,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "rerun_verifier_isolated",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "661427dea8a3a8ed",
+  "unknown_premature": 1
+}

@@ -1,0 +1,107 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 904,
+      "latency_ms": 14801.3,
+      "prompt_tokens": 977,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"A non-zero verifier exit (exit code 1) could indicate either a legitimate implementation failure (the code under t"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1188,
+      "latency_ms": 19250.6,
+      "prompt_tokens": 375,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"declared_model\", \"verification_plan\"], \"unresolved_distinction\": \"Whether the failure trace reflects faulty implementation behavior (symbols exist but pr"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2080,
+      "latency_ms": 35829.1,
+      "prompt_tokens": 500,
+      "response_preview": "{\n  \"candidate_loci\": [\n    \"verification_plan\",\n    \"declared_model\",\n    \"implementation\"\n  ],\n  \"unresolved_distinction\": \"Whether the failure is caused by a structural path or target mismatch in t"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 4096,
+      "latency_ms": 87248.7,
+      "prompt_tokens": 512,
+      "response_preview": ""
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 517,
+      "latency_ms": 10240.8,
+      "prompt_tokens": 213,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "sr-11",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": ".sea/interaction/interaction-model.sea"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_source_symbols",
+      "round": 1,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "1a992e5ba441faad",
+  "unknown_premature": 0
+}

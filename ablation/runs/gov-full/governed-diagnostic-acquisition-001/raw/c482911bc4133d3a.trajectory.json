@@ -1,0 +1,61 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 997,
+      "latency_ms": 15019.2,
+      "prompt_tokens": 680,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\n    \"verifier\",\n    \"implementation\",\n    \"unknown\"\n  ],\n  \"unresolved_distinction\": \"Whether the verifier exit code 2 indicates a failure in the verifier itself or a n"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 138,
+      "latency_ms": 3561.8,
+      "prompt_tokens": 231,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": null, \"settle\": \"implementation\"}\n```\nLocus: implementation"
+    }
+  ],
+  "case_id": "cep-06",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "cep.scoring"
+      ],
+      "missing": [
+        "cep.scoring"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_source_symbols",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "c482911bc4133d3a",
+  "unknown_premature": 0
+}

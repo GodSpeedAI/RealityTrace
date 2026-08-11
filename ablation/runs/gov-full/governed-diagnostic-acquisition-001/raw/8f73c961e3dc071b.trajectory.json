@@ -1,0 +1,52 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 825,
+      "latency_ms": 10845.1,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"Exit code 127 universally means 'command not found' in POSIX shells. The distinction is whether the required toolchai"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 199,
+      "latency_ms": 3476.8,
+      "prompt_tokens": 520,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\"],\n  \"unresolved_distinction\": \"Resolved. The environment inspection confirms the toolchain is unavailable and the environment is restricted (PATH=/usr/bin:"
+    }
+  ],
+  "case_id": "ag-10",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "8f73c961e3dc071b",
+  "unknown_premature": 0
+}

@@ -1,0 +1,96 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_fixture_integrity"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 499,
+      "latency_ms": 9305.6,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\"], \"unresolved_distinction\": \"Exit code 101 is consistent with a panic in the target program (implementation) but could als"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1153,
+      "latency_ms": 22709.0,
+      "prompt_tokens": 716,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"evidence_collection\", \"verification_plan\"], \"unresolved_distinction\": \"The isolated verifier re-run confirms the failure is reproducible in the test execution pa"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 75201.6,
+      "prompt_tokens": 541,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 488,
+      "latency_ms": 9025.1,
+      "prompt_tokens": 400,
+      "response_preview": "Candidates: environment, implementation\nExcluded: verifier, verification_plan, projection, authority, evidence_collection, declared_model, unknown\nLocus: environment"
+    }
+  ],
+  "case_id": "sr-09",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_fixture_integrity": {
+      "checked": [
+        "data/corpus-v999.json"
+      ],
+      "missing": [
+        "data/corpus-v999.json"
+      ],
+      "ok": [],
+      "stale": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/sea-rs && cargo test --offline  -p sea-forge-core test_corpus_scenario_missing_fixture",
+      "isolated_result": "failed",
+      "summary": "See https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields for more information.\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src/lib.rs (target/debug/deps/sea_forge_core-2d9b0a5a8ca75840)\n     Running tests/corpus_sr9.rs (target/debug/deps/corpus_sr9-ffbbfa5678132253)\nerror: test failed, to rerun pass `-p sea-forge-core --test corpus_sr9`",
+      "test": "test_corpus_scenario_missing_fixture"
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_fixture_integrity",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "2b217e7170c7f5a1",
+  "unknown_premature": 0
+}

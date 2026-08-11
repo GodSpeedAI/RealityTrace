@@ -1,0 +1,127 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 551,
+      "latency_ms": 10125.3,
+      "prompt_tokens": 684,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 reflects an internal verifier failure or merely an incomplete/empty recorded evidence "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 975,
+      "latency_ms": 16075.7,
+      "prompt_tokens": 230,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Target binding exists, so the failure is not due to a missing target; verifier_exit=101 still could be verifier-inter"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 345,
+      "latency_ms": 5545.5,
+      "prompt_tokens": 238,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"No source symbols are referenced in the failure trace, so the probe gives no new information to distinguish a verifie"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1451,
+      "latency_ms": 25034.8,
+      "prompt_tokens": 238,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Environment is clean and toolchain is available, so this does not distinguish a verifier-internal failure from bad/em"
+    }
+  ],
+  "case_id": "sr-13",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "0e69e87378e0a3d9",
+  "unknown_premature": 4
+}

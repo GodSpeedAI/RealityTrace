@@ -1,0 +1,71 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 668,
+      "latency_ms": 13303.6,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verifier\"],\n  \"unresolved_distinction\": \"Exit code 127 ('command not found') could mean the required toolchain is absent/misconfigured in the environment"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 619,
+      "latency_ms": 11062.9,
+      "prompt_tokens": 375,
+      "response_preview": "{\n  \"candidate_loci\": [\"environment\", \"unknown\"],\n  \"unresolved_distinction\": \"Whether the failure is actually due to missing/unavailable toolchain or working directories, versus insufficient evidence"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 155,
+      "latency_ms": 3432.5,
+      "prompt_tokens": 487,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"\", \"selected_action\": null, \"expected_information\": \"\", \"settle\": \"environment\"}\nLocus: environment"
+    }
+  ],
+  "case_id": "df-06",
+  "condition": "G",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 1
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_environment",
+      "round": 1,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "775bc18387b814bb",
+  "unknown_premature": 0
+}

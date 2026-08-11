@@ -1,0 +1,79 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 601,
+      "latency_ms": 11057.5,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine pytest failure in the implementation under test or an error/misconfiguration in"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3107,
+      "latency_ms": 58040.3,
+      "prompt_tokens": 547,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether the pytest command can actually run under the assigned environment, e.g. python3/pytest availability and projec"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 178,
+      "latency_ms": 3248.8,
+      "prompt_tokens": 501,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The environment inspection shows the toolchain is unavailable and PATH is restricted, which explains why the pytest-based verific"
+    }
+  ],
+  "case_id": "cep-10",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && python3 -m pytest -q tests/test_import.py -k corpus_scenario"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 2
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "90b65e536dd19867",
+  "unknown_premature": 0
+}

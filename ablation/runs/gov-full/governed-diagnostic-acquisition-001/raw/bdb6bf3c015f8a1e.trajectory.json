@@ -1,0 +1,163 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1522,
+      "latency_ms": 25848.9,
+      "prompt_tokens": 684,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Whether verifier_exit=101 represents a crash/panic internal to the verifier itself versus a fatal error the verifi"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1537,
+      "latency_ms": 31950.2,
+      "prompt_tokens": 329,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The unreadable restrictive fixture file explains the verifier failure as a permissions/environment access problem rather than a verifier "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1072,
+      "latency_ms": 26471.4,
+      "prompt_tokens": 232,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The target binding exists and no targets are missing, so the failure is not due to missing discovery/binding; the unreadable restrictive "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 572,
+      "latency_ms": 14028.3,
+      "prompt_tokens": 239,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"No source-symbol defects are referenced in the failure trace; the remaining evidence points to an environment access/permissions issue wi"
+    }
+  ],
+  "case_id": "ag-11",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "644",
+          "path": "src/main.rs",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "0",
+          "path": "tests/fixtures/example.py",
+          "readable": false,
+          "restrictive": true
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "tests/fixtures/example.py",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    },
+    {
+      "locus": "environment",
+      "round": 2
+    },
+    {
+      "locus": "environment",
+      "round": 3
+    },
+    {
+      "locus": "environment",
+      "round": 4
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "environment"
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "bdb6bf3c015f8a1e",
+  "unknown_premature": 0
+}

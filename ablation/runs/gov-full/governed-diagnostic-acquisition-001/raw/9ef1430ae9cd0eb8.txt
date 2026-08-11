@@ -1,0 +1,7 @@
+Locus: unknown
+Terminal: TERMINAL_UNKNOWN
+Actions: rerun_verifier_isolated, inspect_target_binding, inspect_source_symbols
+Payment: 7/7
+Rounds: 4
+Premature attempts: 2
+Unknown premature: 1

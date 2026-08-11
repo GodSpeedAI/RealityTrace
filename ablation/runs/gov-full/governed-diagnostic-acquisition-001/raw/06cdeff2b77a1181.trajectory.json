@@ -1,0 +1,37 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1322,
+      "latency_ms": 24470.8,
+      "prompt_tokens": 968,
+      "response_preview": "Locus: unknown"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1648,
+      "latency_ms": 25292.4,
+      "prompt_tokens": 371,
+      "response_preview": "Locus: evidence_collection"
+    }
+  ],
+  "case_id": "sr-12",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "06cdeff2b77a1181",
+  "unknown_premature": 1
+}

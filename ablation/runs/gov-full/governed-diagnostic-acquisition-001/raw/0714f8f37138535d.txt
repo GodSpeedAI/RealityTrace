@@ -1,0 +1,7 @@
+Locus: evidence_collection
+Terminal: BUDGET_EXHAUSTED
+Actions: 
+Payment: 0/7
+Rounds: 1
+Premature attempts: 0
+Unknown premature: 0

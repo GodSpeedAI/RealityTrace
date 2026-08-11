@@ -1,0 +1,62 @@
+{
+  "acquired_probes": [
+    "inspect_fixture_integrity"
+  ],
+  "actions": [
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 91428.4,
+      "prompt_tokens": 678,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1154,
+      "latency_ms": 25889.5,
+      "prompt_tokens": 205,
+      "response_preview": "{\"candidate_loci\": [\"evidence_collection\"], \"unresolved_distinction\": null, \"settle\": \"evidence_collection\"}\nLocus: evidence_collection"
+    }
+  ],
+  "case_id": "ag-14",
+  "condition": "O",
+  "final_locus": "evidence_collection",
+  "observations": {
+    "inspect_fixture_integrity": {
+      "checked": [
+        "tests/fixtures/example.py"
+      ],
+      "missing": [],
+      "ok": [],
+      "stale": [
+        "tests/fixtures/example.py"
+      ]
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_fixture_integrity",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "evidence_collection"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "4568e63cd57adf52",
+  "unknown_premature": 0
+}

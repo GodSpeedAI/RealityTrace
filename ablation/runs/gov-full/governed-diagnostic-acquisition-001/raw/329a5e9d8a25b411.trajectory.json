@@ -1,0 +1,83 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1028,
+      "latency_ms": 27214.7,
+      "prompt_tokens": 977,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Whether verifier exit code 1 reflects a valid verifier rejecting/failing a faulty implementation, or an error in the "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 592,
+      "latency_ms": 17713.4,
+      "prompt_tokens": 541,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether pytest exit code 1 reflects a genuine implementation failure in the selected corpus_scenario tests, or "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 353,
+      "latency_ms": 10519.8,
+      "prompt_tokens": 504,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The referenced test target exists, so the pytest failure is not due to an unresolvable target; exit code 1 most likely reflects a genu"
+    }
+  ],
+  "case_id": "cep-13",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "329a5e9d8a25b411",
+  "unknown_premature": 0
+}

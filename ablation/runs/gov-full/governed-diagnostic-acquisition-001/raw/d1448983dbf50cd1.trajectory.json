@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 849,
+      "latency_ms": 13100.9,
+      "prompt_tokens": 974,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a verifier-level configuration or runtime fault versus a legitimate validati"
+    }
+  ],
+  "case_id": "df-12",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "d1448983dbf50cd1",
+  "unknown_premature": 0
+}

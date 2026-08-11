@@ -1,0 +1,60 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 588,
+      "latency_ms": 17818.7,
+      "prompt_tokens": 680,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\", \"implementation\"], \"unresolved_distinction\": \"verifier_exit=1 shows a verifier failure was observed, but there are no logs, error text, plan/proj"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 179,
+      "latency_ms": 6130.9,
+      "prompt_tokens": 299,
+      "response_preview": "```json\n{\"candidate_loci\": [\"declared_model\"], \"unresolved_distinction\": \"The model file cashflow.sea references an undefined entity 'Customer', indicating the declared model itself is invalid rather "
+    }
+  ],
+  "case_id": "df-10",
+  "condition": "O",
+  "final_locus": "declared_model",
+  "observations": {
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Parse failed for examples/namespaces/finance/cashflow.sea: resolved closure failed graph construction: Undefined entity: Customer at 0:0"
+      ],
+      "exit_code": 1,
+      "model_file": "examples/namespaces/finance/cashflow.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "2fe7e5f18b52fc30",
+  "unknown_premature": 1
+}

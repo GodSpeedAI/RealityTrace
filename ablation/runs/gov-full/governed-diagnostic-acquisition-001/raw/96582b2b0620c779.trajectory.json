@@ -1,0 +1,94 @@
+{
+  "acquired_probes": [
+    "inspect_environment",
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 748,
+      "latency_ms": 17606.6,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"environment\"], \"unresolved_distinction\": \"Exit code 101 typically indicates a process panic/crash, but it is unclear whether the crash originates from a "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 755,
+      "latency_ms": 24882.5,
+      "prompt_tokens": 527,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\"],\n  \"unresolved_distinction\": \"Environment has been ruled out: the toolchain is available, directories are writable, and no missing dependencies or environmenta"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 732,
+      "latency_ms": 17409.5,
+      "prompt_tokens": 375,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"environment\", \"verifier\"], \"unresolved_distinction\": \"The rejection indicates insufficient evidence to confirm the failure originates in the implementati"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1248,
+      "latency_ms": 40346.5,
+      "prompt_tokens": 543,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The isolated rerun failed at compilation before any test executed, indicating the failure is most consistent with an implementation de"
+    }
+  ],
+  "case_id": "df-05",
+  "condition": "G",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "rerun_verifier_isolated": {
+      "isolated_result": "compile_error",
+      "summary": "compilation failed \u2014 no test could run",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "rerun_verifier_isolated",
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "96582b2b0620c779",
+  "unknown_premature": 0
+}

@@ -1,0 +1,87 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1149,
+      "latency_ms": 17409.9,
+      "prompt_tokens": 972,
+      "response_preview": "Looking at case sr-04, I need to analyze the available evidence:\n\n**Observed facts:**\n- Verifier exit code: 101 (atypical \u2014 in Go/Rust ecosystems, this often signals a panic/unrecoverable error)\n- std"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1073,
+      "latency_ms": 19227.4,
+      "prompt_tokens": 507,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"implementation\", \"environment\", \"verifier\"], \"unresolved_distinction\": \"Whether isolation failed because the test target/path was not resolvable or mis-declar"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 481,
+      "latency_ms": 9626.1,
+      "prompt_tokens": 513,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": \"The failing verification referenced a missing test target, indicating a stale or mis-declared verification target/path binding rath"
+    }
+  ],
+  "case_id": "sr-04",
+  "condition": "G",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/corpus_sr4_stale.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/corpus_sr4_stale.rs"
+      ]
+    },
+    "rerun_verifier_isolated": {
+      "isolated_result": "not_found",
+      "summary": "could not determine isolated test",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "4897b4fa947a081d",
+  "unknown_premature": 0
+}

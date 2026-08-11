@@ -1,0 +1,107 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_environment",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1028,
+      "latency_ms": 14532.2,
+      "prompt_tokens": 974,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"verification_plan\", \"environment\", \"implementation\"],\n  \"unresolved_distinction\": \"Verifier exit code 2 in pytest typically signals a usage/collection error"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1565,
+      "latency_ms": 23785.7,
+      "prompt_tokens": 555,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"implementation\", \"verifier\"],\n  \"unresolved_distinction\": \"The test target exists, so a missing path in the verification command is less likely. The rema"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 3187,
+      "latency_ms": 55011.6,
+      "prompt_tokens": 521,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"Environment and missing target path are unlikely; remaining distinction is whether pytest exit code 2 comes from missing/i"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 573,
+      "latency_ms": 8630.3,
+      "prompt_tokens": 238,
+      "response_preview": "Candidates: implementation, declared_model, unknown\nExcluded: environment (toolchain available, defaults fine), verifier (no verifier errors), verification_plan (observations collected normally), proj"
+    }
+  ],
+  "case_id": "cep-06",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "cep.scoring"
+      ],
+      "missing": [
+        "cep.scoring"
+      ],
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 3
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "798cc23d493c7374",
+  "unknown_premature": 0
+}

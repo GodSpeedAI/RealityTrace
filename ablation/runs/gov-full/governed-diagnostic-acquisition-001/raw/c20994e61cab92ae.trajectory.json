@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2993,
+      "latency_ms": 53962.5,
+      "prompt_tokens": 972,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "df-15",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "c20994e61cab92ae",
+  "unknown_premature": 0
+}

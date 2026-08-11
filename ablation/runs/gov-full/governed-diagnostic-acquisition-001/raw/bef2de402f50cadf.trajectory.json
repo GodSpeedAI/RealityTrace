@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1334,
+      "latency_ms": 21143.4,
+      "prompt_tokens": 974,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"environment\"],\n  \"unresolved_distinction\": \"Whether the verifier exited with code 1 due to a failing test assertion caused by an implementation bug, o"
+    }
+  ],
+  "case_id": "cep-02",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "bef2de402f50cadf",
+  "unknown_premature": 0
+}

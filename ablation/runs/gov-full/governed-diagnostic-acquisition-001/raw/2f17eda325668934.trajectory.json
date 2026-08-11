@@ -1,0 +1,145 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1167,
+      "latency_ms": 28758.2,
+      "prompt_tokens": 684,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\n    \"verifier\",\n    \"environment\",\n    \"implementation\"\n  ],\n  \"unresolved_distinction\": \"Exit code 101 is a panic-level abort (common in Rust runtimes). The key unreso"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 405,
+      "latency_ms": 12580.5,
+      "prompt_tokens": 337,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"None; unreadable source file with restrictive permissions points to an environment/runtime access problem rather than verifier or impleme"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 117653.5,
+      "prompt_tokens": 235,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 286,
+      "latency_ms": 11158.3,
+      "prompt_tokens": 202,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No symbols were referenced in the failure trace, so there is no source-level evidence pointing to any specific locus.\", \"settle\": \"unknown\"}\n"
+    }
+  ],
+  "case_id": "df-07",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "0",
+          "path": "domainforge-core/src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "domainforge-core/src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": [
+        "(default test discovery)"
+      ]
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    },
+    {
+      "locus": "environment",
+      "round": 2
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_source_symbols",
+      "round": 3
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "2f17eda325668934",
+  "unknown_premature": 1
+}

@@ -1,0 +1,137 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "rerun_verifier_isolated",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3144,
+      "latency_ms": 54235.1,
+      "prompt_tokens": 974,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"environment\"],\n  \"unresolved_distinction\": \"Whether the nonzero verifier exit reflects a real test failure in the implementat"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1114,
+      "latency_ms": 19346.5,
+      "prompt_tokens": 375,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\", \"unknown\"],\n  \"unresolved_distinction\": \"Whether the failing verification actually resolves to and exercises an existing implementation target, rather than an "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 599,
+      "latency_ms": 12117.4,
+      "prompt_tokens": 486,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"environment\"], \"unresolved_distinction\": \"The test target exists, so this is not a target binding gap. Need to determine whether the import test failure is due t"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 968,
+      "latency_ms": 18521.8,
+      "prompt_tokens": 558,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The failing test passes in isolated rerun, so the implementation appears correct; the original failure is best attributed to environmenta"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 584,
+      "latency_ms": 10661.7,
+      "prompt_tokens": 375,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether the failure is caused by missing/unusable toolchain or working directories versus an implementation"
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 422,
+      "latency_ms": 7271.8,
+      "prompt_tokens": 499,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"Resolved: toolchain is available, but the designated TMPDIR/working directory is not writable.\", \"selected_action\": null, \"expected_infor"
+    }
+  ],
+  "case_id": "cep-09",
+  "condition": "G",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "TMPDIR=/home/sprime01/projects/cep/.corpus-tmpfix",
+      "path": "default",
+      "tmpdir": "not_writable",
+      "toolchain": "available"
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.6,
+      "exit_code": 0,
+      "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_tmpdir_unavailable",
+      "isolated_result": "passed",
+      "summary": ".                                                                        [100%]\n1 passed in 0.18s",
+      "test": "tests/test_import.py::test_corpus_scenario_tmpdir_unavailable"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 1
+    },
+    {
+      "locus": "environment",
+      "round": 3
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 1,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_environment",
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 4,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "3025d94ffcb222f4",
+  "unknown_premature": 0
+}

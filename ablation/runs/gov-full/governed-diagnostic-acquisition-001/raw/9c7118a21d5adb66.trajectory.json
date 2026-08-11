@@ -1,0 +1,105 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1511,
+      "latency_ms": 30096.0,
+      "prompt_tokens": 974,
+      "response_preview": "Locus: unknown"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1148,
+      "latency_ms": 19560.1,
+      "prompt_tokens": 371,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"An UNKNOWN outcome could mean the verifier could not locate or execute against the t"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2988,
+      "latency_ms": 58802.7,
+      "prompt_tokens": 596,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\", \"environment\", \"projection\"],\n  \"unresolved_distinction\": \"The verifier configuration is syntactically coherent and has a clear exit-code direction rule, so ve"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 4096,
+      "latency_ms": 77878.3,
+      "prompt_tokens": 536,
+      "response_preview": ""
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 1753,
+      "latency_ms": 34611.1,
+      "prompt_tokens": 287,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "df-10",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "examples/namespaces/finance/cashflow.sea"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192valid, nonzero\u2192invalid",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "conformance_result"
+      ],
+      "verifier": "domainforge-validate",
+      "verifier_command": "cd /home/sprime01/projects/domainforge && /home/sprime01/projects/domainforge-slice0b/target/debug/domainforge validate examples/namespaces/finance/cashflow.sea"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "9c7118a21d5adb66",
+  "unknown_premature": 1
+}

@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3358,
+      "latency_ms": 69443.4,
+      "prompt_tokens": 972,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"verification_plan\", \"implementation\", \"environment\"],\n  \"unresolved_distinction\": \"The only signal is verifier_exit=101; no trace, command/config, source-state, or "
+    }
+  ],
+  "case_id": "ag-04",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "95eac25587cb1f40",
+  "unknown_premature": 0
+}

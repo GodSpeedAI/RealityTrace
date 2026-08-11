@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 771,
+      "latency_ms": 14314.8,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verifier\"],\n  \"unresolved_distinction\": \"Exit code 127 ('command not found') could mean the required toolchain/runtime is absent from the environment, or"
+    }
+  ],
+  "case_id": "ag-10",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "51c8634ffa65e25b",
+  "unknown_premature": 0
+}

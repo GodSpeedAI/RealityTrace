@@ -1,0 +1,7 @@
+Locus: unknown
+Terminal: BUDGET_EXHAUSTED
+Actions: inspect_verifier_config, inspect_environment, inspect_target_binding
+Payment: 3/7
+Rounds: 4
+Premature attempts: 1
+Unknown premature: 0

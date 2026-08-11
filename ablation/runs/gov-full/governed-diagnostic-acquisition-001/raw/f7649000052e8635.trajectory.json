@@ -1,0 +1,134 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_verifier_config",
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 3,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 4,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3938,
+      "latency_ms": 74088.6,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"verifier_exit=1 only shows that verification failed; without a "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1570,
+      "latency_ms": 26110.9,
+      "prompt_tokens": 371,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verification_plan\", \"projection\", \"verifier\"],\n  \"unresolved_distinction\": \"Whether the failure originates from the test target not resolving to exist"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 3235,
+      "latency_ms": 61235.2,
+      "prompt_tokens": 502,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"projection\"], \"unresolved_distinction\": \"The referenced test target exists, so this is not a missing test-path binding; the rema"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 3713,
+      "latency_ms": 66613.7,
+      "prompt_tokens": 504,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"projection\"], \"unresolved_distinction\": \"No source symbols are referenced in the failure trace, so an implementation-symbol placement issue is not"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 816,
+      "latency_ms": 17404.5,
+      "prompt_tokens": 294,
+      "response_preview": "Candidates: implementation, environment, unknown\nExcluded: projection:exists, verifier:valid\nLocus: unknown"
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 1063,
+      "latency_ms": 21635.6,
+      "prompt_tokens": 371,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Need to determine whether the failure is due to the verifier invocation/configuration,"
+    }
+  ],
+  "case_id": "cep-15",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario"
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 3
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "f7649000052e8635",
+  "unknown_premature": 2
+}

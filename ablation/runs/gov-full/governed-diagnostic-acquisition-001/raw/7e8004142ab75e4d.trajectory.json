@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 71507.3,
+      "prompt_tokens": 971,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 619,
+      "latency_ms": 10537.8,
+      "prompt_tokens": 147,
+      "response_preview": "Locus: evidence_collection"
+    }
+  ],
+  "case_id": "cep-04",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "7e8004142ab75e4d",
+  "unknown_premature": 0
+}

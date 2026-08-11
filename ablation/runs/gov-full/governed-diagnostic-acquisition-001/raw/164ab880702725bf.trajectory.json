@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3185,
+      "latency_ms": 63884.0,
+      "prompt_tokens": 978,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a crash/misconfiguration in the verifier itself, a failure in the implem"
+    }
+  ],
+  "case_id": "df-08",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "164ab880702725bf",
+  "unknown_premature": 0
+}

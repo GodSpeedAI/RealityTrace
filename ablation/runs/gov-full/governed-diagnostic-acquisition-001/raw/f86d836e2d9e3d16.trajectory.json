@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1306,
+      "latency_ms": 19348.7,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"Exit code 101 is characteristic of a Rust panic. The key question is whether the verifier crashed due to its own inte"
+    }
+  ],
+  "case_id": "ag-02",
+  "condition": "V",
+  "final_locus": "verifier",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "f86d836e2d9e3d16",
+  "unknown_premature": 0
+}

@@ -1,0 +1,66 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2255,
+      "latency_ms": 37872.0,
+      "prompt_tokens": 684,
+      "response_preview": "Looking at the retrieval context for case ag-08, I can identify the following key signals:\n\n**Available evidence:**\n- `verifier_exit: 101` \u2014 abnormal exit code from the verifier\n- FTS retrieval is com"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 279,
+      "latency_ms": 4615.1,
+      "prompt_tokens": 244,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The missing `from_cli` symbol in the source indicates the implementation is incomplete. The verifier's exit code 101 and the e"
+    }
+  ],
+  "case_id": "ag-08",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "from_cli"
+      ],
+      "missing": [
+        "from_cli"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "10b86d5cc04a642d",
+  "unknown_premature": 0
+}

@@ -1,0 +1,5 @@
+Locus: unknown
+Terminal: CONTRACT_FAILURE
+Actions: 
+Payment: 0/7
+Rounds: 0

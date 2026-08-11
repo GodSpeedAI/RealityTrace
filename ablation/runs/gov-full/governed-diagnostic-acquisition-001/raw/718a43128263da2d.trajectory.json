@@ -1,0 +1,56 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1787,
+      "latency_ms": 36996.5,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Exit code 101 is characteristic of a Rust panic. The key question is whether the verifier process itself pani"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 960,
+      "latency_ms": 26009.3,
+      "prompt_tokens": 585,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"Exit code 101 from cargo test is the standard Rust exit code for test panics or compilation failures \u2014 not a verifier crash. T"
+    }
+  ],
+  "case_id": "sr-03",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core --test corpus_sr3_stale"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "718a43128263da2d",
+  "unknown_premature": 0
+}

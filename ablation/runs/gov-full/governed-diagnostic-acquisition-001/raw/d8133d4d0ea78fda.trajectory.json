@@ -1,0 +1,60 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 479,
+      "latency_ms": 7472.1,
+      "prompt_tokens": 674,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"projection\"],\n  \"unresolved_distinction\": \"The verifier exited with code 1, but this could mean either (a) the verifier correctly detected"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 352,
+      "latency_ms": 5015.5,
+      "prompt_tokens": 316,
+      "response_preview": "```json\n{\"candidate_loci\": [\"declared_model\"], \"unresolved_distinction\": null, \"settle\": \"declared_model\"}\n```\nLocus: declared_model"
+    }
+  ],
+  "case_id": "sr-12",
+  "condition": "O",
+  "final_locus": "declared_model",
+  "observations": {
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Parse failed for .sea/interaction/interaction-model.sea: resolved closure failed graph construction: Undefined entity: UserIntent at 0:0"
+      ],
+      "exit_code": 1,
+      "model_file": ".sea/interaction/interaction-model.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "validate_semantic_model",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "d8133d4d0ea78fda",
+  "unknown_premature": 0
+}

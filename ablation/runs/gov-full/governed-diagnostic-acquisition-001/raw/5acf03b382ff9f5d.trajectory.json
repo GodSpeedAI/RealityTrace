@@ -1,0 +1,60 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1612,
+      "latency_ms": 34168.3,
+      "prompt_tokens": 680,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a verifier-internal failure, an implementation artifact failing va"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 142,
+      "latency_ms": 4347.1,
+      "prompt_tokens": 262,
+      "response_preview": "```json\n{\"candidate_loci\": [\"declared_model\"], \"unresolved_distinction\": null, \"settle\": \"declared_model\"}\n```\nLocus: declared_model"
+    }
+  ],
+  "case_id": "df-12",
+  "condition": "O",
+  "final_locus": "declared_model",
+  "observations": {
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Namespace 'finance' must provide at least one pattern"
+      ],
+      "exit_code": 1,
+      "model_file": "examples/namespaces/finance/cashflow.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "5acf03b382ff9f5d",
+  "unknown_premature": 1
+}

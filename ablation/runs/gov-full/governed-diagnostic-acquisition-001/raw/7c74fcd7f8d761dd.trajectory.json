@@ -1,0 +1,154 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 566,
+      "latency_ms": 10477.9,
+      "prompt_tokens": 675,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-side crash or an incomplete/preserved evidence artifact preventing diag"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 643,
+      "latency_ms": 10749.7,
+      "prompt_tokens": 236,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"Resolved: the missing tests/integration_tests.rs is what the verifier attempted to bind/run, causing exit 101; the verifier should h"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 521,
+      "latency_ms": 8396.8,
+      "prompt_tokens": 239,
+      "response_preview": "{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"No source symbols were implicated, so the failure is not attributable to implementation/projection code. The crash followed from the verifie"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1026,
+      "latency_ms": 16281.9,
+      "prompt_tokens": 245,
+      "response_preview": "{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"Environment appears normal, so the failure remains attributable to the verifier's handling of the missing test target.\", \"settle\": \"verifier"
+    }
+  ],
+  "case_id": "ag-05",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "644",
+          "path": "src/main.rs",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "644",
+          "path": "tests/fixtures/example.py",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/integration_tests.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/integration_tests.rs"
+      ]
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 2
+    },
+    {
+      "locus": "verifier",
+      "round": 3
+    },
+    {
+      "locus": "verifier",
+      "round": 4
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "verifier"
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "7c74fcd7f8d761dd",
+  "unknown_premature": 0
+}

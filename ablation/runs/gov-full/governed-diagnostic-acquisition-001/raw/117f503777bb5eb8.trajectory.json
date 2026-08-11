@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 76820.4,
+      "prompt_tokens": 975,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 535,
+      "latency_ms": 10316.5,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: evidence_collection, environment, verification_plan\nExcluded: verifier, projection, implementation, authority, declared_model\nLocus: evidence_collection"
+    }
+  ],
+  "case_id": "sr-07",
+  "condition": "V",
+  "final_locus": "evidence_collection",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "evidence_collection",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "117f503777bb5eb8",
+  "unknown_premature": 0
+}

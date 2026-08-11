@@ -1,0 +1,139 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1180,
+      "latency_ms": 17927.8,
+      "prompt_tokens": 684,
+      "response_preview": "Based on the retrieval context, I'll run the diagnostic decomposition:\n\n**1. Candidate Loci:**\n- **verifier** \u2014 `verifier_exit: 101` is a non-standard exit code. In many runtimes (e.g., Rust), exit co"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 564,
+      "latency_ms": 9971.1,
+      "prompt_tokens": 301,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The restrictive/unreadable source file explains the missing FTS/vector evidence and likely caused verifier exit 101 due to inaccessible i"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2168,
+      "latency_ms": 35837.7,
+      "prompt_tokens": 243,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"Target binding is intact \u2014 files exist and are discoverable. However, missing FTS/vector evidence could st"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1067,
+      "latency_ms": 16718.9,
+      "prompt_tokens": 272,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"The symbol probe found no referenced symbols, so it does not discriminate between restrictive content access (environment) and failed FTS/vec"
+    }
+  ],
+  "case_id": "sr-08",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "0",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "69944d7581c9bf2a",
+  "unknown_premature": 3
+}

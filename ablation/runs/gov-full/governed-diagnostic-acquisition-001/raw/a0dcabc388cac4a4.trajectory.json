@@ -1,0 +1,84 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 778,
+      "latency_ms": 20471.5,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\", \"verification_plan\"], \"unresolved_distinction\": \"The verifier exited with code 101 (often a panic/fatal-error signal) and no meaningful trace con"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 491,
+      "latency_ms": 13003.7,
+      "prompt_tokens": 603,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verification_plan\", \"environment\", \"verifier\"], \"unresolved_distinction\": \"The verifier config itself appears well-formed (cargo-test with a package filter and corpus targ"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1735,
+      "latency_ms": 47820.1,
+      "prompt_tokens": 554,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"None; verifier config is well-formed and the referenced test target resolves, so cargo exit 101 most likely indicates a build/compile "
+    }
+  ],
+  "case_id": "sr-08",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "a0dcabc388cac4a4",
+  "unknown_premature": 0
+}

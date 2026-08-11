@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1082,
+      "latency_ms": 15558.1,
+      "prompt_tokens": 22800,
+      "response_preview": "Looking at this case, I need to analyze the failure systematically.\n\n**Observations:**\n- The build artifacts all show `\"fresh\": true` \u2014 compilation succeeded\n- `verifier_exit: 101` is Rust's standard "
+    }
+  ],
+  "case_id": "ag-01",
+  "condition": "V",
+  "final_locus": "verification_plan",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "d61ca2bdd0198268",
+  "unknown_premature": 0
+}

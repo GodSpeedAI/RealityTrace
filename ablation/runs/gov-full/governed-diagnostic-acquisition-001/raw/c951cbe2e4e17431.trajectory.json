@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 584,
+      "latency_ms": 11569.3,
+      "prompt_tokens": 972,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"whether verifier_exit=101 reflects a verifier-internal fault versus an unavailable/misconfigured execution environment\", \"sel"
+    }
+  ],
+  "case_id": "ag-14",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "c951cbe2e4e17431",
+  "unknown_premature": 0
+}

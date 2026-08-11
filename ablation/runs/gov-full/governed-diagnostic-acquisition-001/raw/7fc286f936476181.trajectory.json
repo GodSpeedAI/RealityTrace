@@ -1,0 +1,127 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 563,
+      "latency_ms": 8324.3,
+      "prompt_tokens": 684,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"The verifier exited with code 101, but it is unclear whether this was caused by a cras"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1566,
+      "latency_ms": 26709.8,
+      "prompt_tokens": 301,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Target binding exists and evidence collection can inspect it, but without stdout/stderr, implementation logs, or coverage "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 203,
+      "latency_ms": 3348.3,
+      "prompt_tokens": 249,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"No symbols referenced in the failure trace and no stdout/stderr, implementation logs, or coverage available; exit "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 2056,
+      "latency_ms": 32437.2,
+      "prompt_tokens": 247,
+      "response_preview": "{\"candidate_loci\":[\"unknown\"],\"unresolved_distinction\":\"Environment probe found no env/path/toolchain issues, but there is still no output/trace/coverage to distinguish a verifier-internal crash from "
+    }
+  ],
+  "case_id": "sr-14",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "7fc286f936476181",
+  "unknown_premature": 3
+}

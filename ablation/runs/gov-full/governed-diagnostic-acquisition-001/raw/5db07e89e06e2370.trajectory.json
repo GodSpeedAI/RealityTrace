@@ -1,0 +1,73 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2009,
+      "latency_ms": 64817.9,
+      "prompt_tokens": 978,
+      "response_preview": "Locus: unknown"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2606,
+      "latency_ms": 69012.7,
+      "prompt_tokens": 371,
+      "response_preview": "{\"candidate_loci\":[\"verifier\",\"verification_plan\",\"implementation\",\"environment\"],\"unresolved_distinction\":\"Whether the failure is reproducible in isolation, indicating a persistent verifier/config/co"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 118071.7,
+      "prompt_tokens": 502,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 428,
+      "latency_ms": 10851.3,
+      "prompt_tokens": 184,
+      "response_preview": "Candidates: implementation, environment, verifier\nExcluded: verifier (produced a clear diagnostic), environment (no infra failure indicated), authority (no permission error), evidence_collection (obse"
+    }
+  ],
+  "case_id": "sr-08",
+  "condition": "G",
+  "final_locus": "implementation",
+  "observations": {
+    "rerun_verifier_isolated": {
+      "isolated_result": "compile_error",
+      "summary": "compilation failed \u2014 no test could run",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 5,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "rerun_verifier_isolated",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "implementation",
+      "no_valid_action": true,
+      "round": 2
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "5db07e89e06e2370",
+  "unknown_premature": 1
+}

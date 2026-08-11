@@ -1,0 +1,111 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1118,
+      "latency_ms": 30064.4,
+      "prompt_tokens": 21797,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"Exit code 101 is the standard Rust panic exit code. All build artifacts compiled successful"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 122833.9,
+      "prompt_tokens": 436,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 520,
+      "latency_ms": 17045.6,
+      "prompt_tokens": 208,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"The target binding exists, but no failed behavior or missing artifact is observable from this probe to distinguish among the possible loci.\","
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 560,
+      "latency_ms": 14641.0,
+      "prompt_tokens": 227,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No source symbols or missing artifacts were referenced by the probe, so there is still no observable failure point to distinguish among possi"
+    }
+  ],
+  "case_id": "df-01",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/flow_tests.rs"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.4,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/domainforge && cargo test --offline  -p domainforge-core --test flow_tests test_corpus_scenario_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s\n     Running tests/flow_tests.rs (target/debug/deps/flow_tests-266f728ea7df5483)\nerror: test failed, to rerun pass `-p domainforge-core --test flow_tests`",
+      "test": "test_corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "7691dc48a4e69118",
+  "unknown_premature": 2
+}

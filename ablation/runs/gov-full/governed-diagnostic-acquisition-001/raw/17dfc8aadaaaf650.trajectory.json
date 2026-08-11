@@ -1,0 +1,52 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1766,
+      "latency_ms": 22673.1,
+      "prompt_tokens": 978,
+      "response_preview": "Looking at the evidence for case sr-13:\n- **verifier_exit: 101** \u2014 abnormal exit code suggesting a crash or internal error, not a typical test-failure exit\n- **Vector all zeros** \u2014 no meaningful trace"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 704,
+      "latency_ms": 11291.7,
+      "prompt_tokens": 492,
+      "response_preview": "{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"Environment was inspected and found healthy (toolchain available, default paths and tmpdir); abnormal exit 101 therefore most consistent wit"
+    }
+  ],
+  "case_id": "sr-13",
+  "condition": "V",
+  "final_locus": "verifier",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "17dfc8aadaaaf650",
+  "unknown_premature": 0
+}

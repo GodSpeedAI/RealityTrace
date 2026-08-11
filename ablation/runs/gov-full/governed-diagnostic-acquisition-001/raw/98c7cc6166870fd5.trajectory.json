@@ -1,0 +1,134 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1113,
+      "latency_ms": 16274.3,
+      "prompt_tokens": 678,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"verifier_exit=101 typically signals a verifier panic/internal error (pointing to verifier),"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1583,
+      "latency_ms": 26523.8,
+      "prompt_tokens": 458,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The isolated verifier rerun reproduced exit 101 as a cargo test failure in unit_tests, indicating the verifier itself ran and reported"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 382,
+      "latency_ms": 7177.3,
+      "prompt_tokens": 252,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"None; the target binding exists, the verifier ran successfully, and the failure is a failing implementation unit test.\", \"settle\": \"im"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 490,
+      "latency_ms": 9974.4,
+      "prompt_tokens": 224,
+      "response_preview": "Locus: implementation"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 4046,
+      "latency_ms": 68696.2,
+      "prompt_tokens": 428,
+      "response_preview": "Candidates: verifier, implementation\nExcluded: environment (tests-ran), verification_plan (targets-exist), projection (binding-ok), evidence_collection (reproduced), authority (not-auth), declared_mod"
+    }
+  ],
+  "case_id": "ag-03",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline  test_corpus_scenario_wrong_expectation",
+      "isolated_result": "failed",
+      "summary": "     Running unittests src/lib.rs (target/debug/deps/ast_grep_mcp-36c99467a6a81be9)\n     Running unittests src/main.rs (target/debug/deps/ast_grep_mcp_server-40943245856d2f97)\n     Running tests/integration_tests.rs (target/debug/deps/integration_tests-e37f2d19c5959a6f)\n     Running tests/unit_tests.rs (target/debug/deps/unit_tests-f7b98ffb8f18d3b5)\nerror: test failed, to rerun pass `--test unit_tests`",
+      "test": "test_corpus_scenario_wrong_expectation"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    },
+    {
+      "locus": "implementation",
+      "round": 3
+    },
+    {
+      "locus": "implementation",
+      "round": 4
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 4,
+      "settlement_rejected": "implementation"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "98c7cc6166870fd5",
+  "unknown_premature": 1
+}

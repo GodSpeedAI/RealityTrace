@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1222,
+      "latency_ms": 31019.2,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Exit code 101 is characteristic of a Rust panic (Cargo/Rust convention). The unresolved question is whether t"
+    }
+  ],
+  "case_id": "df-05",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "a4a40f666728f952",
+  "unknown_premature": 0
+}

@@ -1,0 +1,69 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 608,
+      "latency_ms": 13053.1,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine implementation/test failure or a verifier/c"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 83815.3,
+      "prompt_tokens": 540,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1517,
+      "latency_ms": 28498.7,
+      "prompt_tokens": 229,
+      "response_preview": "Candidates: evidence_collection, unknown\nExcluded: verifier: config-valid, environment: no-env-assignments, implementation: no-output, verification_plan: no-data, projection: no-data, authority: no-da"
+    }
+  ],
+  "case_id": "cep-15",
+  "condition": "V",
+  "final_locus": "evidence_collection",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "evidence_collection",
+      "no_valid_action": true,
+      "round": 2
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "b266afd07db10c3a",
+  "unknown_premature": 0
+}

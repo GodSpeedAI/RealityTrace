@@ -1,0 +1,7 @@
+Locus: implementation
+Terminal: BUDGET_EXHAUSTED
+Actions: rerun_verifier_isolated
+Payment: 5/7
+Rounds: 2
+Premature attempts: 0
+Unknown premature: 1

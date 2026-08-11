@@ -1,0 +1,52 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 608,
+      "latency_ms": 10848.6,
+      "prompt_tokens": 972,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects an internal verifier crash/fault versus a missing or unusable runtime/toolchain environmen"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2817,
+      "latency_ms": 35226.1,
+      "prompt_tokens": 491,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\"],\n  \"unresolved_distinction\": \"Environment ruled out by available toolchain and normal runtime paths; abnormal exit code 101 is most consistent with an intern"
+    }
+  ],
+  "case_id": "ag-04",
+  "condition": "V",
+  "final_locus": "verifier",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "8114cbd37bc5b434",
+  "unknown_premature": 0
+}

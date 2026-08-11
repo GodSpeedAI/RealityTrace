@@ -1,0 +1,62 @@
+{
+  "acquired_probes": [
+    "inspect_fixture_integrity"
+  ],
+  "actions": [
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 553,
+      "latency_ms": 20641.5,
+      "prompt_tokens": 684,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 reflects an internal verifier failure versus missing or malformed collected evidence p"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 327,
+      "latency_ms": 5042.0,
+      "prompt_tokens": 235,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"evidence_collection\"],\n  \"unresolved_distinction\": \"The probe confirms data/corpus-v999.json is entirely missing. Verifier exit 101 is a downstream consequence of the r"
+    }
+  ],
+  "case_id": "df-08",
+  "condition": "O",
+  "final_locus": "evidence_collection",
+  "observations": {
+    "inspect_fixture_integrity": {
+      "checked": [
+        "data/corpus-v999.json"
+      ],
+      "missing": [
+        "data/corpus-v999.json"
+      ],
+      "ok": [],
+      "stale": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_fixture_integrity",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "evidence_collection"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "13d51422163cca1c",
+  "unknown_premature": 0
+}

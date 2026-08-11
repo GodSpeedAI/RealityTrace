@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3659,
+      "latency_ms": 64432.4,
+      "prompt_tokens": 974,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"verifier_exit=1 could indicate either an implementation defect caught by the verifier or a verifier/verification harness e"
+    }
+  ],
+  "case_id": "df-10",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "338251ab3c938eff",
+  "unknown_premature": 0
+}

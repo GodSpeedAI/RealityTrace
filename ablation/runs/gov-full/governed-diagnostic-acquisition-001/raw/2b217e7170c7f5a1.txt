@@ -1,0 +1,7 @@
+Locus: unknown
+Terminal: BUDGET_EXHAUSTED
+Actions: rerun_verifier_isolated, inspect_fixture_integrity
+Payment: 6/7
+Rounds: 3
+Premature attempts: 0
+Unknown premature: 0

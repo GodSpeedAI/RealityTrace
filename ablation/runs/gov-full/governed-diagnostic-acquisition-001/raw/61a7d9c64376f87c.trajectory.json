@@ -1,0 +1,139 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_target_binding",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1969,
+      "latency_ms": 28670.3,
+      "prompt_tokens": 684,
+      "response_preview": "Looking at the retrieval context for case sr-05:\n\n**Key signals observed:**\n- `verifier_exit: 101` \u2014 a non-zero, abnormal exit code (often associated with runtime panic/crash in verification harnesses"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 552,
+      "latency_ms": 11775.3,
+      "prompt_tokens": 245,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"Presence of run_id does not explain verifier_exit=101; still unclear whether verifier logic crashed or an environment depende"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 550,
+      "latency_ms": 10647.7,
+      "prompt_tokens": 237,
+      "response_preview": "{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"Target binding is valid and no missing targets were found, so the environment-related target hypothesis is weakened; the remaining likely ca"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 735,
+      "latency_ms": 12466.6,
+      "prompt_tokens": 232,
+      "response_preview": "{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"Environment probe found no anomalies, so the remaining supported locus is verifier behavior.\", \"settle\": \"verifier\"}\nLocus: verifier"
+    }
+  ],
+  "case_id": "sr-05",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "run_id"
+      ],
+      "missing": [],
+      "present": [
+        "run_id"
+      ]
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 3
+    },
+    {
+      "locus": "verifier",
+      "round": 4
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "verifier"
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "61a7d9c64376f87c",
+  "unknown_premature": 2
+}

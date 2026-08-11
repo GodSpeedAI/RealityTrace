@@ -1,0 +1,84 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 691,
+      "latency_ms": 18574.7,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"environment\", \"verification_plan\", \"implementation\"],\n  \"unresolved_distinction\": \"Verifier exit code 101 (abnormal/internal-error exit) is the only signal."
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2857,
+      "latency_ms": 85955.5,
+      "prompt_tokens": 608,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verification_plan\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"The verifier configuration and direction rule look valid, so exit 101 is mo"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2094,
+      "latency_ms": 66300.1,
+      "prompt_tokens": 525,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"None. The referenced target resolves, verifier configuration/direction was already valid, and a cargo nonzero exit most likely indicat"
+    }
+  ],
+  "case_id": "sr-10",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-domain corpus_scenario_stale_fixture"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "793555f6df0c25d5",
+  "unknown_premature": 0
+}

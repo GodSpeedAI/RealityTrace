@@ -1,0 +1,147 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 608,
+      "latency_ms": 18525.0,
+      "prompt_tokens": 684,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Exit code 101 indicates an abnormal/non-zero termination, but the retrieval context provides no stack trace, stder"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 200,
+      "latency_ms": 7267.5,
+      "prompt_tokens": 351,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The observation shows crates/sea-forge-core/src/lib.rs has mode 0 (no read permissions) and is unreadable, which is a restrictive file pe"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 245,
+      "latency_ms": 7783.0,
+      "prompt_tokens": 265,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": null, \"settle\": \"environment\"}\n```\nLocus: environment"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 499,
+      "latency_ms": 17560.4,
+      "prompt_tokens": 204,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"No source symbols were implicated by the trace, leaving the external/environmental failure explanation as the best supported locus.\", \"se"
+    }
+  ],
+  "case_id": "sr-08",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "0",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    },
+    {
+      "locus": "environment",
+      "round": 3
+    },
+    {
+      "locus": "environment",
+      "round": 4
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "environment"
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "66d4d2343569a417",
+  "unknown_premature": 1
+}

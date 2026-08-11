@@ -1,0 +1,83 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1052,
+      "latency_ms": 24310.4,
+      "prompt_tokens": 22800,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Whether exit code 101 originates from the verifier itself crashing while processing cargo-jso"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1637,
+      "latency_ms": 45102.9,
+      "prompt_tokens": 376,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the sufficiency-contract gap is due to the verifier's declared command/evidence contract"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 571,
+      "latency_ms": 18571.8,
+      "prompt_tokens": 562,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the verifier command's referenced test target/path resolves to an existing target in the"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 536,
+      "latency_ms": 16235.9,
+      "prompt_tokens": 237,
+      "response_preview": "Candidates: unknown, verifier, environment\nExcluded: implementation-no execution result observed, verifier_config-exit-code direction appears valid, environment-no missing env evidence shown\nLocus: un"
+    }
+  ],
+  "case_id": "ag-01",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline --message-format json corpus_scenario"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 2
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "8a74365da1800e74",
+  "unknown_premature": 0
+}

@@ -1,0 +1,133 @@
+{
+  "acquired_probes": [
+    "inspect_fixture_integrity",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1517,
+      "latency_ms": 43821.1,
+      "prompt_tokens": 681,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\", \"environment\"], \"unresolved_distinction\": \"The only signal is verifier_exit=101; without verifier stdout/stderr, implementation"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 778,
+      "latency_ms": 22985.9,
+      "prompt_tokens": 277,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The missing required fixture tests/fixtures/example-v999.py most likely explains verifier_exit=101; no remaining evidence points to verif"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 115564.7,
+      "prompt_tokens": 238,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 395,
+      "latency_ms": 10894.8,
+      "prompt_tokens": 202,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"The probe found no referenced symbols, so there is no evidence pointing to implementation/projection/etc.; no prior candidates are available."
+    }
+  ],
+  "case_id": "ag-13",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_fixture_integrity": {
+      "checked": [
+        "tests/fixtures/example-v999.py",
+        "tests/fixtures/example.py"
+      ],
+      "missing": [
+        "tests/fixtures/example-v999.py"
+      ],
+      "ok": [
+        "tests/fixtures/example.py"
+      ],
+      "stale": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_source_symbols",
+      "round": 3
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "b39987143c289e44",
+  "unknown_premature": 2
+}

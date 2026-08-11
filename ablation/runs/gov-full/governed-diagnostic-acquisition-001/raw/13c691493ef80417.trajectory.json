@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 122875.8,
+      "prompt_tokens": 978,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3954,
+      "latency_ms": 114034.9,
+      "prompt_tokens": 147,
+      "response_preview": "Locus: environment"
+    }
+  ],
+  "case_id": "ag-09",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "environment",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "13c691493ef80417",
+  "unknown_premature": 0
+}

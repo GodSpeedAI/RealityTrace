@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 614,
+      "latency_ms": 10746.8,
+      "prompt_tokens": 1539,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"implementation\"], \"unresolved_distinction\": \"Whether the failure is caused by an incorrect assertion/expectation in the test plan or by incorrect behavior in "
+    }
+  ],
+  "case_id": "cep-01",
+  "condition": "V",
+  "final_locus": "verification_plan",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "ec776ba7fabbecc9",
+  "unknown_premature": 0
+}

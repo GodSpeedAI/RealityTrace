@@ -1,0 +1,7 @@
+Locus: implementation
+Terminal: CONCRETE_SETTLEMENT
+Actions: inspect_environment, rerun_verifier_isolated
+Payment: 6/7
+Rounds: 3
+Premature attempts: 1
+Unknown premature: 0

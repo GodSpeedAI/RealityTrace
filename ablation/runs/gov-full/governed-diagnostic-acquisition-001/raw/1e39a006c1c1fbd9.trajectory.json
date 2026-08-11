@@ -1,0 +1,52 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1168,
+      "latency_ms": 14925.7,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"Whether exit code 101 (typically indicating an internal crash/panic) results from the verifier's own internal fault o"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 227,
+      "latency_ms": 3427.9,
+      "prompt_tokens": 547,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\"],\n  \"unresolved_distinction\": \"The observation confirms TMPDIR is set to a nonexistent, non-writable directory while the toolchain itself is available. Thi"
+    }
+  ],
+  "case_id": "df-15",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "TMPDIR=/nonexistent-corpus-tmpdir",
+      "path": "default",
+      "tmpdir": "not_writable",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "1e39a006c1c1fbd9",
+  "unknown_premature": 0
+}

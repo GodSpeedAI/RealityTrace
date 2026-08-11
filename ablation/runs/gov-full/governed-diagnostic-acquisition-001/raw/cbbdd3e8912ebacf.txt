@@ -1,0 +1,7 @@
+Locus: declared_model
+Terminal: CONCRETE_SETTLEMENT
+Actions: validate_semantic_model, inspect_target_binding
+Payment: 4/7
+Rounds: 3
+Premature attempts: 1
+Unknown premature: 1

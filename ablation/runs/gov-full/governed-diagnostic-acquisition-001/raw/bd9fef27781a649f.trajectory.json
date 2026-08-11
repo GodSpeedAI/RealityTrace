@@ -1,0 +1,120 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 746,
+      "latency_ms": 21141.9,
+      "prompt_tokens": 680,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine implementation verdict versus a verifier/runtime or evid"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 462,
+      "latency_ms": 13175.7,
+      "prompt_tokens": 326,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"\", \"settle\": \"implementation\"}\nLocus: implementation"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 3015,
+      "latency_ms": 79187.6,
+      "prompt_tokens": 208,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"\", \"settle\": \"implementation\"}\nLocus: implementation"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 526,
+      "latency_ms": 13062.3,
+      "prompt_tokens": 203,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No source symbols are referenced in the failure trace, so there is no implementation-level evidence; no other locus is indicated by the obser"
+    }
+  ],
+  "case_id": "cep-02",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.5,
+      "exit_code": 1,
+      "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_test_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\ntests/test_import.py:21: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_import.py::test_corpus_scenario_test_assertion_bug - assert...\n1 failed in 0.16s",
+      "test": "tests/test_import.py::test_corpus_scenario_test_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    },
+    {
+      "locus": "implementation",
+      "round": 3
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "bd9fef27781a649f",
+  "unknown_premature": 1
+}

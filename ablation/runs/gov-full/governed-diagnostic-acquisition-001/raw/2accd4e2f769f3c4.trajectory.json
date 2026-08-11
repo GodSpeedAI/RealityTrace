@@ -1,0 +1,61 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 951,
+      "latency_ms": 17143.7,
+      "prompt_tokens": 674,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"verifier_exit=2 with no log/stderr/vector signal is insufficient to distinguish a verifier/usage failure fr"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 556,
+      "latency_ms": 9522.0,
+      "prompt_tokens": 241,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The required source symbol cep.conformance.anti_collapse is missing, which explains the failure as an implementation defect rather tha"
+    }
+  ],
+  "case_id": "cep-08",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "cep.conformance.anti_collapse"
+      ],
+      "missing": [
+        "cep.conformance.anti_collapse"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "2accd4e2f769f3c4",
+  "unknown_premature": 1
+}

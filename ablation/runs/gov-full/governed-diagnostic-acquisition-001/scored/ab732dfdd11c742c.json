@@ -1,0 +1,47 @@
+{
+  "acquired_any": true,
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "action_ids": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "budget_exhausted": false,
+  "case_id": "ag-12",
+  "condition": "V",
+  "correct_use": null,
+  "diag_success": false,
+  "discrim_selected_any": false,
+  "discriminating_probes": [
+    "inspect_permissions"
+  ],
+  "exact_correct": false,
+  "failure_locus": "ACTION_SELECTION_FAILURE",
+  "final_locus": "unknown",
+  "first_action": "inspect_verifier_config",
+  "first_is_discrim": false,
+  "gate_infeasible": false,
+  "governed_safe_concrete": 0,
+  "has_discrim_evidence": false,
+  "is_determinate": true,
+  "is_unknown_case": false,
+  "latency_ms": 267649.8,
+  "model_calls": 4,
+  "num_actions": 2,
+  "payment_used": 2,
+  "premature_attempts": 0,
+  "reasoning_tokens": 8932,
+  "rep": 3,
+  "rounds_before_first": 0,
+  "scoring_version": "gov-scorer-1",
+  "semantic_model_fp": false,
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "total_tokens": 11498,
+  "true_locus": "authority",
+  "unit_id": "ab732dfdd11c742c",
+  "unknown_correct": false,
+  "unknown_premature": 0,
+  "unsupported_concrete": false
+}

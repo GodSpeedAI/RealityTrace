@@ -1,0 +1,111 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 676,
+      "latency_ms": 14142.2,
+      "prompt_tokens": 677,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"environment\", \"evidence_collection\", \"verifier\"],\n  \"unresolved_distinction\": \"The verifier exited with code 1, but no artifact content, error message"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 122103.7,
+      "prompt_tokens": 358,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 552,
+      "latency_ms": 15932.2,
+      "prompt_tokens": 207,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"The observation only confirms that tests/test_import.py exists; it does not identify a failing component or implicate any specific locus.\", \""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 329,
+      "latency_ms": 10562.6,
+      "prompt_tokens": 227,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "cep-03",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.5,
+      "exit_code": 1,
+      "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_test_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\ntests/test_import.py:21: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_import.py::test_corpus_scenario_test_assertion_bug - assert...\n1 failed in 0.15s",
+      "test": "tests/test_import.py::test_corpus_scenario_test_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "7209687c827153db",
+  "unknown_premature": 2
+}

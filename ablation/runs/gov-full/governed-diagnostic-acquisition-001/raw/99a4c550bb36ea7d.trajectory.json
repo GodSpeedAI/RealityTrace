@@ -1,0 +1,61 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1084,
+      "latency_ms": 18952.3,
+      "prompt_tokens": 674,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"verifier_exit=2 could indicate a verifier/harness failure versus an implementation- or environment-triggere"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 233,
+      "latency_ms": 4796.2,
+      "prompt_tokens": 243,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The required symbol iter_reality_gap_case_files is absent from the source, meaning the implementation does not provide the exp"
+    }
+  ],
+  "case_id": "cep-07",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "iter_reality_gap_case_files"
+      ],
+      "missing": [
+        "iter_reality_gap_case_files"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "99a4c550bb36ea7d",
+  "unknown_premature": 1
+}

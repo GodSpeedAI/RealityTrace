@@ -1,0 +1,131 @@
+{
+  "acquired_probes": [
+    "inspect_environment",
+    "inspect_target_binding",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 3,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 4,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1054,
+      "latency_ms": 13275.2,
+      "prompt_tokens": 968,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"implementation\"],\n  \"unresolved_distinction\": \"Verifier exited with code 2 (pytest error/interruption code). This could be caused by a missing or broken "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1218,
+      "latency_ms": 16375.7,
+      "prompt_tokens": 519,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verification_plan\"],\n  \"unresolved_distinction\": \"Whether the pytest exit code 2 is due to a missing or non-resolving test target (verification_plan) "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 635,
+      "latency_ms": 10339.9,
+      "prompt_tokens": 496,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\"],\n  \"unresolved_distinction\": \"Resolved: the referenced test target exists and binds correctly, so exit code 2 is not due to a missing/non-resolving target; it "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1145,
+      "latency_ms": 20276.7,
+      "prompt_tokens": 375,
+      "response_preview": "{\"candidate_loci\":[\"implementation\",\"verification_plan\",\"evidence_collection\",\"environment\"],\"unresolved_distinction\":\"Whether the failing verification actually resolves to an existing target/file in "
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 603,
+      "latency_ms": 10819.6,
+      "prompt_tokens": 502,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"The verification target exists, so the failure is not due to a missing test file/path binding. The"
+    }
+  ],
+  "case_id": "cep-07",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "iter_reality_gap_case_files"
+      ],
+      "missing": [
+        "iter_reality_gap_case_files"
+      ],
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 3
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 3,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 4
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "03d9d4749a8f36c3",
+  "unknown_premature": 0
+}

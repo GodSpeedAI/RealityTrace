@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1927,
+      "latency_ms": 40397.2,
+      "prompt_tokens": 687,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"Verifier exit 127 typically indicates a missing or non-executable command, but without stderr/path/command details it is uncl"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 392,
+      "latency_ms": 8340.3,
+      "prompt_tokens": 260,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"Exit 127 is now best explained by the restricted PATH and unavailable toolchain in the execution environment.\", \"settle\": \"environment\"}\n"
+    }
+  ],
+  "case_id": "df-06",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "64b6f320e00b76d1",
+  "unknown_premature": 1
+}

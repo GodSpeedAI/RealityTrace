@@ -1,0 +1,91 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 696,
+      "latency_ms": 17608.1,
+      "prompt_tokens": 687,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"evidence_collection\", \"environment\"],\n  \"unresolved_distinction\": \"The verifier exited with code 101 (often indicating a panic/fatal error in the verifier p"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1513,
+      "latency_ms": 33484.6,
+      "prompt_tokens": 275,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"The source symbol 'from_concept' is confirmed missing from the implementation. This could m"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 3017,
+      "latency_ms": 61037.2,
+      "prompt_tokens": 298,
+      "response_preview": "Looking at this observation, the probe reveals that the **default test discovery target itself does not exist**. This is a broader infrastructural absence than just a single missing symbol \u2014 the entir"
+    }
+  ],
+  "case_id": "df-05",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "from_concept"
+      ],
+      "missing": [
+        "from_concept"
+      ],
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": [
+        "(default test discovery)"
+      ]
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "a9a23913760f997b",
+  "unknown_premature": 1
+}

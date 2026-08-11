@@ -1,0 +1,138 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1118,
+      "latency_ms": 19848.3,
+      "prompt_tokens": 684,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"evidence_collection\", \"environment\"], \"unresolved_distinction\": \"The verifier_exit=101 indicates an abnormal verifier process termination, but the retrieval co"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3551,
+      "latency_ms": 76519.8,
+      "prompt_tokens": 325,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The probe shows the expected target file tests/corpus_sr3_stale.rs is missing, which explains the abnormal verifier termination and spars"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1315,
+      "latency_ms": 27838.1,
+      "prompt_tokens": 256,
+      "response_preview": "{\"candidate_loci\":[\"environment\"],\"unresolved_distinction\":\"None remaining; the symbol probe found no referenced symbols, so it does not shift the diagnosis away from the missing expected target file "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 2619,
+      "latency_ms": 60313.6,
+      "prompt_tokens": 236,
+      "response_preview": "{\"candidate_loci\":[\"unknown\"],\"unresolved_distinction\":\"Environment probe shows no env/path/toolchain anomaly, so the missing expected artifact cannot be confidently attributed to environment versus i"
+    }
+  ],
+  "case_id": "sr-03",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/corpus_sr3_stale.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/corpus_sr3_stale.rs"
+      ]
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    },
+    {
+      "locus": "environment",
+      "round": 3
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "a75ab2e428e329f9",
+  "unknown_premature": 1
+}

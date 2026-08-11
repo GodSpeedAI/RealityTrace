@@ -1,0 +1,7 @@
+Locus: implementation
+Terminal: CONCRETE_SETTLEMENT
+Actions: inspect_target_binding, inspect_source_symbols
+Payment: 2/7
+Rounds: 3
+Premature attempts: 0
+Unknown premature: 1

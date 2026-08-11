@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4075,
+      "latency_ms": 74230.5,
+      "prompt_tokens": 977,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects failing pytest-checked implementation behavior versus a verifier/configuration error.\", \""
+    }
+  ],
+  "case_id": "cep-13",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "a059dbf37984b8a6",
+  "unknown_premature": 0
+}

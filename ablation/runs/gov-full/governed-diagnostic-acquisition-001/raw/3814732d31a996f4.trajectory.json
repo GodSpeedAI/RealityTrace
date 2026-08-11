@@ -1,0 +1,83 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2152,
+      "latency_ms": 49658.4,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"implementation\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects an invalid verifier configuration/plan or an actual implementation-l"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 518,
+      "latency_ms": 13134.4,
+      "prompt_tokens": 544,
+      "response_preview": "{\n  \"candidate_loci\": [\"verification_plan\", \"implementation\"],\n  \"unresolved_distinction\": \"Whether pytest exited nonzero because the target path/filter failed to resolve to an actual test or fixture "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 579,
+      "latency_ms": 13789.9,
+      "prompt_tokens": 498,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": null, \"selected_action\": null, \"expected_information\": null, \"settle\": \"implementation\"}\nLocus: implementation"
+    }
+  ],
+  "case_id": "cep-03",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "3814732d31a996f4",
+  "unknown_premature": 0
+}

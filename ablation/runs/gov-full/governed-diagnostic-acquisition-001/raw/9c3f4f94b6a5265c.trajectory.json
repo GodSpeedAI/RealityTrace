@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 793,
+      "latency_ms": 10404.8,
+      "prompt_tokens": 968,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Exit code 2 from a pytest-progress verifier typically signals collection/execution interruptio"
+    }
+  ],
+  "case_id": "cep-07",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "9c3f4f94b6a5265c",
+  "unknown_premature": 0
+}

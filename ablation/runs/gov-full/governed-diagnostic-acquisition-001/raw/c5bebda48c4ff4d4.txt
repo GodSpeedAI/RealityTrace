@@ -1,0 +1,7 @@
+Locus: verification_plan
+Terminal: CONCRETE_SETTLEMENT
+Actions: inspect_verifier_config, inspect_target_binding
+Payment: 2/7
+Rounds: 2
+Premature attempts: 0
+Unknown premature: 0

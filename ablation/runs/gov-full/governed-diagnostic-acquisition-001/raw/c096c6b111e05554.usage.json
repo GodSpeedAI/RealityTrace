@@ -1,0 +1,1 @@
+{"acquired_probes": [], "actions_taken": [], "condition": "O", "latency_ms": 0, "model_calls": 0, "payment_used": 0, "premature_attempts": 0, "reasoning_tokens": 0, "resolved_model": "glm-5.2", "terminal_state": "CONTRACT_FAILURE", "total_tokens": 0, "unknown_premature": 0}

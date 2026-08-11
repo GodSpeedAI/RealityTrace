@@ -1,0 +1,70 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1253,
+      "latency_ms": 20512.9,
+      "prompt_tokens": 22091,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"All compilation artifacts are fresh (build succeeded), yet the verifier exited with code 101 (Rust panic code). Th"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 81869.2,
+      "prompt_tokens": 588,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 531,
+      "latency_ms": 10166.9,
+      "prompt_tokens": 243,
+      "response_preview": "Candidates: evidence_collection, unknown\nExcluded: verifier, implementation, environment, projection, verification_plan, authority, declared_model\nLocus: unknown"
+    }
+  ],
+  "case_id": "df-01",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/domainforge && cargo test --offline --message-format json -p domainforge-core --test flow_tests corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 2
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "9bfdbf0d3ab98467",
+  "unknown_premature": 0
+}

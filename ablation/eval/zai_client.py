@@ -26,9 +26,9 @@ from .model_client import ModelCall, ModelClientError
 CODING_URL = "https://api.z.ai/api/coding/paas/v4/chat/completions"
 AUTH_FILE = "~/.local/share/opencode/auth.json"
 CODING_PLAN_KEY = "zai-coding-plan"
-MAX_RETRIES = 3
+MAX_RETRIES = 5
 RETRY_STATUS = (429, 500, 502, 503, 504)
-RETRY_BACKOFF = (2.0, 4.0, 8.0)
+RETRY_BACKOFF = (5.0, 15.0, 30.0, 60.0, 120.0)
 
 
 def _b64u(b: bytes) -> bytes:

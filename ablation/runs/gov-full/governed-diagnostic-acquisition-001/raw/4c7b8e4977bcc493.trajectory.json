@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4009,
+      "latency_ms": 85394.6,
+      "prompt_tokens": 971,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"environment\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine implementation/test failure or an inva"
+    }
+  ],
+  "case_id": "cep-03",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "4c7b8e4977bcc493",
+  "unknown_premature": 0
+}

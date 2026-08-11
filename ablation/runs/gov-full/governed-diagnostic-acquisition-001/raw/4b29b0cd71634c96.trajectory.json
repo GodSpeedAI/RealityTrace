@@ -1,0 +1,116 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 580,
+      "latency_ms": 13794.2,
+      "prompt_tokens": 678,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\", \"environment\", \"unknown\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-side failure, missing/malformed collected evi"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1650,
+      "latency_ms": 34403.0,
+      "prompt_tokens": 427,
+      "response_preview": "{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"\", \"settle\": \"verifier\"}\nLocus: verifier"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 462,
+      "latency_ms": 14652.0,
+      "prompt_tokens": 208,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"Target binding exists, so verifier-target mismatch is unlikely; no remaining evidence points to another specific locus.\", \"settle\": \"unknown\""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 507,
+      "latency_ms": 13613.1,
+      "prompt_tokens": 222,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No referenced symbols or trace evidence were available to localize the failure.\", \"settle\": \"unknown\"}\nLocus: unknown"
+    }
+  ],
+  "case_id": "ag-02",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline  test_corpus_scenario_assertion_bug_integration",
+      "isolated_result": "failed",
+      "summary": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src/lib.rs (target/debug/deps/ast_grep_mcp-36c99467a6a81be9)\n     Running unittests src/main.rs (target/debug/deps/ast_grep_mcp_server-40943245856d2f97)\n     Running tests/integration_tests.rs (target/debug/deps/integration_tests-e37f2d19c5959a6f)\nerror: test failed, to rerun pass `--test integration_tests`",
+      "test": "test_corpus_scenario_assertion_bug_integration"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 2
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "4b29b0cd71634c96",
+  "unknown_premature": 2
+}

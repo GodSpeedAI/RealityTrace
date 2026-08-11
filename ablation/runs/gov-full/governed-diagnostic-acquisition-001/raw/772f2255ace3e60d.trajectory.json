@@ -1,0 +1,134 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1575,
+      "latency_ms": 36286.1,
+      "prompt_tokens": 975,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"environment\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-internal fault (e.g., a panic/hard crash in the verifier logic) ve"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1660,
+      "latency_ms": 50178.0,
+      "prompt_tokens": 517,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"The isolated rerun did not identify a concrete failing test, so it remains unclear whether verifier_exit=101 is a verifier-in"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 941,
+      "latency_ms": 29662.5,
+      "prompt_tokens": 510,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The missing referenced target tests/flow_tests.rs explains the abort; no evidence points to a verifier-internal crash.\", \"selected_action"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 590,
+      "latency_ms": 17031.1,
+      "prompt_tokens": 375,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the failure is due to missing/unusable environment prerequisites versus an invalid targe"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 571,
+      "latency_ms": 17305.0,
+      "prompt_tokens": 484,
+      "response_preview": "{\"candidate_loci\": [\"evidence_collection\", \"implementation\"], \"unresolved_distinction\": \"Environment is now ruled out; remaining distinction is whether the failure is caused by an invalid target/path "
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 1619,
+      "latency_ms": 51203.2,
+      "prompt_tokens": 377,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the insufficient evidence is due to a verifier/verification-plan contract defining the w"
+    }
+  ],
+  "case_id": "df-03",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/flow_tests.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/flow_tests.rs"
+      ]
+    },
+    "rerun_verifier_isolated": {
+      "isolated_result": "not_found",
+      "summary": "could not determine isolated test",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 3
+    },
+    {
+      "locus": "evidence_collection",
+      "round": 4
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_environment",
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "evidence_collection"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "772f2255ace3e60d",
+  "unknown_premature": 0
+}

@@ -1,0 +1,151 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1643,
+      "latency_ms": 29963.1,
+      "prompt_tokens": 684,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"verification_plan\", \"implementation\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"verifier_exit=101 alone does not establish whether the verifier failed in"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 988,
+      "latency_ms": 17538.5,
+      "prompt_tokens": 348,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": null, \"settle\": \"environment\"}\nLocus: environment"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 534,
+      "latency_ms": 10138.5,
+      "prompt_tokens": 209,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"Environment target binding was ruled out, leaving no supported locus.\", \"settle\": \"unknown\"}\nLocus: unknown"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 543,
+      "latency_ms": 11075.3,
+      "prompt_tokens": 214,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No symbols referenced in the failure trace and prior environment binding ruled out; no supported locus remains.\", \"settle\": \"unknown\"}\nLocus:"
+    }
+  ],
+  "case_id": "ag-11",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "644",
+          "path": "src/main.rs",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "0",
+          "path": "tests/fixtures/example.py",
+          "readable": false,
+          "restrictive": true
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "tests/fixtures/example.py",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "9441e6f3541897a6",
+  "unknown_premature": 3
+}

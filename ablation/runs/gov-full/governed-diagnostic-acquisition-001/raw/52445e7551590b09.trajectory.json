@@ -1,0 +1,61 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 448,
+      "latency_ms": 10428.1,
+      "prompt_tokens": 674,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"A verifier exit code of 2 could indicate a verifier/harness usage error, a collectio"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 417,
+      "latency_ms": 10243.0,
+      "prompt_tokens": 255,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The required source symbol cep.conformance.anti_collapse is absent, indicating the implementation is incomplete or non-conformant.\", \""
+    }
+  ],
+  "case_id": "cep-08",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "cep.conformance.anti_collapse"
+      ],
+      "missing": [
+        "cep.conformance.anti_collapse"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "52445e7551590b09",
+  "unknown_premature": 1
+}

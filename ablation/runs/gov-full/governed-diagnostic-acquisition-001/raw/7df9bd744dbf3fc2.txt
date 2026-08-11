@@ -1,0 +1,7 @@
+Locus: unknown
+Terminal: BUDGET_EXHAUSTED
+Actions: 
+Payment: 0/7
+Rounds: 1
+Premature attempts: 1
+Unknown premature: 0

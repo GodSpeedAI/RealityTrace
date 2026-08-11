@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 495,
+      "latency_ms": 14220.5,
+      "prompt_tokens": 680,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine implementation failure in repo cep or a v"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 620,
+      "latency_ms": 15562.7,
+      "prompt_tokens": 261,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"None; the environment probe shows TMPDIR is not writable, which can explain verifier_exit=1 and missing artifacts without requiring an im"
+    }
+  ],
+  "case_id": "cep-09",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "TMPDIR=/home/sprime01/projects/cep/.corpus-tmpfix",
+      "path": "default",
+      "tmpdir": "not_writable",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "434797036debadc0",
+  "unknown_premature": 1
+}

@@ -1,0 +1,52 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1223,
+      "latency_ms": 20152.6,
+      "prompt_tokens": 19597,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"The test asserts left(2) == right(3) but I cannot determine from the assertion alone whether the implemen"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2455,
+      "latency_ms": 46182.9,
+      "prompt_tokens": 559,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": null, \"selected_action\": null, \"expected_information\": null, \"settle\": \"verification_plan\"}\nLocus: verification_plan"
+    }
+  ],
+  "case_id": "sr-01",
+  "condition": "V",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "a894b9422a4e1b4b",
+  "unknown_premature": 0
+}

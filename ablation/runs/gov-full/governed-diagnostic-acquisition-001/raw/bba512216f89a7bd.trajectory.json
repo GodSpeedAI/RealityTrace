@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 198641.6,
+      "prompt_tokens": 984,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 546,
+      "latency_ms": 15225.7,
+      "prompt_tokens": 147,
+      "response_preview": "Locus: evidence_collection"
+    }
+  ],
+  "case_id": "df-02",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "bba512216f89a7bd",
+  "unknown_premature": 0
+}

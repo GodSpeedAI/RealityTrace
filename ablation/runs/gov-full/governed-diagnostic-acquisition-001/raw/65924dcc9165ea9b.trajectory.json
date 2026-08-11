@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 990,
+      "latency_ms": 14435.5,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"Exit code 127 ('command not found') could mean the required toolchain/runtime is missing from the environment (enviro"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 155,
+      "latency_ms": 2965.6,
+      "prompt_tokens": 517,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\"],\n  \"unresolved_distinction\": null,\n  \"selected_action\": null,\n  \"expected_information\": null,\n  \"settle\": \"environment\"\n}\n```\nLocus: environment"
+    }
+  ],
+  "case_id": "ag-10",
+  "condition": "G",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "65924dcc9165ea9b",
+  "unknown_premature": 0
+}

@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 731,
+      "latency_ms": 20894.0,
+      "prompt_tokens": 677,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether pytest's exit code 1 reflects genuine test failures (implementation defect) versus a fault in the verifier"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 425,
+      "latency_ms": 11558.9,
+      "prompt_tokens": 252,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The probe reveals the toolchain is unavailable and PATH is restricted to /usr/bin:/bin. This explains the pytest exit code 1: tes"
+    }
+  ],
+  "case_id": "cep-10",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "ae7ec9cf5a910479",
+  "unknown_premature": 0
+}

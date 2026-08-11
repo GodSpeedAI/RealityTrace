@@ -1,0 +1,133 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 557,
+      "latency_ms": 10028.4,
+      "prompt_tokens": 677,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine test failure in the implementation under te"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 638,
+      "latency_ms": 13926.5,
+      "prompt_tokens": 297,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"The test target tests/test_import.py exists, but the frozen context still does not show the artifac"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1060,
+      "latency_ms": 16486.4,
+      "prompt_tokens": 257,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"The automated probe returned no discriminative signal: 'no symbols referenced in failure tr"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1110,
+      "latency_ms": 21912.8,
+      "prompt_tokens": 273,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Environment appears normal and toolchain is available, but the empty/no-symbol failure trace remain"
+    }
+  ],
+  "case_id": "cep-15",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "tests/fixtures/sample_settlement_recorded.json",
+          "readable": true,
+          "restrictive": false
+        },
+        {
+          "mode": "644",
+          "path": "tests/test_import.py",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_source_symbols",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "70447d3d6b3c7e0f",
+  "unknown_premature": 3
+}

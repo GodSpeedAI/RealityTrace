@@ -1,0 +1,98 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 819,
+      "latency_ms": 15658.8,
+      "prompt_tokens": 974,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verification_plan\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"The verifier exited non-zero (exit=1), but we have no failure trace or stdout/"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1889,
+      "latency_ms": 37274.3,
+      "prompt_tokens": 577,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"The verifier config/command is superficially valid, but without pytest stdout/stderr/traceback we "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 188,
+      "latency_ms": 5833.5,
+      "prompt_tokens": 607,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\"],\n  \"unresolved_distinction\": \"The isolated verifier run reached the test body and failed on an assertion at tests/test_import.py:21, indicating the verifier ex"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 3078,
+      "latency_ms": 58269.0,
+      "prompt_tokens": 375,
+      "response_preview": "{\n  \"candidate_loci\": [\n    \"implementation\",\n    \"verifier\",\n    \"environment\",\n    \"evidence_collection\",\n    \"unknown\"\n  ],\n  \"unresolved_distinction\": \"Whether the failure reproduces as a true imp"
+    }
+  ],
+  "case_id": "cep-02",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario"
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.5,
+      "exit_code": 1,
+      "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_test_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\ntests/test_import.py:21: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_import.py::test_corpus_scenario_test_assertion_bug - assert...\n1 failed in 0.16s",
+      "test": "tests/test_import.py::test_corpus_scenario_test_assertion_bug"
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 3
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "implementation"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "3086fe9ce5fe2b3f",
+  "unknown_premature": 0
+}

@@ -1,0 +1,81 @@
+{
+  "acquired_probes": [
+    "inspect_environment",
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 918,
+      "latency_ms": 16351.8,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\", \"implementation\"], \"unresolved_distinction\": \"Exit code 101 could indicate a verifier-internal crash/panic, a missing toolchain or inaccessible w"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1361,
+      "latency_ms": 33751.2,
+      "prompt_tokens": 517,
+      "response_preview": "{\"candidate_loci\":[\"verifier\",\"implementation\",\"evidence_collection\"],\"unresolved_distinction\":\"Environment is healthy, so exit code 101 is likely either a verifier/evidence-collection crash or an imp"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 582,
+      "latency_ms": 17714.1,
+      "prompt_tokens": 509,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The isolated rerun failed at compilation before any test executed, which points to the implementation rather than a runtime verifier o"
+    }
+  ],
+  "case_id": "sr-08",
+  "condition": "G",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "rerun_verifier_isolated": {
+      "isolated_result": "compile_error",
+      "summary": "compilation failed \u2014 no test could run",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "bbcabacb33720c8d",
+  "unknown_premature": 0
+}

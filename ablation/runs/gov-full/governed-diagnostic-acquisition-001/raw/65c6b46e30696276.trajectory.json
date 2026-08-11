@@ -1,0 +1,136 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "rerun_verifier_isolated",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 3,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 954,
+      "latency_ms": 24880.0,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Verifier exit code 101 is unusual (often indicating a panic or internal error rather than a normal "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3493,
+      "latency_ms": 88383.1,
+      "prompt_tokens": 613,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"None: cargo-test treats nonzero exit as failure, and the configured direction rule maps nonzero to contradicts. With no environment as"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2770,
+      "latency_ms": 68604.2,
+      "prompt_tokens": 375,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"evidence_collection\", \"environment\", \"verifier\"], \"unresolved_distinction\": \"Whether the observed failure reproduces as a genuine implementation defect under iso"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1029,
+      "latency_ms": 22830.0,
+      "prompt_tokens": 499,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\", \"verification_plan\"], \"unresolved_distinction\": \"Whether the isolated rerun returned not_found because the evidence did not identify a concrete t"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 4096,
+      "latency_ms": 92776.4,
+      "prompt_tokens": 328,
+      "response_preview": ""
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 510,
+      "latency_ms": 12387.1,
+      "prompt_tokens": 328,
+      "response_preview": "Locus: projection"
+    }
+  ],
+  "case_id": "sr-04",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/corpus_sr4_stale.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/corpus_sr4_stale.rs"
+      ]
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-domain --test corpus_sr4_stale"
+    },
+    "rerun_verifier_isolated": {
+      "isolated_result": "not_found",
+      "summary": "could not determine isolated test",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "rerun_verifier_isolated",
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 3
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 4
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "65c6b46e30696276",
+  "unknown_premature": 0
+}

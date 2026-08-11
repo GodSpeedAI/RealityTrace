@@ -1,0 +1,109 @@
+{
+  "acquired_probes": [
+    "inspect_environment",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1043,
+      "latency_ms": 12726.1,
+      "prompt_tokens": 974,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verifier\"],\n  \"unresolved_distinction\": \"Pytest verifier exited with code 2 (interrupted/aborted). It is unclear whether this was caused by an environmen"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2764,
+      "latency_ms": 46353.8,
+      "prompt_tokens": 375,
+      "response_preview": "{\"candidate_loci\":[\"environment\",\"implementation\",\"evidence_collection\"],\"unresolved_distinction\":\"Whether the failure is due to missing/unusable toolchain or working directories versus missing/misres"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 659,
+      "latency_ms": 8510.2,
+      "prompt_tokens": 484,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Whether the referenced target artifact is missing or misresolved versus existing but not captured "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1443,
+      "latency_ms": 18616.8,
+      "prompt_tokens": 482,
+      "response_preview": "{\n  \"candidate_loci\": [\"evidence_collection\"],\n  \"unresolved_distinction\": null,\n  \"selected_action\": null,\n  \"expected_information\": null,\n  \"settle\": \"evidence_collection\"\n}\nLocus: evidence_collecti"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 513,
+      "latency_ms": 9214.8,
+      "prompt_tokens": 377,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "cep-06",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 1
+    },
+    {
+      "locus": "evidence_collection",
+      "round": 3
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_environment",
+      "round": 1,
+      "settlement_rejected": "environment"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "evidence_collection"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "fa0f91b9fafbebf1",
+  "unknown_premature": 0
+}

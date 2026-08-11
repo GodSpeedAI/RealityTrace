@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1566,
+      "latency_ms": 48737.3,
+      "prompt_tokens": 977,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"implementation\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a bad verifier invocation/configuration or plan, versus a genuine pytest failure"
+    }
+  ],
+  "case_id": "cep-13",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "5551aa605712e451",
+  "unknown_premature": 0
+}

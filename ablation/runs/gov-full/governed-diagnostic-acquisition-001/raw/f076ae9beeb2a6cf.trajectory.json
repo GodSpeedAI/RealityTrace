@@ -1,0 +1,138 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 562,
+      "latency_ms": 9447.9,
+      "prompt_tokens": 1245,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\"], \"unresolved_distinction\": \"whether the false expectation came from the verifier oracle itself or from an upstream verification plan that specified"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1544,
+      "latency_ms": 25574.5,
+      "prompt_tokens": 321,
+      "response_preview": "{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"\", \"settle\": \"verifier\"}\nLocus: verifier"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2592,
+      "latency_ms": 44618.6,
+      "prompt_tokens": 208,
+      "response_preview": "{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": null, \"settle\": \"verifier\"}\nLocus: verifier"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 473,
+      "latency_ms": 7296.8,
+      "prompt_tokens": 204,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\"], \"unresolved_distinction\": \"None - the source symbol inspection returned no referenced symbols, providing no additional discriminative signal; previous locus de"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 2484,
+      "latency_ms": 43901.1,
+      "prompt_tokens": 332,
+      "response_preview": "Candidates: verifier, implementation, unknown\nExcluded: implementation: no-source-trace, environment: isolated-repro, verification_plan: target-executed, projection: no-mapping-issue, authority: no-pe"
+    }
+  ],
+  "case_id": "cep-01",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.5,
+      "exit_code": 1,
+      "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_test_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\ntests/test_import.py:21: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_import.py::test_corpus_scenario_test_assertion_bug - assert...\n1 failed in 0.15s",
+      "test": "tests/test_import.py::test_corpus_scenario_test_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    },
+    {
+      "locus": "verifier",
+      "round": 2
+    },
+    {
+      "locus": "verifier",
+      "round": 3
+    },
+    {
+      "locus": "verifier",
+      "round": 4
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 4,
+      "settlement_rejected": "verifier"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "f076ae9beeb2a6cf",
+  "unknown_premature": 0
+}

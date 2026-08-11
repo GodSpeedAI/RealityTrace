@@ -1,0 +1,134 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1598,
+      "latency_ms": 48814.8,
+      "prompt_tokens": 681,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"verifier_exit=101 could indicate a verifier-side crash, an implementation failure surfaced during v"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1261,
+      "latency_ms": 44201.8,
+      "prompt_tokens": 427,
+      "response_preview": "{\"candidate_loci\":[\"implementation\"],\"unresolved_distinction\":\"The isolated verifier rerun compiled and executed; cargo exited 101 because a corpus test failed, which points to the implementation unde"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 377,
+      "latency_ms": 9111.8,
+      "prompt_tokens": 243,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"No unresolved distinction; default test target binding exists and the failure is a corpus test failure under the implementation under "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 299,
+      "latency_ms": 25511.3,
+      "prompt_tokens": 225,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"none; symbol inspection found no referenced symbols and does not disturb the default implementation-test failure binding\", \"settle\": \""
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 701,
+      "latency_ms": 17393.9,
+      "prompt_tokens": 425,
+      "response_preview": "Candidates: implementation, environment, verification_plan\nExcluded: verifier (verifier executed and produced results), evidence_collection (data was collected), authority (no permission issues), decl"
+    }
+  ],
+  "case_id": "sr-02",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/sea-rs && cargo test --offline  -p sea-forge-domain test_corpus_scenario_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "See https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields for more information.\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src/lib.rs (target/debug/deps/sea_forge_domain-fc68c08271312e03)\n     Running tests/corpus_sr2.rs (target/debug/deps/corpus_sr2-81ddfb041c8fcdf3)\nerror: test failed, to rerun pass `-p sea-forge-domain --test corpus_sr2`",
+      "test": "test_corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    },
+    {
+      "locus": "implementation",
+      "round": 3
+    },
+    {
+      "locus": "implementation",
+      "round": 4
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 4,
+      "settlement_rejected": "implementation"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "93b0053f89fb08a7",
+  "unknown_premature": 1
+}

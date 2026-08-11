@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 94825.3,
+      "prompt_tokens": 980,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2059,
+      "latency_ms": 43516.2,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: evidence_collection, environment, verification_plan, authority\nExcluded: verifier-unobserved, projection-unobserved, implementation-unobserved, declared_model-unobserved\nLocus: evidence_co"
+    }
+  ],
+  "case_id": "df-09",
+  "condition": "V",
+  "final_locus": "evidence_collection",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "evidence_collection",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "32980936ba8adaa3",
+  "unknown_premature": 0
+}

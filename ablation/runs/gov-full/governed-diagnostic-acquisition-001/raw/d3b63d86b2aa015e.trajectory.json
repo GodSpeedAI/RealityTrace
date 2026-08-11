@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3768,
+      "latency_ms": 90516.3,
+      "prompt_tokens": 975,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"A verifier exit code of 101 alone does not establish whether the verifier itself failed, the implementation"
+    }
+  ],
+  "case_id": "sr-02",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "d3b63d86b2aa015e",
+  "unknown_premature": 0
+}

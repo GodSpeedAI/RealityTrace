@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 105105.4,
+      "prompt_tokens": 978,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3518,
+      "latency_ms": 92275.1,
+      "prompt_tokens": 147,
+      "response_preview": "Locus: environment"
+    }
+  ],
+  "case_id": "sr-13",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "environment",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "1ca1663092ff325f",
+  "unknown_premature": 0
+}

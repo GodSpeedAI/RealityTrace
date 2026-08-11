@@ -1,0 +1,111 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 970,
+      "latency_ms": 18483.3,
+      "prompt_tokens": 22506,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"declared_model\", \"verifier\"], \"unresolved_distinction\": \"Exit code 101 could indicate either a verifier-side crash (verifier fault), the implementation p"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 83459.3,
+      "prompt_tokens": 468,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 348,
+      "latency_ms": 7368.9,
+      "prompt_tokens": 207,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"Target binding exists, but no evidence identifies a failing component.\", \"settle\": \"unknown\"}\nLocus: unknown"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 307,
+      "latency_ms": 6451.6,
+      "prompt_tokens": 214,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No symbols are referenced in the failure trace, so source inspection provides no evidence to identify a failing component.\", \"settle\": \"unkno"
+    }
+  ],
+  "case_id": "ag-01",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline  test_corpus_scenario_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "     Running unittests src/lib.rs (target/debug/deps/ast_grep_mcp-36c99467a6a81be9)\n     Running unittests src/main.rs (target/debug/deps/ast_grep_mcp_server-40943245856d2f97)\n     Running tests/integration_tests.rs (target/debug/deps/integration_tests-e37f2d19c5959a6f)\n     Running tests/unit_tests.rs (target/debug/deps/unit_tests-f7b98ffb8f18d3b5)\nerror: test failed, to rerun pass `--test unit_tests`",
+      "test": "test_corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "rerun_verifier_isolated",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "15bbaab7ccd3e2a3",
+  "unknown_premature": 1
+}

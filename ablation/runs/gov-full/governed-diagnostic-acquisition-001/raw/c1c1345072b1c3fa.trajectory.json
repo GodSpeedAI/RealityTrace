@@ -1,0 +1,65 @@
+{
+  "acquired_probes": [
+    "inspect_fixture_integrity"
+  ],
+  "actions": [
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 578,
+      "latency_ms": 15452.3,
+      "prompt_tokens": 683,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine implementation/test failure or a de"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2728,
+      "latency_ms": 82213.6,
+      "prompt_tokens": 267,
+      "response_preview": "Locus: evidence_collection"
+    }
+  ],
+  "case_id": "cep-13",
+  "condition": "O",
+  "final_locus": "evidence_collection",
+  "observations": {
+    "inspect_fixture_integrity": {
+      "checked": [
+        "tests/fixtures/inventory-version-v999.json",
+        "tests/fixtures/sample_settlement_recorded.json"
+      ],
+      "missing": [
+        "tests/fixtures/inventory-version-v999.json"
+      ],
+      "ok": [
+        "tests/fixtures/sample_settlement_recorded.json"
+      ],
+      "stale": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "evidence_collection"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "c1c1345072b1c3fa",
+  "unknown_premature": 1
+}

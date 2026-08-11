@@ -1,0 +1,42 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1772,
+      "latency_ms": 35421.4,
+      "prompt_tokens": 1539,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Whether the failure is due to a faulty test oracle/assertion or due to incorrect implementation behavior being exercised b"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 76390.7,
+      "prompt_tokens": 376,
+      "response_preview": ""
+    }
+  ],
+  "case_id": "cep-01",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "verifier"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "13a68ad6195f9548",
+  "unknown_premature": 0
+}

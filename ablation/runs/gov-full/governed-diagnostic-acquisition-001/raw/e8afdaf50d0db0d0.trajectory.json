@@ -1,0 +1,52 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 731,
+      "latency_ms": 9785.5,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\", \"verification_plan\"], \"unresolved_distinction\": \"Exit code 127 ('command not found') could mean the required toolchain/binary is absent from the environment "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 152,
+      "latency_ms": 2832.0,
+      "prompt_tokens": 511,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"None. The inspection confirms the toolchain is unavailable and PATH is restricted, explaining exit code 127 'command not found'.\""
+    }
+  ],
+  "case_id": "df-06",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "e8afdaf50d0db0d0",
+  "unknown_premature": 0
+}

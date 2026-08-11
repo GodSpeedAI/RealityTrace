@@ -1,0 +1,142 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1557,
+      "latency_ms": 22319.4,
+      "prompt_tokens": 677,
+      "response_preview": "Looking at the available evidence for case cep-04:\n\n1. **Candidate loci enumerated:**\n   - `verifier` \u2014 verifier_exit code 4 (in pytest, exit code 4 often signals an internal/usage error, pointing to "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2742,
+      "latency_ms": 48232.9,
+      "prompt_tokens": 261,
+      "response_preview": "{\"candidate_loci\": [\"projection\"], \"unresolved_distinction\": \"Missing target binding tests/test_import.py explains the pytest exit code 4; the failure is in the projected/bound target rather than veri"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 846,
+      "latency_ms": 11686.0,
+      "prompt_tokens": 237,
+      "response_preview": "```json\n{\"candidate_loci\": [\"projection\"], \"unresolved_distinction\": \"No source symbols are referenced in the trace, consistent with a file-level/collection-level binding failure rather than a symbol-"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 563,
+      "latency_ms": 9406.7,
+      "prompt_tokens": 252,
+      "response_preview": "```json\n{\"candidate_loci\": [\"projection\"], \"unresolved_distinction\": \"Environment is effectively ruled out by clean toolchain/path assignments; file-level/collection binding failure remains best expla"
+    }
+  ],
+  "case_id": "cep-04",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "tests/fixtures/sample_settlement_recorded.json",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": [
+        "tests/test_import.py"
+      ]
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "projection",
+      "round": 2
+    },
+    {
+      "locus": "projection",
+      "round": 3
+    },
+    {
+      "locus": "projection",
+      "round": 4
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "projection"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "projection"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "projection"
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "38a8420bc1282134",
+  "unknown_premature": 1
+}

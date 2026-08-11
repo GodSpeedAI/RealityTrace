@@ -1,0 +1,71 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1563,
+      "latency_ms": 35464.8,
+      "prompt_tokens": 981,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"Whether verifier_exit 127 reflects a missing toolchain/runtime in the environment versus a misconfigured or absent verifier e"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 583,
+      "latency_ms": 13516.4,
+      "prompt_tokens": 375,
+      "response_preview": "{\n  \"candidate_loci\": [\"environment\", \"implementation\", \"verifier\"],\n  \"unresolved_distinction\": \"Whether the failure is due to missing/unavailable toolchain or working directories versus an invalid v"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 302,
+      "latency_ms": 8713.9,
+      "prompt_tokens": 491,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"None; the toolchain is confirmed unavailable and PATH is restricted, indicating an environment deficiency rather than a verifier or targe"
+    }
+  ],
+  "case_id": "df-06",
+  "condition": "G",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 1
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_environment",
+      "round": 1,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "b1a67721d68b07a6",
+  "unknown_premature": 0
+}

@@ -1,0 +1,61 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 673,
+      "latency_ms": 9772.3,
+      "prompt_tokens": 674,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"implementation\", \"verifier\"],\n  \"unresolved_distinction\": \"A pytest exit code of 2 typically signals collection errors or internal errors, but without te"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 556,
+      "latency_ms": 11318.2,
+      "prompt_tokens": 288,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The expected symbol cep.conformance.anti_collapse is absent from the implementation source.\", \"settle\": \"implementation\"}\nLocus: imple"
+    }
+  ],
+  "case_id": "cep-08",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "cep.conformance.anti_collapse"
+      ],
+      "missing": [
+        "cep.conformance.anti_collapse"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "51348b89db24c9fb",
+  "unknown_premature": 1
+}

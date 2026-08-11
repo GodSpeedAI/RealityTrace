@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1031,
+      "latency_ms": 15050.7,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verifier\"],\n  \"unresolved_distinction\": \"Exit code 101 (commonly a Rust panic or runtime abort) could indicate either that the implementation under te"
+    }
+  ],
+  "case_id": "sr-10",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "44b8828908b6371f",
+  "unknown_premature": 0
+}

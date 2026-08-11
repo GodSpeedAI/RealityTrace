@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3715,
+      "latency_ms": 65215.5,
+      "prompt_tokens": 968,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a failing target implementation, a verifier/config "
+    }
+  ],
+  "case_id": "df-11",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "709c1dcd07c62a50",
+  "unknown_premature": 0
+}

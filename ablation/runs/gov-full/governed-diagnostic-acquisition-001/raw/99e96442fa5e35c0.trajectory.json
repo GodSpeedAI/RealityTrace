@@ -1,0 +1,137 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_target_binding",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 821,
+      "latency_ms": 14117.4,
+      "prompt_tokens": 687,
+      "response_preview": "Looking at this case, I can observe:\n- verifier_exit: 101 (non-zero, indicating verifier error)\n- The vector is entirely zeros (no semantic signal extracted)\n- No FTS content captured\n- Minimal graph "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1338,
+      "latency_ms": 23886.8,
+      "prompt_tokens": 273,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\", \"projection\", \"environment\"], \"unresolved_distinction\": \"The expected symbol new_with_namespace is present, which rules out a missing-symbol sour"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2807,
+      "latency_ms": 53223.1,
+      "prompt_tokens": 264,
+      "response_preview": "{\"candidate_loci\":[\"environment\"],\"unresolved_distinction\":null,\"settle\":\"environment\"}\nLocus: environment"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 523,
+      "latency_ms": 10443.8,
+      "prompt_tokens": 206,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"Environment probe found no anomalies, but no evidence points to another specific locus\", \"settle\": \"unknown\"}\nLocus: unknown"
+    }
+  ],
+  "case_id": "df-04",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "domainforge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "new_with_namespace"
+      ],
+      "missing": [],
+      "present": [
+        "new_with_namespace"
+      ]
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": [
+        "(default test discovery)"
+      ]
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 3
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "99e96442fa5e35c0",
+  "unknown_premature": 2
+}

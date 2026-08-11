@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 943,
+      "latency_ms": 13173.5,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Exit code 101 (often a panic/abort signal) could originate from three sources: (a) the environ"
+    }
+  ],
+  "case_id": "sr-04",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "912cf8f25092887c",
+  "unknown_premature": 0
+}

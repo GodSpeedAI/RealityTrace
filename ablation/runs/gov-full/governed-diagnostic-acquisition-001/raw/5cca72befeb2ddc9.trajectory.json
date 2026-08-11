@@ -1,0 +1,71 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 600,
+      "latency_ms": 11626.8,
+      "prompt_tokens": 971,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine implementation/test failure or a verifier-side/configuration problem.\", \"select"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1011,
+      "latency_ms": 18484.4,
+      "prompt_tokens": 572,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"Isolated verifier rerun reproduces the same AssertionError, indicating the failure is not a verifier configuration/environment artifac"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 3170,
+      "latency_ms": 53870.5,
+      "prompt_tokens": 375,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\", \"evidence_collection\", \"verifier\", \"environment\"],\n  \"unresolved_distinction\": \"Whether the observed failure is a reproducible implementation defect or an arti"
+    }
+  ],
+  "case_id": "cep-03",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.5,
+      "exit_code": 1,
+      "isolated_cmd": "uv run pytest -q tests/test_import.py::test_corpus_scenario_test_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\ntests/test_import.py:21: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_import.py::test_corpus_scenario_test_assertion_bug - assert...\n1 failed in 0.15s",
+      "test": "tests/test_import.py::test_corpus_scenario_test_assertion_bug"
+    }
+  },
+  "payment_used": 5,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "implementation"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "5cca72befeb2ddc9",
+  "unknown_premature": 0
+}

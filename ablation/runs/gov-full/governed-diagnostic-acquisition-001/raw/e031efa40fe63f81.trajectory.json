@@ -1,0 +1,127 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 648,
+      "latency_ms": 22585.5,
+      "prompt_tokens": 681,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-side crash, an implementation failure surfaced through the ve"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 552,
+      "latency_ms": 16204.5,
+      "prompt_tokens": 249,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Target binding/default discovery exists, so a missing-target/environment issue is less likely, but no stderr/artifact/sour"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 164,
+      "latency_ms": 9215.6,
+      "prompt_tokens": 240,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"The trace references no source symbols, so there is nothing to inspect that would attribute the failure to impleme"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 297,
+      "latency_ms": 11468.7,
+      "prompt_tokens": 248,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Environment appears normal, but there is still no trace, artifact, symbol, or output evidence to distinguish a verifier-si"
+    }
+  ],
+  "case_id": "sr-15",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "e031efa40fe63f81",
+  "unknown_premature": 4
+}

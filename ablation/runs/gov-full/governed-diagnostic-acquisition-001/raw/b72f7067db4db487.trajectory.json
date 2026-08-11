@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1606,
+      "latency_ms": 25582.5,
+      "prompt_tokens": 678,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-side failure, an implementation/runtim"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 563,
+      "latency_ms": 10250.7,
+      "prompt_tokens": 259,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"None; TMPDIR is assigned to a nonexistent/non-writable directory, providing a concrete environment cause for the failure.\", \"settle\": \"en"
+    }
+  ],
+  "case_id": "df-15",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "TMPDIR=/nonexistent-corpus-tmpdir",
+      "path": "default",
+      "tmpdir": "not_writable",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "b72f7067db4db487",
+  "unknown_premature": 1
+}

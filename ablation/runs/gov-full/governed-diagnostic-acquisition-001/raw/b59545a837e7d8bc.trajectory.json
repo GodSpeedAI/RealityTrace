@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2352,
+      "latency_ms": 70761.4,
+      "prompt_tokens": 678,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"verifier_exit=127 suggests the verifier command/executable was not found or failed to launch, but the context lacks stderr/pa"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 82,
+      "latency_ms": 3069.6,
+      "prompt_tokens": 260,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": null, \"settle\": \"environment\"}\n```\nLocus: environment"
+    }
+  ],
+  "case_id": "ag-10",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "b59545a837e7d8bc",
+  "unknown_premature": 1
+}

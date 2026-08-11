@@ -1,0 +1,78 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3852,
+      "latency_ms": 95226.1,
+      "prompt_tokens": 975,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\", \"verification_plan\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier/harness failure, "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 565,
+      "latency_ms": 15665.9,
+      "prompt_tokens": 371,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"Need to determine whether the failing target/path exists before distinguishing implementation absence from "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 111111.1,
+      "prompt_tokens": 483,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 563,
+      "latency_ms": 13437.2,
+      "prompt_tokens": 179,
+      "response_preview": "Candidates: evidence_collection, verifier\nExcluded: implementation (no failing observations), environment (no external errors), authority (no permission errors), verification_plan (target binding exis"
+    }
+  ],
+  "case_id": "sr-06",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 2
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "a8bd214ea6f17677",
+  "unknown_premature": 1
+}

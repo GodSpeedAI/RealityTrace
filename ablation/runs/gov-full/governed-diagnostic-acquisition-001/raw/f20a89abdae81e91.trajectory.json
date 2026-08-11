@@ -1,0 +1,94 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1689,
+      "latency_ms": 21943.9,
+      "prompt_tokens": 19597,
+      "response_preview": "## Diagnostic Decomposition\n\n### Step 1: Enumerate candidate loci\n\n1. **implementation** \u2014 The code under test in `sea-forge-core` produced a value of 2 where the test expected 3. The build succeeded,"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1577,
+      "latency_ms": 29841.2,
+      "prompt_tokens": 499,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Whether the expected value right=3 is specified by the intended verification/spec, making the implementation valu"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 74251.4,
+      "prompt_tokens": 563,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 849,
+      "latency_ms": 16247.6,
+      "prompt_tokens": 272,
+      "response_preview": "Candidates: unknown, evidence_collection, implementation\nExcluded: verifier (normal config), environment (no assignments), projection (no trace symbols)\nLocus: unknown"
+    }
+  ],
+  "case_id": "sr-01",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "f20a89abdae81e91",
+  "unknown_premature": 0
+}

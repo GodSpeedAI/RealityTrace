@@ -1,0 +1,94 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1742,
+      "latency_ms": 44540.4,
+      "prompt_tokens": 19597,
+      "response_preview": "## Diagnostic Decomposition for sr-01\n\n### Step 1: Enumerate Candidate Loci\n\n**Candidate A: implementation**\nThe test `test_corpus_scenario_assertion_bug` in `corpus_sr1.rs:3` calls some function unde"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 637,
+      "latency_ms": 14524.2,
+      "prompt_tokens": 501,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verification_plan\"],\n  \"unresolved_distinction\": \"Whether the implementation produces a genuinely incorrect value (2) or the test's expected value (3)"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 4096,
+      "latency_ms": 122677.6,
+      "prompt_tokens": 561,
+      "response_preview": ""
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 753,
+      "latency_ms": 25712.3,
+      "prompt_tokens": 272,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "sr-01",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "3eb07c4beeeaa21a",
+  "unknown_premature": 0
+}

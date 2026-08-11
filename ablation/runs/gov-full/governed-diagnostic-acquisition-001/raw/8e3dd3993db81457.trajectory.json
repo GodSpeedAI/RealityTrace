@@ -1,0 +1,70 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 701,
+      "latency_ms": 15574.3,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"environment\"],\n  \"unresolved_distinction\": \"The verifier exited with code 101, which in many runtimes signals a panic/crash rather than a "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 114193.2,
+      "prompt_tokens": 592,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1572,
+      "latency_ms": 49260.7,
+      "prompt_tokens": 242,
+      "response_preview": "Candidates: unknown, evidence_collection\nExcluded: verifier(configured), implementation(no-result), environment(no-error), authority(no-permission-issue), projection(no-evidence), declared_model(no-ev"
+    }
+  ],
+  "case_id": "sr-05",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 2
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "8e3dd3993db81457",
+  "unknown_premature": 0
+}

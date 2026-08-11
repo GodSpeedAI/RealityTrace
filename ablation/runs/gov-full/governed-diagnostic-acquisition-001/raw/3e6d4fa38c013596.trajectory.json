@@ -1,0 +1,119 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 780,
+      "latency_ms": 13507.2,
+      "prompt_tokens": 690,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Exit code 101 is atypical for a normal pass/fail verdict \u2014 it may indicate the verifier itself crashed ("
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 272,
+      "latency_ms": 5532.9,
+      "prompt_tokens": 416,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The isolated verifier rerun shows the test harness ran cleanly (compiled, executed) and reported 'test failed' with exit code 101, whi"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 163,
+      "latency_ms": 4295.7,
+      "prompt_tokens": 269,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"\", \"settle\": \"implementation\"}\nLocus: implementation"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1001,
+      "latency_ms": 19764.1,
+      "prompt_tokens": 203,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"The symbol probe found no referenced symbols, so it neither confirms nor rules out an implementa"
+    }
+  ],
+  "case_id": "df-02",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/entity_tests.rs"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.3,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/domainforge && cargo test --offline  -p domainforge-core --test entity_tests test_corpus_scenario_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s\n     Running tests/entity_tests.rs (target/debug/deps/entity_tests-9b83f9cc2b30479b)\nerror: test failed, to rerun pass `-p domainforge-core --test entity_tests`",
+      "test": "test_corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    },
+    {
+      "locus": "implementation",
+      "round": 3
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "rerun_verifier_isolated",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "3e6d4fa38c013596",
+  "unknown_premature": 0
+}

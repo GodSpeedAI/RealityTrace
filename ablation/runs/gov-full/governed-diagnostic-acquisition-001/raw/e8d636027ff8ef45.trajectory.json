@@ -1,0 +1,140 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 3,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 4,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1490,
+      "latency_ms": 32758.7,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Exit code 101 is a typical panic/crash code (especially in Rust). The key question is whether the verifier itself "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3166,
+      "latency_ms": 94532.4,
+      "prompt_tokens": 371,
+      "response_preview": "{\"candidate_loci\":[\"verification_plan\",\"projection\",\"implementation\",\"verifier\",\"environment\"],\"unresolved_distinction\":\"Whether the failing verification command references a target/path that actually"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1803,
+      "latency_ms": 67277.7,
+      "prompt_tokens": 498,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"projection\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"Whether the failure is caused by missing/misplaced source symbols invoked downstream of a val"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 622,
+      "latency_ms": 16767.4,
+      "prompt_tokens": 493,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\"], \"unresolved_distinction\": \"The failure occurs before any source symbols are invoked, ruling out implementation-level missing symbols. The failur"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 603,
+      "latency_ms": 20879.6,
+      "prompt_tokens": 376,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"unknown\"], \"unresolved_distinction\": \"Whether the failure is due to a verifier configuration/execution defect versus an incomplete or mismatched v"
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 528,
+      "latency_ms": 16795.8,
+      "prompt_tokens": 556,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"verifier\", \"unknown\"], \"unresolved_distinction\": \"Whether the cargo-test verifier is configured correctly but references a non-existent/mismatched test target"
+    }
+  ],
+  "case_id": "sr-14",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_order -- --test-threads=1"
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 3
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 3,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 4
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "e8d636027ff8ef45",
+  "unknown_premature": 1
+}

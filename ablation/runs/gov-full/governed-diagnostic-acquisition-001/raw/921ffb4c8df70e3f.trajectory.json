@@ -1,0 +1,142 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1410,
+      "latency_ms": 18743.2,
+      "prompt_tokens": 681,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"verifier_exit=101 is a non-standard exit code (commonly a panic/crash code). It is unc"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3882,
+      "latency_ms": 67661.7,
+      "prompt_tokens": 291,
+      "response_preview": "{\"candidate_loci\": [\"evidence_collection\"], \"unresolved_distinction\": null, \"settle\": \"evidence_collection\"}\nLocus: evidence_collection"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 393,
+      "latency_ms": 7398.7,
+      "prompt_tokens": 205,
+      "response_preview": "{\"candidate_loci\": [\"evidence_collection\"], \"unresolved_distinction\": \"\", \"settle\": \"evidence_collection\"}\nLocus: evidence_collection"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 706,
+      "latency_ms": 9945.5,
+      "prompt_tokens": 206,
+      "response_preview": "Based on the observation:\n\n- The environment probe shows a clean/normal environment: no custom assignments, default paths, default tmpdir, and toolchain is available.\n- This rules out `environment` as"
+    }
+  ],
+  "case_id": "df-03",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "domainforge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/flow_tests.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/flow_tests.rs"
+      ]
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "evidence_collection",
+      "round": 2
+    },
+    {
+      "locus": "evidence_collection",
+      "round": 3
+    },
+    {
+      "locus": "evidence_collection",
+      "round": 4
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "evidence_collection"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "evidence_collection"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "settlement_rejected": "evidence_collection"
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "921ffb4c8df70e3f",
+  "unknown_premature": 0
+}

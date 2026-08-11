@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 156,
+      "latency_ms": 4499.5,
+      "prompt_tokens": 680,
+      "response_preview": "{\n  \"candidate_loci\": [\n    \"implementation\",\n    \"verifier\",\n    \"environment\"\n  ],\n  \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a genuine implementation/test failure, a verifier-sid"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 146,
+      "latency_ms": 3890.9,
+      "prompt_tokens": 267,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": null, \"settle\": \"environment\"}\n```\nLocus: environment"
+    }
+  ],
+  "case_id": "cep-09",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "TMPDIR=/home/sprime01/projects/cep/.corpus-tmpfix",
+      "path": "default",
+      "tmpdir": "not_writable",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "95956b31a4a28af8",
+  "unknown_premature": 1
+}

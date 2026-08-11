@@ -1,0 +1,123 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 962,
+      "latency_ms": 20548.2,
+      "prompt_tokens": 683,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a verifier/plan-side validation fault or invalid output produced b"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 84579.1,
+      "prompt_tokens": 279,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 409,
+      "latency_ms": 9519.0,
+      "prompt_tokens": 211,
+      "response_preview": "{\"candidate_loci\": [], \"unresolved_distinction\": \"The target binding exists, so a missing-target issue is not supported; no observed defect points to any specific non-unknown locus.\", \"settle\": \"unkno"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 565,
+      "latency_ms": 10954.8,
+      "prompt_tokens": 227,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No symbols referenced in failure trace; no defect-specific observations identify any non-unknown locus.\", \"settle\": \"unknown\"}\nLocus: unknown"
+    }
+  ],
+  "case_id": "sr-11",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": ".sea/interaction/interaction-model.sea"
+        }
+      ],
+      "missing_targets": []
+    },
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Parse failed for .sea/interaction/interaction-model.sea: resolved closure failed graph construction: Grammar error: Undefined subject role 'NoSuchRoleForCorpus'"
+      ],
+      "exit_code": 1,
+      "model_file": ".sea/interaction/interaction-model.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "b62b9426df32de4c",
+  "unknown_premature": 3
+}

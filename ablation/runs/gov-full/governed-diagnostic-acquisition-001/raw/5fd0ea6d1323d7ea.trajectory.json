@@ -1,0 +1,111 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 586,
+      "latency_ms": 11138.1,
+      "prompt_tokens": 690,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit 101 reflects a verifier-side failure, an evidence-collection/p"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4096,
+      "latency_ms": 71085.7,
+      "prompt_tokens": 367,
+      "response_preview": ""
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 562,
+      "latency_ms": 14060.5,
+      "prompt_tokens": 207,
+      "response_preview": "{\"candidate_loci\":[\"unknown\"],\"unresolved_distinction\":\"No failure symptom or prior candidates were provided; the probe only confirms a target exists, which does not isolate the failure to a non-unkno"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 147,
+      "latency_ms": 3506.7,
+      "prompt_tokens": 232,
+      "response_preview": "```json\n{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No failure trace symbols were available for the probe to inspect, so no evidence points toward any specific locus.\", \"settle\": null}\n"
+    }
+  ],
+  "case_id": "df-02",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/entity_tests.rs"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.3,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/domainforge && cargo test --offline  -p domainforge-core --test entity_tests test_corpus_scenario_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s\n     Running tests/entity_tests.rs (target/debug/deps/entity_tests-9b83f9cc2b30479b)\nerror: test failed, to rerun pass `-p domainforge-core --test entity_tests`",
+      "test": "test_corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "5fd0ea6d1323d7ea",
+  "unknown_premature": 2
+}

@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1026,
+      "latency_ms": 18783.4,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\", \"verification_plan\"], \"unresolved_distinction\": \"Exit code 127 conventionally means 'command not found.' The key distinction is whether the requi"
+    }
+  ],
+  "case_id": "ag-10",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "1d27e234213bad70",
+  "unknown_premature": 0
+}

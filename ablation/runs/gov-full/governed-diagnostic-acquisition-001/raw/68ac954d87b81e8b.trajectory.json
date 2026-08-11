@@ -1,0 +1,64 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1767,
+      "latency_ms": 22652.6,
+      "prompt_tokens": 677,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"verifier_exit=4 is non-standard; with pytest-style stdin_format this c"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 969,
+      "latency_ms": 16180.0,
+      "prompt_tokens": 294,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": null, \"settle\": \"verification_plan\"}\nLocus: verification_plan"
+    }
+  ],
+  "case_id": "cep-04",
+  "condition": "O",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": [
+        "tests/test_import.py"
+      ]
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "68ac954d87b81e8b",
+  "unknown_premature": 0
+}

@@ -1,0 +1,104 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1103,
+      "latency_ms": 21886.9,
+      "prompt_tokens": 971,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"implementation\"], \"unresolved_distinction\": \"Exit code 4 in pytest typically indicates a command-line usage error (e.g., unresolvable test"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 406,
+      "latency_ms": 9730.4,
+      "prompt_tokens": 376,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"environment\"], \"unresolved_distinction\": \"Whether the failure is due to the verifier's own configuration/command versus an incomplete verification"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1963,
+      "latency_ms": 47408.8,
+      "prompt_tokens": 535,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"environment\"], \"unresolved_distinction\": \"Whether the verifier failed because the referenced test path/target is missing or malformed in the verification plan"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 580,
+      "latency_ms": 9933.5,
+      "prompt_tokens": 495,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": \"Resolved. The referenced test target tests/test_import.py does not exist in the working tree, confirming the verification p"
+    }
+  ],
+  "case_id": "cep-04",
+  "condition": "G",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": [
+        "tests/test_import.py"
+      ]
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "48285d8e67716f8a",
+  "unknown_premature": 0
+}

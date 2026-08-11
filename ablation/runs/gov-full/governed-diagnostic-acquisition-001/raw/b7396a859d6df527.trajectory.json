@@ -1,0 +1,127 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 581,
+      "latency_ms": 11510.3,
+      "prompt_tokens": 684,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"environment\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 represents a verifier-internal crash/fault (v"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 554,
+      "latency_ms": 12037.2,
+      "prompt_tokens": 267,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\", \"evidence_collection\"], \"unresolved_distinction\": \"Target binding exists, but verifier_exit=101 still cannot be attributed to verifier "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 485,
+      "latency_ms": 10342.9,
+      "prompt_tokens": 239,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"No symbols are referenced in the failure trace, so source-symbol inspection provides no evidence to distinguish verifier, implementation, env"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1412,
+      "latency_ms": 28477.4,
+      "prompt_tokens": 232,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"Environment probe is nominal, but the trace still lacks symbols or other evidence needed to distinguish verifier, implementation, evidence_co"
+    }
+  ],
+  "case_id": "sr-14",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "b7396a859d6df527",
+  "unknown_premature": 4
+}

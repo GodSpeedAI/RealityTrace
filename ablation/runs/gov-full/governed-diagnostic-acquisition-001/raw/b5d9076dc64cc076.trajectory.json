@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3990,
+      "latency_ms": 78763.2,
+      "prompt_tokens": 687,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\", \"verification_plan\"], \"unresolved_distinction\": \"Whether verifier_exit=127 reflects a missing executable/dependency in the runtime environment versus a v"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 561,
+      "latency_ms": 10345.4,
+      "prompt_tokens": 252,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"Exit 127 is now explained by a restricted PATH and unavailable toolchain in the runtime environment.\", \"settle\": \"environment\"}\nLocus: en"
+    }
+  ],
+  "case_id": "df-06",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 1
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "b5d9076dc64cc076",
+  "unknown_premature": 0
+}

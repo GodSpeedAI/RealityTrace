@@ -1,0 +1,64 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 552,
+      "latency_ms": 12486.7,
+      "prompt_tokens": 683,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verification_plan\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"Verifier exit code 4 in a pytest-progress context typically signals a command-line usage error o"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 132,
+      "latency_ms": 3992.7,
+      "prompt_tokens": 323,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": null, \"settle\": \"verification_plan\"}\n```\nLocus: verification_plan"
+    }
+  ],
+  "case_id": "cep-05",
+  "condition": "O",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/test_inventory.py"
+        }
+      ],
+      "missing_targets": [
+        "tests/test_inventory.py"
+      ]
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "a69d5cb8adeb3651",
+  "unknown_premature": 1
+}

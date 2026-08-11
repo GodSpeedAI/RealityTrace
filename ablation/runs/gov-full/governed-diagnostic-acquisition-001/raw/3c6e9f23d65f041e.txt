@@ -1,0 +1,7 @@
+Locus: environment
+Terminal: CONCRETE_SETTLEMENT
+Actions: inspect_environment
+Payment: 1/7
+Rounds: 2
+Premature attempts: 0
+Unknown premature: 0

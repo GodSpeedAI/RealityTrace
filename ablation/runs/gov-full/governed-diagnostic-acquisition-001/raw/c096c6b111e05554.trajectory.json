@@ -1,0 +1,16 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [],
+  "case_id": "cep-12",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "c096c6b111e05554",
+  "unknown_premature": 0
+}

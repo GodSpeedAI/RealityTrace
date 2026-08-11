@@ -1,0 +1,61 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1407,
+      "latency_ms": 28595.6,
+      "prompt_tokens": 684,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Verifier exit code 101 could indicate (a) the verifier process itself crashed (verifie"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 510,
+      "latency_ms": 13581.8,
+      "prompt_tokens": 331,
+      "response_preview": "Locus: implementation"
+    }
+  ],
+  "case_id": "ag-08",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "from_cli"
+      ],
+      "missing": [
+        "from_cli"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "2e76f8c899a0efab",
+  "unknown_premature": 1
+}

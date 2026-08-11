@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 94809.0,
+      "prompt_tokens": 981,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 515,
+      "latency_ms": 10326.4,
+      "prompt_tokens": 147,
+      "response_preview": "Candidates: evidence_collection, verification_plan, environment\nExcluded: implementation (no observations to implicate the system under test), verifier (no verification attempt recorded), authority (n"
+    }
+  ],
+  "case_id": "sr-10",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "cfeeca4ae03c8fb2",
+  "unknown_premature": 0
+}

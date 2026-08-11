@@ -1,0 +1,62 @@
+{
+  "acquired_probes": [
+    "inspect_fixture_integrity"
+  ],
+  "actions": [
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1459,
+      "latency_ms": 33788.2,
+      "prompt_tokens": 677,
+      "response_preview": "Looking at the retrieval context for case cep-14:\n\n**Observations:**\n- `verifier_exit: 1` with `stdin_format: pytest-progress` \u2014 the verifier ran and exited non-zero, consistent with test failures.\n- "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 980,
+      "latency_ms": 29591.7,
+      "prompt_tokens": 266,
+      "response_preview": "{\"candidate_loci\": [\"evidence_collection\"], \"unresolved_distinction\": \"\", \"settle\": \"evidence_collection\"}\nLocus: evidence_collection"
+    }
+  ],
+  "case_id": "cep-14",
+  "condition": "O",
+  "final_locus": "evidence_collection",
+  "observations": {
+    "inspect_fixture_integrity": {
+      "checked": [
+        "tests/fixtures/sample_settlement_recorded.json"
+      ],
+      "missing": [],
+      "ok": [],
+      "stale": [
+        "tests/fixtures/sample_settlement_recorded.json"
+      ]
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "evidence_collection"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "e2865fe1f0785f4d",
+  "unknown_premature": 1
+}

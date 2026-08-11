@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 892,
+      "latency_ms": 16572.2,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"implementation\"], \"unresolved_distinction\": \"Exit code 101 is a non-zero failure, but the evidence does not reveal whether it indicates a "
+    }
+  ],
+  "case_id": "sr-05",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "87c5ee4b47a0ff17",
+  "unknown_premature": 0
+}

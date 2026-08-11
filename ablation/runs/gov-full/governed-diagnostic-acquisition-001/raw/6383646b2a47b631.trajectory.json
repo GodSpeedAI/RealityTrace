@@ -1,0 +1,127 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment",
+    "inspect_permissions"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_permissions",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1134,
+      "latency_ms": 28050.5,
+      "prompt_tokens": 681,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\"],\n  \"unresolved_distinction\": \"Verifier exited abnormally (exit 101, consistent with a Go panic). It is unclear whether the verifier crashed"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 774,
+      "latency_ms": 25698.3,
+      "prompt_tokens": 304,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"The observation confirms the implementation's test targets are properly discoverable and exist (no missing targets"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1172,
+      "latency_ms": 34615.0,
+      "prompt_tokens": 291,
+      "response_preview": "{\"candidate_loci\":[\"verifier\",\"implementation\"],\"unresolved_distinction\":\"The empty source-symbol probe rules out an implementation symbol referenced by the failure trace, but it cannot distinguish a "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 2508,
+      "latency_ms": 68680.0,
+      "prompt_tokens": 254,
+      "response_preview": "{\"candidate_loci\": [\"unknown\"], \"unresolved_distinction\": \"The environment probe is clean and the toolchain is available, so it does not distinguish a verifier-internal panic from a verifier path trig"
+    }
+  ],
+  "case_id": "sr-15",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": true,
+      "checked": [
+        {
+          "mode": "644",
+          "path": "crates/sea-forge-core/src/lib.rs",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": []
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "6383646b2a47b631",
+  "unknown_premature": 4
+}

@@ -1,0 +1,64 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 593,
+      "latency_ms": 11154.6,
+      "prompt_tokens": 678,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"],\n  \"unresolved_distinction\": \"Verifier exit code 101 (often associated with runtime panic/crash) could indicate the verifier"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 4059,
+      "latency_ms": 75930.0,
+      "prompt_tokens": 297,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": null, \"settle\": \"verification_plan\"}\nLocus: verification_plan"
+    }
+  ],
+  "case_id": "sr-04",
+  "condition": "O",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/corpus_sr4_stale.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/corpus_sr4_stale.rs"
+      ]
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "5e5496eed8604c6b",
+  "unknown_premature": 1
+}

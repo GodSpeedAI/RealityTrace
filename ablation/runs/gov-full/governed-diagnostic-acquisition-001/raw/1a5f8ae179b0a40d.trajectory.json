@@ -1,0 +1,149 @@
+{
+  "acquired_probes": [
+    "inspect_permissions",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_permissions",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1742,
+      "latency_ms": 42112.1,
+      "prompt_tokens": 680,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects legitimate test failures in the code under test (implementation) or a failure in "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1750,
+      "latency_ms": 41658.6,
+      "prompt_tokens": 320,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The restrictive permissions (mode 0) on tests/fixtures prevent the verifier from loading test data, indicating an environment mis"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 343,
+      "latency_ms": 11571.9,
+      "prompt_tokens": 242,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The probe confirms the target file exists and does not contradict the prior environment misconfiguration hypothesis, so the existing evid"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 2544,
+      "latency_ms": 72484.6,
+      "prompt_tokens": 229,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The symbol probe is non-diagnostic; prior evidence remains only consistent with environment, not conclusive enough to rule out unknown ca"
+    }
+  ],
+  "case_id": "cep-12",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_permissions": {
+      "all_accessible": false,
+      "checked": [
+        {
+          "mode": "0",
+          "path": "tests/fixtures",
+          "readable": false,
+          "restrictive": true
+        },
+        {
+          "mode": "644",
+          "path": "tests/test_import.py",
+          "readable": true,
+          "restrictive": false
+        }
+      ],
+      "restrictive_paths": [
+        {
+          "mode": "0",
+          "path": "tests/fixtures",
+          "readable": false,
+          "restrictive": true
+        }
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 2
+    },
+    {
+      "locus": "environment",
+      "round": 3
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "1a5f8ae179b0a40d",
+  "unknown_premature": 2
+}

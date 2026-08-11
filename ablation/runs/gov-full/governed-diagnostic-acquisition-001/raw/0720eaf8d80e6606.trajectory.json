@@ -1,0 +1,138 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding",
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 3,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 4,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1171,
+      "latency_ms": 26202.6,
+      "prompt_tokens": 975,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\"], \"unresolved_distinction\": \"Whether exit 101 reflects a verifier-side crash/misbehavior or an invalid verification command/plan.\", \"selected_action"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1634,
+      "latency_ms": 31138.8,
+      "prompt_tokens": 376,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the verifier's own configuration/command/evidence contract is defective, or whether evidence collection faile"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 821,
+      "latency_ms": 19249.5,
+      "prompt_tokens": 556,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the verifier command references a valid test target/path, or whether evidence collection failed despite a val"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 822,
+      "latency_ms": 13813.2,
+      "prompt_tokens": 486,
+      "response_preview": "{\"candidate_loci\": [\"evidence_collection\"], \"unresolved_distinction\": \"The verifier target/path resolves correctly, so the failure is attributable to evidence collection rather than an invalid verifie"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 1603,
+      "latency_ms": 35552.6,
+      "prompt_tokens": 377,
+      "response_preview": "{\"candidate_loci\":[\"evidence_collection\",\"verifier\",\"verification_plan\",\"implementation\"],\"unresolved_distinction\":\"The rejection indicates insufficient evidence, but not whether that is due to an evi"
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 612,
+      "latency_ms": 13114.5,
+      "prompt_tokens": 566,
+      "response_preview": "{\n  \"candidate_loci\": [\"evidence_collection\", \"verification_plan\", \"implementation\"],\n  \"unresolved_distinction\": \"The verifier configuration appears internally consistent, but it is unclear whether t"
+    }
+  ],
+  "case_id": "sr-06",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-domain corpus_scenario_calls_interpret"
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    },
+    {
+      "locus": "evidence_collection",
+      "round": 3
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 3,
+      "settlement_rejected": "evidence_collection"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 4
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "0720eaf8d80e6606",
+  "unknown_premature": 0
+}

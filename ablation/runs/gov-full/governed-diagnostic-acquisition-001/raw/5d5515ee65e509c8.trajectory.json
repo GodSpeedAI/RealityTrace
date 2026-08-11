@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 389,
+      "latency_ms": 8606.2,
+      "prompt_tokens": 678,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"evidence_collection\", \"implementation\"], \"unresolved_distinction\": \"Verifier exit code 101 is non-zero, but with no FTS content, a zero-valued vector, and no a"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 346,
+      "latency_ms": 7159.6,
+      "prompt_tokens": 279,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The expected source symbols are confirmed missing, indicating the implementation failed to provide required functionality rather than "
+    }
+  ],
+  "case_id": "ag-07",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "missing": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_source_symbols",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "5d5515ee65e509c8",
+  "unknown_premature": 0
+}

@@ -1,0 +1,82 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "rerun_verifier_isolated"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 762,
+      "latency_ms": 19155.7,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"],\n  \"unresolved_distinction\": \"The verifier exited with code 101 (often indicating a panic or internal error rather than a cl"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 657,
+      "latency_ms": 22683.4,
+      "prompt_tokens": 593,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\", \"environment\"],\n  \"unresolved_distinction\": \"The verifier configuration is valid and cargo-test naturally returns nonzero/101 for failing or panicking Rust tes"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 289,
+      "latency_ms": 9614.8,
+      "prompt_tokens": 729,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The isolated rerun under the same offline conditions passed, which rules out an implementation defect and confirms a transient/environmen"
+    }
+  ],
+  "case_id": "sr-14",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_order -- --test-threads=1"
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 0,
+      "isolated_cmd": "cd /home/sprime01/projects/sea-rs && cargo test --offline  -p sea-forge-core test_corpus_scenario_order_b -- --test-threads=1",
+      "isolated_result": "passed",
+      "summary": "     Running unittests src/lib.rs (target/debug/deps/sea_forge_core-2d9b0a5a8ca75840)\n     Running tests/corpus_sr_order.rs (target/debug/deps/corpus_sr_order-fed18298c338b2b0)\n     Running tests/origin_ref_boundary.rs (target/debug/deps/origin_ref_boundary-1f4f9e28fff7096d)\n     Running tests/projection_kind_boundary.rs (target/debug/deps/projection_kind_boundary-c4f45f0dabd58994)\n     Running tests/version_skew.rs (target/debug/deps/version_skew-5305fd2b1eaf07c3)",
+      "test": "test_corpus_scenario_order_b"
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 2
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "e4e48042938ccfaf",
+  "unknown_premature": 0
+}

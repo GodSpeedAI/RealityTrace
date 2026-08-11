@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 806,
+      "latency_ms": 13914.9,
+      "prompt_tokens": 678,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"A verifier exit code of 101 alone does not establish whether the verifier itself failed, the implementation"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 524,
+      "latency_ms": 10723.1,
+      "prompt_tokens": 259,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The required symbols are absent from the implementation source, so the failure can be attributed to the implementation rather than ver"
+    }
+  ],
+  "case_id": "ag-07",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "missing": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "de5f47263067019f",
+  "unknown_premature": 1
+}

@@ -1,0 +1,136 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "rerun_verifier_isolated",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1020,
+      "latency_ms": 17605.0,
+      "prompt_tokens": 22800,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"All dependency artifacts are fresh/successful, so the build chain itself did not fail. Exit code 101 (Rus"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 983,
+      "latency_ms": 18228.8,
+      "prompt_tokens": 613,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\"],\n  \"unresolved_distinction\": \"The verifier command is a standard cargo-test invocation with a sensible direction rule and no environment overrides, ind"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 557,
+      "latency_ms": 10443.3,
+      "prompt_tokens": 375,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"evidence_collection\", \"verification_plan\"], \"unresolved_distinction\": \"Whether the observed failure reflects a genuine implementation defect or is an art"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 572,
+      "latency_ms": 12551.3,
+      "prompt_tokens": 688,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The isolated verifier rerun confirms the failure is a genuine test failure in the implementation, not an artifact of evidence collecti"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 2140,
+      "latency_ms": 44794.1,
+      "prompt_tokens": 375,
+      "response_preview": "{\"candidate_loci\":[\"implementation\",\"verification_plan\",\"environment\",\"unknown\"],\"unresolved_distinction\":\"Whether the failure trace maps to a real defect or mismatch in the target source symbols, or "
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 1908,
+      "latency_ms": 33279.5,
+      "prompt_tokens": 492,
+      "response_preview": "{\n  \"candidate_loci\": [\n    \"verification_plan\",\n    \"environment\",\n    \"unknown\"\n  ],\n  \"unresolved_distinction\": \"Whether the failure is due to a stale or incorrect verifier target/binding (verifica"
+    }
+  ],
+  "case_id": "ag-01",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline --message-format json corpus_scenario"
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.2,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/ast-grep-mcp-rs && cargo test --offline  test_corpus_scenario_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "     Running unittests src/lib.rs (target/debug/deps/ast_grep_mcp-36c99467a6a81be9)\n     Running unittests src/main.rs (target/debug/deps/ast_grep_mcp_server-40943245856d2f97)\n     Running tests/integration_tests.rs (target/debug/deps/integration_tests-e37f2d19c5959a6f)\n     Running tests/unit_tests.rs (target/debug/deps/unit_tests-f7b98ffb8f18d3b5)\nerror: test failed, to rerun pass `--test unit_tests`",
+      "test": "test_corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    },
+    {
+      "locus": "implementation",
+      "round": 3
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "rerun_verifier_isolated",
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_source_symbols",
+      "round": 3,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "5b942bdb2a3fafb4",
+  "unknown_premature": 0
+}

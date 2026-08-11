@@ -1,0 +1,39 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 123001.9,
+      "prompt_tokens": 977,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3191,
+      "latency_ms": 87476.8,
+      "prompt_tokens": 147,
+      "response_preview": "Locus: environment"
+    }
+  ],
+  "case_id": "cep-05",
+  "condition": "V",
+  "final_locus": "environment",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "environment",
+      "no_valid_action": true,
+      "round": 1
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "285c45a808ad3ff1",
+  "unknown_premature": 0
+}

@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2594,
+      "latency_ms": 46492.8,
+      "prompt_tokens": 978,
+      "response_preview": "{\"candidate_loci\":[\"verifier\",\"implementation\",\"environment\"],\"unresolved_distinction\":\"Whether verifier_exit=101 is a verifier-internal abnormal exit versus a propagated failure from the implementati"
+    }
+  ],
+  "case_id": "sr-08",
+  "condition": "V",
+  "final_locus": "verifier",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "d4e5b890afd4e0b0",
+  "unknown_premature": 0
+}

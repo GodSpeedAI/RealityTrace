@@ -1,0 +1,134 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 3,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 4,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 3973,
+      "latency_ms": 119836.1,
+      "prompt_tokens": 977,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a real implementation/test failure, a verifier misconfiguration, or "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1155,
+      "latency_ms": 30821.3,
+      "prompt_tokens": 371,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verification_plan\", \"implementation\", \"verifier\", \"environment\"], \"unresolved_distinction\": \"Cannot determine whether the verification target/path even resolves to an exis"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2814,
+      "latency_ms": 61757.2,
+      "prompt_tokens": 521,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether the failure stems from missing or incorrect source symbols in the implementation versus a defect in the verifier/t"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 591,
+      "latency_ms": 19859.0,
+      "prompt_tokens": 489,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verifier\"], \"unresolved_distinction\": \"Whether the failure is due to the implementation itself or a misconfigured/defective verifier/test setup, given that no so"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 4087,
+      "latency_ms": 117451.8,
+      "prompt_tokens": 294,
+      "response_preview": "Locus: unknown"
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 570,
+      "latency_ms": 14558.0,
+      "prompt_tokens": 371,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verification_plan\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"The rejection of UNKNOWN with remaining budget implies the failure may be dia"
+    }
+  ],
+  "case_id": "cep-13",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result"
+      ],
+      "verifier": "pytest",
+      "verifier_command": "cd /home/sprime01/projects/cep && uv run pytest -q tests/test_import.py -k corpus_scenario"
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 3
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "00444f8cb332dbd0",
+  "unknown_premature": 2
+}

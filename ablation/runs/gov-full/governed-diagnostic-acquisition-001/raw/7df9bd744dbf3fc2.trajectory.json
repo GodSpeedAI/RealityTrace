@@ -1,0 +1,42 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 906,
+      "latency_ms": 11457.0,
+      "prompt_tokens": 978,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"verification_plan\", \"implementation\", \"environment\"],\n  \"unresolved_distinction\": \"Whether exit code 101 indicates an internal verifier crash (e.g., panic i"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 512,
+      "latency_ms": 8804.4,
+      "prompt_tokens": 376,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "sr-08",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "verifier"
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "7df9bd744dbf3fc2",
+  "unknown_premature": 0
+}

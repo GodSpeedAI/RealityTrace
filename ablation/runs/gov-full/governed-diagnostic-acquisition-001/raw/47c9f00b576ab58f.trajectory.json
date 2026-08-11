@@ -1,0 +1,80 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols",
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1669,
+      "latency_ms": 33221.4,
+      "prompt_tokens": 19597,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"The assertion failed with left=2, right=3 at corpus_sr1.rs:3:5. It is unclear whether the implementation "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 448,
+      "latency_ms": 14174.2,
+      "prompt_tokens": 567,
+      "response_preview": "{\n  \"candidate_loci\": [\n    \"implementation\",\n    \"verification_plan\"\n  ],\n  \"unresolved_distinction\": \"The source-symbol inspection did not help because no symbols were referenced in the failure trac"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1967,
+      "latency_ms": 64064.4,
+      "prompt_tokens": 585,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Verifier config is sound and no environment or authority issues are indicated, but the observation does not estab"
+    }
+  ],
+  "case_id": "sr-01",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 2
+    }
+  ],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "47c9f00b576ab58f",
+  "unknown_premature": 0
+}

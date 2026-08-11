@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1187,
+      "latency_ms": 26144.4,
+      "prompt_tokens": 678,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether verifier_exit=101 reflects an internal verifier crash (verifier locus), an environment-leve"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 118,
+      "latency_ms": 5485.6,
+      "prompt_tokens": 286,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": null, \"settle\": \"environment\"}\n```\nLocus: environment"
+    }
+  ],
+  "case_id": "df-15",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "TMPDIR=/nonexistent-corpus-tmpdir",
+      "path": "default",
+      "tmpdir": "not_writable",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "45e78ed4c4449bf3",
+  "unknown_premature": 1
+}

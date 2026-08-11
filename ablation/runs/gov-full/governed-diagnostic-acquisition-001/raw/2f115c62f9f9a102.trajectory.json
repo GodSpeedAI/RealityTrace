@@ -1,0 +1,116 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1436,
+      "latency_ms": 21772.6,
+      "prompt_tokens": 19303,
+      "response_preview": "Looking at this failure case, I need to decompose the diagnostic carefully.\n\n## Step 1: Enumerate Candidate Loci\n\n**Candidate 1: `implementation`** \u2014 The test `test_corpus_scenario_assertion_bug` in `"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 3075,
+      "latency_ms": 61092.6,
+      "prompt_tokens": 432,
+      "response_preview": "{\"candidate_loci\":[\"implementation\",\"verification_plan\"],\"unresolved_distinction\":\"The isolated verifier rerun reproduces the corpus test failure, ruling out flaky/environment execution and verifier h"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1653,
+      "latency_ms": 30794.7,
+      "prompt_tokens": 265,
+      "response_preview": "{\"candidate_loci\": [\"implementation\", \"verification_plan\"], \"unresolved_distinction\": \"Target binding exists, so this is not a missing-target verification_plan issue, but the probe still gives no auth"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1488,
+      "latency_ms": 30356.0,
+      "prompt_tokens": 245,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "sr-01",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "rerun_verifier_isolated": {
+      "elapsed_s": 0.3,
+      "exit_code": 101,
+      "isolated_cmd": "cd /home/sprime01/projects/sea-rs && cargo test --offline  -p sea-forge-core test_corpus_scenario_assertion_bug",
+      "isolated_result": "failed",
+      "summary": "See https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields for more information.\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src/lib.rs (target/debug/deps/sea_forge_core-2d9b0a5a8ca75840)\n     Running tests/corpus_sr1.rs (target/debug/deps/corpus_sr1-3647d3f663672a1d)\nerror: test failed, to rerun pass `-p sea-forge-core --test corpus_sr1`",
+      "test": "test_corpus_scenario_assertion_bug"
+    }
+  },
+  "payment_used": 7,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 1,
+      "round": 2,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "terminal_unknown": true
+    }
+  ],
+  "terminal_state": "TERMINAL_UNKNOWN",
+  "unit_id": "2f115c62f9f9a102",
+  "unknown_premature": 2
+}

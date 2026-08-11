@@ -1,0 +1,107 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2849,
+      "latency_ms": 56309.5,
+      "prompt_tokens": 975,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\"], \"unresolved_distinction\": \"Whether exit code 101 originates from the verifier process itself crashing (e.g., an internal Rust panic in the ve"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 2530,
+      "latency_ms": 67596.4,
+      "prompt_tokens": 574,
+      "response_preview": "{\"candidate_loci\":[\"implementation\"],\"unresolved_distinction\":\"Resolved: cargo-test is configured to treat nonzero exit as contradicts, and exit 101 is the normal cargo/test-harness propagation of a f"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 1657,
+      "latency_ms": 43612.5,
+      "prompt_tokens": 375,
+      "response_preview": "{\"candidate_loci\":[\"implementation\",\"verification_plan\",\"unknown\"],\"unresolved_distinction\":\"Whether the implementation is truly at fault because referenced source symbols are missing/misplaced, or wh"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 4096,
+      "latency_ms": 83355.3,
+      "prompt_tokens": 495,
+      "response_preview": ""
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 1541,
+      "latency_ms": 39116.9,
+      "prompt_tokens": 270,
+      "response_preview": "Locus: unknown"
+    }
+  ],
+  "case_id": "df-03",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/domainforge && cargo test --offline --message-format json -p domainforge-core --test flow_tests corpus_scenario"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_source_symbols",
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "budget_exhausted": true,
+      "calls_in_round": 1,
+      "final_locus": "unknown",
+      "no_valid_action": true,
+      "round": 3
+    }
+  ],
+  "terminal_state": "BUDGET_EXHAUSTED",
+  "unit_id": "f44576eb95d48a5a",
+  "unknown_premature": 0
+}

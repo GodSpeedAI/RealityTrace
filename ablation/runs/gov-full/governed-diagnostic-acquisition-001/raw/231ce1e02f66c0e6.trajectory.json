@@ -1,0 +1,87 @@
+{
+  "acquired_probes": [
+    "rerun_verifier_isolated",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "rerun_verifier_isolated",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 786,
+      "latency_ms": 10741.6,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Exit code 101 could indicate a verifier internal crash (verifier), a panic in the implementation un"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 580,
+      "latency_ms": 10748.2,
+      "prompt_tokens": 521,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"environment\"], \"unresolved_distinction\": \"The isolated rerun could not identify a test target, suggesting the failure may be due to a bad verification-plan ta"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 467,
+      "latency_ms": 8711.6,
+      "prompt_tokens": 511,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": \"The target file referenced by the verification command does not exist in the working tree, confirming a bad target binding "
+    }
+  ],
+  "case_id": "sr-04",
+  "condition": "G",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/corpus_sr4_stale.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/corpus_sr4_stale.rs"
+      ]
+    },
+    "rerun_verifier_isolated": {
+      "isolated_result": "not_found",
+      "summary": "could not determine isolated test",
+      "test": "(none)"
+    }
+  },
+  "payment_used": 6,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "rerun_verifier_isolated",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "231ce1e02f66c0e6",
+  "unknown_premature": 0
+}

@@ -1,0 +1,7 @@
+Locus: unknown
+Terminal: CONTRACT_FAILURE
+Actions: inspect_verifier_config, inspect_target_binding, inspect_source_symbols, inspect_target_binding
+Payment: 4/7
+Rounds: 4
+Premature attempts: 2
+Unknown premature: 0

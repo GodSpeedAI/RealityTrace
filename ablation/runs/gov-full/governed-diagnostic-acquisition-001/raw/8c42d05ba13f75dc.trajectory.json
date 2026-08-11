@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1134,
+      "latency_ms": 26181.1,
+      "prompt_tokens": 680,
+      "response_preview": "Looking at the available evidence:\n\n**Step 1: Enumerate candidate loci**\n1. **implementation** \u2013 `verifier_exit: 1` with `stdin_format: pytest-progress`. In pytest, exit code 1 conventionally means te"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 266,
+      "latency_ms": 9818.7,
+      "prompt_tokens": 272,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"TMPDIR is not writable; if verifier/test harness writes temp files there, this could cause exit code 1, making environment the ro"
+    }
+  ],
+  "case_id": "cep-09",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "TMPDIR=/home/sprime01/projects/cep/.corpus-tmpfix",
+      "path": "default",
+      "tmpdir": "not_writable",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "8c42d05ba13f75dc",
+  "unknown_premature": 1
+}

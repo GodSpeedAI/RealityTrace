@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_source_symbols",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 4096,
+      "latency_ms": 124937.1,
+      "prompt_tokens": 678,
+      "response_preview": ""
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 133,
+      "latency_ms": 4812.3,
+      "prompt_tokens": 221,
+      "response_preview": "```json\n{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"\", \"settle\": \"implementation\"}\n```\nLocus: implementation"
+    }
+  ],
+  "case_id": "ag-06",
+  "condition": "O",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "missing": [
+        "crate::format::format_matches_as_text",
+        "format_matches_as_text"
+      ],
+      "present": []
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_source_symbols",
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "30438867769bb20b",
+  "unknown_premature": 0
+}

@@ -1,0 +1,105 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1574,
+      "latency_ms": 29949.8,
+      "prompt_tokens": 978,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit 101 reflects a verifier-side crash/misconfiguration versus missing or malformed collected evide"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1068,
+      "latency_ms": 21157.2,
+      "prompt_tokens": 376,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"verification_plan\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the failure is due to a verifier configuration/command defect versus an evidence-collect"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 527,
+      "latency_ms": 9657.5,
+      "prompt_tokens": 554,
+      "response_preview": "{\n  \"candidate_loci\": [\n    \"verifier\",\n    \"verification_plan\",\n    \"evidence_collection\"\n  ],\n  \"unresolved_distinction\": \"Whether the configured cargo-test command references a test target/path tha"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 521,
+      "latency_ms": 10704.5,
+      "prompt_tokens": 518,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": \"None; the verification command references a non-existent test target, indicating an invalid verification-plan binding.\", \"selected_"
+    }
+  ],
+  "case_id": "sr-03",
+  "condition": "G",
+  "final_locus": "verification_plan",
+  "observations": {
+    "inspect_target_binding": {
+      "all_exist": false,
+      "checked": [
+        {
+          "exists": false,
+          "target": "tests/corpus_sr3_stale.rs"
+        }
+      ],
+      "missing_targets": [
+        "tests/corpus_sr3_stale.rs"
+      ]
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core --test corpus_sr3_stale"
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [
+    {
+      "locus": "verifier",
+      "round": 1
+    }
+  ],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 1,
+      "settlement_rejected": "verifier"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "verification_plan"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "be4f0355f4861577",
+  "unknown_premature": 0
+}

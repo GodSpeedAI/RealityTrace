@@ -1,0 +1,152 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_verifier_config",
+    "inspect_target_binding"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "model"
+    },
+    {
+      "action": "inspect_verifier_config",
+      "round": 3,
+      "source": "model"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 4,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 730,
+      "latency_ms": 17401.9,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"environment\", \"implementation\"],\n  \"unresolved_distinction\": \"Exit code 101 could indicate a verifier-internal crash/assertion (verifier locus), an environm"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 607,
+      "latency_ms": 20069.9,
+      "prompt_tokens": 371,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"implementation\", \"environment\"], \"unresolved_distinction\": \"Whether the failing verification command references a target/path that does not resolve, indicatin"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 2326,
+      "latency_ms": 52634.3,
+      "prompt_tokens": 498,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\"],\n  \"unresolved_distinction\": \"None; the target/path resolves correctly, eliminating verification-plan and environment/path issues. The failure is best attribut"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 4084,
+      "latency_ms": 115715.6,
+      "prompt_tokens": 375,
+      "response_preview": "{\"candidate_loci\":[\"implementation\",\"verification_plan\",\"projection\"],\"unresolved_distinction\":\"Whether the failure trace maps to real source symbols in the implementation or to a path/projection/veri"
+    },
+    {
+      "call_num": 5,
+      "completion_tokens": 996,
+      "latency_ms": 21806.5,
+      "prompt_tokens": 484,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verification_plan\"], \"unresolved_distinction\": \"Previously distinguished implementation vs. plan/projection mismatch; absence of any source symbols in the trace rules out "
+    },
+    {
+      "call_num": 6,
+      "completion_tokens": 1932,
+      "latency_ms": 42090.5,
+      "prompt_tokens": 376,
+      "response_preview": "{\"candidate_loci\": [\"verification_plan\", \"verifier\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether the sufficiency contract was mis-specified by the verifier configuration/plan versus whe"
+    },
+    {
+      "call_num": 7,
+      "completion_tokens": 962,
+      "latency_ms": 31738.8,
+      "prompt_tokens": 559,
+      "response_preview": "{\n  \"candidate_loci\": [\"verification_plan\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Whether the verifier command targets a nonexistent or incorrectly bound test/fixture due to a plan spec"
+    }
+  ],
+  "case_id": "sr-10",
+  "condition": "G",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    },
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-domain corpus_scenario_stale_fixture"
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [
+    {
+      "locus": "implementation",
+      "round": 2
+    },
+    {
+      "locus": "verification_plan",
+      "round": 3
+    }
+  ],
+  "rep": 1,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_source_symbols",
+      "round": 2,
+      "settlement_rejected": "implementation"
+    },
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_verifier_config",
+      "round": 3,
+      "settlement_rejected": "verification_plan"
+    },
+    {
+      "action": "inspect_target_binding",
+      "calls_in_round": 1,
+      "round": 4
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "59eb5d0698c096c3",
+  "unknown_premature": 1
+}

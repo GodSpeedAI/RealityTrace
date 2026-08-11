@@ -1,0 +1,58 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1098,
+      "latency_ms": 20187.8,
+      "prompt_tokens": 972,
+      "response_preview": "```json\n{\"candidate_loci\": [\"verifier\", \"environment\", \"verification_plan\"], \"unresolved_distinction\": \"Exit code 101 is abnormal and typically signals a panic/crash rather than a normal test failure."
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 194,
+      "latency_ms": 3990.6,
+      "prompt_tokens": 538,
+      "response_preview": "{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The TMPDIR is assigned to a nonexistent path and is not writable, while the toolchain is available. This directly explains the abnormal e"
+    }
+  ],
+  "case_id": "df-15",
+  "condition": "G",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "TMPDIR=/nonexistent-corpus-tmpdir",
+      "path": "default",
+      "tmpdir": "not_writable",
+      "toolchain": "available"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_environment",
+      "calls_in_round": 1,
+      "round": 1
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "8fff064e57c7e495",
+  "unknown_premature": 0
+}

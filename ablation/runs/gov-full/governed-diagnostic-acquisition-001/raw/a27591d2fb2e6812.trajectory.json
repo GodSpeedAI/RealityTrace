@@ -1,0 +1,60 @@
+{
+  "acquired_probes": [
+    "validate_semantic_model"
+  ],
+  "actions": [
+    {
+      "action": "validate_semantic_model",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1078,
+      "latency_ms": 25918.2,
+      "prompt_tokens": 674,
+      "response_preview": "{\"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"], \"unresolved_distinction\": \"Whether verifier_exit=1 reflects a real validation failure in the implementation/declared artifact "
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 906,
+      "latency_ms": 20152.0,
+      "prompt_tokens": 281,
+      "response_preview": "{\"candidate_loci\":[\"declared_model\"],\"unresolved_distinction\":\"The probe now gives an explicit model parse/closure failure: Undefined entity UserIntent in .sea/interaction/interaction-model.sea, so th"
+    }
+  ],
+  "case_id": "sr-12",
+  "condition": "O",
+  "final_locus": "declared_model",
+  "observations": {
+    "validate_semantic_model": {
+      "errors": [
+        "Error: Parse failed for .sea/interaction/interaction-model.sea: resolved closure failed graph construction: Undefined entity: UserIntent at 0:0"
+      ],
+      "exit_code": 1,
+      "model_file": ".sea/interaction/interaction-model.sea",
+      "valid": false
+    }
+  },
+  "payment_used": 3,
+  "premature_attempts": [],
+  "rep": 3,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "declared_model"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "a27591d2fb2e6812",
+  "unknown_premature": 1
+}

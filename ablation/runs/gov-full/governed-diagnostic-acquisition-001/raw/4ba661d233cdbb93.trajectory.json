@@ -1,0 +1,97 @@
+{
+  "acquired_probes": [
+    "inspect_target_binding",
+    "inspect_source_symbols"
+  ],
+  "actions": [
+    {
+      "action": "inspect_target_binding",
+      "round": 1,
+      "source": "model"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 2,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1535,
+      "latency_ms": 21254.9,
+      "prompt_tokens": 968,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"verification_plan\", \"environment\", \"implementation\"],\n  \"unresolved_distinction\": \"Whether the pytest exit code 2 (test execution interrupted / internal err"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 625,
+      "latency_ms": 11285.3,
+      "prompt_tokens": 371,
+      "response_preview": "{\n  \"candidate_loci\": [\n    \"verifier\",\n    \"verification_plan\",\n    \"implementation\"\n  ],\n  \"unresolved_distinction\": \"Whether the failure is due to the verifier/verification setup referencing the wr"
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 559,
+      "latency_ms": 10117.9,
+      "prompt_tokens": 494,
+      "response_preview": "{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"verification_plan\"],\n  \"unresolved_distinction\": \"The referenced test target exists, so the failure is not a missing target binding. Need to deter"
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 243,
+      "latency_ms": 4466.1,
+      "prompt_tokens": 507,
+      "response_preview": "{\"candidate_loci\": [\"implementation\"], \"unresolved_distinction\": \"The referenced symbol iter_reality_gap_case_files is missing from the source, indicating the implementation is incomplete or incorrect"
+    }
+  ],
+  "case_id": "cep-07",
+  "condition": "G",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_source_symbols": {
+      "checked_symbols": [
+        "iter_reality_gap_case_files"
+      ],
+      "missing": [
+        "iter_reality_gap_case_files"
+      ],
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "tests/test_import.py"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 2,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 2,
+      "forced_action": "inspect_target_binding",
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "action": "inspect_source_symbols",
+      "calls_in_round": 1,
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 3,
+      "settled": "implementation"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "4ba661d233cdbb93",
+  "unknown_premature": 1
+}

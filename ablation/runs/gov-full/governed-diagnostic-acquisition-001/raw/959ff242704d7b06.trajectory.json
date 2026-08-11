@@ -1,0 +1,63 @@
+{
+  "acquired_probes": [
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_environment",
+      "round": 1,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1222,
+      "latency_ms": 29176.4,
+      "prompt_tokens": 681,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verifier\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=127 reflects a classic 'command not found' / missing-binary condition in the execution env"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 799,
+      "latency_ms": 21811.0,
+      "prompt_tokens": 271,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"The restricted PATH and unavailable toolchain indicate a missing dependency or command needed by the verifier, supporting an exec"
+    }
+  ],
+  "case_id": "sr-07",
+  "condition": "O",
+  "final_locus": "environment",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "PATH=/usr/bin:/bin",
+      "path": "restricted",
+      "tmpdir": "default",
+      "toolchain": "unavailable"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [
+    {
+      "locus": "environment",
+      "round": 1
+    }
+  ],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "settlement_rejected": "environment"
+    },
+    {
+      "calls_in_round": 1,
+      "gate_passed": true,
+      "round": 2,
+      "settled": "environment"
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "959ff242704d7b06",
+  "unknown_premature": 0
+}

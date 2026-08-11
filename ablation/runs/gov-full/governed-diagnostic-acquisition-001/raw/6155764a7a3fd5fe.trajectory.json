@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 790,
+      "latency_ms": 10874.9,
+      "prompt_tokens": 977,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"implementation\", \"evidence_collection\"],\n  \"unresolved_distinction\": \"Whether the verifier exited 1 because the implementation genuinely fails df-validate, "
+    }
+  ],
+  "case_id": "sr-11",
+  "condition": "V",
+  "final_locus": "verifier",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "6155764a7a3fd5fe",
+  "unknown_premature": 0
+}

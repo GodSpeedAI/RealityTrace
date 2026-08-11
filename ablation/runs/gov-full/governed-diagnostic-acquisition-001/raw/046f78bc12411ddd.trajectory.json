@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2726,
+      "latency_ms": 34913.9,
+      "prompt_tokens": 968,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"verifier\", \"verification_plan\", \"environment\"],\n  \"unresolved_distinction\": \"Verifier exit code 2 (pytest: execution interrupted or usage/collection error) could arise "
+    }
+  ],
+  "case_id": "cep-07",
+  "condition": "V",
+  "final_locus": "unknown",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [],
+  "terminal_state": "UNKNOWN_SETTLEMENT",
+  "unit_id": "046f78bc12411ddd",
+  "unknown_premature": 0
+}

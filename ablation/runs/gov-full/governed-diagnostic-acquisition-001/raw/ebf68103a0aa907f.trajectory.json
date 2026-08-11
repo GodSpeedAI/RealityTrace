@@ -1,0 +1,24 @@
+{
+  "acquired_probes": [],
+  "actions": [],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 2229,
+      "latency_ms": 49159.2,
+      "prompt_tokens": 968,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"environment\", \"verification_plan\", \"verifier\"],\n  \"unresolved_distinction\": \"Verifier exited with code 2 (pytest: internal error or execution interrupted) with no captu"
+    }
+  ],
+  "case_id": "cep-07",
+  "condition": "V",
+  "final_locus": "verifier",
+  "observations": {},
+  "payment_used": 0,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "ebf68103a0aa907f",
+  "unknown_premature": 0
+}

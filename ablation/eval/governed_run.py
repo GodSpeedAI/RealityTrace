@@ -138,7 +138,7 @@ def oracle_select(case_id, acquired_probes, payment_used, hidden_meta):
 def _model_call(prompt, condition):
     return call_coding_plan(
         model="glm-5.2", system_prompt=SYSTEM_PROMPT,
-        user_prompt=prompt, temperature=0.0, max_tokens=4096)
+        user_prompt=prompt, temperature=0.0, max_tokens=8192)
 
 
 def freeze_contract(exp_dir):
@@ -221,13 +221,15 @@ def run_unit(unit, case_row, ctx_sections, probe_results, hidden_meta,
         t0 = time.monotonic()
         mc = _model_call(prompt, cond)
         elapsed = (time.monotonic() - t0) * 1000
-        total_tokens += int(mc.usage.get("total_tokens") or 0)
-        total_reasoning += int(mc.usage.get("reasoning_tokens") or 0)
+        u = mc.usage or {}
+        total_tokens += int(u.get("total_tokens") or 0)
+        total_reasoning += int(u.get("reasoning_tokens") or 0)
         call_data = {
-            "call_num": call_count, "latency_ms": mc.latency_ms,
-            "prompt_tokens": int(mc.usage.get("prompt_tokens") or 0),
-            "completion_tokens": int(mc.usage.get("completion_tokens") or 0),
-            "response_preview": mc.text[:200],
+            "call_num": call_count,
+            "latency_ms": getattr(mc, 'latency_ms', round(elapsed, 1)),
+            "prompt_tokens": int(u.get("prompt_tokens") or 0),
+            "completion_tokens": int(u.get("completion_tokens") or 0),
+            "response_preview": (mc.text or "")[:200],
         }
         all_calls.append(call_data)
         return mc
@@ -304,8 +306,8 @@ def run_unit(unit, case_row, ctx_sections, probe_results, hidden_meta,
                             actions_taken.append({"action": aid, "source": "oracle", "round": round_num})
                             acquired += (aid,)
                             prev_action = aid
-                            prev_candidates = ", ".join(parsed.get("candidate_loci", []))
-                            prev_unresolved = parsed.get("unresolved_distinction", "")
+                            prev_candidates = ", ".join(parsed.get("candidate_loci", [])) if parsed else ""
+                            prev_unresolved = parsed.get("unresolved_distinction", "") if parsed else ""
                             prompt = O_SCAFFOLD_OBSERVATION.format(
                                 round_num=round_num + 1, max_rounds=MAX_ROUNDS,
                                 payment_used=payment_used, max_payment=MAX_PAYMENT,
@@ -371,8 +373,8 @@ def run_unit(unit, case_row, ctx_sections, probe_results, hidden_meta,
                             actions_taken.append({"action": aid, "source": "oracle", "round": round_num})
                             acquired += (aid,)
                             prev_action = aid
-                            prev_candidates = ", ".join(parsed.get("candidate_loci", []))
-                            prev_unresolved = parsed.get("unresolved_distinction", "")
+                            prev_candidates = ", ".join(parsed.get("candidate_loci", [])) if parsed else ""
+                            prev_unresolved = parsed.get("unresolved_distinction", "") if parsed else ""
                             prompt = O_SCAFFOLD_OBSERVATION.format(
                                 round_num=round_num + 1, max_rounds=MAX_ROUNDS,
                                 payment_used=payment_used, max_payment=MAX_PAYMENT,
@@ -583,6 +585,8 @@ def main():
     ap.add_argument("--seed", type=int, default=SEED)
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--pilot", action="store_true")
+    ap.add_argument("--worker", type=int, default=0)
+    ap.add_argument("--num-workers", type=int, default=1)
     args = ap.parse_args()
 
     rows = load_case_rows(os.path.join(CORPUS, "cases.jsonl"))
@@ -628,6 +632,9 @@ def main():
     rng.shuffle(order)
     if args.limit:
         order = order[:args.limit]
+    # Worker partitioning: each worker processes every Nth unit
+    if args.num_workers > 1:
+        order = [uid for i, uid in enumerate(order) if i % args.num_workers == args.worker]
     by_unit = {u.unit_id: u for u in units}
     with open(os.path.join(exp_dir, "matrix.json"), "w") as f:
         json.dump({"seed": args.seed, "fingerprint": fp, "order": order,

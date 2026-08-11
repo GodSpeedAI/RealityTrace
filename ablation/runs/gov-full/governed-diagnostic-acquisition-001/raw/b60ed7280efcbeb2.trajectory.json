@@ -1,0 +1,125 @@
+{
+  "acquired_probes": [
+    "inspect_fixture_integrity",
+    "inspect_target_binding",
+    "inspect_source_symbols",
+    "inspect_environment"
+  ],
+  "actions": [
+    {
+      "action": "inspect_fixture_integrity",
+      "round": 1,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_target_binding",
+      "round": 2,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_source_symbols",
+      "round": 3,
+      "source": "oracle"
+    },
+    {
+      "action": "inspect_environment",
+      "round": 4,
+      "source": "oracle"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 568,
+      "latency_ms": 15044.4,
+      "prompt_tokens": 678,
+      "response_preview": "{\n  \"candidate_loci\": [\"verifier\", \"environment\"],\n  \"unresolved_distinction\": \"Whether verifier_exit=101 reflects a verifier-internal fault versus an environment/harness-level failure such as missing"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 582,
+      "latency_ms": 12565.9,
+      "prompt_tokens": 235,
+      "response_preview": "```json\n{\"candidate_loci\": [\"environment\"], \"unresolved_distinction\": \"A stale fixture indicates environment/harness-level test data degradation, which weakens the verifier-internal-fault hypothesis, "
+    },
+    {
+      "call_num": 3,
+      "completion_tokens": 571,
+      "latency_ms": 13049.8,
+      "prompt_tokens": 246,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"Target bindings exist, so missing discovery targets are unlikely, but the stale fixture still leaves environment degradation "
+    },
+    {
+      "call_num": 4,
+      "completion_tokens": 1075,
+      "latency_ms": 24720.4,
+      "prompt_tokens": 233,
+      "response_preview": "{\"candidate_loci\": [\"environment\", \"verifier\"], \"unresolved_distinction\": \"The symbol probe found no referenced symbols, so it neither supports nor rules out stale fixture/environment degradation vers"
+    }
+  ],
+  "case_id": "ag-14",
+  "condition": "O",
+  "final_locus": "unknown",
+  "observations": {
+    "inspect_environment": {
+      "env_assignments": "(none)",
+      "path": "default",
+      "tmpdir": "default",
+      "toolchain": "available"
+    },
+    "inspect_fixture_integrity": {
+      "checked": [
+        "tests/fixtures/example.py"
+      ],
+      "missing": [],
+      "ok": [],
+      "stale": [
+        "tests/fixtures/example.py"
+      ]
+    },
+    "inspect_source_symbols": {
+      "checked_symbols": [],
+      "missing": [],
+      "note": "no symbols referenced in failure trace",
+      "present": []
+    },
+    "inspect_target_binding": {
+      "all_exist": true,
+      "checked": [
+        {
+          "exists": true,
+          "target": "(default test discovery)"
+        }
+      ],
+      "missing_targets": []
+    }
+  },
+  "payment_used": 4,
+  "premature_attempts": [],
+  "rep": 2,
+  "rounds": [
+    {
+      "calls_in_round": 1,
+      "round": 1,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "oracle_action": "inspect_target_binding",
+      "round": 2
+    },
+    {
+      "calls_in_round": 1,
+      "round": 3,
+      "unknown_rejected": true
+    },
+    {
+      "calls_in_round": 1,
+      "round": 4,
+      "unknown_rejected": true
+    }
+  ],
+  "terminal_state": "CONTRACT_FAILURE",
+  "unit_id": "b60ed7280efcbeb2",
+  "unknown_premature": 3
+}

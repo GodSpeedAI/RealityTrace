@@ -1,0 +1,56 @@
+{
+  "acquired_probes": [
+    "inspect_verifier_config"
+  ],
+  "actions": [
+    {
+      "action": "inspect_verifier_config",
+      "round": 1,
+      "source": "model"
+    }
+  ],
+  "calls": [
+    {
+      "call_num": 1,
+      "completion_tokens": 1238,
+      "latency_ms": 16170.8,
+      "prompt_tokens": 981,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\", \"verifier\", \"environment\"],\n  \"unresolved_distinction\": \"Exit code 101 (characteristic of a Go runtime panic) could originate from three distinct sourc"
+    },
+    {
+      "call_num": 2,
+      "completion_tokens": 1314,
+      "latency_ms": 18637.9,
+      "prompt_tokens": 622,
+      "response_preview": "```json\n{\n  \"candidate_loci\": [\"implementation\"],\n  \"unresolved_distinction\": \"The verifier configuration is now confirmed as a well-formed standard cargo-test command with a clear direction rule and "
+    }
+  ],
+  "case_id": "sr-09",
+  "condition": "V",
+  "final_locus": "implementation",
+  "observations": {
+    "inspect_verifier_config": {
+      "direction_rule": "exit_code: 0\u2192supports, nonzero\u2192contradicts",
+      "env_assignments": "(none)",
+      "evidence_types": [
+        "test_result",
+        "execution_log"
+      ],
+      "verifier": "cargo-test",
+      "verifier_command": "cd /home/sprime01/projects/sea-rs && cargo test --offline --message-format json -p sea-forge-core corpus_scenario_missing_fixture"
+    }
+  },
+  "payment_used": 1,
+  "premature_attempts": [],
+  "rep": 1,
+  "rounds": [
+    {
+      "action": "inspect_verifier_config",
+      "calls_in_round": 1,
+      "round": 1
+    }
+  ],
+  "terminal_state": "CONCRETE_SETTLEMENT",
+  "unit_id": "fc891fb6275b4673",
+  "unknown_premature": 0
+}

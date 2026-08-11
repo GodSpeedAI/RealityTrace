@@ -1,0 +1,7 @@
+Locus: environment
+Terminal: CONCRETE_SETTLEMENT
+Actions: inspect_verifier_config, inspect_target_binding, inspect_environment
+Payment: 3/7
+Rounds: 4
+Premature attempts: 0
+Unknown premature: 1
