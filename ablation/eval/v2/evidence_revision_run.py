@@ -30,23 +30,40 @@ from .channel import PromptLeakGuard
 from .controller import DiagnosticController, ModelClient, UnitResult, arm_difference_report
 from .dstate import missing_state_sections
 from .evidence_revision import (ARMS, EXPERIMENT_ID, GOVERNANCE_CLASS,
-                                OWNER_STATE, PRIMARY_POPULATION,
-                                contract_fingerprint)
+                                OWNER_STATE, PRIMARY_POPULATION)
+from .case_inputs_v2 import (covariates_for, initial_state_for,
+                             load_case_inputs as load_case_inputs_v2)
+from .marker_neutralization import assert_marker_free
+from .validity_revision import (
+    DESIGN_VERSION, EVIDENCE_POLICY, EXECUTABLE_VERSION, FULL_NAMESPACE,
+    LEAKAGE_POLICY_VERSION, PILOT_NAMESPACE, PILOT_REPETITIONS,
+    PREDECESSOR_DESIGN, PREDECESSOR_EXECUTABLE, build_artifacts,
+    design_fingerprint, neutralized_observations, pair_equality_report,
+    selected_delivery)
 from .ids import unit_id
 from .ledger import CommitLedger, CommitViolation
 from .legibility import assert_semantic_equivalence
 from .replication import COSTS, DESCRIPTIONS, PROBES, VOCAB, _fixture
 from .sufficiency import LEGACY_CONTRACT, derive_topology
 
-EXPECTED_FINGERPRINT = "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3"
-RUNNER_SCHEMA = "evidence-revision-runner-v1"
-MATRIX_SCHEMA = "evidence-revision-matrix-v1"
+EXPECTED_DESIGN_FINGERPRINT = "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9"
+EXPECTED_EXECUTABLE_FINGERPRINT = "2f377dd9fc18ec4516bd07d0fe3cf5d069bd4a54a6ec3431d309773b5e2183c2"
+# Backward-compatible name for consumers that mean executable identity.
+EXPECTED_FINGERPRINT = EXPECTED_EXECUTABLE_FINGERPRINT
+RUNNER_SCHEMA = "evidence-revision-runner-v2"
+MATRIX_SCHEMA = "evidence-revision-matrix-v2"
 CALL_SCHEMA = "evidence-revision-call-v1"
 VALID_STAGES = ("pilot", "full")
 REPO_ROOT = Path(__file__).resolve().parents[3]
 CORPUS = REPO_ROOT / "ablation" / "corpus"
-FROZEN_CONTRACT_JSON = (REPO_ROOT / "ablation" / "analysis" /
-                        "post-audit-v2" / "evidence-revision-001-contract.json")
+REVISION_DIR = REPO_ROOT / "ablation" / "analysis" / "post-audit-v2"
+REVISED_SCIENTIFIC_CONTRACT = REVISION_DIR / "evidence-revision-001-revision-002-contract.json"
+REVISED_EXECUTABLE_CONTRACT = REVISION_DIR / "evidence-revision-001-revision-002-executable-contract.json"
+REVISED_PILOT_MATRIX = REVISION_DIR / "evidence-revision-001-pilot-matrix-v2.json"
+REVISED_CASE_INPUTS = REVISION_DIR / "case-inputs-v2.json"
+REVISED_MARKER_MANIFEST = REVISION_DIR / "evidence-revision-001-marker-neutralization-v2.json"
+REVISED_FEASIBILITY = REVISION_DIR / "evidence-revision-001-masked-k-feasibility-v2.json"
+REVISED_LEAKAGE = REVISION_DIR / "evidence-revision-001-masked-k-leakage-v2.json"
 
 CORPUS_FILES = {
     "cases": CORPUS / "cases.jsonl",
@@ -56,8 +73,16 @@ CORPUS_FILES = {
     "sufficiency": CORPUS / "governed-sufficiency-contract.json",
 }
 SOURCE_FILES = {
-    "frozen_contract_json": FROZEN_CONTRACT_JSON,
-    "contract_module": Path(__file__).with_name("evidence_revision.py"),
+    "scientific_contract": REVISED_SCIENTIFIC_CONTRACT,
+    "executable_contract": REVISED_EXECUTABLE_CONTRACT,
+    "pilot_matrix": REVISED_PILOT_MATRIX,
+    "case_inputs": REVISED_CASE_INPUTS,
+    "marker_manifest": REVISED_MARKER_MANIFEST,
+    "masked_k_feasibility": REVISED_FEASIBILITY,
+    "masked_k_leakage": REVISED_LEAKAGE,
+    "validity_revision_module": Path(__file__).with_name("validity_revision.py"),
+    "case_inputs_module": Path(__file__).with_name("case_inputs_v2.py"),
+    "marker_neutralizer_module": Path(__file__).with_name("marker_neutralization.py"),
     "controller_module": Path(__file__).with_name("controller.py"),
     "channel_module": Path(__file__).with_name("channel.py"),
     "decision_module": Path(__file__).with_name("decision.py"),
@@ -155,87 +180,115 @@ def eligible_cases() -> tuple[str, ...]:
     return cases
 
 
-def inspect_matrix(stage: str) -> dict:
-    """Describe what is frozen and fail visibly on absent pilot coordinates.
+def _revised_contracts() -> tuple[dict, dict, dict]:
+    science = json.loads(REVISED_SCIENTIFIC_CONTRACT.read_text())
+    executable = json.loads(REVISED_EXECUTABLE_CONTRACT.read_text())
+    matrix = json.loads(REVISED_PILOT_MATRIX.read_text())
+    return science, executable, matrix
 
-    The contract freezes 43 eligible cases and five arms, but records neither
-    an exact pilot subset nor repetition count.  Inventing either here would be
-    a scientific change.  Consequently UIDs/total units remain unavailable.
-    """
+
+def inspect_matrix(stage: str) -> dict:
+    """Safe offline inspection of contract-owned execution coordinates."""
     if stage not in VALID_STAGES:
         raise ValueError(stage)
     hashes = frozen_hashes()
-    cases = eligible_cases()
+    science, executable, matrix = _revised_contracts()
+    if science["design_fingerprint"] != EXPECTED_DESIGN_FINGERPRINT:
+        raise ExecutionRefused("revised scientific fingerprint drift")
+    if executable["executable_contract_fingerprint"] != EXPECTED_EXECUTABLE_FINGERPRINT:
+        raise ExecutionRefused("revised executable fingerprint drift")
+    if stage == "pilot":
+        return {
+            "experiment_id": EXPERIMENT_ID, "stage": stage,
+            "design_fingerprint": EXPECTED_DESIGN_FINGERPRINT,
+            "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
+            "cases": matrix["cases"], "arms": matrix["arms"],
+            "repetitions": matrix["repetitions"],
+            "total_units": matrix["total_units"], "uids": matrix["unit_ids"],
+            "namespace": matrix["namespace"],
+            "matrix_sha256": matrix["matrix_sha256"],
+            "case_inputs_sha256": matrix["case_inputs_sha256"],
+            "corpus_hash": hashes["corpus_hash"],
+            "evidence_action_hash": hashes["evidence_action_hash"],
+            "source_hashes": hashes["sources"], "executable": True,
+            "blocker": None, "execution_authorized": False,
+            "model_calls_performed": 0, "provider_calls_performed": 0}
     return {
-        "experiment_id": EXPERIMENT_ID,
-        "stage": stage,
-        "contract_fingerprint": contract_fingerprint(),
-        "cases": list(cases),
-        "arms": list(ARMS),
-        "repetitions": None,
-        "total_units": None,
-        "uids": [],
-        "corpus_hash": hashes["corpus_hash"],
-        "evidence_action_hash": hashes["evidence_action_hash"],
-        "source_hashes": hashes["sources"],
-        "executable": False,
-        "blocker": ("FROZEN_CONTRACT_GAP: exact pilot case selection and "
-                    "repetition count are absent from both the frozen Python "
-                    "contract and emitted contract JSON; runner refuses to "
-                    "invent scientific coordinates"),
-        "model_calls_performed": 0,
-        "provider_calls_performed": 0,
-    }
+        "experiment_id": EXPERIMENT_ID, "stage": stage,
+        "design_fingerprint": EXPECTED_DESIGN_FINGERPRINT,
+        "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
+        "cases": list(eligible_cases()), "arms": list(ARMS),
+        "repetitions": None, "total_units": None, "uids": [],
+        "namespace": FULL_NAMESPACE, "executable": False,
+        "blocker": "FULL matrix is intentionally not frozen or authorized",
+        "execution_authorized": False, "model_calls_performed": 0,
+        "provider_calls_performed": 0}
 
 
 @dataclass(frozen=True)
 class FrozenMatrix:
     stage: str
+    namespace: str
     cases: tuple[str, ...]
     arms: tuple[str, ...]
     repetitions: int
-    fingerprint: str
+    design_fingerprint: str
+    executable_fingerprint: str
+    case_inputs_hash: str
     matrix_hash: str
 
     @property
     def total_units(self) -> int:
         return len(self.cases) * len(self.arms) * self.repetitions
 
-    def uids(self, namespace: str) -> tuple[str, ...]:
+    def uids(self, namespace: str | None = None) -> tuple[str, ...]:
+        namespace = namespace or self.namespace
         return tuple(unit_id(EXPERIMENT_ID, namespace, case, arm, rep,
-                             self.fingerprint)
+                             self.executable_fingerprint)
                      for case in self.cases for arm in self.arms
                      for rep in range(1, self.repetitions + 1))
 
 
-def load_frozen_matrix(path: Path, stage: str, owner_state: Mapping) -> FrozenMatrix:
-    """Load only a matrix whose identity is explicitly frozen by owner state.
+def load_frozen_matrix(path: Path, stage: str,
+                       owner_state: Mapping | None = None) -> FrozenMatrix:
+    """Load a matrix whose canonical hash is owned by the scientific contract.
 
-    Current owner state has no matrix hash, so this deliberately refuses.  A
-    file supplied at the CLI is never allowed to become science by existence.
+    ``owner_state`` is accepted only for API compatibility and is never read:
+    authorization state cannot own scientific matrix semantics.
     """
-    raw = path.read_bytes()
-    doc = json.loads(raw)
-    digest = _sha256(raw)
-    expected = owner_state.get(f"{stage}_matrix_hash")
+    doc = json.loads(path.read_text())
+    _, executable, frozen_doc = _revised_contracts()
+    expected = executable.get("pilot_matrix_sha256") if stage == "pilot" else None
     if not expected:
-        raise ExecutionRefused(
-            f"owner state does not freeze a {stage} matrix hash; adjudication required")
-    if digest != expected:
-        raise ExecutionRefused(f"{stage} matrix hash mismatch")
+        raise ExecutionRefused(f"scientific contract has no frozen {stage} matrix")
+    canonical = _sha256(_canonical({k: v for k, v in doc.items()
+                                    if k != "matrix_sha256"}))
+    if canonical != doc.get("matrix_sha256") or canonical != expected:
+        raise ExecutionRefused(f"{stage} matrix canonical hash mismatch")
     if doc.get("schema") != MATRIX_SCHEMA or doc.get("experiment_id") != EXPERIMENT_ID:
         raise ExecutionRefused("matrix identity/schema mismatch")
-    if doc.get("stage") != stage or doc.get("contract_fingerprint") != EXPECTED_FINGERPRINT:
-        raise ExecutionRefused("matrix stage/fingerprint mismatch")
+    if doc.get("stage") != stage:
+        raise ExecutionRefused("matrix stage mismatch")
+    if doc.get("design_fingerprint") != EXPECTED_DESIGN_FINGERPRINT:
+        raise ExecutionRefused("matrix design fingerprint mismatch")
+    if doc.get("executable_contract_fingerprint") != EXPECTED_EXECUTABLE_FINGERPRINT:
+        raise ExecutionRefused("matrix executable fingerprint mismatch")
+    inputs = load_case_inputs_v2()
+    if doc.get("case_inputs_sha256") != inputs["case_inputs_sha256"]:
+        raise ExecutionRefused("matrix case-input binding mismatch")
     cases, arms = tuple(doc.get("cases", ())), tuple(doc.get("arms", ()))
     reps = doc.get("repetitions")
     if not cases or len(cases) != len(set(cases)) or not isinstance(reps, int) or reps < 1:
         raise ExecutionRefused("matrix cases/repetitions invalid")
-    if arms != tuple(ARMS):
-        raise ExecutionRefused("matrix arms differ from frozen ARMS/order")
-    if not set(cases).issubset(eligible_cases()):
-        raise ExecutionRefused("matrix contains a case outside frozen population")
-    return FrozenMatrix(stage, cases, arms, reps, EXPECTED_FINGERPRINT, digest)
+    if arms != tuple(ARMS) or not set(cases).issubset(eligible_cases()):
+        raise ExecutionRefused("matrix arms/population mismatch")
+    matrix = FrozenMatrix(stage, doc["namespace"], cases, arms, reps,
+                          EXPECTED_DESIGN_FINGERPRINT,
+                          EXPECTED_EXECUTABLE_FINGERPRINT,
+                          inputs["case_inputs_sha256"], canonical)
+    if list(matrix.uids()) != doc.get("unit_ids"):
+        raise ExecutionRefused("matrix unit IDs are not executable-bound")
+    return matrix
 
 
 def owner_state_digest(owner_state: Mapping) -> str:
@@ -252,7 +305,7 @@ class GateRequest:
     run_id: str
     run_root: Path
     owner_state: Mapping = dataclasses.field(default_factory=lambda: OWNER_STATE)
-    observed_fingerprint: str = dataclasses.field(default_factory=contract_fingerprint)
+    observed_fingerprint: str = EXPECTED_EXECUTABLE_FINGERPRINT
 
 
 class ExecutionGate:
@@ -291,12 +344,16 @@ class ExecutionGate:
             expected_marker = {
                 "experiment_id": EXPERIMENT_ID,
                 "stage": req.stage,
-                "contract_fingerprint": EXPECTED_FINGERPRINT,
+                "design_fingerprint": EXPECTED_DESIGN_FINGERPRINT,
+                "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
                 "authorization_state": expected_status,
                 "owner_state_digest": owner_state_digest(req.owner_state),
                 "release_token_sha256": _sha256((req.release_token or "").encode()),
                 "corpus_hash": hashes["corpus_hash"],
                 "evidence_action_hash": hashes["evidence_action_hash"],
+                "matrix_sha256": req.matrix.matrix_hash if req.matrix else None,
+                "case_inputs_sha256": (req.matrix.case_inputs_hash
+                                       if req.matrix else None),
             }
             for key, value in expected_marker.items():
                 if marker.get(key) != value:
@@ -305,7 +362,8 @@ class ExecutionGate:
             failures.append("ModelClient is not configured")
         if req.matrix is None:
             failures.append("frozen stage matrix is unavailable")
-        elif req.matrix.stage != req.stage or req.matrix.fingerprint != EXPECTED_FINGERPRINT:
+        elif (req.matrix.stage != req.stage or
+              req.matrix.executable_fingerprint != EXPECTED_EXECUTABLE_FINGERPRINT):
             failures.append("matrix stage/fingerprint mismatch")
         if not req.run_id or "/" in req.run_id or req.run_id in (".", ".."):
             failures.append("unique run id is invalid")
@@ -315,6 +373,10 @@ class ExecutionGate:
             if diffs[pair]["n_declared_differences"] != 1 or not diffs[pair]["isolates_single_variable"]:
                 failures.append(f"arm-isolation drift: {pair}")
         try:
+            pairs = pair_equality_report()
+            for pair in ("R1_vs_R2", "R3_vs_R4"):
+                if not pairs[pair]["underlying_evidence_equal"]:
+                    failures.append(f"paired evidence mismatch: {pair}")
             assert_semantic_equivalence({"runner_gate": "operational"})
             PromptLeakGuard(PROBES).assert_clean("opaque final transport bytes")
         except Exception as exc:  # pragma: no cover - mutation target
@@ -332,7 +394,9 @@ class RunNamespace:
         self.manifest_path = self.path / "run.json"
         self.identity = {
             "schema": RUNNER_SCHEMA, "experiment_id": EXPERIMENT_ID,
-            "contract_fingerprint": EXPECTED_FINGERPRINT, "stage": stage,
+            "design_fingerprint": EXPECTED_DESIGN_FINGERPRINT,
+            "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
+            "stage": stage,
             "run_id": run_id, "source_hashes": dict(source_hashes),
         }
 
@@ -489,21 +553,21 @@ class DeterministicFakeClient:
 
 
 def _unit_binding(stage: str, namespace: str, case_id: str, arm: str, rep: int) -> str:
-    return _sha256(_canonical({"experiment": EXPERIMENT_ID, "fingerprint": EXPECTED_FINGERPRINT,
+    return _sha256(_canonical({"experiment": EXPERIMENT_ID, "fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
                                "stage": stage, "namespace": namespace,
                                "case_id": case_id, "arm": arm, "rep": rep}))
 
 
 def run_offline_unit(run_dir: Path, client: ModelClient, arm="R1",
-                     stage="pilot", namespace="offline-dry-run", case_id="fixture-01",
+                     stage="pilot", namespace=PILOT_NAMESPACE, case_id="cep-07",
                      rep=1, interrupt=None) -> tuple[UnitResult, DurableReplayClient]:
     """Exercise the complete orchestration with a deterministic injected fake."""
     if not getattr(client, "offline_only", False):
         raise ExecutionRefused("offline dry-run accepts only offline_only clients")
     if arm not in ARMS:
         raise ExecutionRefused("arm is not frozen")
-    uid = unit_id(EXPERIMENT_ID, f"{stage}:{namespace}", case_id, arm, rep,
-                  EXPECTED_FINGERPRINT)
+    uid = unit_id(EXPERIMENT_ID, namespace, case_id, arm, rep,
+                  EXPECTED_EXECUTABLE_FINGERPRINT)
     checkpoint = CheckpointStore(run_dir / "checkpoint.json")
     binding = _unit_binding(stage, namespace, case_id, arm, rep)
     if checkpoint.status(uid) == "PLANNED":
@@ -521,13 +585,27 @@ def run_offline_unit(run_dir: Path, client: ModelClient, arm="R1",
                 raise CommitViolation("completed result lost its raw-response binding")
         doc.pop("runner_contract", None)
         return UnitResult(**doc), replay
-    ctrl = DiagnosticController(ARMS[arm], LEGACY_CONTRACT, PROBES, DESCRIPTIONS,
-                                COSTS, VOCAB, replay, endpoint="offline",
-                                requested_model="fake/deterministic")
-    result = ctrl.run_unit(uid, EXPERIMENT_ID, f"{stage}:{namespace}", case_id, rep,
-                           "Which failure locus does the recorded failure belong to?",
-                           "offline fixture: verifier exit 101; permission denied",
-                           _fixture(), ("inspect_permissions",))
+    if case_id == "fixture-01":  # retained solely for predecessor unit tests
+        initial = {"question": "Which failure locus does the recorded failure belong to?",
+                   "initial_evidence": "offline fixture: verifier exit 101; permission denied"}
+        observations, discriminating = _fixture(), ("inspect_permissions",)
+    else:
+        initial = initial_state_for(case_id)
+        observations = neutralized_observations()[0][case_id]
+        hidden = json.loads(CORPUS_FILES["hidden_meta"].read_text())
+        discriminating = tuple(hidden[case_id]["discriminating_probes"])
+        assert_marker_free(initial["question"])
+        assert_marker_free(initial["initial_evidence"])
+        assert_marker_free(observations)
+    ctrl = DiagnosticController(
+        ARMS[arm], LEGACY_CONTRACT, PROBES, DESCRIPTIONS, COSTS, VOCAB,
+        replay, endpoint="offline", requested_model="fake/deterministic",
+        evidence_selection_policy=EVIDENCE_POLICY[arm], disclosure_k=3,
+        masked_candidate_universe=(
+            tuple(PROBES[:6]) if EVIDENCE_POLICY[arm] == "MASKED_K" else ()))
+    result = ctrl.run_unit(uid, EXPERIMENT_ID, namespace, case_id, rep,
+                           initial["question"], initial["initial_evidence"],
+                           observations, discriminating)
     checkpoint.transition(uid, "PARSED", unit_binding=binding)
     if interrupt:
         interrupt("after_parse", replay.calls)
@@ -550,7 +628,8 @@ def commit_result(run_dir: Path, result: UnitResult, call_ledger: CommitLedger) 
     result_doc = result.to_dict()
     result_doc["runner_contract"] = {
         "experiment_id": EXPERIMENT_ID,
-        "contract_fingerprint": EXPECTED_FINGERPRINT,
+        "design_fingerprint": EXPECTED_DESIGN_FINGERPRINT,
+        "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT,
         "governance_class": GOVERNANCE_CLASS[result.condition],
         "budget_semantics": ARMS[result.condition].budget_semantics,
         "actual_implied_evidence_payment": sum(
@@ -560,7 +639,30 @@ def commit_result(run_dir: Path, result: UnitResult, call_ledger: CommitLedger) 
         "governed_final_settlement": result.final_locus,
         "arm_spec": dataclasses.asdict(ARMS[result.condition]) | {
             "disclosure": ARMS[result.condition].disclosure.value},
+        "leakage_policy_version": LEAKAGE_POLICY_VERSION,
     }
+    if result.case_id != "fixture-01":
+        inputs = load_case_inputs_v2()
+        result_doc["runner_contract"].update(covariates_for(result.case_id, inputs))
+        observations = neutralized_observations()[0]
+        hidden = json.loads(CORPUS_FILES["hidden_meta"].read_text())
+        _, delivery = selected_delivery(result.case_id, result.rep,
+                                        result.condition, observations, hidden)
+        payloads = [o.payload for o in delivery.observations]
+        result_doc["runner_contract"].update({
+            "masked_k_implied_cost": (delivery.payment_charged
+                                      if EVIDENCE_POLICY[result.condition] == "MASKED_K" else None),
+            "masked_k_realized_k": (len(delivery.delivered_probes)
+                                     if EVIDENCE_POLICY[result.condition] == "MASKED_K" else None),
+            "evidence_policy": EVIDENCE_POLICY[result.condition],
+            "evidence_membership": list(delivery.delivered_probes),
+            "evidence_set_hash": _sha256(_canonical({
+                "probes": delivery.delivered_probes,
+                "handles": [o.handle for o in delivery.observations],
+                "payloads": payloads})),
+            "semantic_evidence_hash": _sha256(_canonical(payloads)),
+            "case_input_binding_sha256": inputs["case_inputs_sha256"],
+        })
     payload = json.dumps(result_doc, sort_keys=True, separators=(",", ":"),
                          default=str)
     entry = ledger.commit_raw(result.unit_id, str(result_path), payload)
@@ -608,7 +710,9 @@ def dry_run(output: Path) -> dict:
             "fake_client_calls": fake.call_count, "unit_id": result.unit_id,
             "terminal_state": result.terminal_state,
             "raw_calls_committed": replay.ledger.provenance_summary()["verified"],
-            "scoring_handoff": scored, "contract_fingerprint": contract_fingerprint()}
+            "scoring_handoff": scored,
+            "design_fingerprint": EXPECTED_DESIGN_FINGERPRINT,
+            "executable_contract_fingerprint": EXPECTED_EXECUTABLE_FINGERPRINT}
 
 
 def _live_client():  # pragma: no cover - prohibited during this task
