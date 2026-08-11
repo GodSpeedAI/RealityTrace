@@ -510,6 +510,17 @@ def run_offline_unit(run_dir: Path, client: ModelClient, arm="R1",
         checkpoint.transition(uid, "PLANNED", unit_binding=binding)
     replay = DurableReplayClient(client, uid, run_dir, checkpoint=checkpoint,
                                  interrupt=interrupt)
+    if checkpoint.status(uid) in ("RESULT_COMMITTED", "SCORED"):
+        result_ledger = CommitLedger(str(run_dir / "result-commits.jsonl"))
+        result_ledger.assert_scorable(uid)
+        doc = json.loads((run_dir / "results" / f"{uid}.json").read_text())
+        for execution in doc.get("executions", []):
+            actual = replay.ledger.assert_scorable(
+                f"{uid}:call:{execution['call_num']:03d}")
+            if actual != execution["raw_hash"]:
+                raise CommitViolation("completed result lost its raw-response binding")
+        doc.pop("runner_contract", None)
+        return UnitResult(**doc), replay
     ctrl = DiagnosticController(ARMS[arm], LEGACY_CONTRACT, PROBES, DESCRIPTIONS,
                                 COSTS, VOCAB, replay, endpoint="offline",
                                 requested_model="fake/deterministic")
@@ -557,7 +568,7 @@ def commit_result(run_dir: Path, result: UnitResult, call_ledger: CommitLedger) 
 
 
 def score_committed_result(run_dir: Path, uid: str, scorer: Callable[[dict], dict]) -> dict:
-    """Scoring handoff: it can consume only the verified on-disk result."""
+    """Scoring handoff: consume verified disk bytes and commit one score only."""
     ledger = CommitLedger(str(run_dir / "result-commits.jsonl"))
     ledger.assert_scorable(uid)
     result = json.loads((run_dir / "results" / f"{uid}.json").read_text())
@@ -568,7 +579,17 @@ def score_committed_result(run_dir: Path, uid: str, scorer: Callable[[dict], dic
         actual = calls.assert_scorable(f"{uid}:call:{n:03d}")
         if actual != execution["raw_hash"]:
             raise CommitViolation("score refused: raw response hash mismatch")
-    return scorer(result)
+    score_path = run_dir / "scores" / f"{uid}.json"
+    scores = CommitLedger(str(run_dir / "score-commits.jsonl"))
+    if scores.get(uid):
+        scores.assert_scorable(uid)
+        return json.loads(score_path.read_text())
+    score = scorer(result)
+    scores.commit_raw(uid, str(score_path), json.dumps(
+        score, sort_keys=True, separators=(",", ":"), default=str))
+    checkpoint = CheckpointStore(run_dir / "checkpoint.json")
+    checkpoint.transition(uid, "SCORED")
+    return score
 
 
 def dry_run(output: Path) -> dict:
