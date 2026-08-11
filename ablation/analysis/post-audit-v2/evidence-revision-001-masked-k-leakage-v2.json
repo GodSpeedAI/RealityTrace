@@ -1,0 +1,47 @@
+{
+  "artifact_sha256": "cf052b0e691bc65bdb9f889e0a3b69cfdbcfe958440a00cc6f806e8dcd5f9e87",
+  "channels": {
+    "FULL_membership": {
+      "bits": 0.0,
+      "reason": "all eight observations always delivered"
+    },
+    "NONE_membership": {
+      "bits": 0.0,
+      "reason": "no observations ever delivered"
+    },
+    "marker_presence": "0 bits at model boundary; neutralizer leaves no marker",
+    "missingness": "0 bits; every eligible delivery is affordable",
+    "observation_count": "0 bits; exactly 3 for every MASKED_K delivery",
+    "opaque_handle_identity": "0 bits; paired public seed excludes locus",
+    "ordering": "0 additional bits; canonical public probe order",
+    "rendering_mode": "0 answer bits; frozen by arm and bound to one semantic payload",
+    "set_membership": "measured above; intentionally bounded and nonzero"
+  },
+  "cost_distribution": {
+    "3": 74,
+    "5": 12
+  },
+  "cost_range": [
+    3,
+    5
+  ],
+  "declared_k": 3,
+  "deliveries": 86,
+  "interpretation": "MECHANISTIC_UPPER_BOUND_UNDER_ENFORCED_BUDGET; deployable_navigation=false",
+  "membership_uniquely_determines_locus": [],
+  "missingness_count": 0,
+  "population_cases": 43,
+  "realized_k_distribution": {
+    "3": 86
+  },
+  "realized_membership_leakage_bits": {
+    "maximum": 1.222392,
+    "mean": 1.16448,
+    "minimum": 0.807355
+  },
+  "revision_id": "evidence-revision-001-revision-002",
+  "schema": "masked-k-leakage-accounting-v2",
+  "singleton_equivalent_count": 0,
+  "theoretical_membership_leakage_bits": 1.222392,
+  "unaffordable_count": 0
+}

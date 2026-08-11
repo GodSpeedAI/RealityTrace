@@ -1,0 +1,46 @@
+{
+  "BLOCKER-01": {
+    "evidence": "6894ef508337acab7b409794818d2417a46a0399492b606ca867f79c37186539",
+    "primary_marker_contaminated": [],
+    "status": "CLOSED"
+  },
+  "BLOCKER-02": {
+    "evidence": "cf052b0e691bc65bdb9f889e0a3b69cfdbcfe958440a00cc6f806e8dcd5f9e87",
+    "realized_k": 3,
+    "singleton_equivalent_count": 0,
+    "status": "CLOSED"
+  },
+  "BLOCKER-03": {
+    "evidence": "f185375606e91314aa2bcea443552e49fb373c0456d2a464e83229cd4c6c7e01",
+    "status": "CLOSED",
+    "unaffordable_count": 0
+  },
+  "BLOCKER-04": {
+    "evidence": {
+      "R1_R2": true,
+      "R3_R4": true
+    },
+    "status": "CLOSED"
+  },
+  "design_fingerprint": "c3674dc299c1667523243b355774eb2c29460b242a52b216eb0257aeaff231fe",
+  "executable_contract_fingerprint": "3c63b6df1aa8b2081d5a595a147b64c60aa8780f281267756cbe016516d1bd6e",
+  "execution_authorized": false,
+  "model_calls_performed": 0,
+  "pilot": {
+    "cases": [
+      "cep-07",
+      "df-11",
+      "ag-04",
+      "cep-14",
+      "sr-10",
+      "df-06",
+      "cep-05"
+    ],
+    "repetitions": 2,
+    "total_units": 70
+  },
+  "primary_population_count": 43,
+  "provider_calls_performed": 0,
+  "revision_id": "evidence-revision-001-revision-002",
+  "schema": "evidence-revision-validity-closure-v2"
+}

@@ -1,0 +1,194 @@
+{
+  "additional_provider_calls_authorized": false,
+  "design_fingerprint": "c3674dc299c1667523243b355774eb2c29460b242a52b216eb0257aeaff231fe",
+  "design_version": "evidence-revision-design-v2",
+  "evidence_seed_scope": {
+    "excludes": [
+      "arm_name",
+      "rendering_mode",
+      "true_locus",
+      "answer_key",
+      "model_output"
+    ],
+    "formula": "H(experiment_id, case_id, repetition, evidence_policy)",
+    "policies": {
+      "R0": "NONE",
+      "R1": "MASKED_K",
+      "R2": "MASKED_K",
+      "R3": "FULL",
+      "R4": "FULL"
+    }
+  },
+  "execution_authorized": false,
+  "experiment_id": "evidence-revision-001",
+  "marker_policy": {
+    "case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
+    "manifest_sha256": "6894ef508337acab7b409794818d2417a46a0399492b606ca867f79c37186539",
+    "stage": "before RAW/LEGIBLE rendering",
+    "version": "construction-marker-neutralization-v1"
+  },
+  "masked_k": {
+    "candidate_universe": [
+      "inspect_target_binding",
+      "inspect_source_symbols",
+      "inspect_environment",
+      "inspect_permissions",
+      "inspect_fixture_integrity",
+      "validate_semantic_model"
+    ],
+    "class": "MECHANISTIC_UPPER_BOUND_UNDER_ENFORCED_BUDGET",
+    "decoy_policy_version": "masked-k-exact3-affordable-v2",
+    "deployable_navigation": false,
+    "k": 3,
+    "max_payment": 7
+  },
+  "model_calls_performed": 0,
+  "owner_authorized_semantic_changes": {
+    "BLOCKER-01": "marker-neutral semantic projection before either renderer",
+    "BLOCKER-02": "MASKED_K exact K=3 from frozen direct candidate universe",
+    "BLOCKER-03": "complete feasibility enumeration and deterministic affordable selection at max_payment=7",
+    "BLOCKER-04": "paired evidence-policy seed excludes arm and rendering"
+  },
+  "owner_state": {
+    "additional_provider_calls_authorized": false,
+    "adjudication_is_not_authorization": "discussion or adjudication of the power question does not constitute permission to execute",
+    "execution_authorized": false,
+    "original_10pp_threshold_preserved": true,
+    "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
+    "provider_calls_to_date": {
+      "non_scored_preflight": 2,
+      "note": "the two non-scored preflight calls were declared sufficient; no further provider contact of any kind is authorized \u2014 not pilot, preflight, smoke, scored, unscored validation, or capability checks",
+      "scored": 0
+    },
+    "remedies_declined_by_owner": [
+      "raising or lowering the prespecified threshold",
+      "enlarging the corpus",
+      "running the experiment as an estimation exercise"
+    ],
+    "status": "FROZEN_NOT_STARTED"
+  },
+  "power_analysis": {
+    "alpha": 0.05,
+    "interpretation": "At alpha=0.05 the exact test cannot reach significance with fewer than 6 one-directional discordant pairs. A 10pp effect produces 3.4 expected discordant pairs on 34 eligible cases. The design is therefore underpowered for the prespecified threshold by a wide margin, and the monotone figures are a best case \u2014 any regression in the treated arm makes it worse.",
+    "min_discordant_pairs_for_significance": 6,
+    "prespecified_threshold_pp": 10,
+    "results": {
+      "n=34 (eligible for improvement)": {
+        "mde_at_80pct_power_pp": 23,
+        "n": 34,
+        "power_monotone": 0.1185,
+        "power_with_2pp_regression": 0.0697
+      },
+      "n=43 (whole primary population)": {
+        "mde_at_80pct_power_pp": 18,
+        "n": 43,
+        "power_monotone": 0.2569,
+        "power_with_2pp_regression": 0.1372
+      }
+    },
+    "test": "two-sided exact McNemar"
+  },
+  "provider_calls_performed": 0,
+  "status": "FROZEN_NOT_STARTED",
+  "supersedes_design_fingerprint": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
+  "unchanged_science": {
+    "arms": [
+      "R0",
+      "R1",
+      "R2",
+      "R3",
+      "R4"
+    ],
+    "comparisons": {
+      "C1_evidence_effect": {
+        "arms": [
+          "R0",
+          "R1"
+        ],
+        "declared_differences": "disclosure policy only",
+        "family": "primary",
+        "question": "does delivering evidence at all change the final diagnostic claim? This is the direct test of H-EVIDENCE-REVISION."
+      },
+      "C2_legibility_governed": {
+        "arms": [
+          "R1",
+          "R2"
+        ],
+        "declared_differences": "observation rendering only",
+        "family": "primary",
+        "question": "does rendering the SAME evidence legibly change final accuracy under the governed budget?"
+      },
+      "C3_legibility_upper": {
+        "arms": [
+          "R3",
+          "R4"
+        ],
+        "declared_differences": "observation rendering only",
+        "family": "primary",
+        "question": "the same legibility contrast with evidence coverage at its upper bound, so a null in C2 cannot be attributed to there being too little evidence to render"
+      },
+      "C4_coverage_headroom": {
+        "arms": [
+          "R1",
+          "R3"
+        ],
+        "constraint": "R3 is an EXEMPT_UPPER_BOUND; this comparison bounds headroom and may not be reported as controller performance, affordable navigation, or payment optimality",
+        "declared_differences": "TWO \u2014 disclosure AND budget_semantics. This comparison does NOT isolate a single variable and may never be described as if it did (audit A-06).",
+        "family": "secondary",
+        "question": "how much of the remaining gap is attributable to evidence coverage rather than to revision?"
+      }
+    },
+    "original_10pp_threshold_preserved": true,
+    "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
+    "primary_endpoint": {
+      "construct": null,
+      "definition": "the unit's FINAL diagnostic claim names the true locus, evaluated on the primary population",
+      "gate_handling": "scored on the model's last claim, independent of the sufficiency gate's verdict, so the endpoint measures the model and not the rule",
+      "name": "R_correct",
+      "unit": "case"
+    },
+    "primary_inferential_unit": "CASE",
+    "primary_population": {
+      "corpus_adjudication": {
+        "ag-10": "VALID_DESPITE_MISSING_SIGNATURE \u2014 retained",
+        "basis": "exit 127 means the toolchain was not found, so no output existed against which a signature could match; the fault is present and observable. Materially different from the df-04 class, where exit was 0.",
+        "df-06": "VALID_DESPITE_MISSING_SIGNATURE \u2014 retained",
+        "effect_on_n": "none \u2014 43 stands",
+        "sr-07": "VALID_DESPITE_MISSING_SIGNATURE \u2014 retained"
+      },
+      "definition": "gate-feasible determinate cases",
+      "gate_infeasible_excluded": {
+        "class": "verifier-locus cases",
+        "disposition": "GATE_INFEASIBLE",
+        "evidence": "all 22 affordable acquisition shapes were enumerated under max_payment=7; none achieves zero false positives; the minimum other-locus false-positive count is 6",
+        "reported": "separately and descriptively; never pooled into the primary"
+      },
+      "n_cases": 43,
+      "why": "the primary causal analysis must not be diluted by cases on which the frozen sufficiency rule cannot be satisfied at any affordable acquisition shape \u2014 those cases measure the rule, not the model"
+    },
+    "secondary_endpoints": {
+      "gated_accuracy": "correct AND gate-qualifying evidence held",
+      "invocation_rate": "units with >= 1 acquisition",
+      "matched_evidence_use": "utilisation on units where both arms held evidence",
+      "output_class_rates": "VALID_DECISION / OUTPUT_TRUNCATED / MODEL_OUTPUT_CONTRACT_FAILURE / PARSER_FAILURE, reported separately and never collapsed into 'incorrect'",
+      "response_mode": "modal share and entropy \u2014 labelled POST-HOC, not a test",
+      "revision_rate": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result.",
+      "terminal_state_distribution": "all six Terminal values, per arm"
+    },
+    "statistical_plan": {
+      "alpha": 0.05,
+      "interval": "Wilson score, 95%",
+      "mandatory_covariates": [
+        "per-arm output-truncation rate",
+        "per-arm MODEL_OUTPUT_CONTRACT_FAILURE rate"
+      ],
+      "multiple_comparisons": "three primary comparisons; the family and its size are reported with every p-value",
+      "p_value_floor": "never reported as 0; underflow reported as p < 1e-15",
+      "paired_test": "McNemar, exact binomial when b + c < 25",
+      "prespecified_effect_threshold_pp": 10,
+      "primary_unit": "case",
+      "repetition_handling": "repetitions aggregated within case before pairing (majority over reps; ties resolved as incorrect); (case, rep) pairing may be reported alongside but never alone \u2014 pseudo-replication, audit A-05",
+      "sided": "two-sided"
+    }
+  }
+}

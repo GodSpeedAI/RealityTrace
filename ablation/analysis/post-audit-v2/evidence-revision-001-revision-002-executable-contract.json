@@ -1,0 +1,44 @@
+{
+  "additional_provider_calls_authorized": false,
+  "case_inputs": {
+    "schema": "case-input-v2",
+    "sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b"
+  },
+  "decoy_policy_version": "masked-k-exact3-affordable-v2",
+  "design_fingerprint": "c3674dc299c1667523243b355774eb2c29460b242a52b216eb0257aeaff231fe",
+  "evidence_policy": {
+    "R0": "NONE",
+    "R1": "MASKED_K",
+    "R2": "MASKED_K",
+    "R3": "FULL",
+    "R4": "FULL"
+  },
+  "executable_contract_fingerprint": "3c63b6df1aa8b2081d5a595a147b64c60aa8780f281267756cbe016516d1bd6e",
+  "executable_version": "executable-contract-v2",
+  "execution_authorized": false,
+  "experiment_id": "evidence-revision-001",
+  "full_namespace": "full:er001-full-v2",
+  "leakage_policy_version": "masked-k-leakage-accounting-v2",
+  "marker_manifest_sha256": "6894ef508337acab7b409794818d2417a46a0399492b606ca867f79c37186539",
+  "masked_k_feasibility_sha256": "f185375606e91314aa2bcea443552e49fb373c0456d2a464e83229cd4c6c7e01",
+  "masked_k_leakage_sha256": "cf052b0e691bc65bdb9f889e0a3b69cfdbcfe958440a00cc6f806e8dcd5f9e87",
+  "model_calls_performed": 0,
+  "pilot_matrix_sha256": "ce95cd08808fbfd7e66d3c985188a362371c54c1fcdfa3a3faa1d7af9b8c19d5",
+  "pilot_selection": {
+    "cases": [
+      "cep-07",
+      "df-11",
+      "ag-04",
+      "cep-14",
+      "sr-10",
+      "df-06",
+      "cep-05"
+    ],
+    "namespace": "pilot:er001-pilot-v2",
+    "repetitions": 2,
+    "rule": "pilot-selection-v1"
+  },
+  "provider_calls_performed": 0,
+  "status": "FROZEN_NOT_STARTED",
+  "supersedes_executable_fingerprint": "557c0dcd9fe3b354e754074dd8d3e61a635a0bec638c138f592b451fca1083cd"
+}
