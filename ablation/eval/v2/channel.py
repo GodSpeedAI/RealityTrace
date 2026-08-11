@@ -185,7 +185,8 @@ class ObservationChannel:
 
     def __init__(self, catalogue: ActionCatalogue, costs: dict,
                  policy: DisclosurePolicy = DisclosurePolicy.FULL,
-                 k: int = 3, acknowledge_unsafe: bool = False):
+                 k: int = 3, acknowledge_unsafe: bool = False,
+                 masked_candidate_universe=()):
         # SINGLE is an evidence-availability policy, not a naming policy. With
         # opaque handles the delivered SET still narrows the adversary's
         # candidate set to 1, so its leakage is declared, not denied. It is a
@@ -202,6 +203,7 @@ class ObservationChannel:
         self.costs = costs
         self.policy = policy
         self.k = k
+        self.masked_candidate_universe = tuple(masked_candidate_universe)
 
     def deliver(self, observations: dict, discriminating, seed: int) -> Delivery:
         """Select and render the observation set for one delivery event."""
@@ -220,9 +222,26 @@ class ObservationChannel:
         elif self.policy is DisclosurePolicy.MASKED_K:
             rng = random.Random(seed)
             core = discriminating[:1]
-            pool = [p for p in probes if p in observations and p not in core]
-            rng.shuffle(pool)
-            chosen = core + pool[:max(0, self.k - len(core))]
+            if self.masked_candidate_universe:
+                # evidence-revision-001 revision 002: exact-K candidates.
+                # The frozen universe is public and target-independent. Select
+                # from the cheapest cost tier, then use the paired public seed
+                # only as a deterministic tie breaker. Hidden metadata supplies
+                # the target but never participates in choosing a decoy.
+                pool = [p for p in self.masked_candidate_universe
+                        if p in observations and p not in core]
+                if not core or len(set(pool)) < self.k - 1:
+                    raise UnsafeDisclosure("MASKED_K exact-K candidate space exhausted")
+                cheapest = min(self.costs[p] for p in pool)
+                pool = sorted(p for p in pool if self.costs[p] == cheapest)
+                rng.shuffle(pool)
+                chosen = core + pool[:self.k - 1]
+                if len(set(chosen)) != self.k:
+                    raise UnsafeDisclosure("MASKED_K did not realize exact K")
+            else:
+                pool = [p for p in probes if p in observations and p not in core]
+                rng.shuffle(pool)
+                chosen = core + pool[:max(0, self.k - len(core))]
             chosen = [p for p in probes if p in chosen]
             consistency = len(chosen)
         else:  # SINGLE — audited legacy behaviour, test-only

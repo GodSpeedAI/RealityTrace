@@ -204,7 +204,9 @@ class DiagnosticController:
     def __init__(self, spec: ConditionSpec, contract, probe_ids, descriptions,
                  costs, vocabulary, client: ModelClient,
                  requested_max_tokens: int = 8192, temperature: float = 0.0,
-                 endpoint: str = "injected-client", requested_model: str = "glm-5.2"):
+                 endpoint: str = "injected-client", requested_model: str = "glm-5.2",
+                 evidence_selection_policy: str | None = None,
+                 disclosure_k: int = 3, masked_candidate_universe=()):
         self.spec = spec
         self.contract = contract
         self.probe_ids = tuple(probe_ids)
@@ -216,6 +218,9 @@ class DiagnosticController:
         self.temperature = temperature
         self.endpoint = endpoint
         self.requested_model = requested_model
+        self.evidence_selection_policy = evidence_selection_policy
+        self.disclosure_k = disclosure_k
+        self.masked_candidate_universe = tuple(masked_candidate_universe)
         self.leak_guard = PromptLeakGuard(self.probe_ids)
 
     # ── one unit ─────────────────────────────────────────────────────────────
@@ -225,10 +230,21 @@ class DiagnosticController:
                  evaluator_discriminating=()) -> UnitResult:
         from .channel import ActionCatalogue
 
-        seed = unit_seed(experiment_id, namespace, case_id, self.spec.name, rep)
+        seed_scope = self.evidence_selection_policy or self.spec.name
+        # Revision 002 intentionally excludes arm/rendering and namespace from
+        # evidence membership. R1/R2 (and R3/R4) consequently share handles,
+        # ordering, target and payload for a matched (case, rep).
+        if self.evidence_selection_policy:
+            seed = unit_seed(experiment_id, "evidence-selection", case_id,
+                             seed_scope, rep)
+        else:
+            seed = unit_seed(experiment_id, namespace, case_id,
+                             self.spec.name, rep)
         catalogue = ActionCatalogue(self.probe_ids, seed)
-        channel = ObservationChannel(catalogue, self.costs,
-                                     self.spec.disclosure)
+        channel = ObservationChannel(
+            catalogue, self.costs, self.spec.disclosure,
+            k=self.disclosure_k,
+            masked_candidate_universe=self.masked_candidate_universe)
         schema = (catalogue.render(self.descriptions, self.costs)
                   if self.spec.schema_visible else "(not shown in this condition)")
 
@@ -408,6 +424,13 @@ class DiagnosticController:
         delivered set is identical for every unit and therefore carries no
         information about the locus (R-01).
         """
+        if (self.spec.disclosure is DisclosurePolicy.MASKED_K
+                and acquired_probes):
+            # Revision 002 defines one exact-K intervention per unit. A later
+            # rejected model proposal cannot trigger a second partial or
+            # over-budget treatment.
+            rr.gate_result = "NO_FURTHER_EVIDENCE"
+            return state
         remaining = {p: o for p, o in observations.items()
                      if p not in acquired_probes}
         if not remaining:
