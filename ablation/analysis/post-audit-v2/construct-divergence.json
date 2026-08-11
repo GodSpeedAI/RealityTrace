@@ -1,0 +1,71 @@
+{
+  "actions_never_evaluator_discriminating": [
+    "inspect_verifier_config"
+  ],
+  "agree": [
+    [
+      "inspect_environment",
+      "environment"
+    ],
+    [
+      "inspect_fixture_integrity",
+      "evidence_collection"
+    ],
+    [
+      "inspect_permissions",
+      "authority"
+    ],
+    [
+      "inspect_source_symbols",
+      "implementation"
+    ],
+    [
+      "inspect_target_binding",
+      "verification_plan"
+    ],
+    [
+      "validate_semantic_model",
+      "declared_model"
+    ],
+    [
+      "validate_semantic_model",
+      "projection"
+    ]
+  ],
+  "bears_on_only": [],
+  "constructs": {
+    "EVALUATOR_DISCRIMINATING_ACTION": "Sealed construction-ground-truth property: the action whose observation exhibits the injected fault. Scoring only.",
+    "GATE_QUALIFYING_EVIDENCE": "Whether acquired evidence satisfies the predeclared sufficiency predicate for a proposed locus. Answer-blind.",
+    "HYPOTHESIS_BEARING_ACTION": "Whether an action is publicly expected to bear on a candidate locus, derivable from the published catalogue without ground truth."
+  },
+  "distractor_correction": "`inspect_verifier_config` is GATE_QUALIFYING for `environment` under the frozen sufficiency contract (plan 9 records it as a 7/7 TP, 0 FP predictor) and is not an EVALUATOR_DISCRIMINATING action for any case. Calling it 'the intentional distractor' conflates the two constructs. Its measured effect on A_select is one unit.",
+  "evaluator_only": [
+    [
+      "rerun_verifier_isolated",
+      "verifier"
+    ]
+  ],
+  "gate_only": [
+    [
+      "inspect_verifier_config",
+      "environment"
+    ],
+    [
+      "rerun_verifier_isolated",
+      "implementation"
+    ]
+  ],
+  "loci_with_no_gate_rule": [
+    "verifier"
+  ],
+  "metric_construct_binding": {
+    "A_select_any_evaluator": "EVALUATOR_DISCRIMINATING_ACTION",
+    "A_select_first_evaluator": "EVALUATOR_DISCRIMINATING_ACTION",
+    "A_select_first_hypothesis_bearing": "HYPOTHESIS_BEARING_ACTION",
+    "A_use_evaluator_evidence": "EVALUATOR_DISCRIMINATING_ACTION",
+    "gate_blind_accuracy": null,
+    "settlement_eligible": "GATE_QUALIFYING_EVIDENCE"
+  },
+  "note": "These sets are expected to be non-empty. They are three different constructs. `inspect_verifier_config` is GATE_QUALIFYING for environment and is NOT an EVALUATOR_DISCRIMINATING action; calling it a 'distractor' conflates the two.",
+  "scorer_version": "post-audit-v2"
+}

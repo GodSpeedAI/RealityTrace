@@ -1,0 +1,227 @@
+{
+  "experiment": "attribution-002",
+  "interpretation_permitted": "The C-loop attribution reduction survives conditioning on parseability and is a real observation. The restraint measurement does not discriminate a calibrated abstainer from an unconditional one: see `unknown_rate_on_determinate_cases` against `unknown_rate_on_unknown_cases`, and the exp-3 D1 replication.",
+  "methods": {
+    "C-loop": {
+      "A_c_as_historically_reported": {
+        "ci95": [
+          0.01,
+          0.0641
+        ],
+        "denominator": 156,
+        "numerator": 4,
+        "rate": 0.0256
+      },
+      "A_c_conditional_on_parseable": {
+        "ci95": [
+          0.0121,
+          0.077
+        ],
+        "denominator": 129,
+        "numerator": 4,
+        "rate": 0.031
+      },
+      "A_u": {
+        "ci95": [
+          0.551,
+          0.88
+        ],
+        "denominator": 24,
+        "numerator": 18,
+        "rate": 0.75
+      },
+      "calls_at_observed_ceiling": 30,
+      "n": 180,
+      "response_mode_all": {
+        "distribution": {
+          "(unparseable)": 30,
+          "environment": 1,
+          "implementation": 4,
+          "unknown": 130,
+          "verification_plan": 1,
+          "verifier": 14
+        },
+        "entropy_bits": 1.2618,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "unknown",
+        "modal_share": 0.7222,
+        "n": 180,
+        "normalised_entropy": 0.398
+      },
+      "response_mode_determinate": {
+        "distribution": {
+          "(unparseable)": 27,
+          "environment": 1,
+          "implementation": 4,
+          "unknown": 112,
+          "verification_plan": 1,
+          "verifier": 11
+        },
+        "entropy_bits": 1.2799,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "unknown",
+        "modal_share": 0.7179,
+        "n": 156,
+        "normalised_entropy": 0.4038
+      },
+      "response_mode_unknown_cases": {
+        "distribution": {
+          "(unparseable)": 3,
+          "unknown": 18,
+          "verifier": 3
+        },
+        "entropy_bits": 1.0613,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "unknown",
+        "modal_share": 0.75,
+        "n": 24,
+        "normalised_entropy": 0.3348
+      },
+      "unknown_rate_on_determinate_cases": {
+        "ci95": [
+          0.6428,
+          0.7827
+        ],
+        "denominator": 156,
+        "numerator": 112,
+        "rate": 0.7179
+      },
+      "unknown_rate_on_unknown_cases": {
+        "ci95": [
+          0.551,
+          0.88
+        ],
+        "denominator": 24,
+        "numerator": 18,
+        "rate": 0.75
+      },
+      "unparseable": {
+        "ci95": [
+          0.1193,
+          0.228
+        ],
+        "denominator": 180,
+        "numerator": 30,
+        "rate": 0.1667
+      }
+    },
+    "D-direct": {
+      "A_c_as_historically_reported": {
+        "ci95": [
+          0.1056,
+          0.2187
+        ],
+        "denominator": 156,
+        "numerator": 24,
+        "rate": 0.1538
+      },
+      "A_c_conditional_on_parseable": {
+        "ci95": [
+          0.1155,
+          0.2376
+        ],
+        "denominator": 143,
+        "numerator": 24,
+        "rate": 0.1678
+      },
+      "A_u": {
+        "ci95": [
+          0.0,
+          0.138
+        ],
+        "denominator": 24,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "calls_at_observed_ceiling": 14,
+      "n": 180,
+      "response_mode_all": {
+        "distribution": {
+          "(unparseable)": 14,
+          "declared_model": 1,
+          "environment": 7,
+          "evidence_collection": 30,
+          "implementation": 8,
+          "projection": 2,
+          "unknown": 2,
+          "verification_plan": 1,
+          "verifier": 115
+        },
+        "entropy_bits": 1.7397,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "verifier",
+        "modal_share": 0.6389,
+        "n": 180,
+        "normalised_entropy": 0.5488
+      },
+      "response_mode_determinate": {
+        "distribution": {
+          "(unparseable)": 13,
+          "declared_model": 1,
+          "environment": 7,
+          "evidence_collection": 29,
+          "implementation": 7,
+          "projection": 2,
+          "unknown": 2,
+          "verification_plan": 1,
+          "verifier": 94
+        },
+        "entropy_bits": 1.8468,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "verifier",
+        "modal_share": 0.6026,
+        "n": 156,
+        "normalised_entropy": 0.5826
+      },
+      "response_mode_unknown_cases": {
+        "distribution": {
+          "(unparseable)": 1,
+          "evidence_collection": 1,
+          "implementation": 1,
+          "verifier": 21
+        },
+        "entropy_bits": 0.7417,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "verifier",
+        "modal_share": 0.875,
+        "n": 24,
+        "normalised_entropy": 0.234
+      },
+      "unknown_rate_on_determinate_cases": {
+        "ci95": [
+          0.0035,
+          0.0455
+        ],
+        "denominator": 156,
+        "numerator": 2,
+        "rate": 0.0128
+      },
+      "unknown_rate_on_unknown_cases": {
+        "ci95": [
+          0.0,
+          0.138
+        ],
+        "denominator": 24,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "unparseable": {
+        "ci95": [
+          0.0469,
+          0.1263
+        ],
+        "denominator": 180,
+        "numerator": 14,
+        "rate": 0.0778
+      }
+    }
+  },
+  "n_units": 360,
+  "scorer_version": "post-audit-v2"
+}

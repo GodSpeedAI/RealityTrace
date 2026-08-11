@@ -1,0 +1,300 @@
+{
+  "adjudication": {
+    "audit_claim": "F9: 'the limitation is the rule language, not the evidence representation'",
+    "corrected": "Three-way. (1) The evidence IS present: under full observation the exclusion rule is 10/10 on verifier with one true-UNKNOWN false positive (df-14) and zero other-locus false positives. (2) The v1 rule language could not express it. (3) The premise costs 13 payment units against a frozen budget of 7, so no acquisition order reaches it, and every affordable truncation produces 6-16 false positives on OTHER determinate loci \u2014 worse than leaving the verifier cases infeasible. Diagnosis-by-exclusion is intrinsically expensive.",
+    "status": "NOT ADOPTED \u2014 owner governance decision",
+    "what_the_owner_must_decide": [
+      "whether a true-UNKNOWN case becoming concretely settleable is acceptable (df-14 under the full-observation rule)",
+      "whether the acquisition budget should be raised to make exclusion reachable, which is an experimental-design change and not a validity repair",
+      "whether `verifier` should remain declared gate-infeasible and reported as such"
+    ]
+  },
+  "affordable_frontier": [
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 6,
+      "premise_probes": [
+        "inspect_fixture_integrity",
+        "inspect_permissions"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 6,
+      "n_target": 10,
+      "other_locus_false_positives": 7,
+      "premise_probes": [
+        "inspect_fixture_integrity"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 7,
+      "premise_probes": [
+        "inspect_environment",
+        "inspect_fixture_integrity"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 7,
+      "premise_probes": [
+        "inspect_fixture_integrity",
+        "inspect_source_symbols"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 7,
+      "premise_probes": [
+        "inspect_fixture_integrity",
+        "inspect_target_binding"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 7,
+      "premise_probes": [
+        "inspect_fixture_integrity",
+        "inspect_verifier_config"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 6,
+      "n_target": 10,
+      "other_locus_false_positives": 13,
+      "premise_probes": [
+        "inspect_permissions"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 13,
+      "premise_probes": [
+        "inspect_environment",
+        "inspect_permissions"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 13,
+      "premise_probes": [
+        "inspect_permissions",
+        "inspect_source_symbols"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 13,
+      "premise_probes": [
+        "inspect_permissions",
+        "inspect_target_binding"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 13,
+      "premise_probes": [
+        "inspect_permissions",
+        "inspect_verifier_config"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 5,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 6,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_environment"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 6,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_source_symbols"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 6,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_target_binding"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 6,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_verifier_config"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_environment",
+        "inspect_source_symbols"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_environment",
+        "inspect_target_binding"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_environment",
+        "inspect_verifier_config"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_source_symbols",
+        "inspect_target_binding"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_source_symbols",
+        "inspect_verifier_config"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    },
+    {
+      "cost": 7,
+      "n_target": 10,
+      "other_locus_false_positives": 16,
+      "premise_probes": [
+        "inspect_target_binding",
+        "inspect_verifier_config"
+      ],
+      "sensitivity": 10,
+      "unknown_false_positives": 1
+    }
+  ],
+  "frontier_summary": {
+    "any_with_zero_false_positives": false,
+    "min_other_locus_false_positives": 6,
+    "n_affordable_rule_shapes": 22
+  },
+  "legacy_contract": {
+    "fingerprint": "9c210ed2cb6e48f5706524edbb84f692ab219d82825b8e0fe2acc52cc09976ed",
+    "reproduces_frozen_topology": true,
+    "topology": {
+      "gate_feasible_determinate": 43,
+      "gate_infeasible_determinate": 10,
+      "true_unknown": 7,
+      "unknown_false_positives": 0
+    },
+    "version": "governed-sufficiency-v1-as-composable"
+  },
+  "proposed_contract_at_frozen_budget": {
+    "max_payment": 7,
+    "premise_cost": 13,
+    "premise_probes": [
+      "inspect_environment",
+      "inspect_fixture_integrity",
+      "inspect_permissions",
+      "inspect_source_symbols",
+      "inspect_target_binding",
+      "rerun_verifier_isolated",
+      "validate_semantic_model"
+    ],
+    "reachable": false,
+    "topology": {
+      "gate_feasible_determinate": 43,
+      "gate_infeasible_determinate": 10,
+      "true_unknown": 7,
+      "unknown_false_positives": 0
+    }
+  },
+  "proposed_contract_unbudgeted": {
+    "topology": {
+      "gate_feasible_determinate": 53,
+      "gate_infeasible_determinate": 0,
+      "true_unknown": 7,
+      "unknown_false_positives": 1
+    },
+    "unknown_false_positives": [
+      [
+        "df-14",
+        [
+          "verifier"
+        ]
+      ]
+    ]
+  },
+  "scorer_version": "post-audit-v2"
+}

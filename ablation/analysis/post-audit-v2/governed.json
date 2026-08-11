@@ -1,0 +1,495 @@
+{
+  "O_outcome_is_bimodal": {
+    "accuracy_by_probes_delivered": {
+      "0": {
+        "ci95": [
+          0.0,
+          0.7935
+        ],
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "1": {
+        "ci95": [
+          0.8273,
+          0.9656
+        ],
+        "denominator": 63,
+        "numerator": 58,
+        "rate": 0.9206
+      },
+      "2": {
+        "ci95": [
+          0.2077,
+          0.9385
+        ],
+        "denominator": 3,
+        "numerator": 2,
+        "rate": 0.6667
+      },
+      "4": {
+        "ci95": [
+          0.0,
+          0.0583
+        ],
+        "denominator": 62,
+        "numerator": 0,
+        "rate": 0.0
+      }
+    },
+    "note": "O's 46.5% is a mixture of a high-accuracy mode (settles on the first delivered observation) and a zero mode (never settles). Probe count is a CONSEQUENCE of being wrong, not a cause: each rejected proposal triggered another delivery."
+  },
+  "conditions": {
+    "G": {
+      "A_select_any_conditional_on_an_action_being_taken": {
+        "ci95": [
+          0.248,
+          0.5013
+        ],
+        "denominator": 52,
+        "numerator": 19,
+        "rate": 0.3654
+      },
+      "A_select_first_as_historically_reported": {
+        "ci95": [
+          0.0215,
+          0.0978
+        ],
+        "denominator": 129,
+        "numerator": 6,
+        "rate": 0.0465
+      },
+      "A_select_first_conditional_on_an_action_being_taken": {
+        "ci95": [
+          0.054,
+          0.2297
+        ],
+        "denominator": 52,
+        "numerator": 6,
+        "rate": 0.1154
+      },
+      "A_u": {
+        "ci95": [
+          0.8454,
+          1.0
+        ],
+        "denominator": 21,
+        "numerator": 21,
+        "rate": 1.0
+      },
+      "A_u_mechanism": {
+        "BUDGET_EXHAUSTED": 18,
+        "CONTRACT_FAILURE": 3
+      },
+      "A_use_unmatched": {
+        "ci95": [
+          0.5121,
+          0.8819
+        ],
+        "denominator": 19,
+        "numerator": 14,
+        "rate": 0.7368
+      },
+      "calls_at_observed_ceiling": 135,
+      "gate_blind_model_claim_accuracy_lower_bound": {
+        "ci95": [
+          0.168,
+          0.3125
+        ],
+        "denominator": 129,
+        "note": "LOWER BOUND. Response previews are truncated at 200 characters, so a claim appearing later in a response is invisible; accepted settlements are unioned in. Historical A_c is a conjunction of a correct claim AND possession of gate-qualifying evidence, so the two must be reported separately.",
+        "numerator": 30,
+        "rate": 0.2326
+      },
+      "gate_suppressed_correct_claims_lower_bound": {
+        "ci95": [
+          0.0598,
+          0.1648
+        ],
+        "denominator": 129,
+        "note": "units where the model named the true locus but the gate refused it for want of qualifying evidence",
+        "numerator": 13,
+        "rate": 0.1008
+      },
+      "gated_accuracy_feasible_determinate": {
+        "ci95": [
+          0.0839,
+          0.2009
+        ],
+        "denominator": 129,
+        "numerator": 17,
+        "rate": 0.1318
+      },
+      "invocation": {
+        "ci95": [
+          0.3418,
+          0.4841
+        ],
+        "denominator": 180,
+        "numerator": 74,
+        "rate": 0.4111
+      },
+      "n": 180,
+      "response_mode_feasible_determinate": {
+        "distribution": {
+          "declared_model": 1,
+          "environment": 8,
+          "implementation": 7,
+          "unknown": 109,
+          "verification_plan": 4
+        },
+        "entropy_bits": 0.892,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "unknown",
+        "modal_share": 0.845,
+        "n": 129,
+        "normalised_entropy": 0.2814
+      },
+      "terminal_states": {
+        "BUDGET_EXHAUSTED": 146,
+        "CONCRETE_SETTLEMENT": 19,
+        "CONTRACT_FAILURE": 13,
+        "TERMINAL_UNKNOWN": 2
+      },
+      "units_with_empty_content_call": 129
+    },
+    "O": {
+      "A_select_any_conditional_on_an_action_being_taken": {
+        "ci95": [
+          0.9709,
+          1.0
+        ],
+        "denominator": 128,
+        "numerator": 128,
+        "rate": 1.0
+      },
+      "A_select_first_as_historically_reported": {
+        "ci95": [
+          0.9574,
+          0.9986
+        ],
+        "denominator": 129,
+        "numerator": 128,
+        "rate": 0.9922
+      },
+      "A_select_first_conditional_on_an_action_being_taken": {
+        "ci95": [
+          0.9709,
+          1.0
+        ],
+        "denominator": 128,
+        "numerator": 128,
+        "rate": 1.0
+      },
+      "A_u": {
+        "ci95": [
+          0.8454,
+          1.0
+        ],
+        "denominator": 21,
+        "numerator": 21,
+        "rate": 1.0
+      },
+      "A_u_mechanism": {
+        "CONTRACT_FAILURE": 21
+      },
+      "A_use_unmatched": {
+        "ci95": [
+          0.3845,
+          0.5548
+        ],
+        "denominator": 128,
+        "numerator": 60,
+        "rate": 0.4688
+      },
+      "calls_at_observed_ceiling": 28,
+      "gate_blind_model_claim_accuracy_lower_bound": {
+        "ci95": [
+          0.4037,
+          0.5737
+        ],
+        "denominator": 129,
+        "note": "LOWER BOUND. Response previews are truncated at 200 characters, so a claim appearing later in a response is invisible; accepted settlements are unioned in. Historical A_c is a conjunction of a correct claim AND possession of gate-qualifying evidence, so the two must be reported separately.",
+        "numerator": 63,
+        "rate": 0.4884
+      },
+      "gate_suppressed_correct_claims_lower_bound": {
+        "ci95": [
+          0.0079,
+          0.0661
+        ],
+        "denominator": 129,
+        "note": "units where the model named the true locus but the gate refused it for want of qualifying evidence",
+        "numerator": 3,
+        "rate": 0.0233
+      },
+      "gated_accuracy_feasible_determinate": {
+        "ci95": [
+          0.3813,
+          0.551
+        ],
+        "denominator": 129,
+        "numerator": 60,
+        "rate": 0.4651
+      },
+      "invocation": {
+        "ci95": [
+          0.9692,
+          0.999
+        ],
+        "denominator": 180,
+        "numerator": 179,
+        "rate": 0.9944
+      },
+      "n": 180,
+      "response_mode_feasible_determinate": {
+        "distribution": {
+          "declared_model": 16,
+          "environment": 18,
+          "evidence_collection": 6,
+          "implementation": 21,
+          "unknown": 63,
+          "verification_plan": 5
+        },
+        "entropy_bits": 2.0889,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "unknown",
+        "modal_share": 0.4884,
+        "n": 129,
+        "normalised_entropy": 0.659
+      },
+      "terminal_states": {
+        "BUDGET_EXHAUSTED": 10,
+        "CONCRETE_SETTLEMENT": 66,
+        "CONTRACT_FAILURE": 84,
+        "TERMINAL_UNKNOWN": 20
+      },
+      "units_with_empty_content_call": 28
+    },
+    "V": {
+      "A_select_any_conditional_on_an_action_being_taken": {
+        "ci95": [
+          0.2876,
+          0.6454
+        ],
+        "denominator": 26,
+        "numerator": 12,
+        "rate": 0.4615
+      },
+      "A_select_first_as_historically_reported": {
+        "ci95": [
+          0.0167,
+          0.0875
+        ],
+        "denominator": 129,
+        "numerator": 5,
+        "rate": 0.0388
+      },
+      "A_select_first_conditional_on_an_action_being_taken": {
+        "ci95": [
+          0.0851,
+          0.3788
+        ],
+        "denominator": 26,
+        "numerator": 5,
+        "rate": 0.1923
+      },
+      "A_u": {
+        "ci95": [
+          0.0767,
+          0.4
+        ],
+        "denominator": 21,
+        "numerator": 4,
+        "rate": 0.1905
+      },
+      "A_u_mechanism": {
+        "BUDGET_EXHAUSTED": 13,
+        "CONCRETE_SETTLEMENT": 5,
+        "UNKNOWN_SETTLEMENT": 3
+      },
+      "A_use_unmatched": {
+        "ci95": [
+          0.7575,
+          1.0
+        ],
+        "denominator": 12,
+        "numerator": 12,
+        "rate": 1.0
+      },
+      "calls_at_observed_ceiling": 107,
+      "gate_blind_model_claim_accuracy_lower_bound": {
+        "ci95": [
+          0.1414,
+          0.2789
+        ],
+        "denominator": 129,
+        "note": "LOWER BOUND. Response previews are truncated at 200 characters, so a claim appearing later in a response is invisible; accepted settlements are unioned in. Historical A_c is a conjunction of a correct claim AND possession of gate-qualifying evidence, so the two must be reported separately.",
+        "numerator": 26,
+        "rate": 0.2016
+      },
+      "gate_suppressed_correct_claims_lower_bound": {
+        "ci95": [
+          0.0,
+          0.0289
+        ],
+        "denominator": 129,
+        "note": "units where the model named the true locus but the gate refused it for want of qualifying evidence",
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "gated_accuracy_feasible_determinate": {
+        "ci95": [
+          0.1547,
+          0.2958
+        ],
+        "denominator": 129,
+        "numerator": 28,
+        "rate": 0.2171
+      },
+      "invocation": {
+        "ci95": [
+          0.1974,
+          0.3239
+        ],
+        "denominator": 180,
+        "numerator": 46,
+        "rate": 0.2556
+      },
+      "n": 180,
+      "response_mode_feasible_determinate": {
+        "distribution": {
+          "declared_model": 1,
+          "environment": 28,
+          "evidence_collection": 53,
+          "implementation": 10,
+          "unknown": 27,
+          "verification_plan": 5,
+          "verifier": 5
+        },
+        "entropy_bits": 2.1817,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "evidence_collection",
+        "modal_share": 0.4109,
+        "n": 129,
+        "normalised_entropy": 0.6883
+      },
+      "terminal_states": {
+        "BUDGET_EXHAUSTED": 101,
+        "CONCRETE_SETTLEMENT": 53,
+        "UNKNOWN_SETTLEMENT": 26
+      },
+      "units_with_empty_content_call": 96
+    }
+  },
+  "experiment": "governed-diagnostic-acquisition-001",
+  "matched_evidence_use_O_vs_G": {
+    "G": {
+      "ci95": [
+        0.5121,
+        0.8819
+      ],
+      "denominator": 19,
+      "numerator": 14,
+      "rate": 0.7368
+    },
+    "O": {
+      "ci95": [
+        0.5121,
+        0.8819
+      ],
+      "denominator": 19,
+      "numerator": 14,
+      "rate": 0.7368
+    },
+    "n_matched_pairs": 19,
+    "note": "On units where BOTH conditions held evaluator-discriminating evidence, utilization is identical. The unmatched 46.9% vs 73.7% contrast is a population difference: O's denominator includes every hard case G never reached. Do not report it as a like-for-like causal estimate."
+  },
+  "paired": {
+    "A_u_G_vs_V": {
+      "case_level": {
+        "mcnemar_b": 7,
+        "mcnemar_c": 0,
+        "n_pairs": 7,
+        "p": 0.01562,
+        "unit": "case"
+      },
+      "case_rep_level_as_historically_reported": {
+        "mcnemar_b": 17,
+        "mcnemar_c": 0,
+        "n_pairs": 21,
+        "p": 1.526e-05,
+        "unit": "rep"
+      }
+    },
+    "accuracy_G_vs_V": {
+      "case_level": {
+        "mcnemar_b": 2,
+        "mcnemar_c": 6,
+        "n_pairs": 43,
+        "p": 0.2891,
+        "unit": "case"
+      },
+      "case_rep_level_as_historically_reported": {
+        "mcnemar_b": 11,
+        "mcnemar_c": 22,
+        "n_pairs": 129,
+        "p": 0.08172,
+        "unit": "rep"
+      }
+    },
+    "accuracy_O_vs_G": {
+      "case_level": {
+        "mcnemar_b": 14,
+        "mcnemar_c": 0,
+        "n_pairs": 43,
+        "p": 0.0001221,
+        "unit": "case"
+      },
+      "case_rep_level_as_historically_reported": {
+        "mcnemar_b": 45,
+        "mcnemar_c": 2,
+        "n_pairs": 129,
+        "p": 8.993e-10,
+        "unit": "rep"
+      }
+    },
+    "accuracy_O_vs_V": {
+      "case_level": {
+        "mcnemar_b": 14,
+        "mcnemar_c": 4,
+        "n_pairs": 43,
+        "p": 0.03088,
+        "unit": "case"
+      },
+      "case_rep_level_as_historically_reported": {
+        "mcnemar_b": 44,
+        "mcnemar_c": 12,
+        "n_pairs": 129,
+        "p": 3.435e-05,
+        "unit": "rep"
+      }
+    },
+    "invocation_G_vs_V": {
+      "case_level": {
+        "mcnemar_b": 18,
+        "mcnemar_c": 4,
+        "n_pairs": 60,
+        "p": 0.004344,
+        "unit": "case"
+      },
+      "case_rep_level_as_historically_reported": {
+        "mcnemar_b": 51,
+        "mcnemar_c": 23,
+        "n_pairs": 180,
+        "p": 0.001697,
+        "unit": "rep"
+      }
+    }
+  },
+  "scorer_version": "post-audit-v2"
+}

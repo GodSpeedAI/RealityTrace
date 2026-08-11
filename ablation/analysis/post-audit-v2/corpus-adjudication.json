@@ -1,0 +1,104 @@
+{
+  "control_comparison": {
+    "cases_with_the_same_environment_probe_profile": [
+      "ag-10",
+      "cep-10",
+      "df-06",
+      "sr-07"
+    ],
+    "note": "cep-10 shares the toolchain=unavailable/path=restricted profile but exited 1 with output, so its signature IS present. The flag tracks whether output existed to match, not whether the fault was injected."
+  },
+  "df-15_reclassification": {
+    "change": "unknown -> environment (acquisition-keys.json onward)",
+    "consequence": "A_u denominators are not comparable across the S23.2 / exp-3 boundary (8 unknown cases -> 7).",
+    "disclosed_in": ".agents/reports/8-sxr-diagnostic-acquisition.md \u00a75, \u00a724.1",
+    "only_key_difference_in_the_chain": true
+  },
+  "flagged_cases": [
+    {
+      "action": "NO QUARANTINE; record as a difficulty characteristic",
+      "case_id": "ag-10",
+      "failure_signature_present": false,
+      "injected_fault_observable_in_probe": true,
+      "observed_environment_probe": {
+        "env_assignments": "PATH=/usr/bin:/bin",
+        "path": "restricted",
+        "tmpdir": "default",
+        "toolchain": "unavailable"
+      },
+      "rationale": "Exit 127 means the toolchain binary was never found, so the verifier produced no output for a textual signature to match against. The fault did manifest (exit != 0) and is directly observable via inspect_environment (toolchain=unavailable, path=restricted). This is materially different from the df-04 defect class the owner review repaired, where the exit code was 0 and no fault had been injected at all.",
+      "true_locus": "environment",
+      "verdict": "VALID_DESPITE_MISSING_SIGNATURE",
+      "verifier_exit": 127
+    },
+    {
+      "action": "NO QUARANTINE; record as a difficulty characteristic",
+      "case_id": "df-06",
+      "failure_signature_present": false,
+      "injected_fault_observable_in_probe": true,
+      "observed_environment_probe": {
+        "env_assignments": "PATH=/usr/bin:/bin",
+        "path": "restricted",
+        "tmpdir": "default",
+        "toolchain": "unavailable"
+      },
+      "rationale": "Exit 127 means the toolchain binary was never found, so the verifier produced no output for a textual signature to match against. The fault did manifest (exit != 0) and is directly observable via inspect_environment (toolchain=unavailable, path=restricted). This is materially different from the df-04 defect class the owner review repaired, where the exit code was 0 and no fault had been injected at all.",
+      "true_locus": "environment",
+      "verdict": "VALID_DESPITE_MISSING_SIGNATURE",
+      "verifier_exit": 127
+    },
+    {
+      "action": "NO QUARANTINE; record as a difficulty characteristic",
+      "case_id": "sr-07",
+      "failure_signature_present": false,
+      "injected_fault_observable_in_probe": true,
+      "observed_environment_probe": {
+        "env_assignments": "PATH=/usr/bin:/bin",
+        "path": "restricted",
+        "tmpdir": "default",
+        "toolchain": "unavailable"
+      },
+      "rationale": "Exit 127 means the toolchain binary was never found, so the verifier produced no output for a textual signature to match against. The fault did manifest (exit != 0) and is directly observable via inspect_environment (toolchain=unavailable, path=restricted). This is materially different from the df-04 defect class the owner review repaired, where the exit code was 0 and no fault had been injected at all.",
+      "true_locus": "environment",
+      "verdict": "VALID_DESPITE_MISSING_SIGNATURE",
+      "verifier_exit": 127
+    }
+  ],
+  "ground_truth_modified": false,
+  "n_flagged": 3,
+  "n_quarantined": 0,
+  "prior_repairs_preserved": {
+    "df-04": "superseded exit 0 -> exit 101, repairs.jsonl",
+    "df-11": "superseded exit 2 -> exit 1, repairs.jsonl",
+    "df-12": "superseded exit 2 -> exit 1, repairs.jsonl",
+    "note": "repaired by the owner BEFORE any model-backed run, under a documented supersession protocol with a post-repair leakage re-sweep. Not affected by this adjudication."
+  },
+  "residual_risks": [
+    {
+      "affects": [
+        "ag-10",
+        "df-06",
+        "sr-07"
+      ],
+      "detail": "all three flagged cases are `environment` and present the model with a bare exit-127 and no verifier output. They are plausibly harder from the base context alone, so `environment` results should be stratified by signature presence in any future replication.",
+      "risk": "thin initial evidence"
+    },
+    {
+      "affects": [
+        "df-06"
+      ],
+      "detail": "df-06's inspect_target_binding reports all_exist=false because default test discovery cannot resolve when the toolchain is missing, so df-06 is gate-eligible for verification_plan as well as environment. Legitimate (the gate is a sufficiency test, not an oracle) but it must not be read as a second injected fault.",
+      "risk": "cross-locus probe artifact"
+    },
+    {
+      "affects": [
+        "ag-10",
+        "df-06",
+        "sr-07"
+      ],
+      "detail": "for exit-127 faults the flag cannot fire by construction. Corpus gates must not treat it as evidence of a construction defect.",
+      "risk": "failure_signature_present is not a validity flag"
+    }
+  ],
+  "scorer_version": "post-audit-v2"
+}

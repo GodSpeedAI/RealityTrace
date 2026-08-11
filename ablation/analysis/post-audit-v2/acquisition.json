@@ -1,0 +1,288 @@
+{
+  "D2_acquisition_decomposition": {
+    "acquired": {
+      "ci95": [
+        0.1384,
+        0.2523
+      ],
+      "denominator": 180,
+      "numerator": 34,
+      "rate": 0.1889
+    },
+    "acquisition_rate_conditional_on_valid_action_contract": {
+      "ci95": [
+        0.3507,
+        0.5722
+      ],
+      "denominator": 74,
+      "numerator": 34,
+      "rate": 0.4595
+    },
+    "clean_immediate_settlement": {
+      "ci95": [
+        0.1676,
+        0.2884
+      ],
+      "denominator": 180,
+      "numerator": 40,
+      "rate": 0.2222
+    },
+    "denied_after_parse_failure": {
+      "ci95": [
+        0.5159,
+        0.6582
+      ],
+      "denominator": 180,
+      "numerator": 106,
+      "rate": 0.5889
+    },
+    "historically_reported_no_acquisition": {
+      "ci95": [
+        0.7477,
+        0.8616
+      ],
+      "denominator": 180,
+      "numerator": 146,
+      "rate": 0.8111
+    },
+    "n": 180,
+    "note": "The historical 81.1% conflates declining to investigate with being denied the opportunity: a round-1 parse failure substituted the budget-exhausted scaffold, which told the model 'Budget exhausted (0/7 payment, 1/3 rounds). No further acquisition possible.'",
+    "round1_contract_failure_rate": {
+      "ci95": [
+        0.5159,
+        0.6582
+      ],
+      "denominator": 180,
+      "numerator": 106,
+      "rate": 0.5889
+    }
+  },
+  "D2_selection": {
+    "A_i_historical_note": "acquisition_scorer conditioned A_i's denominator on `not exact_correct`, i.e. on the outcome variable, which excludes units that selected a discriminating action AND were correct.",
+    "A_i_unconditioned": {
+      "ci95": [
+        0.0098,
+        0.0629
+      ],
+      "denominator": 159,
+      "numerator": 4,
+      "rate": 0.0252
+    },
+    "selection_conditional_on_an_action_being_taken": {
+      "ci95": [
+        0.0467,
+        0.2662
+      ],
+      "denominator": 34,
+      "numerator": 4,
+      "rate": 0.1176
+    }
+  },
+  "UNRECOVERABLE_FROM_HISTORICAL_EVIDENCE": {
+    "reason": "acquisition_run.run_d2 never persisted model responses; the raw file is a harness-composed summary and rounds.json holds only round metadata. What these units would have done cannot be determined from any surviving artifact. No behaviour is imputed.",
+    "units": 106
+  },
+  "conditions": {
+    "D0": {
+      "A_c": {
+        "ci95": [
+          0.1088,
+          0.2218
+        ],
+        "denominator": 159,
+        "numerator": 25,
+        "rate": 0.1572
+      },
+      "A_u": {
+        "ci95": [
+          0.0,
+          0.1546
+        ],
+        "denominator": 21,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "n": 180,
+      "response_mode_all": {
+        "distribution": {
+          "(unparseable)": 14,
+          "environment": 6,
+          "evidence_collection": 30,
+          "implementation": 8,
+          "projection": 2,
+          "unknown": 3,
+          "verification_plan": 4,
+          "verifier": 113
+        },
+        "entropy_bits": 1.7949,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "verifier",
+        "modal_share": 0.6278,
+        "n": 180,
+        "normalised_entropy": 0.5662
+      },
+      "response_mode_determinate": {
+        "distribution": {
+          "(unparseable)": 13,
+          "environment": 6,
+          "evidence_collection": 26,
+          "implementation": 8,
+          "projection": 2,
+          "unknown": 3,
+          "verification_plan": 4,
+          "verifier": 97
+        },
+        "entropy_bits": 1.8741,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "verifier",
+        "modal_share": 0.6101,
+        "n": 159,
+        "normalised_entropy": 0.5912
+      },
+      "unparseable": {
+        "ci95": [
+          0.0469,
+          0.1263
+        ],
+        "denominator": 180,
+        "numerator": 14,
+        "rate": 0.0778
+      }
+    },
+    "D1": {
+      "A_c": {
+        "ci95": [
+          0.0064,
+          0.054
+        ],
+        "denominator": 159,
+        "numerator": 3,
+        "rate": 0.0189
+      },
+      "A_u": {
+        "ci95": [
+          0.8454,
+          1.0
+        ],
+        "denominator": 21,
+        "numerator": 21,
+        "rate": 1.0
+      },
+      "n": 180,
+      "response_mode_all": {
+        "distribution": {
+          "(unparseable)": 6,
+          "environment": 1,
+          "implementation": 2,
+          "unknown": 167,
+          "verification_plan": 2,
+          "verifier": 2
+        },
+        "entropy_bits": 0.5219,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "unknown",
+        "modal_share": 0.9278,
+        "n": 180,
+        "normalised_entropy": 0.1646
+      },
+      "response_mode_determinate": {
+        "distribution": {
+          "(unparseable)": 6,
+          "environment": 1,
+          "implementation": 2,
+          "unknown": 146,
+          "verification_plan": 2,
+          "verifier": 2
+        },
+        "entropy_bits": 0.5756,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "unknown",
+        "modal_share": 0.9182,
+        "n": 159,
+        "normalised_entropy": 0.1816
+      },
+      "unparseable": {
+        "ci95": [
+          0.0154,
+          0.0708
+        ],
+        "denominator": 180,
+        "numerator": 6,
+        "rate": 0.0333
+      }
+    },
+    "D2": {
+      "A_c": {
+        "ci95": [
+          0.1141,
+          0.2288
+        ],
+        "denominator": 159,
+        "numerator": 26,
+        "rate": 0.1635
+      },
+      "A_u": {
+        "ci95": [
+          0.1063,
+          0.4509
+        ],
+        "denominator": 21,
+        "numerator": 5,
+        "rate": 0.2381
+      },
+      "n": 180,
+      "response_mode_all": {
+        "distribution": {
+          "declared_model": 2,
+          "environment": 30,
+          "evidence_collection": 81,
+          "implementation": 17,
+          "unknown": 36,
+          "verification_plan": 3,
+          "verifier": 11
+        },
+        "entropy_bits": 2.1521,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "evidence_collection",
+        "modal_share": 0.45,
+        "n": 180,
+        "normalised_entropy": 0.6789
+      },
+      "response_mode_determinate": {
+        "distribution": {
+          "declared_model": 2,
+          "environment": 27,
+          "evidence_collection": 72,
+          "implementation": 15,
+          "unknown": 31,
+          "verification_plan": 3,
+          "verifier": 9
+        },
+        "entropy_bits": 2.1551,
+        "label": "POST-HOC RESPONSE-MODE ANALYSIS",
+        "max_entropy_bits": 3.1699,
+        "modal_answer": "evidence_collection",
+        "modal_share": 0.4528,
+        "n": 159,
+        "normalised_entropy": 0.6799
+      },
+      "unparseable": {
+        "ci95": [
+          0.0,
+          0.0209
+        ],
+        "denominator": 180,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "unparseable_note": "0% is definitional, not an achievement: run_d2 composes the raw file as 'Locus: <final_locus>' so extraction cannot fail. The round-1 contract-failure rate below is the real figure."
+    }
+  },
+  "experiment": "diagnostic-acquisition-001",
+  "scorer_version": "post-audit-v2"
+}

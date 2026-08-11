@@ -1,0 +1,25 @@
+{
+  "historical_artifacts_modified": [],
+  "model_calls_performed": 0,
+  "outputs": {
+    "acquisition.json": "a25cef132c48dd45d9a239b6d6ca91eecec01734c1b2b914724d8d58b34218ed",
+    "governed.json": "91b85a8930a0a886f1d8490f8f04ba5edf114e8a35805c154895cf32c9489f14",
+    "hash-provenance.json": "9b42aaf469fba19855c7ac4b1b1e8c7ea791ff876084f091852b5fa4443c0917",
+    "s231-retrieval-ablation.json": "7570a9d55e56bda94d9b58900f86bd2162b8b2d726b3b76c6d3c94bc506b9b8a",
+    "s232-attribution-ablation.json": "d899e17d0d5a50d0a9f0257a1b5e4ca52659e5d435ecf2ffadfa7894b0b0e524"
+  },
+  "scorer_version": "post-audit-v2",
+  "source_artifacts": {
+    "corpus/acquisition-hidden-meta.json": "dcf75d1340972fd6cb16b594493fae0554ec327a98278a092686a5abf71719e5",
+    "corpus/acquisition-keys.json": "8fcb69275313a916594da3065ae916b4f20184be7b6c902a6e918f6b72a2433a",
+    "corpus/governed-keys.json": "3b1fa60c10832a34520ff1e6b6d9c7258535b2f28f7e238555228dcfdf96bf28",
+    "runs/acq-full/diagnostic-acquisition-001/scored/": "dir:540:9e92f22c238a6e2ea51f4cd688672a8c2d65fbb9d625aeaa2be1356d9359e7dd",
+    "runs/attribution-002/attribution-002/matrix.json": "b4b9f4432d0e260d15d14518e5b75482351e8b555d28d5209981a9c24969b809",
+    "runs/attribution-002/attribution-002/scoring/attribution-002/": "dir:360:1f9a596d445472958155348e2f8641e2ea89e0870c639b5cee7345ad0f66a159",
+    "runs/full-001/full-001/matrix.json": "8e77af91de38853009b59f627f88f21e8dba88f9e45a57cffbc54b48ec8a2fa2",
+    "runs/full-001/full-001/scoring/full-001/": "dir:720:1930db32275e978078349f6a2b21d64f19c0810cf4f7d97971bd92583c36f480",
+    "runs/gov-full/governed-diagnostic-acquisition-001/manifest.jsonl": "435c10969f1296d916a3cd1ba575fcd2a7644b3aaf83950941ff81b47ef204e3",
+    "runs/gov-full/governed-diagnostic-acquisition-001/scored/": "dir:540:0ad6c665c1c86a94395d71dfe3dcf2310e275c82a9d78f5fb72523ace1b80952"
+  },
+  "statement": "Derived from immutable historical evidence only. No model was called. No file under ablation/runs/** or ablation/corpus/** was written."
+}
