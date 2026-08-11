@@ -5,7 +5,7 @@ Frozen design fingerprint: `7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306d
 | Responsibility | Existing owner/module | Reuse | Missing orchestration / genuine gap |
 |---|---|---|---|
 | Experiment contract, frozen arms, owner state, endpoints, statistics hooks | `eval.v2.evidence_revision` | As-is; runner imports `ARMS`, `OWNER_STATE`, `contract_fingerprint`, endpoint/statistical documents | Central gate and run manifest are missing |
-| `ConditionSpec`, typed controller transitions, scoring handoff state | `eval.v2.controller` | As-is | Durable call wrapper and unit/result checkpoint orchestration are missing |
+| `ConditionSpec`, typed controller transitions, scoring handoff state | `eval.v2.controller` | Reused with two objective conformance fixes | Durable call wrapper and unit/result checkpoint orchestration were missing; harness-source model actions are now ignored for evidence selection, and enforced-budget deliveries cannot overdraw |
 | `DiagnosticState`, round rendering and continuity validation | `eval.v2.dstate` | As-is | Runner must validate final rendered bytes at transport boundary |
 | Opaque action/evidence handles and disclosure | `eval.v2.channel` | As-is | Runner must bind unit coordinates and prevent cross-unit reuse |
 | RAW/LEGIBLE rendering and semantic binding | `eval.v2.legibility`, invoked by `DiagnosticState` | As-is | Gate must require equivalence/source hashes |
@@ -22,3 +22,7 @@ Frozen design fingerprint: `7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306d
 | Frozen pilot matrix | **not present in the frozen Python contract or emitted JSON** | Cannot infer without changing science | **Owner-adjudication blocker:** exact pilot case IDs and repetition count are absent. Runner may inspect/verify a frozen matrix once supplied, but must not invent one. |
 
 Implementation policy: compose the frozen modules, add only orchestration, and fail closed on the unresolved pilot-matrix contract gap. The apparent R1/R2 `SINGLE` wording in the implementation request conflicts with the authoritative contract, whose arms use `MASKED_K`; the authoritative contract wins and will not be changed.
+
+## Investigation corrections applied
+
+Two component-level orchestration defects were found after the initial map and fixed without changing a frozen field: (1) a typed model action could select evidence even when `ConditionSpec.action_source == "harness"`; it is now recorded but ignored while the frozen harness policy chooses delivery, and (2) repeated harness deliveries could overdraw an `ENFORCED` payment budget; an unaffordable whole policy delivery now discloses nothing, charges nothing, and records budget exhaustion rather than silently shrinking `MASKED_K`. Regression tests cover both.

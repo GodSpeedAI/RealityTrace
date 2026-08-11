@@ -1,0 +1,59 @@
+{
+  "authorization_behavior": "fail_closed",
+  "contract_fingerprint": "7edd93a3a503b9395c0d39e79540cb20fe084fc8c020413c306db88e1029d3e3",
+  "execution_authorized": false,
+  "experiment_id": "evidence-revision-001",
+  "full_execution_authorized": false,
+  "historical_evidence_modified": false,
+  "implementation_commits": [
+    "c40f513284d43741d5055d398818a527e0fa46c4",
+    "a6f87d3720d4e6ac396f95077e9ec6df815714fe",
+    "cf6b6cee458e4d904aa85972c8cc96b3d8e4fe6a",
+    "0ee64007225a03d61c4d61aed5858158e1ae4640"
+  ],
+  "model_calls_performed": 0,
+  "pilot_matrix": {
+    "arms": [
+      "R0",
+      "R1",
+      "R2",
+      "R3",
+      "R4"
+    ],
+    "eligible_base_cases": 43,
+    "repetitions": null,
+    "status": "BLOCKED_FROZEN_CONTRACT_GAP",
+    "total_units": null,
+    "uids": []
+  },
+  "provider_calls_performed": 0,
+  "runner_implemented": true,
+  "runner_ready_for_execution": false,
+  "science_modified": false,
+  "source_hashes": {
+    "ablation/analysis/post-audit-v2/evidence-revision-001-contract.json": "cb9b699f3414a01506985e2e98521fab306022ec3620da9125acdd7043b07df1",
+    "ablation/eval/tests/test_v2_evidence_revision_runner.py": "f6b0c86c47ec96b9a4b588dd864b44831b0fb253e60e2fab4afe71395be14d79",
+    "ablation/eval/v2/controller.py": "6f0f54c0e680d0737e3c56ea85c0fd6a39b2f4db60ea48f64c733b999b7167dd",
+    "ablation/eval/v2/evidence_revision.py": "c82ca0654d0fce7f3597dad9d6bf4b23f205456e7c1953a6b238b6e52e296c92",
+    "ablation/eval/v2/evidence_revision_run.py": "1d72958f6b3b9f13d3ee283ffd52cd16264a78b772797aa862e2c9a0cb7d14c6"
+  },
+  "tests": {
+    "collected": 291,
+    "failed": 0,
+    "passed": 291,
+    "result": "PASS",
+    "skipped": 0
+  },
+  "unresolved_contract_blockers": [
+    "exact frozen pilot case selection absent",
+    "frozen pilot repetition count absent"
+  ],
+  "unresolved_live_checks": [
+    "provider route/credential availability",
+    "provider-returned model identity",
+    "finish_reason and usage behavior",
+    "effective completion ceiling",
+    "optional provenance and cost fields",
+    "provider idempotency/reconciliation capability"
+  ]
+}
