@@ -1,43 +1,29 @@
 # Current status
 
 ## Objective
-Offline-adjudicate the completed `evidence-revision-001` revision-002 PILOT for forensic integrity and endpoint reconstructability without provider contact, experimental execution, scientific changes, or FULL authorization.
+Correct the offline revision-002 PILOT adjudication to use the frozen `evidence_revision.py` primary endpoint, case unit, repetition aggregation, canonical comparison IDs/families, and secondary semantics without touching the completed run or contacting a provider.
 
 ## Disposition
-**ANALYSIS_READY**. All required primary inputs, requested contrasts, representation pairs, and gate-blind/governed outcomes reconstruct from the frozen local artifacts without imputation or provider contact.
+**ANALYSIS_READY**. Integrity remains PASS. The corrected canonical case-level `R_correct` is R0 0/6, R1 2/6, R2 1/6, R3 3/6, R4 3/6.
 
-## Integrity
-- 60/60 unique frozen UIDs and `RESULT_COMMITTED` results verified.
-- 198/198 unique provider-call identities, raw files, sidecars, call-ledger entries, execution bindings, and provenance records verified.
-- All result-ledger and checkpoint hashes match current result bytes.
-- Canonical matrix/case input, design, executable, runner implementation, and reviewed-commit bindings match.
-- All R1/R2 and R3/R4 evidence memberships, evidence-set hashes, and semantic hashes match by case+rep.
-- No score artifacts exist; the completed pilot stopped at `RESULT_COMMITTED`.
-- Input run manifest SHA-256: `ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13`.
+## Frozen-contract conformance
+- Primary is final gate-blind correctness across all cases; it is never conditioned on round-1 correctness.
+- Primary unit is case; two repetitions are majority aggregated and 1/1 ties are incorrect.
+- Case×rep accuracy and `revision_to_correct_conditional` are descriptive only.
+- Canonical mappings: C1 R0/R1 primary; C2 R1/R2 primary; C3 R3/R4 primary; C4 R1/R3 secondary.
+- C4 is explicitly EXEMPT_UPPER_BOUND headroom changing disclosure and budget semantics, not a single-variable isolation.
+- Frozen secondary endpoints are reported separately. `matched_evidence_use` is NOT_RECONSTRUCTABLE; `revision_rate` is PARTIAL because null/UNKNOWN membership in “wrong claim” is not operationally frozen; `response_mode` is a labelled POST-HOC/PARTIAL gate-blind case×rep operationalization.
 
-## Primary descriptive reconstruction
-- R0: 1/7 (14.3%)
-- R1: 3/8 (37.5%)
-- R2: 3/8 (37.5%)
-- R3: 4/8 (50.0%)
-- R4: 7/9 (77.8%)
-
-Requested contrasts: C1 +23.2 pp; C2 0.0 pp; C3 +12.5 pp; C4 +27.8 pp. Protocol-pilot description only; no confirmation, threshold movement, or authorization consequence.
-
-## Verification and calls
-- Deterministic analysis rerun produced byte-identical artifacts and did not change the input run manifest.
-- Complete offline suite: 366 passed, 0 failed, 0 skipped.
-- Provider/model calls by analysis: 0/0.
-- Experimental units run by analysis: 0.
+## Verification
+- 11 deterministic analysis-contract conformance tests pass.
+- Complete offline suite: 377 passed, 0 failed, 0 skipped.
+- Deterministic adjudication rerun is byte-identical.
+- Completed-run manifest before/after: `ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13` / same.
+- Provider/model calls by correction: 0/0; experimental units: 0.
 - FULL authorized/executed: false/false.
 
 ## Artifacts and commit
-- `ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.md`
-- `ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.json`
-- `ablation/analysis/post-audit-v2/pilot-unit-reconstruction-revision-002.jsonl`
-- `ablation/analysis/post-audit-v2/pilot-adjudication-revision-002-hashes.json`
-- `ablation/analysis/post-audit-v2/pilot_adjudication_revision_002.py`
-- Analysis commit: `a7811dd3d045a281fb0724b73a245c690b287be9`.
+Corrected artifacts remain under `ablation/analysis/post-audit-v2/pilot-*revision-002*` with deterministic script `pilot_adjudication_revision_002.py`. The temporal JSONL is unchanged because its unit/call reconstruction was already correct. Correction commit: `19cacb0bf09f513e0f613fdc2d2e55531495cab0`. Previous analysis commit `a7811dd3d045a281fb0724b73a245c690b287be9` is superseded.
 
 ## Worktree
 The completed run and unrelated historical untracked run directories remain untouched.

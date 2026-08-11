@@ -1,21 +1,378 @@
 {
-  "analysis_commit": "a7811dd3d045a281fb0724b73a245c690b287be9",
+  "analysis_contract_tests": {
+    "failed": 0,
+    "passed": 11
+  },
   "artifacts": {
-    "ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.json": "12ab704f21f096898b12302c122ef88ef9c09346895f8af2e8cfb7e8eff36d6e",
-    "ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.md": "65e6a0f91484d792cd534ea8e91d3f0f582608b69247ecb14982f2d48e3f90bf",
+    "ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.json": "e565bb2ac26041c175ef9d7c0bddf65bfb7d08eb5ff226a856c83c20f0f24ca0",
+    "ablation/analysis/post-audit-v2/pilot-adjudication-revision-002.md": "28b4dfad1713d4852046449681f1cb554055fd5962684574da50cb80e8ae97d2",
     "ablation/analysis/post-audit-v2/pilot-unit-reconstruction-revision-002.jsonl": "3deede495bed6cdebb6948e15b1f8422d62187513b98deb037db255e81c1767d",
-    "ablation/analysis/post-audit-v2/pilot_adjudication_revision_002.py": "9208b4b35229b1d36655973199eb8c0d1e3ac39ff828461dd3542528c765d1ab"
+    "ablation/analysis/post-audit-v2/pilot_adjudication_revision_002.py": "66e3b4400d52a0aa47aff14cb77f3943b2101edfc32a092598ca8499514e0879"
+  },
+  "canonical_case_level_R_correct": {
+    "R0": {
+      "denominator": 6,
+      "numerator": 0,
+      "rate": 0.0
+    },
+    "R1": {
+      "denominator": 6,
+      "numerator": 2,
+      "rate": 0.3333333333333333
+    },
+    "R2": {
+      "denominator": 6,
+      "numerator": 1,
+      "rate": 0.16666666666666666
+    },
+    "R3": {
+      "denominator": 6,
+      "numerator": 3,
+      "rate": 0.5
+    },
+    "R4": {
+      "denominator": 6,
+      "numerator": 3,
+      "rate": 0.5
+    }
+  },
+  "canonical_comparisons": {
+    "C1_evidence_effect": {
+      "both_correct": 0,
+      "both_incorrect": 4,
+      "cases": [
+        {
+          "case_id": "cep-07",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "df-11",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "ag-04",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "sr-10",
+          "first_correct": false,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-06",
+          "first_correct": false,
+          "second_correct": true
+        },
+        {
+          "case_id": "cep-05",
+          "first_correct": false,
+          "second_correct": false
+        }
+      ],
+      "constraint": null,
+      "declared_differences": "disclosure policy only",
+      "discordant_count": 2,
+      "family": "primary",
+      "first_arm": "R0",
+      "first_only_correct": 0,
+      "isolates_single_variable": true,
+      "second_arm": "R1",
+      "second_only_correct": 2
+    },
+    "C2_legibility_governed": {
+      "both_correct": 1,
+      "both_incorrect": 4,
+      "cases": [
+        {
+          "case_id": "cep-07",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "df-11",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "ag-04",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "sr-10",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-06",
+          "first_correct": true,
+          "second_correct": false
+        },
+        {
+          "case_id": "cep-05",
+          "first_correct": false,
+          "second_correct": false
+        }
+      ],
+      "constraint": null,
+      "declared_differences": "observation rendering only",
+      "discordant_count": 1,
+      "family": "primary",
+      "first_arm": "R1",
+      "first_only_correct": 1,
+      "isolates_single_variable": true,
+      "second_arm": "R2",
+      "second_only_correct": 0
+    },
+    "C3_legibility_upper": {
+      "both_correct": 2,
+      "both_incorrect": 2,
+      "cases": [
+        {
+          "case_id": "cep-07",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-11",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "ag-04",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "sr-10",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-06",
+          "first_correct": true,
+          "second_correct": false
+        },
+        {
+          "case_id": "cep-05",
+          "first_correct": false,
+          "second_correct": true
+        }
+      ],
+      "constraint": null,
+      "declared_differences": "observation rendering only",
+      "discordant_count": 2,
+      "family": "primary",
+      "first_arm": "R3",
+      "first_only_correct": 1,
+      "isolates_single_variable": true,
+      "second_arm": "R4",
+      "second_only_correct": 1
+    },
+    "C4_coverage_headroom": {
+      "both_correct": 2,
+      "both_incorrect": 3,
+      "cases": [
+        {
+          "case_id": "cep-07",
+          "first_correct": false,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-11",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "ag-04",
+          "first_correct": false,
+          "second_correct": false
+        },
+        {
+          "case_id": "sr-10",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "df-06",
+          "first_correct": true,
+          "second_correct": true
+        },
+        {
+          "case_id": "cep-05",
+          "first_correct": false,
+          "second_correct": false
+        }
+      ],
+      "constraint": "R3 is an EXEMPT_UPPER_BOUND; this comparison bounds headroom and may not be reported as controller performance, affordable navigation, or payment optimality",
+      "declared_differences": "TWO \u2014 disclosure AND budget_semantics. This comparison does NOT isolate a single variable and may never be described as if it did (audit A-06).",
+      "discordant_count": 1,
+      "family": "secondary",
+      "first_arm": "R1",
+      "first_only_correct": 0,
+      "isolates_single_variable": false,
+      "second_arm": "R3",
+      "second_only_correct": 1
+    }
+  },
+  "correction_commit": "19cacb0bf09f513e0f613fdc2d2e55531495cab0",
+  "descriptive_case_rep_accuracy": {
+    "R0": {
+      "denominator": 12,
+      "numerator": 1,
+      "rate": 0.08333333333333333
+    },
+    "R1": {
+      "denominator": 12,
+      "numerator": 5,
+      "rate": 0.4166666666666667
+    },
+    "R2": {
+      "denominator": 12,
+      "numerator": 3,
+      "rate": 0.25
+    },
+    "R3": {
+      "denominator": 12,
+      "numerator": 8,
+      "rate": 0.6666666666666666
+    },
+    "R4": {
+      "denominator": 12,
+      "numerator": 8,
+      "rate": 0.6666666666666666
+    }
+  },
+  "descriptive_conditional_revision_to_correct": {
+    "R0": {
+      "denominator": 7,
+      "denominator_uids": [
+        "1fa530b313c22108",
+        "8b3c3aa49d86315e",
+        "009ab9d5a598d055",
+        "8b18b2f8b98645da",
+        "85cd771319143a8e",
+        "dc71097610aa8edd",
+        "d1d0136c7dc6c321"
+      ],
+      "numerator": 1,
+      "numerator_uids": [
+        "85cd771319143a8e"
+      ],
+      "rate": 0.14285714285714285
+    },
+    "R1": {
+      "denominator": 8,
+      "denominator_uids": [
+        "d2ff366eea550104",
+        "762021b28692c394",
+        "678dbdc0d42c31bc",
+        "4ea579b3bdad7e3f",
+        "87b26450b5ee06b1",
+        "3e00fd7e90182194",
+        "6e27c1a063021484",
+        "b935c258b5934b9a"
+      ],
+      "numerator": 3,
+      "numerator_uids": [
+        "d2ff366eea550104",
+        "87b26450b5ee06b1",
+        "3e00fd7e90182194"
+      ],
+      "rate": 0.375
+    },
+    "R2": {
+      "denominator": 8,
+      "denominator_uids": [
+        "d3290c29c1013838",
+        "61fafb8796b9e37c",
+        "8233417f81ed8ca7",
+        "ebc3531df923d29c",
+        "7dbedcfd6259d963",
+        "a7408394a3d80fda",
+        "697dfa0c32cebb03",
+        "c2af168e16c1d74f"
+      ],
+      "numerator": 3,
+      "numerator_uids": [
+        "ebc3531df923d29c",
+        "7dbedcfd6259d963",
+        "a7408394a3d80fda"
+      ],
+      "rate": 0.375
+    },
+    "R3": {
+      "denominator": 8,
+      "denominator_uids": [
+        "d782b14da4382cf4",
+        "819221ac24f8c1fa",
+        "2511fedaa1336ef8",
+        "db2b3d46374dc61f",
+        "daa24583bbe3cde6",
+        "045cdc73943ce021",
+        "f64fd61970a8623d",
+        "bfd77825e612ece4"
+      ],
+      "numerator": 4,
+      "numerator_uids": [
+        "d782b14da4382cf4",
+        "daa24583bbe3cde6",
+        "045cdc73943ce021",
+        "bfd77825e612ece4"
+      ],
+      "rate": 0.5
+    },
+    "R4": {
+      "denominator": 9,
+      "denominator_uids": [
+        "b950e62127e96e2b",
+        "3ad7112fe3e702a6",
+        "eeb0193d7013be28",
+        "05ed059d878e861b",
+        "321e43a6b6669fc4",
+        "68bb5b1ab3bee6dd",
+        "2b04320ff1b05385",
+        "0d4e4564a682b6cc",
+        "b38667173c341747"
+      ],
+      "numerator": 7,
+      "numerator_uids": [
+        "b950e62127e96e2b",
+        "05ed059d878e861b",
+        "321e43a6b6669fc4",
+        "68bb5b1ab3bee6dd",
+        "2b04320ff1b05385",
+        "0d4e4564a682b6cc",
+        "b38667173c341747"
+      ],
+      "rate": 0.7777777777777778
+    }
+  },
+  "frozen_secondary_endpoint_reconstruction_status": {
+    "gated_accuracy": "PASS",
+    "invocation_rate": "PASS",
+    "matched_evidence_use": "NOT_RECONSTRUCTABLE",
+    "output_class_rates": "PASS",
+    "response_mode": "PARTIAL_POST_HOC",
+    "revision_rate": "PARTIAL",
+    "terminal_state_distribution": "PASS"
   },
   "full_authorized": false,
   "full_executed": false,
-  "hash_manifest_sha256": "9216e63a9a56b334dfc0e34a8901626c6d90ff028206b87e8c8d24432daf46a8",
-  "input_run_manifest_sha256": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+  "full_suite": {
+    "failed": 0,
+    "passed": 377,
+    "skipped": 0
+  },
+  "hash_manifest_sha256": "8aed0b2ece906780e64ef1bb40787a55f94b45402b77aa4cb282cd94471854cb",
+  "input_run_manifest_after": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+  "input_run_manifest_before": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+  "integrity": "PASS",
   "model_calls_performed": 0,
   "provider_calls_performed": 0,
   "status": "ANALYSIS_READY",
-  "tests": {
-    "failed": 0,
-    "passed": 366,
-    "skipped": 0
-  }
+  "supersedes_analysis_commit": "a7811dd3d045a281fb0724b73a245c690b287be9"
 }
