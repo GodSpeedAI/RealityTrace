@@ -1,0 +1,6053 @@
+{
+  "analysis_input_files": {
+    "ablation/analysis/post-audit-v2/case-inputs-v2.json": "11d47c6812a4087783c56cf038ff54822e0c6fccab99e61b484f7e07318dd3cb",
+    "ablation/analysis/post-audit-v2/evidence-revision-001-pilot-matrix-v2.json": "ac1f4665e9bf01971744768c860f16df6b4c3ceb3464b3938a6848e781068f3c",
+    "ablation/corpus/governed-keys.json": "3b1fa60c10832a34520ff1e6b6d9c7258535b2f28f7e238555228dcfdf96bf28"
+  },
+  "arms": {
+    "R0": {
+      "any_revision": 8,
+      "concrete_settlement": {
+        "denominator": 12,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "final_gate_blind_accuracy": {
+        "denominator": 12,
+        "numerator": 1,
+        "rate": 0.08333333333333333
+      },
+      "final_gate_blind_unresolved": {
+        "denominator": 12,
+        "numerator": 10,
+        "rate": 0.8333333333333334
+      },
+      "final_governed_accuracy": {
+        "denominator": 12,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "final_governed_unresolved": {
+        "denominator": 12,
+        "numerator": 12,
+        "rate": 1.0
+      },
+      "gate_acceptance": {
+        "denominator": 12,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "harmful_revision": 5,
+      "initial_statuses": {
+        "CORRECT_CONCRETE": 5,
+        "UNKNOWN_UNRESOLVED": 6,
+        "WRONG_CONCRETE": 1
+      },
+      "persistence_initial_wrong": {
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "primary": {
+        "denominator": 7,
+        "denominator_uids": [
+          "1fa530b313c22108",
+          "8b3c3aa49d86315e",
+          "009ab9d5a598d055",
+          "8b18b2f8b98645da",
+          "85cd771319143a8e",
+          "dc71097610aa8edd",
+          "d1d0136c7dc6c321"
+        ],
+        "numerator": 1,
+        "numerator_uids": [
+          "85cd771319143a8e"
+        ],
+        "rate": 0.14285714285714285
+      },
+      "time_to_first_correct_calls": [
+        3,
+        3,
+        4
+      ],
+      "units": 12,
+      "unknown_to_correct": {
+        "denominator": 6,
+        "numerator": 1,
+        "rate": 0.16666666666666666
+      },
+      "useful_revision": 1,
+      "wrong_concrete_to_correct": {
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      }
+    },
+    "R1": {
+      "any_revision": 6,
+      "concrete_settlement": {
+        "denominator": 12,
+        "numerator": 5,
+        "rate": 0.4166666666666667
+      },
+      "final_gate_blind_accuracy": {
+        "denominator": 12,
+        "numerator": 5,
+        "rate": 0.4166666666666667
+      },
+      "final_gate_blind_unresolved": {
+        "denominator": 12,
+        "numerator": 7,
+        "rate": 0.5833333333333334
+      },
+      "final_governed_accuracy": {
+        "denominator": 12,
+        "numerator": 5,
+        "rate": 0.4166666666666667
+      },
+      "final_governed_unresolved": {
+        "denominator": 12,
+        "numerator": 7,
+        "rate": 0.5833333333333334
+      },
+      "gate_acceptance": {
+        "denominator": 12,
+        "numerator": 5,
+        "rate": 0.4166666666666667
+      },
+      "harmful_revision": 2,
+      "initial_statuses": {
+        "CORRECT_CONCRETE": 4,
+        "UNKNOWN_UNRESOLVED": 7,
+        "WRONG_CONCRETE": 1
+      },
+      "persistence_initial_wrong": {
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "primary": {
+        "denominator": 8,
+        "denominator_uids": [
+          "d2ff366eea550104",
+          "762021b28692c394",
+          "678dbdc0d42c31bc",
+          "4ea579b3bdad7e3f",
+          "87b26450b5ee06b1",
+          "3e00fd7e90182194",
+          "6e27c1a063021484",
+          "b935c258b5934b9a"
+        ],
+        "numerator": 3,
+        "numerator_uids": [
+          "d2ff366eea550104",
+          "87b26450b5ee06b1",
+          "3e00fd7e90182194"
+        ],
+        "rate": 0.375
+      },
+      "time_to_first_correct_calls": [
+        3,
+        4,
+        3,
+        4,
+        4
+      ],
+      "units": 12,
+      "unknown_to_correct": {
+        "denominator": 7,
+        "numerator": 3,
+        "rate": 0.42857142857142855
+      },
+      "useful_revision": 3,
+      "wrong_concrete_to_correct": {
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      }
+    },
+    "R2": {
+      "any_revision": 10,
+      "concrete_settlement": {
+        "denominator": 12,
+        "numerator": 4,
+        "rate": 0.3333333333333333
+      },
+      "final_gate_blind_accuracy": {
+        "denominator": 12,
+        "numerator": 3,
+        "rate": 0.25
+      },
+      "final_gate_blind_unresolved": {
+        "denominator": 12,
+        "numerator": 7,
+        "rate": 0.5833333333333334
+      },
+      "final_governed_accuracy": {
+        "denominator": 12,
+        "numerator": 3,
+        "rate": 0.25
+      },
+      "final_governed_unresolved": {
+        "denominator": 12,
+        "numerator": 8,
+        "rate": 0.6666666666666666
+      },
+      "gate_acceptance": {
+        "denominator": 12,
+        "numerator": 4,
+        "rate": 0.3333333333333333
+      },
+      "harmful_revision": 4,
+      "initial_statuses": {
+        "CORRECT_CONCRETE": 4,
+        "UNKNOWN_UNRESOLVED": 7,
+        "WRONG_CONCRETE": 1
+      },
+      "persistence_initial_wrong": {
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "primary": {
+        "denominator": 8,
+        "denominator_uids": [
+          "d3290c29c1013838",
+          "61fafb8796b9e37c",
+          "8233417f81ed8ca7",
+          "ebc3531df923d29c",
+          "7dbedcfd6259d963",
+          "a7408394a3d80fda",
+          "697dfa0c32cebb03",
+          "c2af168e16c1d74f"
+        ],
+        "numerator": 3,
+        "numerator_uids": [
+          "ebc3531df923d29c",
+          "7dbedcfd6259d963",
+          "a7408394a3d80fda"
+        ],
+        "rate": 0.375
+      },
+      "time_to_first_correct_calls": [
+        3,
+        3,
+        3
+      ],
+      "units": 12,
+      "unknown_to_correct": {
+        "denominator": 7,
+        "numerator": 3,
+        "rate": 0.42857142857142855
+      },
+      "useful_revision": 3,
+      "wrong_concrete_to_correct": {
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      }
+    },
+    "R3": {
+      "any_revision": 6,
+      "concrete_settlement": {
+        "denominator": 12,
+        "numerator": 10,
+        "rate": 0.8333333333333334
+      },
+      "final_gate_blind_accuracy": {
+        "denominator": 12,
+        "numerator": 8,
+        "rate": 0.6666666666666666
+      },
+      "final_gate_blind_unresolved": {
+        "denominator": 12,
+        "numerator": 1,
+        "rate": 0.08333333333333333
+      },
+      "final_governed_accuracy": {
+        "denominator": 12,
+        "numerator": 8,
+        "rate": 0.6666666666666666
+      },
+      "final_governed_unresolved": {
+        "denominator": 12,
+        "numerator": 2,
+        "rate": 0.16666666666666666
+      },
+      "gate_acceptance": {
+        "denominator": 12,
+        "numerator": 10,
+        "rate": 0.8333333333333334
+      },
+      "harmful_revision": 0,
+      "initial_statuses": {
+        "CORRECT_CONCRETE": 4,
+        "UNKNOWN_UNRESOLVED": 7,
+        "WRONG_CONCRETE": 1
+      },
+      "persistence_initial_wrong": {
+        "denominator": 1,
+        "numerator": 1,
+        "rate": 1.0
+      },
+      "primary": {
+        "denominator": 8,
+        "denominator_uids": [
+          "d782b14da4382cf4",
+          "819221ac24f8c1fa",
+          "2511fedaa1336ef8",
+          "db2b3d46374dc61f",
+          "daa24583bbe3cde6",
+          "045cdc73943ce021",
+          "f64fd61970a8623d",
+          "bfd77825e612ece4"
+        ],
+        "numerator": 4,
+        "numerator_uids": [
+          "d782b14da4382cf4",
+          "daa24583bbe3cde6",
+          "045cdc73943ce021",
+          "bfd77825e612ece4"
+        ],
+        "rate": 0.5
+      },
+      "time_to_first_correct_calls": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        4
+      ],
+      "units": 12,
+      "unknown_to_correct": {
+        "denominator": 7,
+        "numerator": 4,
+        "rate": 0.5714285714285714
+      },
+      "useful_revision": 4,
+      "wrong_concrete_to_correct": {
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      }
+    },
+    "R4": {
+      "any_revision": 10,
+      "concrete_settlement": {
+        "denominator": 12,
+        "numerator": 10,
+        "rate": 0.8333333333333334
+      },
+      "final_gate_blind_accuracy": {
+        "denominator": 12,
+        "numerator": 8,
+        "rate": 0.6666666666666666
+      },
+      "final_gate_blind_unresolved": {
+        "denominator": 12,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "final_governed_accuracy": {
+        "denominator": 12,
+        "numerator": 8,
+        "rate": 0.6666666666666666
+      },
+      "final_governed_unresolved": {
+        "denominator": 12,
+        "numerator": 2,
+        "rate": 0.16666666666666666
+      },
+      "gate_acceptance": {
+        "denominator": 12,
+        "numerator": 10,
+        "rate": 0.8333333333333334
+      },
+      "harmful_revision": 2,
+      "initial_statuses": {
+        "CORRECT_CONCRETE": 3,
+        "UNKNOWN_UNRESOLVED": 8,
+        "WRONG_CONCRETE": 1
+      },
+      "persistence_initial_wrong": {
+        "denominator": 1,
+        "numerator": 1,
+        "rate": 1.0
+      },
+      "primary": {
+        "denominator": 9,
+        "denominator_uids": [
+          "b950e62127e96e2b",
+          "3ad7112fe3e702a6",
+          "eeb0193d7013be28",
+          "05ed059d878e861b",
+          "321e43a6b6669fc4",
+          "68bb5b1ab3bee6dd",
+          "2b04320ff1b05385",
+          "0d4e4564a682b6cc",
+          "b38667173c341747"
+        ],
+        "numerator": 7,
+        "numerator_uids": [
+          "b950e62127e96e2b",
+          "05ed059d878e861b",
+          "321e43a6b6669fc4",
+          "68bb5b1ab3bee6dd",
+          "2b04320ff1b05385",
+          "0d4e4564a682b6cc",
+          "b38667173c341747"
+        ],
+        "rate": 0.7777777777777778
+      },
+      "time_to_first_correct_calls": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        4,
+        2
+      ],
+      "units": 12,
+      "unknown_to_correct": {
+        "denominator": 8,
+        "numerator": 7,
+        "rate": 0.875
+      },
+      "useful_revision": 7,
+      "wrong_concrete_to_correct": {
+        "denominator": 1,
+        "numerator": 0,
+        "rate": 0.0
+      }
+    }
+  },
+  "contrasts": {
+    "C1": {
+      "contrast": "R1-R0",
+      "difference_pp": 23.214285714285715,
+      "left": {
+        "arm": "R0",
+        "denominator": 7,
+        "numerator": 1,
+        "rate": 0.14285714285714285
+      },
+      "right": {
+        "arm": "R1",
+        "denominator": 8,
+        "numerator": 3,
+        "rate": 0.375
+      }
+    },
+    "C2": {
+      "contrast": "R2-R1",
+      "difference_pp": 0.0,
+      "left": {
+        "arm": "R1",
+        "denominator": 8,
+        "numerator": 3,
+        "rate": 0.375
+      },
+      "right": {
+        "arm": "R2",
+        "denominator": 8,
+        "numerator": 3,
+        "rate": 0.375
+      }
+    },
+    "C3": {
+      "contrast": "R3-R1",
+      "difference_pp": 12.5,
+      "left": {
+        "arm": "R1",
+        "denominator": 8,
+        "numerator": 3,
+        "rate": 0.375
+      },
+      "right": {
+        "arm": "R3",
+        "denominator": 8,
+        "numerator": 4,
+        "rate": 0.5
+      }
+    },
+    "C4": {
+      "contrast": "R4-R3",
+      "difference_pp": 27.77777777777778,
+      "left": {
+        "arm": "R3",
+        "denominator": 8,
+        "numerator": 4,
+        "rate": 0.5
+      },
+      "right": {
+        "arm": "R4",
+        "denominator": 9,
+        "numerator": 7,
+        "rate": 0.7777777777777778
+      }
+    }
+  },
+  "endpoint_definition": {
+    "eligibility": "round-1 proposed_settlement is not the true locus; null is explicit UNKNOWN/UNRESOLVED",
+    "note": "unit-level descriptive reconstruction requested; frozen confirmatory plan uses case aggregation and is not applied as a pilot authorization gate",
+    "numerator": "eligible unit final gate-blind last_model_claim equals evaluator true locus"
+  },
+  "full_authorized": false,
+  "full_executed": false,
+  "gate_governance_divergences": [
+    {
+      "arm": "R2",
+      "case_id": "ag-04",
+      "classification": "INCORRECT_AND_REJECTED",
+      "evidence_delivered": [
+        "inspect_target_binding",
+        "inspect_permissions",
+        "inspect_fixture_integrity"
+      ],
+      "final_gate_blind_claim": "projection",
+      "final_gate_blind_correct": false,
+      "final_governed_settlement": "unknown",
+      "gate_reason": "BUDGET_EXHAUSTED_GATE_REJECTED:EVIDENCE_INSUFFICIENT",
+      "payment_state": 3,
+      "repetition": 2,
+      "terminal_state": "BUDGET_EXHAUSTED_GATE_REJECTED",
+      "true_locus_evaluator_only": "verification_plan",
+      "uid": "8233417f81ed8ca7"
+    },
+    {
+      "arm": "R4",
+      "case_id": "ag-04",
+      "classification": "INCORRECT_AND_REJECTED",
+      "evidence_delivered": [
+        "inspect_target_binding",
+        "inspect_source_symbols",
+        "inspect_environment",
+        "inspect_permissions",
+        "inspect_fixture_integrity",
+        "validate_semantic_model",
+        "rerun_verifier_isolated",
+        "inspect_verifier_config"
+      ],
+      "final_gate_blind_claim": "verifier",
+      "final_gate_blind_correct": false,
+      "final_governed_settlement": "unknown",
+      "gate_reason": "BUDGET_EXHAUSTED_GATE_REJECTED:EVIDENCE_INSUFFICIENT",
+      "payment_state": 14,
+      "repetition": 1,
+      "terminal_state": "BUDGET_EXHAUSTED_GATE_REJECTED",
+      "true_locus_evaluator_only": "verification_plan",
+      "uid": "c10209b7d83f8294"
+    },
+    {
+      "arm": "R0",
+      "case_id": "sr-10",
+      "classification": "CORRECT_BUT_UNQUALIFIED",
+      "evidence_delivered": [],
+      "final_gate_blind_claim": "evidence_collection",
+      "final_gate_blind_correct": true,
+      "final_governed_settlement": "unknown",
+      "gate_reason": "BUDGET_EXHAUSTED_GATE_REJECTED:EVIDENCE_INSUFFICIENT",
+      "payment_state": 0,
+      "repetition": 2,
+      "terminal_state": "BUDGET_EXHAUSTED_GATE_REJECTED",
+      "true_locus_evaluator_only": "evidence_collection",
+      "uid": "85cd771319143a8e"
+    },
+    {
+      "arm": "R4",
+      "case_id": "df-06",
+      "classification": "INCORRECT_AND_REJECTED",
+      "evidence_delivered": [
+        "inspect_target_binding",
+        "inspect_source_symbols",
+        "inspect_environment",
+        "inspect_permissions",
+        "inspect_fixture_integrity",
+        "validate_semantic_model",
+        "rerun_verifier_isolated",
+        "inspect_verifier_config"
+      ],
+      "final_gate_blind_claim": "verifier",
+      "final_gate_blind_correct": false,
+      "final_governed_settlement": "unknown",
+      "gate_reason": "BUDGET_EXHAUSTED_GATE_REJECTED:EVIDENCE_INSUFFICIENT",
+      "payment_state": 14,
+      "repetition": 1,
+      "terminal_state": "BUDGET_EXHAUSTED_GATE_REJECTED",
+      "true_locus_evaluator_only": "environment",
+      "uid": "945341c134f59204"
+    },
+    {
+      "arm": "R0",
+      "case_id": "cep-05",
+      "classification": "INCORRECT_AND_REJECTED",
+      "evidence_delivered": [],
+      "final_gate_blind_claim": "projection",
+      "final_gate_blind_correct": false,
+      "final_governed_settlement": "unknown",
+      "gate_reason": "BUDGET_EXHAUSTED_GATE_REJECTED:EVIDENCE_INSUFFICIENT",
+      "payment_state": 0,
+      "repetition": 1,
+      "terminal_state": "BUDGET_EXHAUSTED_GATE_REJECTED",
+      "true_locus_evaluator_only": "verification_plan",
+      "uid": "dc71097610aa8edd"
+    },
+    {
+      "arm": "R3",
+      "case_id": "cep-05",
+      "classification": "INCORRECT_AND_REJECTED",
+      "evidence_delivered": [
+        "inspect_target_binding",
+        "inspect_source_symbols",
+        "inspect_environment",
+        "inspect_permissions",
+        "inspect_fixture_integrity",
+        "validate_semantic_model",
+        "rerun_verifier_isolated",
+        "inspect_verifier_config"
+      ],
+      "final_gate_blind_claim": "projection",
+      "final_gate_blind_correct": false,
+      "final_governed_settlement": "unknown",
+      "gate_reason": "BUDGET_EXHAUSTED_GATE_REJECTED:EVIDENCE_INSUFFICIENT",
+      "payment_state": 14,
+      "repetition": 1,
+      "terminal_state": "BUDGET_EXHAUSTED_GATE_REJECTED",
+      "true_locus_evaluator_only": "verification_plan",
+      "uid": "f64fd61970a8623d"
+    }
+  ],
+  "identities": {
+    "design": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
+    "executable_contract": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
+    "reviewed_runner_commit": "cf9b28b84a415ef33519e0866536ebd7787d567d",
+    "runner_implementation": "56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066"
+  },
+  "input_run": "/home/sprime01/projects/sxr/ablation/runs/evidence-revision-001-revision-002/evidence-revision-001-revision-002-pilot-20260811T221724Z",
+  "input_run_manifest_sha256": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+  "instrument": {
+    "by_arm": {
+      "R0": {
+        "calls_per_unit_distribution": {
+          "4": 12
+        },
+        "completion_tokens": {
+          "available": 48,
+          "mean_per_call": 1048.7291666666667,
+          "mean_per_unit": 4194.916666666667,
+          "sum": 50339
+        },
+        "latency_ms": {
+          "available": 48,
+          "mean_per_call": 14960.637499999999,
+          "mean_per_unit": 59842.549999999996,
+          "sum": 718110.6
+        },
+        "output_classes": {
+          "VALID_DECISION": 36
+        },
+        "output_contract_failures": 0,
+        "prompt_tokens": {
+          "available": 48,
+          "mean_per_call": 4130.479166666667,
+          "mean_per_unit": 16521.916666666668,
+          "sum": 198263
+        },
+        "provider_calls": 48,
+        "provider_retries": 0,
+        "reasoning_tokens": {
+          "available": 48,
+          "mean_per_call": 927.7916666666666,
+          "mean_per_unit": 3711.1666666666665,
+          "sum": 44534
+        },
+        "rounds_per_unit_distribution": {
+          "3": 12
+        },
+        "total_tokens": {
+          "available": 48,
+          "mean_per_call": 5179.208333333333,
+          "mean_per_unit": 20716.833333333332,
+          "sum": 248602
+        },
+        "truncations": 0
+      },
+      "R1": {
+        "calls_per_unit_distribution": {
+          "3": 2,
+          "4": 10
+        },
+        "completion_tokens": {
+          "available": 46,
+          "mean_per_call": 1256.7608695652175,
+          "mean_per_unit": 4817.583333333333,
+          "sum": 57811
+        },
+        "latency_ms": {
+          "available": 46,
+          "mean_per_call": 17356.595652173914,
+          "mean_per_unit": 66533.61666666667,
+          "sum": 798403.4
+        },
+        "output_classes": {
+          "VALID_DECISION": 36
+        },
+        "output_contract_failures": 0,
+        "prompt_tokens": {
+          "available": 46,
+          "mean_per_call": 3993.3478260869565,
+          "mean_per_unit": 15307.833333333334,
+          "sum": 183694
+        },
+        "provider_calls": 46,
+        "provider_retries": 0,
+        "reasoning_tokens": {
+          "available": 46,
+          "mean_per_call": 1108.304347826087,
+          "mean_per_unit": 4248.5,
+          "sum": 50982
+        },
+        "rounds_per_unit_distribution": {
+          "3": 12
+        },
+        "total_tokens": {
+          "available": 46,
+          "mean_per_call": 5250.108695652174,
+          "mean_per_unit": 20125.416666666668,
+          "sum": 241505
+        },
+        "truncations": 0
+      },
+      "R2": {
+        "calls_per_unit_distribution": {
+          "3": 4,
+          "4": 8
+        },
+        "completion_tokens": {
+          "available": 44,
+          "mean_per_call": 1203.0681818181818,
+          "mean_per_unit": 4411.25,
+          "sum": 52935
+        },
+        "latency_ms": {
+          "available": 44,
+          "mean_per_call": 16181.834090909093,
+          "mean_per_unit": 59333.39166666667,
+          "sum": 712000.7000000001
+        },
+        "output_classes": {
+          "VALID_DECISION": 36
+        },
+        "output_contract_failures": 0,
+        "prompt_tokens": {
+          "available": 44,
+          "mean_per_call": 3777.681818181818,
+          "mean_per_unit": 13851.5,
+          "sum": 166218
+        },
+        "provider_calls": 44,
+        "provider_retries": 0,
+        "reasoning_tokens": {
+          "available": 44,
+          "mean_per_call": 1069.8181818181818,
+          "mean_per_unit": 3922.6666666666665,
+          "sum": 47072
+        },
+        "rounds_per_unit_distribution": {
+          "3": 12
+        },
+        "total_tokens": {
+          "available": 44,
+          "mean_per_call": 4980.75,
+          "mean_per_unit": 18262.75,
+          "sum": 219153
+        },
+        "truncations": 0
+      },
+      "R3": {
+        "calls_per_unit_distribution": {
+          "2": 9,
+          "4": 3
+        },
+        "completion_tokens": {
+          "available": 30,
+          "mean_per_call": 1505.4,
+          "mean_per_unit": 3763.5,
+          "sum": 45162
+        },
+        "latency_ms": {
+          "available": 30,
+          "mean_per_call": 22098.696666666667,
+          "mean_per_unit": 55246.74166666667,
+          "sum": 662960.9
+        },
+        "output_classes": {
+          "VALID_DECISION": 27
+        },
+        "output_contract_failures": 0,
+        "prompt_tokens": {
+          "available": 30,
+          "mean_per_call": 3863.233333333333,
+          "mean_per_unit": 9658.083333333334,
+          "sum": 115897
+        },
+        "provider_calls": 30,
+        "provider_retries": 0,
+        "reasoning_tokens": {
+          "available": 30,
+          "mean_per_call": 1380.6,
+          "mean_per_unit": 3451.5,
+          "sum": 41418
+        },
+        "rounds_per_unit_distribution": {
+          "2": 9,
+          "3": 3
+        },
+        "total_tokens": {
+          "available": 30,
+          "mean_per_call": 5368.633333333333,
+          "mean_per_unit": 13421.583333333334,
+          "sum": 161059
+        },
+        "truncations": 0
+      },
+      "R4": {
+        "calls_per_unit_distribution": {
+          "2": 9,
+          "4": 3
+        },
+        "completion_tokens": {
+          "available": 30,
+          "mean_per_call": 1669.1333333333334,
+          "mean_per_unit": 4172.833333333333,
+          "sum": 50074
+        },
+        "latency_ms": {
+          "available": 30,
+          "mean_per_call": 22431.766666666666,
+          "mean_per_unit": 56079.416666666664,
+          "sum": 672953.0
+        },
+        "output_classes": {
+          "VALID_DECISION": 27
+        },
+        "output_contract_failures": 0,
+        "prompt_tokens": {
+          "available": 30,
+          "mean_per_call": 3874.1666666666665,
+          "mean_per_unit": 9685.416666666666,
+          "sum": 116225
+        },
+        "provider_calls": 30,
+        "provider_retries": 0,
+        "reasoning_tokens": {
+          "available": 30,
+          "mean_per_call": 1525.7,
+          "mean_per_unit": 3814.25,
+          "sum": 45771
+        },
+        "rounds_per_unit_distribution": {
+          "2": 9,
+          "3": 3
+        },
+        "total_tokens": {
+          "available": 30,
+          "mean_per_call": 5543.3,
+          "mean_per_unit": 13858.25,
+          "sum": 166299
+        },
+        "truncations": 0
+      }
+    },
+    "output_contract_failure_rate": 0.0,
+    "provider_retry_rate": 0.0,
+    "total_provider_calls": 198,
+    "truncation_rate": 0.0
+  },
+  "integrity": {
+    "checks": {
+      "all_call_identities_expected": {
+        "detail": null,
+        "pass": true
+      },
+      "all_raw_decisions_reconstructable": {
+        "detail": null,
+        "pass": true
+      },
+      "all_representation_pair_evidence_equal": {
+        "detail": null,
+        "pass": true
+      },
+      "arm_evidence_policy": {
+        "detail": null,
+        "pass": true
+      },
+      "call_ledger_count_unique": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:009ab9d5a598d055:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:009ab9d5a598d055:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:009ab9d5a598d055:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:009ab9d5a598d055:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:045cdc73943ce021:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:045cdc73943ce021:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:05ed059d878e861b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:05ed059d878e861b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:0d4e4564a682b6cc:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:0d4e4564a682b6cc:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:0d4e4564a682b6cc:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:0d4e4564a682b6cc:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:1bf67e4c8ac538de:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:1bf67e4c8ac538de:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:1fa530b313c22108:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:1fa530b313c22108:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:1fa530b313c22108:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:1fa530b313c22108:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:2511fedaa1336ef8:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:2511fedaa1336ef8:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:2b04320ff1b05385:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:2b04320ff1b05385:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:321e43a6b6669fc4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:321e43a6b6669fc4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:3803dfce5741302b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:3803dfce5741302b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:3ad7112fe3e702a6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:3ad7112fe3e702a6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:3e00fd7e90182194:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:3e00fd7e90182194:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:3e00fd7e90182194:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:4ea579b3bdad7e3f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:4ea579b3bdad7e3f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:4ea579b3bdad7e3f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:4ea579b3bdad7e3f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:55d4a0132b36df9a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:55d4a0132b36df9a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:55d4a0132b36df9a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:55d4a0132b36df9a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:5a2d1e94f43b5b0d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:5a2d1e94f43b5b0d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:61fafb8796b9e37c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:61fafb8796b9e37c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:61fafb8796b9e37c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:61fafb8796b9e37c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:678dbdc0d42c31bc:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:678dbdc0d42c31bc:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:678dbdc0d42c31bc:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:678dbdc0d42c31bc:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:68bb5b1ab3bee6dd:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:68bb5b1ab3bee6dd:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:691ff7cd8abd2e64:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:691ff7cd8abd2e64:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:694e06cb359023b8:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:694e06cb359023b8:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:697dfa0c32cebb03:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:697dfa0c32cebb03:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:697dfa0c32cebb03:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:697dfa0c32cebb03:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:6e27c1a063021484:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:6e27c1a063021484:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:6e27c1a063021484:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:6e27c1a063021484:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:734f04ceb8a6438b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:734f04ceb8a6438b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:734f04ceb8a6438b:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:734f04ceb8a6438b:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:762021b28692c394:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:762021b28692c394:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:762021b28692c394:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:762021b28692c394:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:7769cb6d22bbe1c6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:7769cb6d22bbe1c6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:7769cb6d22bbe1c6:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:7769cb6d22bbe1c6:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:79d5a820c8a8a43e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:79d5a820c8a8a43e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:79d5a820c8a8a43e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:79d5a820c8a8a43e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:7dbedcfd6259d963:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:7dbedcfd6259d963:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:7dbedcfd6259d963:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:819221ac24f8c1fa:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:819221ac24f8c1fa:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8233417f81ed8ca7:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8233417f81ed8ca7:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8233417f81ed8ca7:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8233417f81ed8ca7:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:842a1b78feee534c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:842a1b78feee534c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:842a1b78feee534c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:842a1b78feee534c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:85cd771319143a8e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:85cd771319143a8e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:85cd771319143a8e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:85cd771319143a8e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:87b26450b5ee06b1:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:87b26450b5ee06b1:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:87b26450b5ee06b1:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:87b26450b5ee06b1:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8b18b2f8b98645da:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8b18b2f8b98645da:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8b18b2f8b98645da:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8b18b2f8b98645da:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8b3c3aa49d86315e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8b3c3aa49d86315e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8b3c3aa49d86315e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8b3c3aa49d86315e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8d917bdc985e95ac:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8d917bdc985e95ac:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8d917bdc985e95ac:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:8d917bdc985e95ac:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:922e3dc9100fb14b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:922e3dc9100fb14b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:922e3dc9100fb14b:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:922e3dc9100fb14b:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:93217f5bf9ea0657:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:93217f5bf9ea0657:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:93217f5bf9ea0657:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:93217f5bf9ea0657:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:945341c134f59204:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:945341c134f59204:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:945341c134f59204:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:945341c134f59204:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:a172984f942bb36c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:a172984f942bb36c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:a172984f942bb36c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:a172984f942bb36c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:a7408394a3d80fda:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:a7408394a3d80fda:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:a7408394a3d80fda:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:b38667173c341747:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:b38667173c341747:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:b935c258b5934b9a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:b935c258b5934b9a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:b935c258b5934b9a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:b935c258b5934b9a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:b950e62127e96e2b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:b950e62127e96e2b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:bfd77825e612ece4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:bfd77825e612ece4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:bfd77825e612ece4:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:bfd77825e612ece4:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:c10209b7d83f8294:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:c10209b7d83f8294:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:c10209b7d83f8294:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:c10209b7d83f8294:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:c2af168e16c1d74f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:c2af168e16c1d74f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:c2af168e16c1d74f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:c2af168e16c1d74f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d1d0136c7dc6c321:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d1d0136c7dc6c321:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d1d0136c7dc6c321:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d1d0136c7dc6c321:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d2ff366eea550104:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d2ff366eea550104:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d2ff366eea550104:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d3290c29c1013838:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d3290c29c1013838:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d3290c29c1013838:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d3746f71b514e90d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d3746f71b514e90d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d3746f71b514e90d:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d3746f71b514e90d:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d782b14da4382cf4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:d782b14da4382cf4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:daa24583bbe3cde6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:daa24583bbe3cde6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:db2b3d46374dc61f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:db2b3d46374dc61f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:db2b3d46374dc61f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:db2b3d46374dc61f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:dc71097610aa8edd:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:dc71097610aa8edd:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:dc71097610aa8edd:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:dc71097610aa8edd:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:e7fadfec5fcaea2e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:e7fadfec5fcaea2e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:e7fadfec5fcaea2e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:e7fadfec5fcaea2e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:ebc3531df923d29c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:ebc3531df923d29c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:ebc3531df923d29c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:eeb0193d7013be28:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:eeb0193d7013be28:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:f5ff0225fc3c519a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:f5ff0225fc3c519a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:f5ff0225fc3c519a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:f5ff0225fc3c519a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:f64fd61970a8623d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:f64fd61970a8623d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:f64fd61970a8623d:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:f64fd61970a8623d:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:ffb02bc855270a55:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:ffb02bc855270a55:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:ffb02bc855270a55:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_recoverable:ffb02bc855270a55:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:009ab9d5a598d055:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:009ab9d5a598d055:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:009ab9d5a598d055:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:009ab9d5a598d055:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:045cdc73943ce021:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:045cdc73943ce021:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:05ed059d878e861b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:05ed059d878e861b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:0d4e4564a682b6cc:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:0d4e4564a682b6cc:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:0d4e4564a682b6cc:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:0d4e4564a682b6cc:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:1bf67e4c8ac538de:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:1bf67e4c8ac538de:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:1fa530b313c22108:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:1fa530b313c22108:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:1fa530b313c22108:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:1fa530b313c22108:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:2511fedaa1336ef8:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:2511fedaa1336ef8:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:2b04320ff1b05385:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:2b04320ff1b05385:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:321e43a6b6669fc4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:321e43a6b6669fc4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:3803dfce5741302b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:3803dfce5741302b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:3ad7112fe3e702a6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:3ad7112fe3e702a6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:3e00fd7e90182194:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:3e00fd7e90182194:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:3e00fd7e90182194:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:4ea579b3bdad7e3f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:4ea579b3bdad7e3f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:4ea579b3bdad7e3f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:4ea579b3bdad7e3f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:55d4a0132b36df9a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:55d4a0132b36df9a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:55d4a0132b36df9a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:55d4a0132b36df9a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:5a2d1e94f43b5b0d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:5a2d1e94f43b5b0d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:61fafb8796b9e37c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:61fafb8796b9e37c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:61fafb8796b9e37c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:61fafb8796b9e37c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:678dbdc0d42c31bc:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:678dbdc0d42c31bc:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:678dbdc0d42c31bc:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:678dbdc0d42c31bc:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:68bb5b1ab3bee6dd:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:68bb5b1ab3bee6dd:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:691ff7cd8abd2e64:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:691ff7cd8abd2e64:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:694e06cb359023b8:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:694e06cb359023b8:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:697dfa0c32cebb03:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:697dfa0c32cebb03:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:697dfa0c32cebb03:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:697dfa0c32cebb03:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:6e27c1a063021484:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:6e27c1a063021484:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:6e27c1a063021484:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:6e27c1a063021484:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:734f04ceb8a6438b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:734f04ceb8a6438b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:734f04ceb8a6438b:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:734f04ceb8a6438b:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:762021b28692c394:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:762021b28692c394:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:762021b28692c394:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:762021b28692c394:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:7769cb6d22bbe1c6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:7769cb6d22bbe1c6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:7769cb6d22bbe1c6:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:7769cb6d22bbe1c6:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:79d5a820c8a8a43e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:79d5a820c8a8a43e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:79d5a820c8a8a43e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:79d5a820c8a8a43e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:7dbedcfd6259d963:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:7dbedcfd6259d963:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:7dbedcfd6259d963:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:819221ac24f8c1fa:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:819221ac24f8c1fa:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8233417f81ed8ca7:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8233417f81ed8ca7:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8233417f81ed8ca7:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8233417f81ed8ca7:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:842a1b78feee534c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:842a1b78feee534c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:842a1b78feee534c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:842a1b78feee534c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:85cd771319143a8e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:85cd771319143a8e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:85cd771319143a8e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:85cd771319143a8e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:87b26450b5ee06b1:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:87b26450b5ee06b1:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:87b26450b5ee06b1:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:87b26450b5ee06b1:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8b18b2f8b98645da:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8b18b2f8b98645da:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8b18b2f8b98645da:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8b18b2f8b98645da:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8b3c3aa49d86315e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8b3c3aa49d86315e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8b3c3aa49d86315e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8b3c3aa49d86315e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8d917bdc985e95ac:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8d917bdc985e95ac:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8d917bdc985e95ac:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:8d917bdc985e95ac:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:922e3dc9100fb14b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:922e3dc9100fb14b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:922e3dc9100fb14b:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:922e3dc9100fb14b:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:93217f5bf9ea0657:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:93217f5bf9ea0657:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:93217f5bf9ea0657:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:93217f5bf9ea0657:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:945341c134f59204:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:945341c134f59204:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:945341c134f59204:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:945341c134f59204:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:a172984f942bb36c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:a172984f942bb36c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:a172984f942bb36c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:a172984f942bb36c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:a7408394a3d80fda:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:a7408394a3d80fda:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:a7408394a3d80fda:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:b38667173c341747:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:b38667173c341747:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:b935c258b5934b9a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:b935c258b5934b9a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:b935c258b5934b9a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:b935c258b5934b9a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:b950e62127e96e2b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:b950e62127e96e2b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:bfd77825e612ece4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:bfd77825e612ece4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:bfd77825e612ece4:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:bfd77825e612ece4:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:c10209b7d83f8294:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:c10209b7d83f8294:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:c10209b7d83f8294:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:c10209b7d83f8294:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:c2af168e16c1d74f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:c2af168e16c1d74f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:c2af168e16c1d74f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:c2af168e16c1d74f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d1d0136c7dc6c321:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d1d0136c7dc6c321:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d1d0136c7dc6c321:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d1d0136c7dc6c321:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d2ff366eea550104:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d2ff366eea550104:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d2ff366eea550104:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d3290c29c1013838:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d3290c29c1013838:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d3290c29c1013838:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d3746f71b514e90d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d3746f71b514e90d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d3746f71b514e90d:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d3746f71b514e90d:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d782b14da4382cf4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:d782b14da4382cf4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:daa24583bbe3cde6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:daa24583bbe3cde6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:db2b3d46374dc61f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:db2b3d46374dc61f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:db2b3d46374dc61f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:db2b3d46374dc61f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:dc71097610aa8edd:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:dc71097610aa8edd:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:dc71097610aa8edd:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:dc71097610aa8edd:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:e7fadfec5fcaea2e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:e7fadfec5fcaea2e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:e7fadfec5fcaea2e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:e7fadfec5fcaea2e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:ebc3531df923d29c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:ebc3531df923d29c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:ebc3531df923d29c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:eeb0193d7013be28:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:eeb0193d7013be28:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:f5ff0225fc3c519a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:f5ff0225fc3c519a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:f5ff0225fc3c519a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:f5ff0225fc3c519a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:f64fd61970a8623d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:f64fd61970a8623d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:f64fd61970a8623d:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:f64fd61970a8623d:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:ffb02bc855270a55:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:ffb02bc855270a55:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:ffb02bc855270a55:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "call_request_binding:ffb02bc855270a55:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "case_input_binding": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_all_result_committed": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:009ab9d5a598d055": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:045cdc73943ce021": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:05ed059d878e861b": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:0d4e4564a682b6cc": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:1bf67e4c8ac538de": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:1fa530b313c22108": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:2511fedaa1336ef8": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:2b04320ff1b05385": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:321e43a6b6669fc4": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:3803dfce5741302b": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:3ad7112fe3e702a6": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:3e00fd7e90182194": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:4ea579b3bdad7e3f": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:55d4a0132b36df9a": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:5a2d1e94f43b5b0d": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:61fafb8796b9e37c": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:678dbdc0d42c31bc": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:68bb5b1ab3bee6dd": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:691ff7cd8abd2e64": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:694e06cb359023b8": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:697dfa0c32cebb03": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:6e27c1a063021484": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:734f04ceb8a6438b": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:762021b28692c394": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:7769cb6d22bbe1c6": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:79d5a820c8a8a43e": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:7dbedcfd6259d963": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:819221ac24f8c1fa": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:8233417f81ed8ca7": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:842a1b78feee534c": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:85cd771319143a8e": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:87b26450b5ee06b1": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:8b18b2f8b98645da": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:8b3c3aa49d86315e": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:8d917bdc985e95ac": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:922e3dc9100fb14b": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:93217f5bf9ea0657": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:945341c134f59204": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:a172984f942bb36c": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:a7408394a3d80fda": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:b38667173c341747": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:b935c258b5934b9a": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:b950e62127e96e2b": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:bfd77825e612ece4": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:c10209b7d83f8294": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:c2af168e16c1d74f": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:d1d0136c7dc6c321": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:d2ff366eea550104": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:d3290c29c1013838": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:d3746f71b514e90d": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:d782b14da4382cf4": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:daa24583bbe3cde6": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:db2b3d46374dc61f": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:dc71097610aa8edd": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:e7fadfec5fcaea2e": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:ebc3531df923d29c": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:eeb0193d7013be28": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:f5ff0225fc3c519a": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:f64fd61970a8623d": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_binding:ffb02bc855270a55": {
+        "detail": null,
+        "pass": true
+      },
+      "checkpoint_uid_set": {
+        "detail": null,
+        "pass": true
+      },
+      "design_fingerprint": {
+        "detail": null,
+        "pass": true
+      },
+      "executable_fingerprint": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:009ab9d5a598d055": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:045cdc73943ce021": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:05ed059d878e861b": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:0d4e4564a682b6cc": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:1bf67e4c8ac538de": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:1fa530b313c22108": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:2511fedaa1336ef8": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:2b04320ff1b05385": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:321e43a6b6669fc4": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:3803dfce5741302b": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:3ad7112fe3e702a6": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:3e00fd7e90182194": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:4ea579b3bdad7e3f": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:55d4a0132b36df9a": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:5a2d1e94f43b5b0d": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:61fafb8796b9e37c": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:678dbdc0d42c31bc": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:68bb5b1ab3bee6dd": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:691ff7cd8abd2e64": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:694e06cb359023b8": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:697dfa0c32cebb03": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:6e27c1a063021484": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:734f04ceb8a6438b": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:762021b28692c394": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:7769cb6d22bbe1c6": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:79d5a820c8a8a43e": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:7dbedcfd6259d963": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:819221ac24f8c1fa": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:8233417f81ed8ca7": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:842a1b78feee534c": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:85cd771319143a8e": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:87b26450b5ee06b1": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:8b18b2f8b98645da": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:8b3c3aa49d86315e": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:8d917bdc985e95ac": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:922e3dc9100fb14b": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:93217f5bf9ea0657": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:945341c134f59204": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:a172984f942bb36c": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:a7408394a3d80fda": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:b38667173c341747": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:b935c258b5934b9a": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:b950e62127e96e2b": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:bfd77825e612ece4": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:c10209b7d83f8294": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:c2af168e16c1d74f": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:d1d0136c7dc6c321": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:d2ff366eea550104": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:d3290c29c1013838": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:d3746f71b514e90d": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:d782b14da4382cf4": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:daa24583bbe3cde6": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:db2b3d46374dc61f": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:dc71097610aa8edd": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:e7fadfec5fcaea2e": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:ebc3531df923d29c": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:eeb0193d7013be28": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:f5ff0225fc3c519a": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:f64fd61970a8623d": {
+        "detail": null,
+        "pass": true
+      },
+      "identity:ffb02bc855270a55": {
+        "detail": null,
+        "pass": true
+      },
+      "implementation_identity": {
+        "detail": null,
+        "pass": true
+      },
+      "input_run_unchanged_during_analysis": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:009ab9d5a598d055": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:045cdc73943ce021": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:05ed059d878e861b": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:0d4e4564a682b6cc": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:1bf67e4c8ac538de": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:1fa530b313c22108": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:2511fedaa1336ef8": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:2b04320ff1b05385": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:321e43a6b6669fc4": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:3803dfce5741302b": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:3ad7112fe3e702a6": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:3e00fd7e90182194": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:4ea579b3bdad7e3f": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:55d4a0132b36df9a": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:5a2d1e94f43b5b0d": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:61fafb8796b9e37c": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:678dbdc0d42c31bc": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:68bb5b1ab3bee6dd": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:691ff7cd8abd2e64": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:694e06cb359023b8": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:697dfa0c32cebb03": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:6e27c1a063021484": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:734f04ceb8a6438b": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:762021b28692c394": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:7769cb6d22bbe1c6": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:79d5a820c8a8a43e": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:7dbedcfd6259d963": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:819221ac24f8c1fa": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:8233417f81ed8ca7": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:842a1b78feee534c": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:85cd771319143a8e": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:87b26450b5ee06b1": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:8b18b2f8b98645da": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:8b3c3aa49d86315e": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:8d917bdc985e95ac": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:922e3dc9100fb14b": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:93217f5bf9ea0657": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:945341c134f59204": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:a172984f942bb36c": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:a7408394a3d80fda": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:b38667173c341747": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:b935c258b5934b9a": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:b950e62127e96e2b": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:bfd77825e612ece4": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:c10209b7d83f8294": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:c2af168e16c1d74f": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:d1d0136c7dc6c321": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:d2ff366eea550104": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:d3290c29c1013838": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:d3746f71b514e90d": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:d782b14da4382cf4": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:daa24583bbe3cde6": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:db2b3d46374dc61f": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:dc71097610aa8edd": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:e7fadfec5fcaea2e": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:ebc3531df923d29c": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:eeb0193d7013be28": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:f5ff0225fc3c519a": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:f64fd61970a8623d": {
+        "detail": null,
+        "pass": true
+      },
+      "last_raw_checkpoint:ffb02bc855270a55": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_binding": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_canonical_hash": {
+        "detail": "effd44ec461b8624e4c498b80f40884f1af0d30296b9062bda3a1f090d85a9e3",
+        "pass": true
+      },
+      "matrix_uid_recomputed:009ab9d5a598d055": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:045cdc73943ce021": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:05ed059d878e861b": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:0d4e4564a682b6cc": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:1bf67e4c8ac538de": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:1fa530b313c22108": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:2511fedaa1336ef8": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:2b04320ff1b05385": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:321e43a6b6669fc4": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:3803dfce5741302b": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:3ad7112fe3e702a6": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:3e00fd7e90182194": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:4ea579b3bdad7e3f": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:55d4a0132b36df9a": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:5a2d1e94f43b5b0d": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:61fafb8796b9e37c": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:678dbdc0d42c31bc": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:68bb5b1ab3bee6dd": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:691ff7cd8abd2e64": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:694e06cb359023b8": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:697dfa0c32cebb03": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:6e27c1a063021484": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:734f04ceb8a6438b": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:762021b28692c394": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:7769cb6d22bbe1c6": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:79d5a820c8a8a43e": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:7dbedcfd6259d963": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:819221ac24f8c1fa": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:8233417f81ed8ca7": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:842a1b78feee534c": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:85cd771319143a8e": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:87b26450b5ee06b1": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:8b18b2f8b98645da": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:8b3c3aa49d86315e": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:8d917bdc985e95ac": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:922e3dc9100fb14b": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:93217f5bf9ea0657": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:945341c134f59204": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:a172984f942bb36c": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:a7408394a3d80fda": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:b38667173c341747": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:b935c258b5934b9a": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:b950e62127e96e2b": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:bfd77825e612ece4": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:c10209b7d83f8294": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:c2af168e16c1d74f": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:d1d0136c7dc6c321": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:d2ff366eea550104": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:d3290c29c1013838": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:d3746f71b514e90d": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:d782b14da4382cf4": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:daa24583bbe3cde6": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:db2b3d46374dc61f": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:dc71097610aa8edd": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:e7fadfec5fcaea2e": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:ebc3531df923d29c": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:eeb0193d7013be28": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:f5ff0225fc3c519a": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:f64fd61970a8623d": {
+        "detail": null,
+        "pass": true
+      },
+      "matrix_uid_recomputed:ffb02bc855270a55": {
+        "detail": null,
+        "pass": true
+      },
+      "no_cross_arm_evidence_contamination": {
+        "detail": null,
+        "pass": true
+      },
+      "no_post_run_mutation": {
+        "detail": null,
+        "pass": true
+      },
+      "no_score_preceded_raw_commit": {
+        "detail": {
+          "note": "live pilot stopped at RESULT_COMMITTED; no score artifacts exist",
+          "score_artifacts": 0
+        },
+        "pass": true
+      },
+      "prompt_guard:009ab9d5a598d055:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:009ab9d5a598d055:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:009ab9d5a598d055:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:009ab9d5a598d055:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:045cdc73943ce021:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:045cdc73943ce021:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:05ed059d878e861b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:05ed059d878e861b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:0d4e4564a682b6cc:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:0d4e4564a682b6cc:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:0d4e4564a682b6cc:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:0d4e4564a682b6cc:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:1bf67e4c8ac538de:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:1bf67e4c8ac538de:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:1fa530b313c22108:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:1fa530b313c22108:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:1fa530b313c22108:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:1fa530b313c22108:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:2511fedaa1336ef8:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:2511fedaa1336ef8:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:2b04320ff1b05385:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:2b04320ff1b05385:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:321e43a6b6669fc4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:321e43a6b6669fc4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:3803dfce5741302b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:3803dfce5741302b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:3ad7112fe3e702a6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:3ad7112fe3e702a6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:3e00fd7e90182194:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:3e00fd7e90182194:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:3e00fd7e90182194:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:4ea579b3bdad7e3f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:4ea579b3bdad7e3f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:4ea579b3bdad7e3f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:4ea579b3bdad7e3f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:55d4a0132b36df9a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:55d4a0132b36df9a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:55d4a0132b36df9a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:55d4a0132b36df9a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:5a2d1e94f43b5b0d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:5a2d1e94f43b5b0d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:61fafb8796b9e37c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:61fafb8796b9e37c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:61fafb8796b9e37c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:61fafb8796b9e37c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:678dbdc0d42c31bc:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:678dbdc0d42c31bc:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:678dbdc0d42c31bc:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:678dbdc0d42c31bc:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:68bb5b1ab3bee6dd:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:68bb5b1ab3bee6dd:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:691ff7cd8abd2e64:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:691ff7cd8abd2e64:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:694e06cb359023b8:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:694e06cb359023b8:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:697dfa0c32cebb03:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:697dfa0c32cebb03:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:697dfa0c32cebb03:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:697dfa0c32cebb03:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:6e27c1a063021484:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:6e27c1a063021484:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:6e27c1a063021484:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:6e27c1a063021484:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:734f04ceb8a6438b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:734f04ceb8a6438b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:734f04ceb8a6438b:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:734f04ceb8a6438b:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:762021b28692c394:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:762021b28692c394:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:762021b28692c394:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:762021b28692c394:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:7769cb6d22bbe1c6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:7769cb6d22bbe1c6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:7769cb6d22bbe1c6:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:7769cb6d22bbe1c6:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:79d5a820c8a8a43e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:79d5a820c8a8a43e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:79d5a820c8a8a43e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:79d5a820c8a8a43e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:7dbedcfd6259d963:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:7dbedcfd6259d963:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:7dbedcfd6259d963:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:819221ac24f8c1fa:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:819221ac24f8c1fa:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8233417f81ed8ca7:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8233417f81ed8ca7:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8233417f81ed8ca7:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8233417f81ed8ca7:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:842a1b78feee534c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:842a1b78feee534c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:842a1b78feee534c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:842a1b78feee534c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:85cd771319143a8e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:85cd771319143a8e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:85cd771319143a8e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:85cd771319143a8e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:87b26450b5ee06b1:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:87b26450b5ee06b1:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:87b26450b5ee06b1:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:87b26450b5ee06b1:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8b18b2f8b98645da:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8b18b2f8b98645da:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8b18b2f8b98645da:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8b18b2f8b98645da:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8b3c3aa49d86315e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8b3c3aa49d86315e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8b3c3aa49d86315e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8b3c3aa49d86315e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8d917bdc985e95ac:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8d917bdc985e95ac:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8d917bdc985e95ac:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:8d917bdc985e95ac:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:922e3dc9100fb14b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:922e3dc9100fb14b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:922e3dc9100fb14b:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:922e3dc9100fb14b:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:93217f5bf9ea0657:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:93217f5bf9ea0657:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:93217f5bf9ea0657:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:93217f5bf9ea0657:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:945341c134f59204:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:945341c134f59204:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:945341c134f59204:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:945341c134f59204:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:a172984f942bb36c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:a172984f942bb36c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:a172984f942bb36c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:a172984f942bb36c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:a7408394a3d80fda:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:a7408394a3d80fda:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:a7408394a3d80fda:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:b38667173c341747:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:b38667173c341747:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:b935c258b5934b9a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:b935c258b5934b9a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:b935c258b5934b9a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:b935c258b5934b9a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:b950e62127e96e2b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:b950e62127e96e2b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:bfd77825e612ece4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:bfd77825e612ece4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:bfd77825e612ece4:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:bfd77825e612ece4:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:c10209b7d83f8294:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:c10209b7d83f8294:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:c10209b7d83f8294:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:c10209b7d83f8294:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:c2af168e16c1d74f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:c2af168e16c1d74f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:c2af168e16c1d74f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:c2af168e16c1d74f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d1d0136c7dc6c321:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d1d0136c7dc6c321:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d1d0136c7dc6c321:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d1d0136c7dc6c321:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d2ff366eea550104:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d2ff366eea550104:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d2ff366eea550104:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d3290c29c1013838:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d3290c29c1013838:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d3290c29c1013838:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d3746f71b514e90d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d3746f71b514e90d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d3746f71b514e90d:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d3746f71b514e90d:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d782b14da4382cf4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:d782b14da4382cf4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:daa24583bbe3cde6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:daa24583bbe3cde6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:db2b3d46374dc61f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:db2b3d46374dc61f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:db2b3d46374dc61f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:db2b3d46374dc61f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:dc71097610aa8edd:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:dc71097610aa8edd:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:dc71097610aa8edd:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:dc71097610aa8edd:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:e7fadfec5fcaea2e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:e7fadfec5fcaea2e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:e7fadfec5fcaea2e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:e7fadfec5fcaea2e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:ebc3531df923d29c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:ebc3531df923d29c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:ebc3531df923d29c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:eeb0193d7013be28:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:eeb0193d7013be28:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:f5ff0225fc3c519a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:f5ff0225fc3c519a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:f5ff0225fc3c519a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:f5ff0225fc3c519a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:f64fd61970a8623d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:f64fd61970a8623d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:f64fd61970a8623d:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:f64fd61970a8623d:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:ffb02bc855270a55:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:ffb02bc855270a55:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:ffb02bc855270a55:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "prompt_guard:ffb02bc855270a55:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_generation_ids_unique_complete": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:009ab9d5a598d055:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:009ab9d5a598d055:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:009ab9d5a598d055:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:009ab9d5a598d055:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:045cdc73943ce021:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:045cdc73943ce021:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:05ed059d878e861b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:05ed059d878e861b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:0d4e4564a682b6cc:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:0d4e4564a682b6cc:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:0d4e4564a682b6cc:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:0d4e4564a682b6cc:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:1bf67e4c8ac538de:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:1bf67e4c8ac538de:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:1fa530b313c22108:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:1fa530b313c22108:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:1fa530b313c22108:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:1fa530b313c22108:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:2511fedaa1336ef8:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:2511fedaa1336ef8:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:2b04320ff1b05385:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:2b04320ff1b05385:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:321e43a6b6669fc4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:321e43a6b6669fc4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:3803dfce5741302b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:3803dfce5741302b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:3ad7112fe3e702a6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:3ad7112fe3e702a6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:3e00fd7e90182194:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:3e00fd7e90182194:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:3e00fd7e90182194:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:4ea579b3bdad7e3f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:4ea579b3bdad7e3f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:4ea579b3bdad7e3f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:4ea579b3bdad7e3f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:55d4a0132b36df9a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:55d4a0132b36df9a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:55d4a0132b36df9a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:55d4a0132b36df9a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:5a2d1e94f43b5b0d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:5a2d1e94f43b5b0d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:61fafb8796b9e37c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:61fafb8796b9e37c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:61fafb8796b9e37c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:61fafb8796b9e37c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:678dbdc0d42c31bc:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:678dbdc0d42c31bc:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:678dbdc0d42c31bc:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:678dbdc0d42c31bc:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:68bb5b1ab3bee6dd:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:68bb5b1ab3bee6dd:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:691ff7cd8abd2e64:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:691ff7cd8abd2e64:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:694e06cb359023b8:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:694e06cb359023b8:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:697dfa0c32cebb03:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:697dfa0c32cebb03:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:697dfa0c32cebb03:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:697dfa0c32cebb03:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:6e27c1a063021484:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:6e27c1a063021484:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:6e27c1a063021484:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:6e27c1a063021484:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:734f04ceb8a6438b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:734f04ceb8a6438b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:734f04ceb8a6438b:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:734f04ceb8a6438b:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:762021b28692c394:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:762021b28692c394:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:762021b28692c394:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:762021b28692c394:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:7769cb6d22bbe1c6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:7769cb6d22bbe1c6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:7769cb6d22bbe1c6:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:7769cb6d22bbe1c6:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:79d5a820c8a8a43e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:79d5a820c8a8a43e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:79d5a820c8a8a43e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:79d5a820c8a8a43e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:7dbedcfd6259d963:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:7dbedcfd6259d963:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:7dbedcfd6259d963:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:819221ac24f8c1fa:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:819221ac24f8c1fa:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8233417f81ed8ca7:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8233417f81ed8ca7:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8233417f81ed8ca7:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8233417f81ed8ca7:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:842a1b78feee534c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:842a1b78feee534c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:842a1b78feee534c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:842a1b78feee534c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:85cd771319143a8e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:85cd771319143a8e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:85cd771319143a8e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:85cd771319143a8e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:87b26450b5ee06b1:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:87b26450b5ee06b1:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:87b26450b5ee06b1:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:87b26450b5ee06b1:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8b18b2f8b98645da:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8b18b2f8b98645da:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8b18b2f8b98645da:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8b18b2f8b98645da:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8b3c3aa49d86315e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8b3c3aa49d86315e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8b3c3aa49d86315e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8b3c3aa49d86315e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8d917bdc985e95ac:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8d917bdc985e95ac:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8d917bdc985e95ac:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:8d917bdc985e95ac:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:922e3dc9100fb14b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:922e3dc9100fb14b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:922e3dc9100fb14b:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:922e3dc9100fb14b:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:93217f5bf9ea0657:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:93217f5bf9ea0657:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:93217f5bf9ea0657:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:93217f5bf9ea0657:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:945341c134f59204:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:945341c134f59204:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:945341c134f59204:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:945341c134f59204:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:a172984f942bb36c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:a172984f942bb36c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:a172984f942bb36c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:a172984f942bb36c:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:a7408394a3d80fda:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:a7408394a3d80fda:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:a7408394a3d80fda:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:b38667173c341747:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:b38667173c341747:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:b935c258b5934b9a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:b935c258b5934b9a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:b935c258b5934b9a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:b935c258b5934b9a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:b950e62127e96e2b:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:b950e62127e96e2b:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:bfd77825e612ece4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:bfd77825e612ece4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:bfd77825e612ece4:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:bfd77825e612ece4:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:c10209b7d83f8294:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:c10209b7d83f8294:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:c10209b7d83f8294:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:c10209b7d83f8294:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:c2af168e16c1d74f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:c2af168e16c1d74f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:c2af168e16c1d74f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:c2af168e16c1d74f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d1d0136c7dc6c321:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d1d0136c7dc6c321:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d1d0136c7dc6c321:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d1d0136c7dc6c321:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d2ff366eea550104:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d2ff366eea550104:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d2ff366eea550104:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d3290c29c1013838:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d3290c29c1013838:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d3290c29c1013838:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d3746f71b514e90d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d3746f71b514e90d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d3746f71b514e90d:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d3746f71b514e90d:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d782b14da4382cf4:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:d782b14da4382cf4:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:daa24583bbe3cde6:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:daa24583bbe3cde6:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:db2b3d46374dc61f:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:db2b3d46374dc61f:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:db2b3d46374dc61f:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:db2b3d46374dc61f:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:dc71097610aa8edd:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:dc71097610aa8edd:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:dc71097610aa8edd:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:dc71097610aa8edd:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:e7fadfec5fcaea2e:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:e7fadfec5fcaea2e:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:e7fadfec5fcaea2e:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:e7fadfec5fcaea2e:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:ebc3531df923d29c:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:ebc3531df923d29c:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:ebc3531df923d29c:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:eeb0193d7013be28:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:eeb0193d7013be28:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:f5ff0225fc3c519a:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:f5ff0225fc3c519a:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:f5ff0225fc3c519a:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:f5ff0225fc3c519a:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:f64fd61970a8623d:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:f64fd61970a8623d:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:f64fd61970a8623d:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:f64fd61970a8623d:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:ffb02bc855270a55:call:001": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:ffb02bc855270a55:call:002": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:ffb02bc855270a55:call:003": {
+        "detail": null,
+        "pass": true
+      },
+      "provider_provenance:ffb02bc855270a55:call:004": {
+        "detail": null,
+        "pass": true
+      },
+      "r0_no_new_evidence": {
+        "detail": null,
+        "pass": true
+      },
+      "recomputed_198_provider_calls": {
+        "detail": null,
+        "pass": true
+      },
+      "recomputed_runner_implementation": {
+        "detail": null,
+        "pass": true
+      },
+      "result_ledger_count_unique": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:009ab9d5a598d055": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:045cdc73943ce021": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:05ed059d878e861b": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:0d4e4564a682b6cc": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:1bf67e4c8ac538de": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:1fa530b313c22108": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:2511fedaa1336ef8": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:2b04320ff1b05385": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:321e43a6b6669fc4": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:3803dfce5741302b": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:3ad7112fe3e702a6": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:3e00fd7e90182194": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:4ea579b3bdad7e3f": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:55d4a0132b36df9a": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:5a2d1e94f43b5b0d": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:61fafb8796b9e37c": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:678dbdc0d42c31bc": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:68bb5b1ab3bee6dd": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:691ff7cd8abd2e64": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:694e06cb359023b8": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:697dfa0c32cebb03": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:6e27c1a063021484": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:734f04ceb8a6438b": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:762021b28692c394": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:7769cb6d22bbe1c6": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:79d5a820c8a8a43e": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:7dbedcfd6259d963": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:819221ac24f8c1fa": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:8233417f81ed8ca7": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:842a1b78feee534c": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:85cd771319143a8e": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:87b26450b5ee06b1": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:8b18b2f8b98645da": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:8b3c3aa49d86315e": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:8d917bdc985e95ac": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:922e3dc9100fb14b": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:93217f5bf9ea0657": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:945341c134f59204": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:a172984f942bb36c": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:a7408394a3d80fda": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:b38667173c341747": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:b935c258b5934b9a": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:b950e62127e96e2b": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:bfd77825e612ece4": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:c10209b7d83f8294": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:c2af168e16c1d74f": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:d1d0136c7dc6c321": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:d2ff366eea550104": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:d3290c29c1013838": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:d3746f71b514e90d": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:d782b14da4382cf4": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:daa24583bbe3cde6": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:db2b3d46374dc61f": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:dc71097610aa8edd": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:e7fadfec5fcaea2e": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:ebc3531df923d29c": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:eeb0193d7013be28": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:f5ff0225fc3c519a": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:f64fd61970a8623d": {
+        "detail": null,
+        "pass": true
+      },
+      "result_recoverable:ffb02bc855270a55": {
+        "detail": null,
+        "pass": true
+      },
+      "result_uid_set": {
+        "detail": {
+          "actual": 60,
+          "expected": 60
+        },
+        "pass": true
+      },
+      "reviewed_commit": {
+        "detail": null,
+        "pass": true
+      },
+      "run_identity": {
+        "detail": null,
+        "pass": true
+      },
+      "sequential_call_commit_order": {
+        "detail": null,
+        "pass": true
+      },
+      "sequential_result_commit_order": {
+        "detail": null,
+        "pass": true
+      },
+      "six_gate_governance_divergences": {
+        "detail": null,
+        "pass": true
+      },
+      "sixty_unique_matrix_uids": {
+        "detail": null,
+        "pass": true
+      },
+      "summary_counts_match_reconstruction": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:009ab9d5a598d055": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:045cdc73943ce021": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:05ed059d878e861b": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:0d4e4564a682b6cc": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:1bf67e4c8ac538de": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:1fa530b313c22108": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:2511fedaa1336ef8": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:2b04320ff1b05385": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:321e43a6b6669fc4": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:3803dfce5741302b": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:3ad7112fe3e702a6": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:3e00fd7e90182194": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:4ea579b3bdad7e3f": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:55d4a0132b36df9a": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:5a2d1e94f43b5b0d": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:61fafb8796b9e37c": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:678dbdc0d42c31bc": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:68bb5b1ab3bee6dd": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:691ff7cd8abd2e64": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:694e06cb359023b8": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:697dfa0c32cebb03": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:6e27c1a063021484": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:734f04ceb8a6438b": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:762021b28692c394": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:7769cb6d22bbe1c6": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:79d5a820c8a8a43e": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:7dbedcfd6259d963": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:819221ac24f8c1fa": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:8233417f81ed8ca7": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:842a1b78feee534c": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:85cd771319143a8e": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:87b26450b5ee06b1": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:8b18b2f8b98645da": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:8b3c3aa49d86315e": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:8d917bdc985e95ac": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:922e3dc9100fb14b": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:93217f5bf9ea0657": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:945341c134f59204": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:a172984f942bb36c": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:a7408394a3d80fda": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:b38667173c341747": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:b935c258b5934b9a": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:b950e62127e96e2b": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:bfd77825e612ece4": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:c10209b7d83f8294": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:c2af168e16c1d74f": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:d1d0136c7dc6c321": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:d2ff366eea550104": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:d3290c29c1013838": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:d3746f71b514e90d": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:d782b14da4382cf4": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:daa24583bbe3cde6": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:db2b3d46374dc61f": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:dc71097610aa8edd": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:e7fadfec5fcaea2e": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:ebc3531df923d29c": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:eeb0193d7013be28": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:f5ff0225fc3c519a": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:f64fd61970a8623d": {
+        "detail": null,
+        "pass": true
+      },
+      "unit_contract:ffb02bc855270a55": {
+        "detail": null,
+        "pass": true
+      }
+    },
+    "counts": {
+      "provider_calls": 198,
+      "raw_responses": 198,
+      "result_commits": 60,
+      "units": 60
+    },
+    "failures": [],
+    "result": "PASS"
+  },
+  "model_calls_performed_by_analysis": 0,
+  "pair_integrity": [
+    {
+      "case_id": "cep-07",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "e7fadfec5fcaea2e",
+      "raw_arm": "R1",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "a172984f942bb36c",
+      "repetition": 1
+    },
+    {
+      "case_id": "cep-07",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": false,
+      "legible_uid": "1bf67e4c8ac538de",
+      "raw_arm": "R3",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": true,
+      "raw_uid": "d782b14da4382cf4",
+      "repetition": 1
+    },
+    {
+      "case_id": "cep-07",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "93217f5bf9ea0657",
+      "raw_arm": "R1",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": true,
+      "raw_uid": "d2ff366eea550104",
+      "repetition": 2
+    },
+    {
+      "case_id": "cep-07",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "b950e62127e96e2b",
+      "raw_arm": "R3",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": false,
+      "raw_uid": "691ff7cd8abd2e64",
+      "repetition": 2
+    },
+    {
+      "case_id": "df-11",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "d3290c29c1013838",
+      "raw_arm": "R1",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "762021b28692c394",
+      "repetition": 1
+    },
+    {
+      "case_id": "df-11",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "3ad7112fe3e702a6",
+      "raw_arm": "R3",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "819221ac24f8c1fa",
+      "repetition": 1
+    },
+    {
+      "case_id": "df-11",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "61fafb8796b9e37c",
+      "raw_arm": "R1",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "678dbdc0d42c31bc",
+      "repetition": 2
+    },
+    {
+      "case_id": "df-11",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "eeb0193d7013be28",
+      "raw_arm": "R3",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "2511fedaa1336ef8",
+      "repetition": 2
+    },
+    {
+      "case_id": "ag-04",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "8d917bdc985e95ac",
+      "raw_arm": "R1",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "4ea579b3bdad7e3f",
+      "repetition": 1
+    },
+    {
+      "case_id": "ag-04",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "c10209b7d83f8294",
+      "raw_arm": "R3",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "db2b3d46374dc61f",
+      "repetition": 1
+    },
+    {
+      "case_id": "ag-04",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "8233417f81ed8ca7",
+      "raw_arm": "R1",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "79d5a820c8a8a43e",
+      "repetition": 2
+    },
+    {
+      "case_id": "ag-04",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "05ed059d878e861b",
+      "raw_arm": "R3",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": false,
+      "raw_uid": "694e06cb359023b8",
+      "repetition": 2
+    },
+    {
+      "case_id": "sr-10",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "ebc3531df923d29c",
+      "raw_arm": "R1",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": true,
+      "raw_uid": "87b26450b5ee06b1",
+      "repetition": 1
+    },
+    {
+      "case_id": "sr-10",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "321e43a6b6669fc4",
+      "raw_arm": "R3",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": true,
+      "raw_uid": "daa24583bbe3cde6",
+      "repetition": 1
+    },
+    {
+      "case_id": "sr-10",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "7dbedcfd6259d963",
+      "raw_arm": "R1",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": true,
+      "raw_uid": "3e00fd7e90182194",
+      "repetition": 2
+    },
+    {
+      "case_id": "sr-10",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "68bb5b1ab3bee6dd",
+      "raw_arm": "R3",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": true,
+      "raw_uid": "045cdc73943ce021",
+      "repetition": 2
+    },
+    {
+      "case_id": "df-06",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "d3746f71b514e90d",
+      "raw_arm": "R1",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": false,
+      "raw_uid": "55d4a0132b36df9a",
+      "repetition": 1
+    },
+    {
+      "case_id": "df-06",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "945341c134f59204",
+      "raw_arm": "R3",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": false,
+      "raw_uid": "3803dfce5741302b",
+      "repetition": 1
+    },
+    {
+      "case_id": "df-06",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "a7408394a3d80fda",
+      "raw_arm": "R1",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": false,
+      "raw_uid": "ffb02bc855270a55",
+      "repetition": 2
+    },
+    {
+      "case_id": "df-06",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "2b04320ff1b05385",
+      "raw_arm": "R3",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": false,
+      "raw_uid": "5a2d1e94f43b5b0d",
+      "repetition": 2
+    },
+    {
+      "case_id": "cep-05",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "697dfa0c32cebb03",
+      "raw_arm": "R1",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "6e27c1a063021484",
+      "repetition": 1
+    },
+    {
+      "case_id": "cep-05",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "0d4e4564a682b6cc",
+      "raw_arm": "R3",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "f64fd61970a8623d",
+      "repetition": 1
+    },
+    {
+      "case_id": "cep-05",
+      "evidence_equal": true,
+      "legible_arm": "R2",
+      "legible_final_correct": false,
+      "legible_revision_to_correct": false,
+      "legible_uid": "c2af168e16c1d74f",
+      "raw_arm": "R1",
+      "raw_final_correct": false,
+      "raw_revision_to_correct": false,
+      "raw_uid": "b935c258b5934b9a",
+      "repetition": 2
+    },
+    {
+      "case_id": "cep-05",
+      "evidence_equal": true,
+      "legible_arm": "R4",
+      "legible_final_correct": true,
+      "legible_revision_to_correct": true,
+      "legible_uid": "b38667173c341747",
+      "raw_arm": "R3",
+      "raw_final_correct": true,
+      "raw_revision_to_correct": true,
+      "raw_uid": "bfd77825e612ece4",
+      "repetition": 2
+    }
+  ],
+  "pairwise": {
+    "R1/R2": {
+      "final_gate_blind_correct": {
+        "both_correct": 3,
+        "discordant_pairs": 2,
+        "legible_better": 0,
+        "neither_correct": 7,
+        "pairs": 12,
+        "raw_better": 2,
+        "same_outcome": 10
+      },
+      "revision_to_correct": {
+        "both_correct": 2,
+        "discordant_pairs": 2,
+        "legible_better": 1,
+        "neither_correct": 8,
+        "pairs": 12,
+        "raw_better": 1,
+        "same_outcome": 10
+      }
+    },
+    "R3/R4": {
+      "final_gate_blind_correct": {
+        "both_correct": 7,
+        "discordant_pairs": 2,
+        "legible_better": 1,
+        "neither_correct": 3,
+        "pairs": 12,
+        "raw_better": 1,
+        "same_outcome": 10
+      },
+      "revision_to_correct": {
+        "both_correct": 3,
+        "discordant_pairs": 5,
+        "legible_better": 4,
+        "neither_correct": 4,
+        "pairs": 12,
+        "raw_better": 1,
+        "same_outcome": 7
+      }
+    }
+  },
+  "provider_calls_performed_by_analysis": 0,
+  "r0_control": {
+    "eligible_denominator": 7,
+    "persistence_initial_unknown": 4,
+    "persistence_initial_wrong": 0,
+    "spontaneous_any_revision": 8,
+    "spontaneous_revision_to_correct": 1,
+    "unknown_denominator": 6,
+    "unknown_to_concrete": 2,
+    "wrong_concrete_denominator": 1,
+    "wrong_to_different_wrong": 0,
+    "wrong_to_unknown": 1
+  },
+  "schema": "pilot-adjudication-revision-002-v1",
+  "scope": "descriptive protocol pilot; not confirmatory",
+  "status": "ANALYSIS_READY",
+  "validity": [
+    {
+      "basis": "Round-1 proposed settlement, forced-final raw decision, final gate-blind claim, and evaluator truth are recoverable.",
+      "classification": "PASS",
+      "number": 1,
+      "question": "Primary endpoint without inference/imputation"
+    },
+    {
+      "basis": "Round 1 precedes first delivery; calls 2+ are post-delivery.",
+      "classification": "PASS",
+      "number": 2,
+      "question": "Pre/post claims distinguishable"
+    },
+    {
+      "basis": "Truth loaded only from sealed governed-keys; absent from call/result model-visible payloads.",
+      "classification": "PASS",
+      "number": 3,
+      "question": "Truth remains evaluator-side"
+    },
+    {
+      "basis": "Both are directly persisted in runner_contract.",
+      "classification": "PASS",
+      "number": 4,
+      "question": "Gate-blind/governed separable"
+    },
+    {
+      "basis": "Policy, membership/hashes, and arm rendering are persisted.",
+      "classification": "PASS",
+      "number": 5,
+      "question": "Evidence/rendering independently recoverable"
+    },
+    {
+      "basis": "All arm numerator/denominator UID sets are deterministic.",
+      "classification": "PASS",
+      "number": 6,
+      "question": "Four frozen requested contrasts reconstructable"
+    },
+    {
+      "basis": "Case/rep mapping and three evidence equalities recover all 24 pairs.",
+      "classification": "PASS",
+      "number": 7,
+      "question": "Representation pairings exact"
+    },
+    {
+      "basis": "Round-1 proposed settlement plus sealed truth determines eligibility.",
+      "classification": "PASS",
+      "number": 8,
+      "question": "Endpoint denominators deterministic"
+    },
+    {
+      "basis": "Forced-final decision is absent from rounds but recovered exactly from committed raw bytes; final claim also directly persisted.",
+      "classification": "PASS",
+      "number": 9,
+      "question": "No result depends on missing intermediate state"
+    },
+    {
+      "basis": "This script reads only local immutable artifacts and sealed evaluator files.",
+      "classification": "PASS",
+      "number": 10,
+      "question": "Reproducible without provider contact"
+    }
+  ]
+}
