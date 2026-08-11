@@ -275,3 +275,48 @@ def test_controller_makes_no_network_calls(monkeypatch):
     monkeypatch.setattr(urllib.request, "urlopen", boom)
     res = run(controller(StubClient([settle("unknown")])))
     assert res.terminal_state
+
+
+# ── R-16 replication readiness ───────────────────────────────────────────────
+
+def test_replication_validation_passes_end_to_end_with_zero_model_calls(tmp_path):
+    from ..v2 import replication
+    r = replication.validate(str(tmp_path))
+    assert r["model_calls_performed"] == 0
+    assert r["integrity_suite"]["all_passed"]
+    assert r["state_continuity"]["prompts_missing_required_state"] == 0
+    assert (r["state_continuity"]["prompts_retaining_initial_evidence"]
+            == r["state_continuity"]["prompts_checked"])
+    assert r["no_fall_through_terminal"]
+    assert r["contract_repair"]["payment_consumed"] == 0
+    assert r["contract_repair"]["final_locus"] is None
+    assert r["provenance"]["all_have_provider_resolved_model"]
+    assert r["status"] == "PREPARED — NOT STARTED"
+
+
+def test_replication_declares_r0_leakage_rather_than_hiding_it(tmp_path):
+    from ..v2 import replication
+    r = replication.validate(str(tmp_path))
+    bounds = r["per_arm_disclosure_bound"]
+    assert bounds["R0"]["answer_isolated"] is False
+    assert bounds["R1"]["answer_isolated"] is True
+    assert bounds["R3"]["answer_isolated"] is True
+    assert "R2" in r["subsumed_arms"]
+
+
+def test_observation_rendering_is_a_real_manipulation():
+    from ..v2.dstate import DiagnosticState
+
+    class _O:
+        handle, payload = "act-01", {"all_accessible": False, "mode": "600"}
+
+    base = dict(question="q", case_id="c", initial_evidence="e",
+                action_schema="s", locus_vocabulary=("unknown",), max_rounds=3,
+                max_payment=7)
+    raw = DiagnosticState(**base, observation_rendering="raw_json"
+                          ).with_observations([_O()], "harness", 1, ())
+    lab = DiagnosticState(**base, observation_rendering="labelled_structural"
+                          ).with_observations([_O()], "harness", 1, ())
+    assert '{"all_accessible": false' in raw.render()
+    assert "all_accessible = false" in lab.render()
+    assert raw.digest() != lab.digest()

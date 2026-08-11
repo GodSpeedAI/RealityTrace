@@ -87,6 +87,7 @@ class ConditionSpec:
     max_model_calls: int = 8
     max_repair_attempts: int = 2
     budget_semantics: str = "ENFORCED"
+    observation_rendering: str = "raw_json"
     forced_final_offered: bool = True
     response_fields: tuple[str, ...] = (
         "candidate_loci", "unresolved_distinction", "selected_action",
@@ -236,7 +237,8 @@ class DiagnosticController:
             action_schema=schema, locus_vocabulary=self.vocabulary,
             max_rounds=self.spec.max_rounds, max_payment=self.spec.max_payment,
             available_actions=catalogue.handles,
-            budget_semantics=self.spec.budget_semantics)
+            budget_semantics=self.spec.budget_semantics,
+            observation_rendering=self.spec.observation_rendering)
 
         res = UnitResult(unit_id=unit_id, case_id=case_id,
                          condition=self.spec.name, rep=rep,

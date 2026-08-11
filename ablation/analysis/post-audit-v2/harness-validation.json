@@ -1,0 +1,195 @@
+{
+  "arm_difference_report": {
+    "R0_vs_R1": {
+      "differences": {
+        "disclosure": {
+          "R0": "MASKED_K",
+          "R1": "FULL"
+        }
+      },
+      "isolates_single_variable": true,
+      "n_declared_differences": 1
+    },
+    "R0_vs_R3": {
+      "differences": {
+        "disclosure": {
+          "R0": "MASKED_K",
+          "R3": "FULL"
+        },
+        "observation_rendering": {
+          "R0": "raw_json",
+          "R3": "labelled_structural"
+        }
+      },
+      "isolates_single_variable": false,
+      "n_declared_differences": 2
+    },
+    "R1_vs_R3": {
+      "differences": {
+        "observation_rendering": {
+          "R1": "raw_json",
+          "R3": "labelled_structural"
+        }
+      },
+      "isolates_single_variable": true,
+      "n_declared_differences": 1
+    }
+  },
+  "arms": {
+    "R0": "R0",
+    "R1": "R1",
+    "R3": "R3"
+  },
+  "client": "deterministic stub; no network transport is imported here",
+  "contract_repair": {
+    "actions_executed": 0,
+    "attempts": 3,
+    "final_locus": null,
+    "payment_consumed": 0,
+    "terminal": "MODEL_OUTPUT_CONTRACT_FAILURE"
+  },
+  "experiment_id": "evidence-revision-001",
+  "instrument_version": "instrument-v2",
+  "integrity_suite": {
+    "all_passed": true,
+    "checks": [
+      {
+        "detail": "invariant under truth injection (4 decoy keys); 0 identical-observation group(s) consistent; 1 evidentially-licensed-but-false pairings exist",
+        "evidence": {
+          "decoy_keys_tested": [
+            "__true_locus__",
+            "true_locus",
+            "answer",
+            "locus"
+          ],
+          "examples": [
+            [
+              "c2",
+              "environment"
+            ]
+          ],
+          "identical_observation_groups": 0,
+          "n_licensed_but_false": 1
+        },
+        "name": "gate_negative_control",
+        "passed": true
+      },
+      {
+        "detail": "6 calls uniform",
+        "evidence": {
+          "endpoint": "injected-client",
+          "requested_max_tokens": "8192",
+          "resolved_model": "stub/deterministic",
+          "temperature": "0.0"
+        },
+        "name": "model_uniformity",
+        "passed": true
+      },
+      {
+        "detail": "1 pilot / 1 full ids disjoint",
+        "evidence": {},
+        "name": "pilot_full_separation",
+        "passed": true
+      },
+      {
+        "detail": "6 prompts clean; delivery carries 0 bits",
+        "evidence": {
+          "answer_isolated": true,
+          "bits_disclosed": 0.0,
+          "loci_consistent_with_delivery": 8,
+          "n_actions": 8,
+          "policy": "FULL"
+        },
+        "name": "oracle_isolation",
+        "passed": true
+      },
+      {
+        "detail": "3 verified content chains",
+        "evidence": {
+          "total": 3,
+          "unverifiable": 0,
+          "verified": 3
+        },
+        "name": "raw_before_score",
+        "passed": true
+      },
+      {
+        "detail": "explicit contract failure; no payment, no action, no fabricated terminal",
+        "evidence": {},
+        "name": "parse_failure_behaviour",
+        "passed": true
+      }
+    ],
+    "n_checks": 6,
+    "n_fail": 0,
+    "n_pass": 6
+  },
+  "model_calls_performed": 0,
+  "no_fall_through_terminal": true,
+  "per_arm_disclosure_bound": {
+    "R0": {
+      "answer_isolated": false,
+      "bits_disclosed": 1.415,
+      "loci_consistent_with_delivery": 3,
+      "n_actions": 8,
+      "policy": "MASKED_K"
+    },
+    "R1": {
+      "answer_isolated": true,
+      "bits_disclosed": 0.0,
+      "loci_consistent_with_delivery": 8,
+      "n_actions": 8,
+      "policy": "FULL"
+    },
+    "R3": {
+      "answer_isolated": true,
+      "bits_disclosed": 0.0,
+      "loci_consistent_with_delivery": 8,
+      "n_actions": 8,
+      "policy": "FULL"
+    }
+  },
+  "provenance": {
+    "all_have_provider_resolved_model": true,
+    "no_manufactured_zeros": true,
+    "records": 6
+  },
+  "state_continuity": {
+    "prompts_checked": 6,
+    "prompts_missing_required_state": 0,
+    "prompts_retaining_initial_evidence": 6
+  },
+  "statistical_plan": {
+    "interval": "Wilson score, 95%",
+    "mandatory_covariate": "per-arm output-truncation rate",
+    "multiple_comparisons": "report the family and the count; no threshold is set here \u2014 that is a preregistration act",
+    "p_value_floor": "never reported as 0; underflow reported as p < 1e-15",
+    "paired_test": "McNemar, exact binomial when b + c < 25",
+    "primary_unit": "case",
+    "repetition_handling": "repetitions aggregated within case before pairing; (case, rep) pairing reported alongside but never alone (audit A-05)"
+  },
+  "status": "PREPARED \u2014 NOT STARTED",
+  "subsumed_arms": {
+    "R2": "context-preserved: state continuity is now an invariant of every arm (see dstate.REQUIRED_ROUND_STATE and the negative test), so it cannot be a between-arm manipulation."
+  },
+  "sufficiency_contract": {
+    "extended_language_adopted": false,
+    "fingerprint": "9c210ed2cb6e48f5706524edbb84f692ab219d82825b8e0fe2acc52cc09976ed",
+    "version": "governed-sufficiency-v1-as-composable"
+  },
+  "supported_metrics": {
+    "A_select_conditional": "discriminating first action | an action was taken",
+    "gate_blind_accuracy": "correct claim, regardless of gate outcome",
+    "gated_accuracy": "correct AND gate-qualifying evidence held",
+    "invocation_rate": "units with >= 1 acquisition, reported separately",
+    "matched_evidence_use": "utilization on units where both arms held evidence",
+    "output_class_rates": "VALID_DECISION / OUTPUT_TRUNCATED / MODEL_OUTPUT_CONTRACT_FAILURE / PARSER_FAILURE, never collapsed into 'incorrect'",
+    "response_mode": "modal share and entropy, labelled POST-HOC",
+    "revision_rate": "P(final claim != round-1 claim | round-1 claim wrong). The endpoint the audit identified as the chain's most surprising unmeasured result (0/63 historically)."
+  },
+  "termination": {
+    "R0": "CONCRETE_SETTLEMENT",
+    "R1": "CONCRETE_SETTLEMENT",
+    "R3": "CONCRETE_SETTLEMENT"
+  }
+}

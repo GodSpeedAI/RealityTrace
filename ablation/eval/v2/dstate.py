@@ -87,6 +87,10 @@ class DiagnosticState:
     payment_used: int = 0
     governance_state: str = "INITIAL"
     budget_semantics: str = "ENFORCED"
+    #: "raw_json" reproduces the historical rendering (a truncated JSON dump);
+    #: "labelled_structural" names each field. This is a real manipulation of
+    #: observation legibility, not a cosmetic flag.
+    observation_rendering: str = "raw_json"
     notes: tuple[str, ...] = field(default_factory=tuple)
 
     # ── evolution ────────────────────────────────────────────────────────────
@@ -164,11 +168,8 @@ class DiagnosticState:
         parts += ["", "[acquired_observations]"]
         if self.acquired:
             for a in self.acquired:
-                blob = json.dumps(a.payload, sort_keys=True, default=str)
-                if len(blob) > OBSERVATION_RENDER_LIMIT:
-                    blob = (blob[:OBSERVATION_RENDER_LIMIT]
-                            + f"… [truncated at {OBSERVATION_RENDER_LIMIT} chars]")
-                parts.append(f"  - round {a.round_num} {a.handle}: {blob}")
+                parts.append(f"  - round {a.round_num} {a.handle}:")
+                parts.append(self._render_payload(a.payload))
         else:
             parts.append("  (none acquired)")
         parts += [
@@ -187,6 +188,21 @@ class DiagnosticState:
             "=== END DIAGNOSTIC STATE ===",
         ]
         return "\n".join(parts)
+
+    def _render_payload(self, payload: dict) -> str:
+        if self.observation_rendering == "labelled_structural":
+            lines = []
+            for k in sorted(payload):
+                v = json.dumps(payload[k], sort_keys=True, default=str)
+                if len(v) > OBSERVATION_RENDER_LIMIT:
+                    v = v[:OBSERVATION_RENDER_LIMIT] + "… [truncated]"
+                lines.append(f"      {k} = {v}")
+            return "\n".join(lines) or "      (no fields reported)"
+        blob = json.dumps(payload, sort_keys=True, default=str)
+        if len(blob) > OBSERVATION_RENDER_LIMIT:
+            blob = (blob[:OBSERVATION_RENDER_LIMIT]
+                    + f"… [truncated at {OBSERVATION_RENDER_LIMIT} chars]")
+        return f"      {blob}"
 
     def digest(self) -> str:
         return hashlib.sha256(self.render().encode()).hexdigest()
