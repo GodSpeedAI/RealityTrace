@@ -223,42 +223,16 @@ def test_stage_other_than_full_is_refused_before_loading(tmp_path):
         runner._cmd_run(args, client_factory=FakeClient)
 
 
-def test_final_authorized_fake_traversal_visits_exact_430_without_transport(tmp_path):
+def test_frozen_unit_plan_is_exact_430_unique_successor_uids(tmp_path):
     _, _, _, request = fixture(tmp_path)
-    client = FakeClient()
-    visited = []
-    def execute(run_dir: Path, case_id: str, arm: str, rep: int):
-        assert run_dir.exists()
-        visited.append((case_id, arm, rep))
-        return unit_id(science.EXPERIMENT_ID, request.matrix.namespace,
-                       case_id, arm, rep, request.matrix.executable_fingerprint)
-    summary = runner.run_authorized_full(
-        request, lambda: client, authorized_unit_executor=execute)
-    assert len(visited) == len(set(visited)) == 430
-    assert summary["units_planned"] == summary["units_completed_or_resumed"] == 430
-    assert summary["provider_calls_performed"] == 0
-    assert summary["model_calls_performed"] == 0
-    assert client.complete_calls == 0
+    plan = runner.frozen_unit_plan(request.matrix)
+    assert len(plan) == 430
+    assert len({row[0] for row in plan}) == 430
+    assert tuple(row[0] for row in plan) == request.matrix.unit_ids
+    assert not (request.run_root / request.run_id).exists()
 
 
-def test_runtime_drift_is_refused_before_fake_unit(tmp_path, monkeypatch):
-    _, _, _, request = fixture(tmp_path)
-    original = runner._runtime_input_hashes
-    calls = 0
-    def drifting():
-        nonlocal calls
-        calls += 1
-        doc = original()
-        if calls > 1:
-            doc = dict(doc, synthetic="drift")
-        return doc
-    monkeypatch.setattr(runner, "_runtime_input_hashes", drifting)
-    reached = False
-    def execute(*args):
-        nonlocal reached
-        reached = True
-        return "never"
-    with pytest.raises(ExecutionRefused, match="runtime inputs changed"):
-        runner.run_authorized_full(
-            request, FakeClient, authorized_unit_executor=execute)
-    assert reached is False
+def test_authorized_runner_has_no_injected_execution_bypass():
+    import inspect
+    assert "authorized_unit_executor" not in inspect.signature(
+        runner.run_authorized_full).parameters

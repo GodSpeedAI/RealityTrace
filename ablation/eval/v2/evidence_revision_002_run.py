@@ -51,6 +51,13 @@ RUNTIME_INPUT_PATHS = tuple(REUSED_ARTIFACTS.values()) + (
 )
 OWNER_AUTHORIZATION_ENV = "SXR_ER002_OWNER_AUTHORIZATION"
 OWNER_AUTHORIZATION_SCHEMA = "evidence-revision-002-full-authorization-v1"
+RELEASE_MARKER_FIELDS = frozenset({
+    "experiment_id", "stage", "design_fingerprint",
+    "executable_contract_fingerprint", "full_matrix_sha256",
+    "case_inputs_sha256", "runner_implementation_sha256",
+    "predecessor_pilot_compatibility_sha256", "owner_state_digest",
+    "reviewed_runner_commit", "release_token_sha256",
+})
 OWNER_AUTHORIZATION_FIELDS = frozenset({
     "schema", "experiment_id", "status", "execution_authorized",
     "additional_provider_calls_authorized", "authorized_stage",
@@ -222,9 +229,19 @@ class ExecutionGate:
         else:
             try:
                 marker_bytes = req.release_marker.read_bytes()
-                marker = json.loads(marker_bytes)
+                def reject_marker_duplicates(pairs):
+                    doc = {}
+                    for key, value in pairs:
+                        if key in doc:
+                            raise ValueError(f"duplicate release marker key: {key}")
+                        doc[key] = value
+                    return doc
+                marker = json.loads(
+                    marker_bytes, object_pairs_hook=reject_marker_duplicates)
+                if not isinstance(marker, dict) or set(marker) != RELEASE_MARKER_FIELDS:
+                    raise ValueError("release marker does not match canonical schema")
                 marker_sha256 = hashlib.sha256(marker_bytes).hexdigest()
-            except (OSError, UnicodeError, json.JSONDecodeError):
+            except (OSError, UnicodeError, json.JSONDecodeError, ValueError):
                 failures.append("successor FULL release marker unreadable")
         if marker is not None:
             marker_expected = {
@@ -392,10 +409,17 @@ def _commit_result(run_dir: Path, result: UnitResult,
     return ledger.commit_raw(result.unit_id, str(result_path), payload).raw_hash or ""
 
 
-def run_authorized_full(
-        req: GateRequest, client_factory: Callable[[], ModelClient],
-        *, authorized_unit_executor: Callable[[Path, str, str, int], str] | None = None
-) -> dict:
+def frozen_unit_plan(matrix: FrozenFullMatrix) -> tuple[tuple[str, str, str, int], ...]:
+    """Return the exact canonical sequential FULL traversal without executing it."""
+    return tuple(
+        (unit_id(EXPERIMENT_ID, matrix.namespace, case_id, arm, rep,
+                 matrix.executable_fingerprint), case_id, arm, rep)
+        for case_id in matrix.cases for arm in matrix.arms
+        for rep in range(1, matrix.repetitions + 1))
+
+
+def run_authorized_full(req: GateRequest,
+                        client_factory: Callable[[], ModelClient]) -> dict:
     """Execute only after static authority, then client validation, then namespace creation.
 
     No caller in the frozen successor owner state can pass the first line.
@@ -495,25 +519,20 @@ def run_authorized_full(
         _atomic_json(manifest_path, identity)
     checkpoint = CheckpointStore(run_dir / "checkpoint.json")
     completed = resumed = 0
-    for case_id in req.matrix.cases:
-        for arm in req.matrix.arms:
-            for rep in range(1, req.matrix.repetitions + 1):
-                uid = unit_id(EXPERIMENT_ID, req.matrix.namespace, case_id, arm,
-                              rep, req.matrix.executable_fingerprint)
-                if _runtime_input_hashes() != static["runtime_input_hashes"]:
-                    raise ExecutionRefused("runtime inputs changed after authorization")
-                before = checkpoint.status(uid)
-                if authorized_unit_executor is None:
-                    result, _ = run_one(run_dir, case_id, arm, rep)
-                    observed_uid = result.unit_id
-                else:
-                    observed_uid = authorized_unit_executor(
-                        run_dir, case_id, arm, rep)
-                if observed_uid != uid:
-                    raise ResumeViolation("successor loop UID differs from matrix")
-                completed += 1
-                resumed += int(before in ("RESULT_COMMITTED", "SCORED"))
-                _atomic_json(run_dir / "execution-summary.json", {
+    for uid, case_id, arm, rep in frozen_unit_plan(req.matrix):
+        if _runtime_input_hashes() != static["runtime_input_hashes"]:
+            raise ExecutionRefused("runtime inputs changed after authorization")
+        before = checkpoint.status(uid)
+        result, _ = run_one(run_dir, case_id, arm, rep)
+        if result.unit_id != uid:
+            raise ResumeViolation("successor loop UID differs from matrix")
+        # Completion follows _commit_result and RESULT_COMMITTED transition in
+        # run_one; no injected executor may manufacture successful traversal.
+        if checkpoint.status(uid) not in ("RESULT_COMMITTED", "SCORED"):
+            raise ResumeViolation("successor unit lacks durable committed result")
+        completed += 1
+        resumed += int(before in ("RESULT_COMMITTED", "SCORED"))
+        _atomic_json(run_dir / "execution-summary.json", {
                     "schema": "evidence-revision-002-execution-summary-v1",
                     "experiment_id": EXPERIMENT_ID, "stage": "full",
                     "run_id": req.run_id,
