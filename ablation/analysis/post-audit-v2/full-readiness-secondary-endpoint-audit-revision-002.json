@@ -1,0 +1,274 @@
+{
+  "classification": "FULL_BLOCKED_SECONDARY_SPEC",
+  "completed_pilot_remains_valid": true,
+  "completed_pilot_validity_reason": "Run integrity, canonical primary reconstruction, and execution measurement are unaffected; this audit changes no bytes or interpretation based on outcomes. The limitation concerns prospective FULL secondary coverage.",
+  "design_fingerprint_must_change_to_unblock": true,
+  "exact_next_owner_action": "Withhold FULL. Explicitly choose O1, O2, O3, or O4. No existing-semantics clarification is available for matched_evidence_use. If preserving the valid pilot and avoiding new provider calls is the priority, authorize a new revision under O1 or O3, freeze all missing semantics/status prospectively without consulting pilot outcomes, update identities/bindings, independently review them, and only then separately adjudicate FULL authorization.",
+  "executable_fingerprint_must_change_to_unblock": true,
+  "experimental_units_run": 0,
+  "full_authorized": false,
+  "full_executed": false,
+  "identity_reason": "Any endpoint definition/status change is a frozen scientific-contract change requiring a new experiment ID; secondary declarations feed executable identity, and the bound runner includes replication.py and validity_revision.py, whose bindings must be updated.",
+  "input_completed_run_manifest_before": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+  "matched_evidence_use": {
+    "carry_forward_status": "The name and one-line phrase were carried forward, but not the executable rule.",
+    "disposition": "MATCHED_EVIDENCE_USE_UNDERSPECIFIED",
+    "historical_rule": "Historical O/G A_use used same case\u00d7rep feasible-determinate pairs where both arms possessed evaluator-discriminating evidence, then scored exact_correct per arm. Historical result: n=19, G=14/19, O=14/19.",
+    "missing_required_observation": "No direct utilization/citation/attribution indicator is elicited or persisted. More importantly, no pre-pilot frozen declaration chooses one proxy from multiple measurable candidates.",
+    "persisted_inputs": "The current immutable pilot plus evaluator-side corpus artifacts contain enough ingredients to compute several candidate historical-style proxies: case, repetition, arm, acquired probe IDs, final gate-blind claim, governed settlement, true locus, and evaluator-discriminating probe sets.",
+    "pilot_endpoint_recomputed": false,
+    "reason_not_recomputed": "No frozen endpoint value exists to recompute without choosing post-pilot semantics. Candidate arm results were not used to decide this disposition.",
+    "unbound_choices": [
+      "which new R-arm pair or pairs",
+      "which evidence construct: evaluator-discriminating, gate-qualifying, hypothesis-bearing, or any held evidence",
+      "whether use is gated exact_correct, final gate-blind correctness, citation, transition, or another behavior",
+      "population and exclusions",
+      "case versus case\u00d7rep reporting and repetition aggregation",
+      "missing-pair handling"
+    ]
+  },
+  "model_calls_performed": 0,
+  "owner_options": [
+    {
+      "analysis_only_clarification": false,
+      "executable_instrumentation_change": false,
+      "id": "O1_DERIVED_PROXY_NEW_REVISION",
+      "meaning": "Prospectively define a complete derived utilization proxy using fields already persisted (including arm pairs, evaluator construct, gate-blind/governed target, population, repetition rule, and missing-pair handling). This is creation of new post-pilot semantics, not clarification of an existing frozen rule.",
+      "new_design_fingerprint": true,
+      "new_executable_fingerprint": true,
+      "new_revision_id": true,
+      "new_runner_implementation_hash": true,
+      "owner_reauthorization": true,
+      "pilot_rerun": false,
+      "pilot_rerun_reason": "No provider rerun is required if owner prospectively freezes the rule without consulting pilot outcomes and explicitly accepts the existing immutable pilot only as execution/instrument validation; the candidate can be recomputed from persisted fields.",
+      "scientific_contract_revision": true
+    },
+    {
+      "analysis_only_clarification": false,
+      "executable_instrumentation_change": true,
+      "id": "O2_DIRECT_USE_MEASUREMENT_NEW_REVISION",
+      "meaning": "Add a prospectively defined direct utilization/citation/attribution observation and scorer. This changes what is elicited or persisted.",
+      "new_design_fingerprint": true,
+      "new_executable_fingerprint": true,
+      "new_revision_id": true,
+      "new_runner_implementation_hash": true,
+      "owner_reauthorization": true,
+      "pilot_rerun": true,
+      "pilot_rerun_reason": "The new observation path and scorer must be piloted before FULL.",
+      "scientific_contract_revision": true
+    },
+    {
+      "analysis_only_clarification": false,
+      "executable_instrumentation_change": false,
+      "id": "O3_REMOVE_OR_DECLARE_UNAVAILABLE_NEW_REVISION",
+      "meaning": "Prospectively remove matched_evidence_use from evaluated FULL endpoints or explicitly freeze it as unavailable/descriptive with no utilization claim. This changes the frozen endpoint set/status; the current contract does not already permit this endpoint to be unavailable.",
+      "new_design_fingerprint": true,
+      "new_executable_fingerprint": true,
+      "new_revision_id": true,
+      "new_runner_implementation_hash": true,
+      "owner_reauthorization": true,
+      "pilot_rerun": false,
+      "pilot_rerun_reason": "No measurement behavior changes; owner may explicitly accept the predecessor pilot as instrument validation, while no matched-use estimate is claimed.",
+      "scientific_contract_revision": true
+    },
+    {
+      "analysis_only_clarification": false,
+      "executable_instrumentation_change": false,
+      "id": "O4_DEFER_OR_STOP_FULL",
+      "meaning": "Keep the frozen contract unchanged and do not run FULL.",
+      "new_design_fingerprint": false,
+      "new_executable_fingerprint": false,
+      "new_revision_id": false,
+      "new_runner_implementation_hash": false,
+      "owner_reauthorization": false,
+      "pilot_rerun": false,
+      "pilot_rerun_reason": "No new experiment proceeds.",
+      "scientific_contract_revision": false
+    }
+  ],
+  "pilot_data_consulted_in_choosing_semantics": false,
+  "pilot_must_be_rerun_now": false,
+  "pilot_rerun_reason": "Do not rerun the valid completed pilot merely to resolve prose. A later owner-selected direct-instrumentation revision would require a new pilot; derived-proxy or unavailable-endpoint revisions can reuse the immutable pilot as instrument validation only with explicit owner acceptance.",
+  "pre_pilot_boundary": {
+    "first_pilot_outcome_analysis_commit": "a7811dd3d045a281fb0724b73a245c690b287be9",
+    "frozen_contract_commit": "5182a61942c7d90f8a081bb3835bfdfe6530cebe",
+    "implementation_bound_release_commit": "bb1102948b6f2a162e8f55ae8693ab99a8fb3976",
+    "pilot_authorization_commit": "86f77ad6a7a293de215f9fb7059af67fe3e22366",
+    "pilot_run_started_utc": "2026-08-11T22:17:24Z"
+  },
+  "provider_calls_performed": 0,
+  "readiness_basis": {
+    "frozen_contract_allows_matched_evidence_use_unavailable": false,
+    "frozen_contract_allows_response_mode_descriptive": true,
+    "full_gate_currently_authorized": false,
+    "full_matrix_currently_frozen": false,
+    "reason": "The requested readiness criterion blocks FULL when a frozen endpoint requires semantic invention or an absent observation. matched_evidence_use does; no pre-pilot source affirmatively declares it optional/unavailable.",
+    "source": "ablation/eval/v2/evidence_revision.py::SECONDARY_ENDPOINTS[\"response_mode\"] says POST-HOC, not a test"
+  },
+  "revision_rate": {
+    "denominator_rule": "round-1 proposed_settlement is non-null AND differs from evaluator true_locus; null/no settlement and unresolved_distinction metadata are excluded; explicit \"unknown\" is included when it differs from truth",
+    "disposition": "REVISION_RATE_DETERMINISTIC_WITHOUT_NEW_SEMANTICS",
+    "numerator_rule": "among denominator units, final gate-blind last_model_claim differs from the round-1 proposed_settlement",
+    "pilot_offline_proof_by_arm": {
+      "R0": {
+        "denominator": 1,
+        "numerator": 1,
+        "uids": [
+          "1fa530b313c22108"
+        ]
+      },
+      "R1": {
+        "denominator": 1,
+        "numerator": 1,
+        "uids": [
+          "762021b28692c394"
+        ]
+      },
+      "R2": {
+        "denominator": 1,
+        "numerator": 1,
+        "uids": [
+          "61fafb8796b9e37c"
+        ]
+      },
+      "R3": {
+        "denominator": 1,
+        "numerator": 0,
+        "uids": [
+          "819221ac24f8c1fa"
+        ]
+      },
+      "R4": {
+        "denominator": 1,
+        "numerator": 0,
+        "uids": [
+          "eeb0193d7013be28"
+        ]
+      }
+    },
+    "proof": "The endpoint prose composes with the frozen typed decision/runtime contract. ControllerDecision.is_settlement is proposed_settlement is not None; unknown is in VOCAB and is explicitly offered as a settlement; unresolved_distinction is separate metadata; correctness is equality to truth. No scientific choice remains.",
+    "unknown_is_wrong_claim": "YES when the evaluator truth is not unknown; explicit unknown is a typed claim and fails equality with concrete truth"
+  },
+  "runner_implementation_identity_must_change_to_unblock": true,
+  "schema": "full-readiness-secondary-endpoint-audit-revision-002-v1",
+  "scope": "offline pre-FULL source/provenance audit; no authorization",
+  "source_basis": [
+    {
+      "commit": "5182a61942c7d90f8a081bb3835bfdfe6530cebe",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/evidence_revision.py",
+      "predates_pilot": true,
+      "rule": "P(final claim != round-1 claim | round-1 claim wrong)",
+      "symbol": "SECONDARY_ENDPOINTS[\"revision_rate\"]"
+    },
+    {
+      "commit": "7d8da3d",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/decision.py",
+      "predates_pilot": true,
+      "rule": "proposed_settlement is str|None; a claim/settlement exists iff value is not None; non-null values must be in the frozen vocabulary",
+      "symbol": "ControllerDecision.proposed_settlement / is_settlement / _validate"
+    },
+    {
+      "commit": "bfbc753",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/replication.py",
+      "predates_pilot": true,
+      "rule": "the literal string \"unknown\" is in the settlement vocabulary",
+      "symbol": "VOCAB"
+    },
+    {
+      "commit": "7d8da3d",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/controller.py",
+      "predates_pilot": true,
+      "rule": "unknown is an explicit settlement; null accompanies an action/no settlement; only non-null settlements update last_model_claim",
+      "symbol": "INSTRUCTION / FORCED_FINAL_INSTRUCTION / DiagnosticController.run"
+    },
+    {
+      "commit": "0d16606768ee78fbaae01356948256c24cd8ff39",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/dstate.py",
+      "predates_pilot": true,
+      "rule": "unresolved text is state metadata separate from proposed_settlement/current_claim",
+      "symbol": "DiagnosticState.current_claim / unresolved_distinctions / with_decision"
+    },
+    {
+      "commit": "5182a61942c7d90f8a081bb3835bfdfe6530cebe",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/evidence_revision.py",
+      "predates_pilot": true,
+      "rule": "population is determinate; correctness requires the claim to name the concrete true locus",
+      "symbol": "PRIMARY_POPULATION / PRIMARY_ENDPOINT"
+    },
+    {
+      "commit": "8fd347d",
+      "frozen_design_or_executable": false,
+      "new_judgment": false,
+      "path": "ablation/eval/governed_scorer.py (historical at commit 8fd347d)",
+      "predates_pilot": true,
+      "rule": "historical A_use was exact correctness conditional on possession of evaluator-discriminating evidence",
+      "symbol": "score_unit: A_use / has_discrim_evidence / correct_use"
+    },
+    {
+      "commit": "8fd347d",
+      "frozen_design_or_executable": false,
+      "new_judgment": false,
+      "path": "ablation/eval/governed_analyze.py (historical at commit 8fd347d)",
+      "predates_pilot": true,
+      "rule": "same case\u00d7rep O/G pairs, feasible determinate, both surviving the has-discriminating-evidence filter; exact_correct scored per arm",
+      "symbol": "analyze: use_filter / paired_analysis O vs G"
+    },
+    {
+      "commit": "4c82ab48a4c4d01321df2da210400dc2295b90cc",
+      "frozen_design_or_executable": false,
+      "new_judgment": false,
+      "path": "ablation/eval/rescore/historical.py",
+      "predates_pilot": true,
+      "rule": "corrective rescore keys case\u00d7rep, requires G and O both have evaluator-discriminating evidence, then scores exact_correct",
+      "symbol": "rescore_governed / matched_evidence_use_O_vs_G"
+    },
+    {
+      "commit": "4c82ab48a4c4d01321df2da210400dc2295b90cc",
+      "frozen_design_or_executable": false,
+      "new_judgment": false,
+      "path": "ablation/analysis/post-audit-v2/governed.json",
+      "predates_pilot": true,
+      "rule": "historical proof: 19 matched pairs; G=14/19 and O=14/19 (73.7% each)",
+      "symbol": "matched_evidence_use_O_vs_G"
+    },
+    {
+      "commit": "0d16606768ee78fbaae01356948256c24cd8ff39",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/semantics.py",
+      "predates_pilot": true,
+      "rule": "historical A_use construct is EVALUATOR_DISCRIMINATING_ACTION, distinct from gate-qualifying and hypothesis-bearing evidence",
+      "symbol": "METRIC_CONSTRUCT[\"A_use_evaluator_evidence\"]"
+    },
+    {
+      "commit": "bfbc753ffaff85d2c32bec0ca6f1a2125135bde7",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/replication.py",
+      "predates_pilot": true,
+      "rule": "says matched-pair form replaces historical A_use, but freezes only \u201cutilization on units where both arms held evidence\u201d",
+      "symbol": "SUPPORTED_METRICS[\"matched_evidence_use\"]"
+    },
+    {
+      "commit": "5182a61942c7d90f8a081bb3835bfdfe6530cebe",
+      "frozen_design_or_executable": true,
+      "new_judgment": false,
+      "path": "ablation/eval/v2/evidence_revision.py",
+      "predates_pilot": true,
+      "rule": "utilisation on units where both arms held evidence; no arm pair, evidence construct, correctness target, population, repetition aggregation, or missing-pair rule",
+      "symbol": "SECONDARY_ENDPOINTS[\"matched_evidence_use\"]"
+    }
+  ]
+}
