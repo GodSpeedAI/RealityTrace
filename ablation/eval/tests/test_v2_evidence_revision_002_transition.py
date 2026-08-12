@@ -236,3 +236,44 @@ def test_authorized_runner_has_no_injected_execution_bypass():
     import inspect
     assert "authorized_unit_executor" not in inspect.signature(
         runner.run_authorized_full).parameters
+
+
+def test_production_loop_fake_traverses_all_430_with_durable_commits(
+        tmp_path, monkeypatch):
+    from eval.v2.controller import UnitResult
+    _, _, _, request = fixture(tmp_path)
+    client = FakeClient()
+    visited = []
+
+    class FakeController:
+        def __init__(self, spec, *args, **kwargs):
+            self.arm = next(name for name, value in science.ARMS.items()
+                            if value is spec)
+            self.replay = args[5]
+        def run_unit(self, uid, experiment_id, namespace, case_id, rep,
+                     *args, **kwargs):
+            binding = runner._unit_binding(request.matrix, case_id, self.arm, rep)
+            self.replay.checkpoint.transition(
+                uid, "CALLING", unit_binding=binding)
+            self.replay.checkpoint.transition(
+                uid, "RAW_COMMITTED", unit_binding=binding)
+            visited.append(uid)
+            return UnitResult(
+                uid, case_id, self.arm, rep, "CONCRETE_SETTLEMENT",
+                "unknown", "unknown", False)
+
+    def fake_commit(run_dir, result, call_ledger, matrix):
+        path = run_dir / "results" / f"{result.unit_id}.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(result.to_dict(), sort_keys=True))
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    monkeypatch.setattr(runner, "DiagnosticController", FakeController)
+    monkeypatch.setattr(runner, "_commit_result", fake_commit)
+    summary = runner.run_authorized_full(request, lambda: client)
+    assert tuple(visited) == request.matrix.unit_ids
+    assert len(set(visited)) == 430
+    assert summary["units_completed_or_resumed"] == 430
+    assert summary["provider_calls_performed"] == 0
+    assert summary["model_calls_performed"] == 0
+    assert client.complete_calls == 0
