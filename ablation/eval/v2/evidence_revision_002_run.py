@@ -6,9 +6,11 @@ accepted as successor FULL authority.
 """
 from __future__ import annotations
 
+import argparse
 import dataclasses
 import hashlib
 import json
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -47,6 +49,43 @@ RUNTIME_INPUT_PATHS = tuple(REUSED_ARTIFACTS.values()) + (
     ROOT / "ablation/corpus/governed-keys.json",
     ROOT / "ablation/corpus/governed-sufficiency-contract.json",
 )
+OWNER_AUTHORIZATION_ENV = "SXR_ER002_OWNER_AUTHORIZATION"
+OWNER_AUTHORIZATION_SCHEMA = "evidence-revision-002-full-authorization-v1"
+OWNER_AUTHORIZATION_FIELDS = frozenset({
+    "schema", "experiment_id", "status", "execution_authorized",
+    "additional_provider_calls_authorized", "authorized_stage",
+    "full_execution_authorized", "authorized_design_fingerprint",
+    "authorized_executable_fingerprint", "authorized_case_inputs_sha256",
+    "authorized_full_matrix_sha256", "authorized_runner_implementation_sha256",
+    "authorized_predecessor_pilot_compatibility_sha256",
+    "authorized_predecessor_pilot_manifest_sha256",
+    "authorized_reviewed_runner_commit", "power_issue",
+    "full_authorization_notwithstanding_unresolved_power",
+    "original_10pp_threshold_preserved", "predecessor_pilot_disposition",
+    "release_token_issued", "release_marker_issued",
+})
+
+
+def load_owner_authorization(path: Path) -> dict:
+    """Load owner-created governance state without modifying frozen science."""
+    def reject_duplicates(pairs):
+        doc = {}
+        for key, value in pairs:
+            if key in doc:
+                raise ValueError(f"duplicate owner authorization key: {key}")
+            doc[key] = value
+        return doc
+    try:
+        doc = json.loads(path.read_text(), object_pairs_hook=reject_duplicates)
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+        raise ExecutionRefused(
+            f"owner authorization unreadable: {type(exc).__name__}") from exc
+    if not isinstance(doc, dict) or set(doc) != OWNER_AUTHORIZATION_FIELDS:
+        raise ExecutionRefused("owner authorization does not match canonical schema")
+    if (doc.get("schema") != OWNER_AUTHORIZATION_SCHEMA or
+            doc.get("experiment_id") != EXPERIMENT_ID):
+        raise ExecutionRefused("owner authorization is not successor FULL authority")
+    return doc
 
 
 def _runtime_input_hashes() -> dict:
@@ -133,9 +172,13 @@ class ExecutionGate:
                 (EXECUTABLE_CONTRACT_PATH, executable),
                 (COMPATIBILITY_PATH, compatibility),
                 (MATRIX_PATH, frozen_matrix_doc)):
-            if not path.is_file() or json.loads(path.read_text()) != expected_doc:
+            normalized_expected = json.loads(json.dumps(expected_doc, default=str))
+            if (not path.is_file() or
+                    json.loads(path.read_text()) != normalized_expected):
                 failures.append(f"published frozen artifact drift: {path.name}")
         expected = {
+            "schema": OWNER_AUTHORIZATION_SCHEMA,
+            "experiment_id": EXPERIMENT_ID,
             "status": "FULL_AUTHORIZED", "execution_authorized": True,
             "additional_provider_calls_authorized": True,
             "authorized_stage": "full", "full_execution_authorized": True,
@@ -149,6 +192,11 @@ class ExecutionGate:
                 "compatibility_sha256"],
             "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
             "full_authorization_notwithstanding_unresolved_power": True,
+            "original_10pp_threshold_preserved": True,
+            "release_token_issued": True,
+            "release_marker_issued": True,
+            "predecessor_pilot_disposition":
+                "VALID_PREDECESSOR_INSTRUMENT_VALIDATION",
         }
         for key, value in expected.items():
             if owner.get(key) != value:
@@ -168,12 +216,15 @@ class ExecutionGate:
         if not req.release_token:
             failures.append("successor FULL release token missing")
         marker = None
+        marker_sha256 = None
         if req.release_marker is None or not req.release_marker.is_file():
             failures.append("successor FULL release marker missing")
         else:
             try:
-                marker = json.loads(req.release_marker.read_text())
-            except (OSError, json.JSONDecodeError):
+                marker_bytes = req.release_marker.read_bytes()
+                marker = json.loads(marker_bytes)
+                marker_sha256 = hashlib.sha256(marker_bytes).hexdigest()
+            except (OSError, UnicodeError, json.JSONDecodeError):
                 failures.append("successor FULL release marker unreadable")
         if marker is not None:
             marker_expected = {
@@ -212,6 +263,9 @@ class ExecutionGate:
                 "matrix_sha256": req.matrix.matrix_sha256,
                 "binding": binding, "owner_state_digest": owner_state_digest,
                 "reviewed_runner_commit": reviewed_commit,
+                "release_marker_sha256": marker_sha256,
+                "release_token_sha256": hashlib.sha256(
+                    req.release_token.encode()).hexdigest(),
                 "runtime_input_hashes": runtime_input_hashes}
 
     @staticmethod
@@ -338,8 +392,10 @@ def _commit_result(run_dir: Path, result: UnitResult,
     return ledger.commit_raw(result.unit_id, str(result_path), payload).raw_hash or ""
 
 
-def run_authorized_full(req: GateRequest,
-                        client_factory: Callable[[], ModelClient]) -> dict:
+def run_authorized_full(
+        req: GateRequest, client_factory: Callable[[], ModelClient],
+        *, authorized_unit_executor: Callable[[Path, str, str, int], str] | None = None
+) -> dict:
     """Execute only after static authority, then client validation, then namespace creation.
 
     No caller in the frozen successor owner state can pass the first line.
@@ -417,8 +473,8 @@ def run_authorized_full(req: GateRequest,
             executable["owner_state"]["predecessor_pilot_manifest_sha256"]),
         "owner_state_digest": _sha256(_canonical(dict(req.owner_state))),
         "reviewed_runner_commit": req.owner_state["authorized_reviewed_runner_commit"],
-        "release_marker_sha256": _file_hash(req.release_marker),
-        "release_token_sha256": hashlib.sha256(req.release_token.encode()).hexdigest(),
+        "release_marker_sha256": static["release_marker_sha256"],
+        "release_token_sha256": static["release_token_sha256"],
         "runtime_input_hashes": static["runtime_input_hashes"],
     }
     run_dir = req.run_root / req.run_id
@@ -444,9 +500,16 @@ def run_authorized_full(req: GateRequest,
             for rep in range(1, req.matrix.repetitions + 1):
                 uid = unit_id(EXPERIMENT_ID, req.matrix.namespace, case_id, arm,
                               rep, req.matrix.executable_fingerprint)
+                if _runtime_input_hashes() != static["runtime_input_hashes"]:
+                    raise ExecutionRefused("runtime inputs changed after authorization")
                 before = checkpoint.status(uid)
-                result, _ = run_one(run_dir, case_id, arm, rep)
-                if result.unit_id != uid:
+                if authorized_unit_executor is None:
+                    result, _ = run_one(run_dir, case_id, arm, rep)
+                    observed_uid = result.unit_id
+                else:
+                    observed_uid = authorized_unit_executor(
+                        run_dir, case_id, arm, rep)
+                if observed_uid != uid:
                     raise ResumeViolation("successor loop UID differs from matrix")
                 completed += 1
                 resumed += int(before in ("RESULT_COMMITTED", "SCORED"))
@@ -463,3 +526,52 @@ def run_authorized_full(req: GateRequest,
                     "model_calls_performed": CommitLedger(
                         str(run_dir / "call-commits.jsonl")).provenance_summary()["verified"]})
     return json.loads((run_dir / "execution-summary.json").read_text())
+
+def _owner_authorization_path(cli_value: Path | None) -> Path:
+    if cli_value is not None:
+        return cli_value
+    env_value = os.getenv(OWNER_AUTHORIZATION_ENV)
+    if not env_value:
+        raise ExecutionRefused(
+            "owner authorization required via --owner-authorization or "
+            + OWNER_AUTHORIZATION_ENV)
+    return Path(env_value)
+
+
+def _cmd_run(args, *, client_factory=None) -> dict:
+    if args.stage != "full":
+        raise ExecutionRefused("evidence-revision-002 accepts only stage full")
+    matrix = load_frozen_full_matrix(args.matrix)
+    owner = load_owner_authorization(
+        _owner_authorization_path(args.owner_authorization))
+    req = GateRequest(
+        matrix=matrix, run_id=args.run_id, run_root=args.output,
+        owner_state=owner, release_token=os.getenv("SXR_ABLATION_RELEASE"),
+        release_marker=(Path(os.environ["SXR_ABLATION_RELEASE_MARKER"])
+                        if os.getenv("SXR_ABLATION_RELEASE_MARKER") else None))
+    # Static authority is deliberately established before importing or
+    # constructing the network-capable provider client.
+    ExecutionGate.validate_static(req)
+    if client_factory is None:
+        from .provider import ZaiCodingPlanClient
+        client_factory = ZaiCodingPlanClient
+    return run_authorized_full(req, client_factory)
+
+
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+    run = sub.add_parser("run", help="owner-authorized successor FULL execution")
+    run.add_argument("--stage", required=True)
+    run.add_argument("--matrix", type=Path, required=True)
+    run.add_argument("--owner-authorization", type=Path)
+    run.add_argument("--run-id", required=True)
+    run.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args(argv)
+    result = _cmd_run(args)
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
