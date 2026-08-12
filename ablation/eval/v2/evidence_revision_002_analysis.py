@@ -11,6 +11,7 @@ from collections import defaultdict
 
 from . import evidence_revision_002 as frozen
 from .ledger import CommitLedger, CommitViolation
+from .replication import VOCAB
 from .validity_revision import PRIMARY_CASES
 
 
@@ -143,8 +144,21 @@ def reconstruct_committed_full(run_dir: Path, matrix: dict | None = None,
         raise ValueError(
             f"committed result set mismatch: missing={len(expected_files-observed_files)}, "
             f"extra={len(observed_files-expected_files)}")
-    result_ledger = CommitLedger(str(run_dir / "result-commits.jsonl"))
-    call_ledger = CommitLedger(str(run_dir / "call-commits.jsonl"))
+    result_ledger_path = run_dir / "result-commits.jsonl"
+    call_ledger_path = run_dir / "call-commits.jsonl"
+    result_ledger = CommitLedger(str(result_ledger_path))
+    call_ledger = CommitLedger(str(call_ledger_path))
+
+    def ledger_ids(path: Path) -> list[str]:
+        if not path.is_file():
+            return []
+        return [json.loads(line)["unit_id"] for line in path.read_text().splitlines()
+                if line.strip()]
+
+    result_ids = ledger_ids(result_ledger_path)
+    if len(result_ids) != len(set(result_ids)) or set(result_ids) != set(expected_uids):
+        raise ValueError("result ledger has missing, duplicate, or orphan entries")
+    expected_call_ids = set()
     expected_coordinates = [
         (case, arm, rep)
         for case in matrix["cases"] for arm in matrix["arms"]
@@ -168,14 +182,27 @@ def reconstruct_committed_full(run_dir: Path, matrix: dict | None = None,
             raise ValueError(f"successor matrix binding mismatch: {uid}")
         for execution in doc.get("executions", []):
             call_id = f"{uid}:call:{execution['call_num']:03d}"
+            expected_call_ids.add(call_id)
             if call_ledger.assert_scorable(call_id) != execution.get("raw_hash"):
                 raise CommitViolation(f"raw call binding mismatch: {call_id}")
         rounds = doc.get("rounds")
-        if not isinstance(rounds, list) or not rounds:
-            raise ValueError(f"round-1 decision missing: {uid}")
-        decision = rounds[0].get("decision")
-        if not isinstance(decision, dict) or "proposed_settlement" not in decision:
-            raise ValueError(f"round-1 typed settlement missing: {uid}")
+        if not isinstance(rounds, list):
+            raise ValueError(f"round records have invalid type: {uid}")
+        if not rounds:
+            if doc.get("terminal_state") != "MODEL_OUTPUT_CONTRACT_FAILURE":
+                raise ValueError(f"round-1 decision missing: {uid}")
+            round1_claim = None
+            round1_unresolved = None
+            output_class = "MODEL_OUTPUT_CONTRACT_FAILURE"
+        else:
+            decision = rounds[0].get("decision")
+            if not isinstance(decision, dict) or "proposed_settlement" not in decision:
+                raise ValueError(f"round-1 typed settlement missing: {uid}")
+            round1_claim = decision["proposed_settlement"]
+            if round1_claim is not None and round1_claim not in VOCAB:
+                raise ValueError(f"round-1 settlement outside vocabulary: {uid}")
+            round1_unresolved = decision.get("unresolved_distinction")
+            output_class = rounds[0].get("output_class", "VALID_DECISION")
         final_claim = doc.get("last_model_claim")
         if final_claim is not None and not isinstance(final_claim, str):
             raise ValueError(f"final gate-blind claim has invalid type: {uid}")
@@ -183,13 +210,17 @@ def reconstruct_committed_full(run_dir: Path, matrix: dict | None = None,
         rows.append({
             "unit_id": uid, "case_id": case, "arm": arm,
             "repetition": rep,
-            "round1_proposed_settlement": decision["proposed_settlement"],
-            "round1_unresolved_distinction": decision.get(
-                "unresolved_distinction"),
+            "round1_proposed_settlement": round1_claim,
+            "round1_unresolved_distinction": round1_unresolved,
             "final_gate_blind_claim": final_claim,
+            "terminal_state": doc.get("terminal_state"),
+            "output_class": output_class,
             "evaluator_true_locus": truth,
             "final_gate_blind_correct": final_claim == truth,
         })
+    call_ids = ledger_ids(call_ledger_path)
+    if len(call_ids) != len(set(call_ids)) or set(call_ids) != expected_call_ids:
+        raise ValueError("call ledger has missing, duplicate, or orphan entries")
     validate_full_rows(rows)
     return rows
 
@@ -204,6 +235,12 @@ def analyze_committed_full(run_dir: Path, matrix: dict | None = None,
         "comparisons": {name: paired_case_table(rows, name)
                         for name in comparison_specs()},
         "revision_rate": revision_rate(rows),
+        "output_class_rates": {
+            arm: {output_class: sum(
+                row["arm"] == arm and row["output_class"] == output_class
+                for row in rows) / sum(row["arm"] == arm for row in rows)
+                  for output_class in sorted({row["output_class"] for row in rows})}
+            for arm in frozen.ARMS},
         "matched_evidence_use": {
             "status": frozen.MATCHED_EVIDENCE_USE["status"], "value": None},
     }

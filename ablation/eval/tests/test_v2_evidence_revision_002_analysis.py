@@ -121,12 +121,24 @@ def test_committed_result_reconstruction_verifies_exact_matrix_and_ledger(tmp_pa
                     "executable_contract_fingerprint"],
                 "full_matrix_sha256": matrix["matrix_sha256"]},
         }
+        if uid == matrix["unit_ids"][0]:
+            doc["rounds"] = []
+            doc["terminal_state"] = "MODEL_OUTPUT_CONTRACT_FAILURE"
+            doc["last_model_claim"] = None
         payload = json.dumps(doc, sort_keys=True)
         payloads[uid] = payload
         ledger.commit_raw(uid, str(tmp_path / "results" / f"{uid}.json"), payload)
     rows = reconstruct_committed_full(tmp_path, matrix)
     assert len(rows) == 430
     assert rows[0]["arm"] == matrix["arms"][0]
+    assert rows[0]["round1_proposed_settlement"] is None
+    assert rows[0]["output_class"] == "MODEL_OUTPUT_CONTRACT_FAILURE"
+    orphan_call_ledger = CommitLedger(str(tmp_path / "call-commits.jsonl"))
+    orphan_call_ledger.commit_raw(
+        "orphan:call:001", str(tmp_path / "raw" / "orphan.json"), "{}")
+    with pytest.raises(ValueError, match="call ledger.*orphan"):
+        reconstruct_committed_full(tmp_path, matrix)
+    (tmp_path / "call-commits.jsonl").unlink()
     first = matrix["unit_ids"][0]
     first_path = tmp_path / "results" / f"{first}.json"
     first_path.write_text("{}")
