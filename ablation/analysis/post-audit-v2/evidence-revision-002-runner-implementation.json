@@ -8,7 +8,7 @@
     "ablation/eval/v2/evidence_revision.py": "fb5f8516ffae99af1318878b0d2c82de7b9dc595a9642c08e3afa12b1dbc0810",
     "ablation/eval/v2/evidence_revision_002.py": "b4479bf898152b008f91643dfe86d719d85b0038f43c8c2049f38ff07833392a",
     "ablation/eval/v2/evidence_revision_002_freeze.py": "de7dbba9fd32dd67f856ad72a5ce29c11e3eda5c6be30c686a1ef384d6a9abcb",
-    "ablation/eval/v2/evidence_revision_002_run.py": "c1dc6ff57fd05457d1c29a95447a67f99e6cfc1b16c43583446657faad247fcc",
+    "ablation/eval/v2/evidence_revision_002_run.py": "09c83e465ea71914ae373428076b0437ed2697b47cfee895dcef0963e736a6db",
     "ablation/eval/v2/evidence_revision_run.py": "7556813eaf9bd723593ac7136c35088569789e45d49a9afec8f4a52d44aafee7",
     "ablation/eval/v2/execution.py": "1838aa35c18baa757e076741e2a9c7493f01ddcf45abb598b7adc960e2cef91c",
     "ablation/eval/v2/ids.py": "4989a0fbcc2c4a4eac705b52457fb393371e2a54d9b1626e49058b85bcbb75a7",
@@ -20,9 +20,9 @@
     "ablation/eval/v2/sufficiency.py": "95712efd222388727ddd06a29f4cfea01c6e590fad07be1bf966bb4baeb79668",
     "ablation/eval/v2/validity_revision.py": "bad843502eac63689771afa83cf4d687c4e07083251b996c805a9d5f648c44cf"
   },
-  "reviewed_runner_commit": "b509707142c0330ab0058843bc70a72de0fe3232",
-  "reviewed_runner_implementation_sha256": "41bc1cfbbac4d25ec629c1462318aeb5444cb9d0edf783f9be8842be8f66c7a1",
+  "reviewed_runner_commit": "0eda13a4108d652e2415e0032a34082ee6e03c4b",
+  "reviewed_runner_implementation_sha256": "5924d91b1ac3b7687c6de40f1044b741e4973f4b7d3149a00d80167cf5e063c5",
   "reviewed_runner_matches_current": true,
-  "runner_implementation_sha256": "41bc1cfbbac4d25ec629c1462318aeb5444cb9d0edf783f9be8842be8f66c7a1",
+  "runner_implementation_sha256": "5924d91b1ac3b7687c6de40f1044b741e4973f4b7d3149a00d80167cf5e063c5",
   "schema": "evidence-revision-002-runner-implementation-v1"
 }

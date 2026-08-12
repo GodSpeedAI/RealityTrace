@@ -40,10 +40,10 @@
   "reviewed_analysis_commit": "2d0a975cb4f898047dd61359e54962205dfa8f4c",
   "reviewed_analysis_implementation_sha256": "4a4091d83d3fa50d4f8d7a5b9420689e742485671a7b3ef005a9a83d539c7bed",
   "reviewed_analysis_matches_current": true,
-  "reviewed_runner_commit": "b509707142c0330ab0058843bc70a72de0fe3232",
-  "reviewed_runner_implementation_sha256": "41bc1cfbbac4d25ec629c1462318aeb5444cb9d0edf783f9be8842be8f66c7a1",
+  "reviewed_runner_commit": "0eda13a4108d652e2415e0032a34082ee6e03c4b",
+  "reviewed_runner_implementation_sha256": "5924d91b1ac3b7687c6de40f1044b741e4973f4b7d3149a00d80167cf5e063c5",
   "reviewed_runner_matches_current": true,
-  "runner_implementation_sha256": "41bc1cfbbac4d25ec629c1462318aeb5444cb9d0edf783f9be8842be8f66c7a1",
+  "runner_implementation_sha256": "5924d91b1ac3b7687c6de40f1044b741e4973f4b7d3149a00d80167cf5e063c5",
   "runtime_behavior_delta": [],
   "schema": "evidence-revision-002-lineage-v1",
   "semantic_delta": {
