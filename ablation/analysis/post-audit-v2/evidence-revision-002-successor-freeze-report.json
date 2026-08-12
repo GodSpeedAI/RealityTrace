@@ -4,6 +4,8 @@
     "analysis_implementation_sha256": "ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696",
     "case_level_primary": true,
     "exact_full_matrix_required": true,
+    "forced_final_output_class_reconstructed": true,
+    "frozen_identity_verified_before_analysis": true,
     "matched_evidence_use": "NOT_EVALUATED_NO_PROXY",
     "orphan_or_duplicate_ledgers_rejected": true,
     "raw_call_ledgers_verified": true,
@@ -16,12 +18,12 @@
     "valid_empty_round_contract_failure_supported": true
   },
   "artifact_file_sha256": {
-    "evidence-revision-002-analysis-implementation.json": "135c45c1f3a300293edd23182a48080c7b5adb2faae4ce8b3955350da28d9e8c",
+    "evidence-revision-002-analysis-implementation.json": "f3e050dfa29aa1c5a58d52bdf8daf45d3f227cc2d05de2c8680f667fb62a4490",
     "evidence-revision-002-contract.json": "82cf3f98a1376f6d1d54320ed1d4c94709345fafffbcdf4924149cb22e802435",
-    "evidence-revision-002-executable-contract.json": "21a9548635dc722291d3f2c6d30d15f8cdfe02ae1f356ba444753b4efd0f8864",
-    "evidence-revision-002-full-matrix-validation.json": "0401aae881fec765a02f3e7bb1ba76ecb87ae20cd4eab0bfefa90e45ae17ab88",
-    "evidence-revision-002-full-matrix.json": "82220a384ca52bda5869a6e5e8e2496d8caf9be5cfe17fb0b738edb9abc7f03c",
-    "evidence-revision-002-lineage.json": "95182c3df4281175c52bfb909ec9deb42821942e077754c269349621d9da8414",
+    "evidence-revision-002-executable-contract.json": "0ff9a5883b1542ebde576b9ac0bdb209ebe29bf59a0851a82e196468a1682606",
+    "evidence-revision-002-full-matrix-validation.json": "f98beb8611b25101568f5fda37cd00d0327a864f330dbeb64f039bd2d2021d71",
+    "evidence-revision-002-full-matrix.json": "bb3914d77e9456a14eac1c50e0612977e41e6b8bb91f1fe1357ed519cdc06f1d",
+    "evidence-revision-002-lineage.json": "77702925f824aa27f39df9e69942c1808dc6823bc669ade7521a7b10ac6be796",
     "evidence-revision-002-predecessor-pilot-compatibility.json": "60acd34aeaf25ecc1a9535269d2e64775cf59b287b1aca6311fea12fd1cd39eb",
     "evidence-revision-002-runner-implementation.json": "6f84bc10d668bb2da4d59c89404709fa7fb33b4c8b156447a7c8f0ab646d704a"
   },
@@ -96,12 +98,12 @@
   },
   "future_full_gate_requires_explicit_power_override": true,
   "identities": {
-    "analysis_implementation_sha256": "ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696",
+    "analysis_implementation_sha256": "4a4091d83d3fa50d4f8d7a5b9420689e742485671a7b3ef005a9a83d539c7bed",
     "case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
     "design_fingerprint": "056284062a2ef6b2a6f6dc54ae63eceeb8802b66341d42ced7d305067d9e1d99",
-    "executable_contract_fingerprint": "41b7e4a977c625beda90667669119fadeb4277e137af7e30ad102b613b6f6c91",
-    "full_matrix_sha256": "f3eb0b49c5927b02f1aade8f45c74356225a483e0e01ba7a86e156d34e2e2c38",
-    "reviewed_analysis_commit": "61176769d5ec4f70fa3992c099fe0639b21df712",
+    "executable_contract_fingerprint": "333ee8ed76544dbcbace791c5f660a9332683644d90c9a92fe31e82593414d28",
+    "full_matrix_sha256": "3e960b1f2ec35e4fdee6f4c339093104285cd9a086c35c723b247d591e5d7f7e",
+    "reviewed_analysis_commit": "2d0a975cb4f898047dd61359e54962205dfa8f4c",
     "reviewed_analysis_matches_current": true,
     "reviewed_runner_commit": "61176769d5ec4f70fa3992c099fe0639b21df712",
     "reviewed_runner_matches_current": true,
@@ -111,7 +113,8 @@
     "bf6167558c6b7ec7285c207d4eea6c5e18c9f83c",
     "9c6467ae9316cc50d3415952d25e79b85097e1f7",
     "35a6badc9c58d62d8c2edd62ac40ecf22fc3c649",
-    "61176769d5ec4f70fa3992c099fe0639b21df712"
+    "61176769d5ec4f70fa3992c099fe0639b21df712",
+    "2d0a975cb4f898047dd61359e54962205dfa8f4c"
   ],
   "matched_evidence_use": {
     "absence_is_zero_utilization": false,

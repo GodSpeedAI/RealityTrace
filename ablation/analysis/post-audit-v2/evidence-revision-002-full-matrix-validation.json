@@ -16,9 +16,9 @@
   "expected_repetitions": 2,
   "expected_units": 430,
   "masked_k_deliveries_checked": 172,
-  "matrix_sha256": "f3eb0b49c5927b02f1aade8f45c74356225a483e0e01ba7a86e156d34e2e2c38",
+  "matrix_sha256": "3e960b1f2ec35e4fdee6f4c339093104285cd9a086c35c723b247d591e5d7f7e",
   "model_calls_performed": 0,
   "provider_calls_performed": 0,
   "schema": "evidence-revision-002-full-matrix-validation-v1",
-  "validation_sha256": "276edec06b4fbad7f58b8fe436f025b31fa693deba2708ac0b7ccf0944570f41"
+  "validation_sha256": "19bd9139cd5cd3b6a52c9d51068e16e37eeb9ddb2ad76c784e0092aef83a87ec"
 }

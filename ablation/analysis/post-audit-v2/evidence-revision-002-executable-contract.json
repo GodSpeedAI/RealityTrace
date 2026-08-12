@@ -1,9 +1,9 @@
 {
   "additional_provider_calls_authorized": false,
   "analysis_implementation": {
-    "reviewed_commit": "61176769d5ec4f70fa3992c099fe0639b21df712",
-    "reviewed_sha256": "ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696",
-    "sha256": "ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696"
+    "reviewed_commit": "2d0a975cb4f898047dd61359e54962205dfa8f4c",
+    "reviewed_sha256": "4a4091d83d3fa50d4f8d7a5b9420689e742485671a7b3ef005a9a83d539c7bed",
+    "sha256": "4a4091d83d3fa50d4f8d7a5b9420689e742485671a7b3ef005a9a83d539c7bed"
   },
   "arms": [
     "R0",
@@ -62,11 +62,11 @@
     "R4": "FULL"
   },
   "evidence_selection_seed_identity": "evidence-revision-001",
-  "executable_contract_fingerprint": "41b7e4a977c625beda90667669119fadeb4277e137af7e30ad102b613b6f6c91",
+  "executable_contract_fingerprint": "333ee8ed76544dbcbace791c5f660a9332683644d90c9a92fe31e82593414d28",
   "execution_authorized": false,
   "experiment_id": "evidence-revision-002",
   "full_execution_authorized": false,
-  "full_matrix_sha256": "f3eb0b49c5927b02f1aade8f45c74356225a483e0e01ba7a86e156d34e2e2c38",
+  "full_matrix_sha256": "3e960b1f2ec35e4fdee6f4c339093104285cd9a086c35c723b247d591e5d7f7e",
   "full_plan": {
     "arms": [
       "R0",
