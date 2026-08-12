@@ -526,6 +526,10 @@ def run_authorized_full(req: GateRequest,
         result, _ = run_one(run_dir, case_id, arm, rep)
         if result.unit_id != uid:
             raise ResumeViolation("successor loop UID differs from matrix")
+        # Reload the checkpoint written by run_one. The loop-level store was
+        # instantiated before the lexical unit primitive and is intentionally
+        # not a shared mutable authority.
+        checkpoint = CheckpointStore(run_dir / "checkpoint.json")
         # Completion follows _commit_result and RESULT_COMMITTED transition in
         # run_one; no injected executor may manufacture successful traversal.
         if checkpoint.status(uid) not in ("RESULT_COMMITTED", "SCORED"):
