@@ -1,10 +1,12 @@
 """Contract-driven successor analysis regression tests."""
+import json
+
 import pytest
 
 from eval.v2.evidence_revision_002_analysis import (
     EndpointNotEvaluated, aggregate_case_primary, comparison_specs,
-    matched_evidence_use, paired_case_table, revision_rate,
-    secondary_endpoint_status)
+    matched_evidence_use, paired_case_table, reconstruct_committed_full,
+    revision_rate, secondary_endpoint_status)
 
 
 def test_case_primary_majority_and_tie_incorrect():
@@ -85,3 +87,52 @@ def test_canonical_analysis_rejects_partial_or_duplicate_full_rows():
         revision_rate(partial)
     with pytest.raises(ValueError, match="duplicate"):
         aggregate_case_primary(partial + partial)
+
+
+
+def test_primary_rejects_truthy_non_boolean_fixture():
+    rows = [{"case_id": "x", "arm": "R0", "repetition": 1,
+             "final_gate_blind_correct": "false"}]
+    with pytest.raises(ValueError, match="must be boolean"):
+        aggregate_case_primary(rows, allow_partial=True)
+
+
+def test_committed_result_reconstruction_verifies_exact_matrix_and_ledger(tmp_path):
+    from eval.v2.evidence_revision_002_freeze import FULL_MATRIX_NAME, build_artifacts
+    from eval.v2.ledger import CommitLedger, CommitViolation
+
+    matrix = build_artifacts()[FULL_MATRIX_NAME]
+    ledger = CommitLedger(str(tmp_path / "result-commits.jsonl"))
+    coordinates = [(case, arm, rep)
+                   for case in matrix["cases"] for arm in matrix["arms"]
+                   for rep in range(1, matrix["repetitions"] + 1)]
+    payloads = {}
+    for uid, (case, arm, rep) in zip(matrix["unit_ids"], coordinates):
+        doc = {
+            "unit_id": uid, "case_id": case, "condition": arm, "rep": rep,
+            "last_model_claim": "unknown", "executions": [],
+            "rounds": [{"decision": {
+                "proposed_settlement": None,
+                "unresolved_distinction": "synthetic offline fixture"}}],
+            "runner_contract": {
+                "experiment_id": "evidence-revision-002",
+                "design_fingerprint": matrix["design_fingerprint"],
+                "executable_contract_fingerprint": matrix[
+                    "executable_contract_fingerprint"],
+                "full_matrix_sha256": matrix["matrix_sha256"]},
+        }
+        payload = json.dumps(doc, sort_keys=True)
+        payloads[uid] = payload
+        ledger.commit_raw(uid, str(tmp_path / "results" / f"{uid}.json"), payload)
+    rows = reconstruct_committed_full(tmp_path, matrix)
+    assert len(rows) == 430
+    assert rows[0]["arm"] == matrix["arms"][0]
+    first = matrix["unit_ids"][0]
+    first_path = tmp_path / "results" / f"{first}.json"
+    first_path.write_text("{}")
+    with pytest.raises(CommitViolation, match="hash mismatch"):
+        reconstruct_committed_full(tmp_path, matrix)
+    ledger.commit_raw(first, str(first_path), payloads[first])
+    first_path.unlink()
+    with pytest.raises(ValueError, match="result set mismatch"):
+        reconstruct_committed_full(tmp_path, matrix)

@@ -9,6 +9,7 @@ from __future__ import annotations
 import dataclasses
 import hashlib
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Mapping
@@ -19,8 +20,8 @@ from .evidence_revision_002 import (
     ARMS, EVIDENCE_SELECTION_EXPERIMENT_ID, EXPERIMENT_ID, FULL_NAMESPACE,
     GOVERNANCE_CLASS, OWNER_STATE)
 from .evidence_revision_002_freeze import (
-    CASE_INPUTS_PATH, FULL_MATRIX_NAME, OUT, build_artifacts,
-    runner_implementation_sha256)
+    CASE_INPUTS_PATH, FULL_MATRIX_NAME, OUT, REUSED_ARTIFACTS, ROOT,
+    build_artifacts, runner_implementation_sha256)
 from .evidence_revision_run import (
     CheckpointStore, DurableReplayClient, ExecutionRefused, FROZEN_PROVIDER_ROUTE,
     FROZEN_REQUESTED_MODEL, ResumeViolation, _atomic_json, _canonical,
@@ -39,6 +40,18 @@ SCIENTIFIC_CONTRACT_PATH = OUT / "evidence-revision-002-contract.json"
 EXECUTABLE_CONTRACT_PATH = OUT / "evidence-revision-002-executable-contract.json"
 COMPATIBILITY_PATH = OUT / "evidence-revision-002-predecessor-pilot-compatibility.json"
 RUNNER_SCHEMA = "evidence-revision-002-runner-v1"
+RUNTIME_INPUT_PATHS = tuple(REUSED_ARTIFACTS.values()) + (
+    ROOT / "ablation/corpus/cases.jsonl",
+    ROOT / "ablation/corpus/acquisition-probes.jsonl",
+    ROOT / "ablation/corpus/acquisition-hidden-meta.json",
+    ROOT / "ablation/corpus/governed-keys.json",
+    ROOT / "ablation/corpus/governed-sufficiency-contract.json",
+)
+
+
+def _runtime_input_hashes() -> dict:
+    return {str(path.relative_to(ROOT)): _file_hash(path)
+            for path in RUNTIME_INPUT_PATHS}
 
 
 @dataclass(frozen=True)
@@ -87,18 +100,6 @@ class GateRequest:
     release_token: str | None = None
     release_marker: Path | None = None
 
-_CAPABILITY_SEAL = object()
-
-
-@dataclass(frozen=True)
-class FinalAuthorization:
-    phase: str
-    authorized: bool
-    stage: str
-    binding: str
-    _seal: object = dataclasses.field(repr=False)
-
-
 class ExecutionGate:
     """Successor authority check; static checks precede any client creation."""
 
@@ -111,6 +112,9 @@ class ExecutionGate:
             "evidence-revision-002-predecessor-pilot-compatibility.json"]
         failures = []
         owner = req.owner_state
+        if not isinstance(req.run_id, str) or not re.fullmatch(
+                r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", req.run_id):
+            failures.append("run_id is not a safe nonempty path component")
         frozen_matrix_doc = artifacts[FULL_MATRIX_NAME]
         request_matrix_projection = {
             "namespace": req.matrix.namespace, "cases": list(req.matrix.cases),
@@ -143,6 +147,8 @@ class ExecutionGate:
             "authorized_runner_implementation_sha256": runner_implementation_sha256(),
             "authorized_predecessor_pilot_compatibility_sha256": compatibility[
                 "compatibility_sha256"],
+            "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
+            "full_authorization_notwithstanding_unresolved_power": True,
         }
         for key, value in expected.items():
             if owner.get(key) != value:
@@ -190,6 +196,7 @@ class ExecutionGate:
                     failures.append(f"release marker mismatch: {key}")
         if failures:
             raise ExecutionRefused("execution refused:\n- " + "\n- ".join(failures))
+        runtime_input_hashes = _runtime_input_hashes()
         binding = _sha256(_canonical({
             "experiment_id": EXPERIMENT_ID, "stage": "full",
             "run_id": req.run_id, "owner_state_digest": owner_state_digest,
@@ -198,12 +205,14 @@ class ExecutionGate:
             "executable_fingerprint": req.matrix.executable_fingerprint,
             "runner_implementation_sha256": runner_implementation_sha256(),
             "reviewed_runner_commit": reviewed_commit,
-            "compatibility_sha256": compatibility["compatibility_sha256"]}))
+            "compatibility_sha256": compatibility["compatibility_sha256"],
+            "runtime_input_hashes": runtime_input_hashes}))
         return {"phase": "STATIC_AUTHORIZED", "authorized": False,
                 "stage": "full", "run_id": req.run_id,
                 "matrix_sha256": req.matrix.matrix_sha256,
                 "binding": binding, "owner_state_digest": owner_state_digest,
-                "reviewed_runner_commit": reviewed_commit}
+                "reviewed_runner_commit": reviewed_commit,
+                "runtime_input_hashes": runtime_input_hashes}
 
     @staticmethod
     def validate_client(static: Mapping, client: ModelClient) -> dict:
@@ -255,9 +264,8 @@ class ExecutionGate:
         if failures:
             raise ExecutionRefused(
                 "final authorization refused:\n- " + "\n- ".join(failures))
-        return FinalAuthorization(
-            phase="FINAL_AUTHORIZED", authorized=True, stage="full",
-            binding=static["binding"], _seal=_CAPABILITY_SEAL)
+        return {"phase": "FINAL_AUTHORIZED", "authorized": True,
+                "stage": "full", "binding": static["binding"]}
 
 
 def _unit_binding(matrix: FrozenFullMatrix, case_id: str, arm: str, rep: int) -> str:
@@ -330,68 +338,6 @@ def _commit_result(run_dir: Path, result: UnitResult,
     return ledger.commit_raw(result.unit_id, str(result_path), payload).raw_hash or ""
 
 
-def _run_frozen_unit(run_dir: Path, client: ModelClient, matrix: FrozenFullMatrix,
-                     case_id: str, arm: str, rep: int, *, require_offline=False,
-                     endpoint=FROZEN_PROVIDER_ROUTE,
-                     requested_model=FROZEN_REQUESTED_MODEL,
-                     authorization: FinalAuthorization | None = None):
-    """Shared successor unit path; live use requires a finalized gate binding."""
-    if not require_offline:
-        if (not isinstance(authorization, FinalAuthorization) or
-                authorization.phase != "FINAL_AUTHORIZED" or
-                authorization.authorized is not True or
-                authorization._seal is not _CAPABILITY_SEAL):
-            raise ExecutionRefused("final successor authorization is required")
-    if require_offline and not getattr(client, "offline_only", False):
-        raise ExecutionRefused("offline fixture accepts only offline_only clients")
-    if case_id not in matrix.cases or arm not in matrix.arms:
-        raise ExecutionRefused("unit is outside frozen successor FULL matrix")
-    uid = unit_id(EXPERIMENT_ID, matrix.namespace, case_id, arm, rep,
-                  matrix.executable_fingerprint)
-    if uid not in matrix.unit_ids:
-        raise ExecutionRefused("unit UID is outside frozen successor FULL matrix")
-    checkpoint = CheckpointStore(run_dir / "checkpoint.json")
-    binding = _unit_binding(matrix, case_id, arm, rep)
-    if checkpoint.status(uid) == "PLANNED":
-        checkpoint.transition(uid, "PLANNED", unit_binding=binding)
-    replay = DurableReplayClient(client, uid, run_dir, checkpoint=checkpoint)
-    if checkpoint.status(uid) in ("RESULT_COMMITTED", "SCORED"):
-        result_ledger = CommitLedger(str(run_dir / "result-commits.jsonl"))
-        result_ledger.assert_scorable(uid)
-        doc = json.loads((run_dir / "results" / f"{uid}.json").read_text())
-        for execution in doc.get("executions", []):
-            actual = replay.ledger.assert_scorable(
-                f"{uid}:call:{execution['call_num']:03d}")
-            if actual != execution["raw_hash"]:
-                raise CommitViolation("completed result lost its raw-response binding")
-        doc.pop("runner_contract", None)
-        return UnitResult(**doc), replay
-    initial = initial_state_for(case_id)
-    observations = neutralized_observations()[0][case_id]
-    hidden = json.loads((Path(__file__).resolve().parents[2] /
-                         "corpus/acquisition-hidden-meta.json").read_text())
-    discriminating = tuple(hidden[case_id]["discriminating_probes"])
-    assert_marker_free(initial); assert_marker_free(observations)
-    ctrl = DiagnosticController(
-        ARMS[arm], LEGACY_CONTRACT, PROBES, DESCRIPTIONS, COSTS, VOCAB,
-        replay, endpoint=endpoint, requested_model=requested_model,
-        evidence_selection_policy=EVIDENCE_POLICY[arm], disclosure_k=3,
-        masked_candidate_universe=(DIRECT_CANDIDATE_UNIVERSE
-                                   if EVIDENCE_POLICY[arm] == "MASKED_K" else ()))
-    # Controller's experiment_id argument is exclusively the frozen evidence
-    # seed domain. Keeping the predecessor domain preserves handles/delivery.
-    result = ctrl.run_unit(
-        uid, EVIDENCE_SELECTION_EXPERIMENT_ID, matrix.namespace, case_id, rep,
-        initial["question"], initial["initial_evidence"], observations,
-        discriminating)
-    checkpoint.transition(uid, "PARSED", unit_binding=binding)
-    _commit_result(run_dir, result, replay.ledger, matrix)
-    checkpoint.transition(uid, "RESULT_COMMITTED", unit_binding=binding,
-                          result_hash=_file_hash(run_dir / "results" / f"{uid}.json"))
-    return result, replay
-
-
-
 def run_authorized_full(req: GateRequest,
                         client_factory: Callable[[], ModelClient]) -> dict:
     """Execute only after static authority, then client validation, then namespace creation.
@@ -403,6 +349,58 @@ def run_authorized_full(req: GateRequest,
     client = client_factory()
     client_result = ExecutionGate.validate_client(static, client)
     final = ExecutionGate.finalize(static, client_result)
+    if final.get("phase") != "FINAL_AUTHORIZED" or final.get("authorized") is not True:
+        raise ExecutionRefused("final successor authorization is not authoritative")
+    def run_one(run_dir: Path, case_id: str, arm: str, rep: int):
+        """Lexically scoped live primitive, reachable only after finalization."""
+        if _runtime_input_hashes() != static["runtime_input_hashes"]:
+            raise ExecutionRefused("runtime inputs changed after authorization")
+        if case_id not in req.matrix.cases or arm not in req.matrix.arms:
+            raise ExecutionRefused("unit is outside frozen successor FULL matrix")
+        uid = unit_id(EXPERIMENT_ID, req.matrix.namespace, case_id, arm, rep,
+                      req.matrix.executable_fingerprint)
+        if uid not in req.matrix.unit_ids:
+            raise ExecutionRefused("unit UID is outside frozen successor FULL matrix")
+        checkpoint = CheckpointStore(run_dir / "checkpoint.json")
+        binding = _unit_binding(req.matrix, case_id, arm, rep)
+        if checkpoint.status(uid) == "PLANNED":
+            checkpoint.transition(uid, "PLANNED", unit_binding=binding)
+        replay = DurableReplayClient(client, uid, run_dir, checkpoint=checkpoint)
+        if checkpoint.status(uid) in ("RESULT_COMMITTED", "SCORED"):
+            result_ledger = CommitLedger(str(run_dir / "result-commits.jsonl"))
+            result_ledger.assert_scorable(uid)
+            doc = json.loads((run_dir / "results" / f"{uid}.json").read_text())
+            for execution in doc.get("executions", []):
+                actual = replay.ledger.assert_scorable(
+                    f"{uid}:call:{execution['call_num']:03d}")
+                if actual != execution["raw_hash"]:
+                    raise CommitViolation("completed result lost its raw-response binding")
+            doc.pop("runner_contract", None)
+            return UnitResult(**doc), replay
+        initial = initial_state_for(case_id)
+        observations = neutralized_observations()[0][case_id]
+        hidden = json.loads((Path(__file__).resolve().parents[2] /
+                             "corpus/acquisition-hidden-meta.json").read_text())
+        discriminating = tuple(hidden[case_id]["discriminating_probes"])
+        assert_marker_free(initial); assert_marker_free(observations)
+        ctrl = DiagnosticController(
+            ARMS[arm], LEGACY_CONTRACT, PROBES, DESCRIPTIONS, COSTS, VOCAB,
+            replay, endpoint=FROZEN_PROVIDER_ROUTE, requested_model=FROZEN_REQUESTED_MODEL,
+            evidence_selection_policy=EVIDENCE_POLICY[arm], disclosure_k=3,
+            masked_candidate_universe=(DIRECT_CANDIDATE_UNIVERSE
+                                       if EVIDENCE_POLICY[arm] == "MASKED_K" else ()))
+        # Controller's experiment_id argument is exclusively the frozen evidence
+        # seed domain. Keeping the predecessor domain preserves handles/delivery.
+        result = ctrl.run_unit(
+            uid, EVIDENCE_SELECTION_EXPERIMENT_ID, req.matrix.namespace, case_id, rep,
+            initial["question"], initial["initial_evidence"], observations,
+            discriminating)
+        checkpoint.transition(uid, "PARSED", unit_binding=binding)
+        _commit_result(run_dir, result, replay.ledger, req.matrix)
+        checkpoint.transition(uid, "RESULT_COMMITTED", unit_binding=binding,
+                              result_hash=_file_hash(run_dir / "results" / f"{uid}.json"))
+        return result, replay
+
     artifacts = build_artifacts()
     executable = artifacts["evidence-revision-002-executable-contract.json"]
     compatibility = artifacts[
@@ -421,6 +419,7 @@ def run_authorized_full(req: GateRequest,
         "reviewed_runner_commit": req.owner_state["authorized_reviewed_runner_commit"],
         "release_marker_sha256": _file_hash(req.release_marker),
         "release_token_sha256": hashlib.sha256(req.release_token.encode()).hexdigest(),
+        "runtime_input_hashes": static["runtime_input_hashes"],
     }
     run_dir = req.run_root / req.run_id
     manifest_path = run_dir / "run.json"
@@ -446,9 +445,7 @@ def run_authorized_full(req: GateRequest,
                 uid = unit_id(EXPERIMENT_ID, req.matrix.namespace, case_id, arm,
                               rep, req.matrix.executable_fingerprint)
                 before = checkpoint.status(uid)
-                result, _ = _run_frozen_unit(
-                    run_dir, client, req.matrix, case_id, arm, rep,
-                    authorization=final)
+                result, _ = run_one(run_dir, case_id, arm, rep)
                 if result.unit_id != uid:
                     raise ResumeViolation("successor loop UID differs from matrix")
                 completed += 1

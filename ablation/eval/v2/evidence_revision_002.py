@@ -29,6 +29,7 @@ PREDECESSOR = {
     "predecessor_revision": "revision-002",
     "predecessor_pilot_run": "evidence-revision-001-revision-002-pilot-20260811T221724Z",
     "predecessor_pilot_manifest_sha256": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+    "predecessor_run_json_sha256": "2be01bcdf2320c8f07b800000dcb5ed1057365b09ccc9ba304b25dede32cc989",
     "predecessor_design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
     "predecessor_executable_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
     "predecessor_runner_implementation_sha256": "56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066",

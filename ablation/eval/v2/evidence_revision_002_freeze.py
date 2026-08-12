@@ -1,8 +1,6 @@
 """Offline artifact builder and compatibility proof for evidence-revision-002."""
 from __future__ import annotations
 
-import copy
-import functools
 import hashlib
 import json
 import subprocess
@@ -265,6 +263,9 @@ def predecessor_pilot_compatibility() -> dict:
         for rep in range(1, matrix["repetitions"] + 1)]
     if expected_uids != matrix["unit_ids"] or len(expected_uids) != len(set(expected_uids)):
         raise AssertionError("predecessor pilot matrix UID drift")
+    if _file_sha(PREDECESSOR_RUN_JSON_PATH) != PREDECESSOR[
+            "predecessor_run_json_sha256"]:
+        raise AssertionError("predecessor run.json byte identity drift")
     run_doc = json.loads(PREDECESSOR_RUN_JSON_PATH.read_text())
     run_expected = {
         "experiment_id": PREDECESSOR["predecessor_experiment_id"],
@@ -320,8 +321,9 @@ def predecessor_pilot_compatibility() -> dict:
         "status": "PREDECESSOR_PILOT_ACCEPTED",
         "predecessor": PREDECESSOR,
         "predecessor_run_json_verified": True,
+        "predecessor_run_json_sha256": PREDECESSOR["predecessor_run_json_sha256"],
         "predecessor_revision_002_scientific_artifact_verified": True,
-        "predecessor_directory_manifest_sha256_expected": PREDECESSOR[
+        "predecessor_completed_run_manifest_sha256_expected": PREDECESSOR[
             "predecessor_pilot_manifest_sha256"],
         "outcome_artifacts_read": False,
         "allowed_deltas": ["experiment/revision identity", "design/executable identity",
@@ -410,8 +412,7 @@ def full_matrix_validation(matrix: dict) -> dict:
     return doc
 
 
-@functools.lru_cache(maxsize=1)
-def _build_artifacts_cached() -> dict:
+def build_artifacts() -> dict:
     science = freeze_science()
     design_fp = science["design_fingerprint"]
     executable_fp = executable_fingerprint(design_fp)
@@ -470,11 +471,6 @@ def _build_artifacts_cached() -> dict:
             reviewed_runner_matches_current=reviewed_current),
         "evidence-revision-002-lineage.json": lineage,
     }
-
-
-def build_artifacts() -> dict:
-    """Return a defensive copy of one deterministic offline build."""
-    return copy.deepcopy(_build_artifacts_cached())
 
 
 def freeze() -> dict:

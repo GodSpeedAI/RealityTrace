@@ -144,6 +144,31 @@ def test_static_gate_rejects_manually_constructed_noncanonical_matrix(tmp_path):
             GateRequest(matrix=forged, run_id="forged", run_root=tmp_path))
 
 
+
+def test_no_module_scope_live_unit_bypass_and_run_id_is_safe(tmp_path):
+    import eval.v2.evidence_revision_002_run as runner
+    assert not hasattr(runner, "_run_frozen_unit")
+    docs = build_artifacts()
+    matrix_path = tmp_path / "matrix.json"
+    matrix_path.write_text(json.dumps(docs[FULL_MATRIX_NAME], sort_keys=True))
+    matrix = load_frozen_full_matrix(matrix_path)
+    with pytest.raises(ExecutionRefused, match="safe nonempty path component"):
+        ExecutionGate.validate_static(
+            GateRequest(matrix=matrix, run_id="../escape", run_root=tmp_path))
+
+
+def test_full_gate_requires_explicit_power_authorization(tmp_path):
+    docs = build_artifacts()
+    matrix_path = tmp_path / "matrix.json"
+    matrix_path.write_text(json.dumps(docs[FULL_MATRIX_NAME], sort_keys=True))
+    matrix = load_frozen_full_matrix(matrix_path)
+    with pytest.raises(
+            ExecutionRefused,
+            match="full_authorization_notwithstanding_unresolved_power"):
+        ExecutionGate.validate_static(
+            GateRequest(matrix=matrix, run_id="safe-run", run_root=tmp_path))
+
+
 def test_live_client_factory_is_unreachable_without_static_authority(tmp_path):
     docs = build_artifacts()
     matrix_path = tmp_path / "matrix.json"
