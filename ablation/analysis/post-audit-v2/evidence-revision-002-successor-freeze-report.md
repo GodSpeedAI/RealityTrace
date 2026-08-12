@@ -73,10 +73,12 @@ Absence is not zero utilization. No utilization claim or derived proxy is permit
 ## New identities
 
 - Scientific design: `056284062a2ef6b2a6f6dc54ae63eceeb8802b66341d42ced7d305067d9e1d99`
-- Executable contract: `46ee79581cd6b20c1abbaf1e99e21c62ae8372949ebbd8575609d4cb23bbb6f9`
-- Runner implementation: `ad8c32bc9ab016b3051d44c8b77dc3333584f91df69732dc16d8536d52cbfdd9`
-- Reviewed runner commit: `9c6467ae9316cc50d3415952d25e79b85097e1f7`
-- FULL matrix: `7812aa656347acfd26283e5f134669d4ea5c1fb72d5162bb0b1d41b34ef1e668`
+- Executable contract: `41b7e4a977c625beda90667669119fadeb4277e137af7e30ad102b613b6f6c91`
+- Runner implementation: `49d2826be2cd03639c818e35f39ef86a03e699ff415d92f8add92a5a1b96b987`
+- Analysis implementation: `ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696`
+- Reviewed analysis commit: `61176769d5ec4f70fa3992c099fe0639b21df712`
+- Reviewed runner commit: `61176769d5ec4f70fa3992c099fe0639b21df712`
+- FULL matrix: `f3eb0b49c5927b02f1aade8f45c74356225a483e0e01ba7a86e156d34e2e2c38`
 - Case inputs: `20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b` (stimulus bytes reused unchanged)
 
 ## FULL matrix
@@ -92,12 +94,12 @@ Absence is not zero utilization. No utilization claim or derived proxy is permit
 
 ## Analysis contract
 
-Canonical analysis verifies the exact 430-result set, rejects orphan/duplicate result or raw-call ledgers, verifies runner/design/executable/matrix bindings, typed round-1 decision fields, frozen evaluator truth joins, and unique coordinates before computing case-level primary tables or `revision_rate`. A valid first-round `MODEL_OUTPUT_CONTRACT_FAILURE` with no round record maps to null/no-claim, incorrect primary, preserved output class, and revision-denominator exclusion. `matched_evidence_use` raises rather than proxying.
+Canonical analysis verifies the exact 430-result set, rejects orphan/duplicate result or raw-call ledgers, verifies runner/design/executable/matrix bindings, typed round-1 decision fields, frozen evaluator truth joins, and unique coordinates before computing case-level primary tables or `revision_rate`. A valid first-round `MODEL_OUTPUT_CONTRACT_FAILURE` with no round record maps to null/no-claim, incorrect primary, preserved output class, and revision-denominator exclusion. Round-level output classification includes later rounds and repair-exhausted terminal attempts, distinguishes truncation from contract failure, and reports all four frozen categories. `matched_evidence_use` raises rather than proxying.
 
 ## Verification
 
 ```text
-399 passed
+401 passed
 0 failed
 0 skipped
 provider calls = 0
@@ -112,10 +114,11 @@ ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13
 ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13
 ```
 
-Implementation commits: `bf6167558c6b7ec7285c207d4eea6c5e18c9f83c`, `9c6467ae9316cc50d3415952d25e79b85097e1f7`, `35a6badc9c58d62d8c2edd62ac40ecf22fc3c649`.
+Implementation commits: `bf6167558c6b7ec7285c207d4eea6c5e18c9f83c`, `9c6467ae9316cc50d3415952d25e79b85097e1f7`, `35a6badc9c58d62d8c2edd62ac40ecf22fc3c649`, `61176769d5ec4f70fa3992c099fe0639b21df712`.
 
 ## Artifacts
 
+- `ablation/analysis/post-audit-v2/evidence-revision-002-analysis-implementation.json`
 - `ablation/analysis/post-audit-v2/evidence-revision-002-contract.json`
 - `ablation/analysis/post-audit-v2/evidence-revision-002-executable-contract.json`
 - `ablation/analysis/post-audit-v2/evidence-revision-002-full-matrix-validation.json`

@@ -1,0 +1,10 @@
+{
+  "analysis_implementation_sha256": "ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696",
+  "files": {
+    "ablation/eval/v2/evidence_revision_002_analysis.py": "ae9c7d8b236d290539ad179f6c7799805f808ee23e63fd1277483925b7743006"
+  },
+  "reviewed_analysis_commit": "61176769d5ec4f70fa3992c099fe0639b21df712",
+  "reviewed_analysis_implementation_sha256": "ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696",
+  "reviewed_analysis_matches_current": true,
+  "schema": "evidence-revision-002-analysis-implementation-v1"
+}

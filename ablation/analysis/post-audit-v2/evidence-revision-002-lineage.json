@@ -1,9 +1,10 @@
 {
+  "analysis_implementation_sha256": "ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696",
   "case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
   "design_fingerprint": "056284062a2ef6b2a6f6dc54ae63eceeb8802b66341d42ced7d305067d9e1d99",
-  "executable_contract_fingerprint": "46ee79581cd6b20c1abbaf1e99e21c62ae8372949ebbd8575609d4cb23bbb6f9",
+  "executable_contract_fingerprint": "41b7e4a977c625beda90667669119fadeb4277e137af7e30ad102b613b6f6c91",
   "experiment_id": "evidence-revision-002",
-  "full_matrix_sha256": "7812aa656347acfd26283e5f134669d4ea5c1fb72d5162bb0b1d41b34ef1e668",
+  "full_matrix_sha256": "f3eb0b49c5927b02f1aade8f45c74356225a483e0e01ba7a86e156d34e2e2c38",
   "pilot_rerun_required": false,
   "predecessor": {
     "pilot_disposition": "VALID_PREDECESSOR_INSTRUMENT_VALIDATION",
@@ -36,10 +37,13 @@
     "predecessor_runner_implementation_sha256": "56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066"
   },
   "predecessor_pilot_disposition": "VALID_PREDECESSOR_INSTRUMENT_VALIDATION",
-  "reviewed_runner_commit": "9c6467ae9316cc50d3415952d25e79b85097e1f7",
-  "reviewed_runner_implementation_sha256": "ad8c32bc9ab016b3051d44c8b77dc3333584f91df69732dc16d8536d52cbfdd9",
+  "reviewed_analysis_commit": "61176769d5ec4f70fa3992c099fe0639b21df712",
+  "reviewed_analysis_implementation_sha256": "ba13932221e18eee1bf59287e926909e386cb6bd160de4c2611cb394d649c696",
+  "reviewed_analysis_matches_current": true,
+  "reviewed_runner_commit": "61176769d5ec4f70fa3992c099fe0639b21df712",
+  "reviewed_runner_implementation_sha256": "49d2826be2cd03639c818e35f39ef86a03e699ff415d92f8add92a5a1b96b987",
   "reviewed_runner_matches_current": true,
-  "runner_implementation_sha256": "ad8c32bc9ab016b3051d44c8b77dc3333584f91df69732dc16d8536d52cbfdd9",
+  "runner_implementation_sha256": "49d2826be2cd03639c818e35f39ef86a03e699ff415d92f8add92a5a1b96b987",
   "runtime_behavior_delta": [],
   "schema": "evidence-revision-002-lineage-v1",
   "semantic_delta": {
