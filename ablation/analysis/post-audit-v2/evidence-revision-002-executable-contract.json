@@ -202,8 +202,8 @@
       "path": "ablation/analysis/post-audit-v2/evidence-revision-001-pair-equality-v2.json"
     }
   },
-  "reviewed_runner_commit": "786b4b5430c03308c90983af07dfdb3d2d87ce7d",
-  "reviewed_runner_implementation_sha256": "e8358cbbc598c12248e9754e7cb3653e866f1f5a847b468fdaff785ba739e652",
+  "reviewed_runner_commit": "b509707142c0330ab0058843bc70a72de0fe3232",
+  "reviewed_runner_implementation_sha256": "41bc1cfbbac4d25ec629c1462318aeb5444cb9d0edf783f9be8842be8f66c7a1",
   "reviewed_runner_matches_current": true,
   "revision_rate": {
     "denominator": "round1.proposed_settlement is not null AND round1.proposed_settlement != evaluator true_locus",
@@ -227,7 +227,7 @@
     "unresolved_distinction": "STATE_METADATA_NOT_A_CLAIM",
     "zero_denominator": "NOT_ESTIMABLE"
   },
-  "runner_implementation_sha256": "e8358cbbc598c12248e9754e7cb3653e866f1f5a847b468fdaff785ba739e652",
+  "runner_implementation_sha256": "41bc1cfbbac4d25ec629c1462318aeb5444cb9d0edf783f9be8842be8f66c7a1",
   "schema": "evidence-revision-002-executable-contract-v1",
   "statistical_plan": {
     "alpha": 0.05,

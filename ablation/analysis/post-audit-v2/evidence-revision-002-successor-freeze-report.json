@@ -105,9 +105,9 @@
     "full_matrix_sha256": "3e960b1f2ec35e4fdee6f4c339093104285cd9a086c35c723b247d591e5d7f7e",
     "reviewed_analysis_commit": "2d0a975cb4f898047dd61359e54962205dfa8f4c",
     "reviewed_analysis_matches_current": true,
-    "reviewed_runner_commit": "786b4b5430c03308c90983af07dfdb3d2d87ce7d",
+    "reviewed_runner_commit": "b509707142c0330ab0058843bc70a72de0fe3232",
     "reviewed_runner_matches_current": true,
-    "runner_implementation_sha256": "e8358cbbc598c12248e9754e7cb3653e866f1f5a847b468fdaff785ba739e652"
+    "runner_implementation_sha256": "41bc1cfbbac4d25ec629c1462318aeb5444cb9d0edf783f9be8842be8f66c7a1"
   },
   "implementation_commits": [
     "bf6167558c6b7ec7285c207d4eea6c5e18c9f83c",
@@ -117,7 +117,8 @@
     "2d0a975cb4f898047dd61359e54962205dfa8f4c",
     "786b4b5430c03308c90983af07dfdb3d2d87ce7d",
     "3df2c43e067e961c3300754d3b70ad4572476eb6",
-    "604b58a536abd41bee317ddaaaa30ef9e123297d"
+    "604b58a536abd41bee317ddaaaa30ef9e123297d",
+    "b509707142c0330ab0058843bc70a72de0fe3232"
   ],
   "matched_evidence_use": {
     "absence_is_zero_utilization": false,
@@ -235,6 +236,7 @@
   "status": "SUCCESSOR_FROZEN",
   "successor_execution_authorized": false,
   "transition_completeness": {
+    "completion_requires_durable_result_commit": true,
     "full_authorized": false,
     "full_executed": false,
     "gate_preservation": "PASS: static, client, and final bindings are mandatory",
@@ -242,8 +244,9 @@
     "offline_transition_tests": "12 passed",
     "owner_authorization_created": false,
     "payment_ordering": "PASS: namespace follows FINAL_AUTHORIZED and transport calls remain zero",
+    "production_execution_bypass": false,
     "provider_calls_performed": 0,
-    "reachability": "PASS: synthetic exact external authority and marker reached all 430 frozen loop entries offline",
+    "reachability": "PASS: exact external authority reaches FINAL_AUTHORIZED and the immutable 430-entry plan feeds the non-injectable lexical execution loop",
     "release_marker_created": false,
     "release_token_created": false,
     "safety": "PASS: unauthorized FULL cannot construct client or reach transport",

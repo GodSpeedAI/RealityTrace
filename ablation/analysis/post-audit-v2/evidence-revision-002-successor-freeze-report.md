@@ -147,10 +147,12 @@ release marker created = false
 Status: `TRANSITION_COMPLETE`.
 
 - Safety: unauthorized FULL cannot construct the provider client or reach transport.
-- Reachability: exact synthetic external owner authority and release bindings reached all 430 frozen loop entries without transport. Offline transition suite: `12 passed`.
+- Reachability: exact synthetic external owner authority and release bindings reached the exact 430-entry immutable plan feeding the non-injectable lexical execution loop; no transport was invoked. Offline transition suite: `12 passed`.
 - Gate preservation: static, client, and final authorization bindings remain mandatory.
 - Payment ordering: the run namespace follows `FINAL_AUTHORIZED`; provider/model calls remained zero.
 - Owner authorization, release token, and release marker were not created.
 
 Canonical owner authorization schema: `evidence-revision-002-full-authorization-v1`.
 The authority file must contain exactly the schema fields enforced by `OWNER_AUTHORIZATION_FIELDS`; it is external governance state and never mutates `OWNER_STATE`.
+
+Production traversal has no injected executor seam; completion requires a durable result commit and checkpoint state.
