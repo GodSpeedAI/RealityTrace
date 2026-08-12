@@ -111,6 +111,21 @@ def fixture(tmp_path, mutate_owner=None, mutate_marker=None):
     return docs, matrix_path, owner_path, request
 
 
+
+def test_real_client_construction_is_network_inert(monkeypatch):
+    from eval.v2.provider import ZaiCodingPlanClient
+    import urllib.request
+    calls = 0
+    def forbidden(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        raise AssertionError("transport must not run during construction")
+    monkeypatch.setattr(urllib.request, "urlopen", forbidden)
+    client = ZaiCodingPlanClient()
+    assert client.model == FROZEN_REQUESTED_MODEL
+    assert calls == 0
+
+
 def test_external_authority_schema_and_default_remain_separate(tmp_path):
     assert science.OWNER_STATE["status"] == "FROZEN_NOT_AUTHORIZED"
     assert science.OWNER_STATE["full_execution_authorized"] is False
