@@ -116,7 +116,8 @@
     "61176769d5ec4f70fa3992c099fe0639b21df712",
     "2d0a975cb4f898047dd61359e54962205dfa8f4c",
     "786b4b5430c03308c90983af07dfdb3d2d87ce7d",
-    "3df2c43e067e961c3300754d3b70ad4572476eb6"
+    "3df2c43e067e961c3300754d3b70ad4572476eb6",
+    "604b58a536abd41bee317ddaaaa30ef9e123297d"
   ],
   "matched_evidence_use": {
     "absence_is_zero_utilization": false,
@@ -145,7 +146,7 @@
   "offline_suite": {
     "command": "cd ablation && uv run --python 3.12 --with pytest python -m pytest -q",
     "failed": 0,
-    "passed": 401,
+    "passed": 413,
     "skipped": 0
   },
   "owner_state": {
@@ -238,7 +239,7 @@
     "full_executed": false,
     "gate_preservation": "PASS: static, client, and final bindings are mandatory",
     "model_calls_performed": 0,
-    "offline_transition_tests": "11 passed",
+    "offline_transition_tests": "12 passed",
     "owner_authorization_created": false,
     "payment_ordering": "PASS: namespace follows FINAL_AUTHORIZED and transport calls remain zero",
     "provider_calls_performed": 0,

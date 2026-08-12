@@ -147,7 +147,7 @@ release marker created = false
 Status: `TRANSITION_COMPLETE`.
 
 - Safety: unauthorized FULL cannot construct the provider client or reach transport.
-- Reachability: exact synthetic external owner authority and release bindings reached all 430 frozen loop entries without transport.
+- Reachability: exact synthetic external owner authority and release bindings reached all 430 frozen loop entries without transport. Offline transition suite: `12 passed`.
 - Gate preservation: static, client, and final authorization bindings remain mandatory.
 - Payment ordering: the run namespace follows `FINAL_AUTHORIZED`; provider/model calls remained zero.
 - Owner authorization, release token, and release marker were not created.
