@@ -1,0 +1,49 @@
+{
+  "case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
+  "design_fingerprint": "056284062a2ef6b2a6f6dc54ae63eceeb8802b66341d42ced7d305067d9e1d99",
+  "executable_contract_fingerprint": "46ee79581cd6b20c1abbaf1e99e21c62ae8372949ebbd8575609d4cb23bbb6f9",
+  "experiment_id": "evidence-revision-002",
+  "full_matrix_sha256": "7812aa656347acfd26283e5f134669d4ea5c1fb72d5162bb0b1d41b34ef1e668",
+  "pilot_rerun_required": false,
+  "predecessor": {
+    "pilot_disposition": "VALID_PREDECESSOR_INSTRUMENT_VALIDATION",
+    "pilot_may_establish": [
+      "live_runner_reachability",
+      "provider_compatibility",
+      "persistence_correctness",
+      "state_continuity",
+      "pairing_integrity",
+      "leak_prevention",
+      "output_contract_viability",
+      "analysis_reconstructability"
+    ],
+    "pilot_must_not_establish": [
+      "successor_confirmatory_evidence",
+      "successor_FULL_sample_membership",
+      "successor_parameter_selection",
+      "successor_endpoint_tuning"
+    ],
+    "predecessor_case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
+    "predecessor_design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
+    "predecessor_executable_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
+    "predecessor_experiment_id": "evidence-revision-001",
+    "predecessor_pilot_manifest_sha256": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+    "predecessor_pilot_matrix_sha256": "effd44ec461b8624e4c498b80f40884f1af0d30296b9062bda3a1f090d85a9e3",
+    "predecessor_pilot_run": "evidence-revision-001-revision-002-pilot-20260811T221724Z",
+    "predecessor_reviewed_runner_commit": "cf9b28b84a415ef33519e0866536ebd7787d567d",
+    "predecessor_revision": "revision-002",
+    "predecessor_run_json_sha256": "2be01bcdf2320c8f07b800000dcb5ed1057365b09ccc9ba304b25dede32cc989",
+    "predecessor_runner_implementation_sha256": "56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066"
+  },
+  "predecessor_pilot_disposition": "VALID_PREDECESSOR_INSTRUMENT_VALIDATION",
+  "reviewed_runner_commit": "9c6467ae9316cc50d3415952d25e79b85097e1f7",
+  "reviewed_runner_implementation_sha256": "ad8c32bc9ab016b3051d44c8b77dc3333584f91df69732dc16d8536d52cbfdd9",
+  "reviewed_runner_matches_current": true,
+  "runner_implementation_sha256": "ad8c32bc9ab016b3051d44c8b77dc3333584f91df69732dc16d8536d52cbfdd9",
+  "runtime_behavior_delta": [],
+  "schema": "evidence-revision-002-lineage-v1",
+  "semantic_delta": {
+    "matched_evidence_use": "NOT_EVALUATED_UNDER_THIS_EXPERIMENT",
+    "revision_rate": "EXPLICIT_PRE_PILOT_TYPED_OPERATIONALIZATION"
+  }
+}

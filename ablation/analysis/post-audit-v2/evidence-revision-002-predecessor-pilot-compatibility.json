@@ -1,0 +1,641 @@
+{
+  "allowed_deltas": [
+    "experiment/revision identity",
+    "design/executable identity",
+    "FULL namespace/matrix/UIds",
+    "owner authorization identity",
+    "endpoint metadata/disposition",
+    "revision_rate declaration"
+  ],
+  "behavioral_deltas": [],
+  "compatibility_sha256": "8e36347a7f77aa3a635f3c1a5a67ccfb35307a12bcfe875227fc9ab18cdbd0f5",
+  "counterfactual_new_experiment_seed_vectors_changed": 60,
+  "coverage": {
+    "evidence_delivery": "all predecessor pilot execution vectors equal",
+    "pairing": "ids.py and both matrix UID sets verified",
+    "parsing": "decision.py byte-equal",
+    "persistence": "ledger.py/evidence_revision_run.py byte-equal; successor adapter regression-tested",
+    "prompt_leak_prevention": "channel.py/marker neutralizer byte-equal plus prompt scan",
+    "provider_calls": "provider.py byte-equal",
+    "raw_before_score_ordering": "execution/ledger/runner core bytes equal",
+    "rendering": "legibility.py byte-equal",
+    "state_continuity": "dstate.py/controller.py byte-equal plus required initial sections"
+  },
+  "evidence_selection_seed_identity": "evidence-revision-001",
+  "execution_vectors": [
+    {
+      "coordinates": [
+        "cep-07",
+        "R0",
+        1
+      ],
+      "vector_sha256": "7540e334951602492ca8b8fee65d7e694dbcde860401285efbcb71a97b5e6cf1"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R0",
+        2
+      ],
+      "vector_sha256": "5e8b504ad2779fde9a8e1ccaa4b953f8c627de7129fdd10097ce1994103b3d5f"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R1",
+        1
+      ],
+      "vector_sha256": "aac3343b3c9844b8757918b9bf850b9b1af9d2ed6a2feab6be88bc4328f5aeba"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R1",
+        2
+      ],
+      "vector_sha256": "fee5000f9f1014f3f525a9294bc977e91743f9611e0f8c15e918a24686ad02d6"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R2",
+        1
+      ],
+      "vector_sha256": "202ce1a92ca1214d3bc538b7fd5f88ca1daa59ce696d705626cceed1950bd852"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R2",
+        2
+      ],
+      "vector_sha256": "5e7c3d1b8ea29c26b2b48bba109c91d3e32a0d407f2c49041d9543e5b8117bf4"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R3",
+        1
+      ],
+      "vector_sha256": "2f0805020f3433d4368cc2bf9f40b504b4c5f51877558589dc33b04830255f10"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R3",
+        2
+      ],
+      "vector_sha256": "28f822757297b8c681fa111521b200220d2f211a0eac3cd31bbb2c038eda5fc5"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R4",
+        1
+      ],
+      "vector_sha256": "e278e584625cba6e7da27ccdff37d0fb32329ff9e1a80064e0e1d765cb0d8c62"
+    },
+    {
+      "coordinates": [
+        "cep-07",
+        "R4",
+        2
+      ],
+      "vector_sha256": "3518afb8813e3471df36f2d6ab1994275cf3fda9c6e16e1484ba15db419e8815"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R0",
+        1
+      ],
+      "vector_sha256": "28887009a4e8974e0d422bd11b83e41b882f2e1d6915d16fc49d0f571271ef88"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R0",
+        2
+      ],
+      "vector_sha256": "e372c46fd0edd890d6ca30e473bb4336450aa908ee310c7e8b600f7341e4c845"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R1",
+        1
+      ],
+      "vector_sha256": "a73dc55282d82cdfaab9af182f4b421b19353f98aabc622f8a9c0b0ccef692b9"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R1",
+        2
+      ],
+      "vector_sha256": "b232c7dda7873778df879ab6af4fb7e0e3bc6a2827092a7164a89fc86ad0cef6"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R2",
+        1
+      ],
+      "vector_sha256": "cf920157bda6dbd92ef0556fee6b1878f424568d0af4ea8cf007d4b35cf5655e"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R2",
+        2
+      ],
+      "vector_sha256": "8005f0348148f293d73cdf1c0c8f2bda9567dbef3f6610a08d394ccf4f9b1e33"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R3",
+        1
+      ],
+      "vector_sha256": "0648d2489d4b7ff95b25b906538dbd797d6030978c92415e49d61a6885ca7880"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R3",
+        2
+      ],
+      "vector_sha256": "032c8328ac161ee80f1125e9a06ba64167f9fe27fc2e2e42eaee3efaa9cf0704"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R4",
+        1
+      ],
+      "vector_sha256": "e95851ae046228f02c01adfa24a5967ca5622f3217351944b0b36681c36567a0"
+    },
+    {
+      "coordinates": [
+        "df-11",
+        "R4",
+        2
+      ],
+      "vector_sha256": "c89b921032483c052ab49fa7be7d660791387dc8f1c025d86e5bee884fdbc255"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R0",
+        1
+      ],
+      "vector_sha256": "28efb5ea26943bab59fdc4504cd5b96772e1e6c3ea44153ef50c3c31cd08b885"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R0",
+        2
+      ],
+      "vector_sha256": "094312315557a9015d2754c5dcbc3330cd2a4acfde3d63b2920a8c58c6063cf7"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R1",
+        1
+      ],
+      "vector_sha256": "597dcdd47f3587f2424e63ba191fc43b340f2e75610e3d17ea0a135a2b10c4ae"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R1",
+        2
+      ],
+      "vector_sha256": "a14a16de70bf5f9623bb18626d05bdb0ffb21e2d2819643925960e1f5110d464"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R2",
+        1
+      ],
+      "vector_sha256": "5b220bf98c06962437e88c15fa6780a7bd2cad985d500fa4a5e13d8d9ef354a1"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R2",
+        2
+      ],
+      "vector_sha256": "040d7f117a17ef0f934d5924e2a5c9b5214f128ab2b1b09bbc265f8a172f339e"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R3",
+        1
+      ],
+      "vector_sha256": "536f66eb85c7591f2364c48cb893ffea054ca5a5350b7a8f874e771c675c5d74"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R3",
+        2
+      ],
+      "vector_sha256": "558158feea11e1827d4f17bb89337f9a522aa3fab6b4e526c6c052cd1443970d"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R4",
+        1
+      ],
+      "vector_sha256": "91c627ee7ae010a11a8ab151b1d169fbf9bbfdc5d36a4ef766681f484ef6d77a"
+    },
+    {
+      "coordinates": [
+        "ag-04",
+        "R4",
+        2
+      ],
+      "vector_sha256": "3398a556e8ac6a945624ab22ddccf67d4c51084e754d14f65144aaf43c33f06b"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R0",
+        1
+      ],
+      "vector_sha256": "7548a85f6d44882d3d526294f61a18e10627f28c061834779e62329a02b59e8a"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R0",
+        2
+      ],
+      "vector_sha256": "6e7e1d32431126c51f277df8bb5ed795d8e6dff2a667e699a69009bd7ac1b259"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R1",
+        1
+      ],
+      "vector_sha256": "3251140fe3d81132deaffe012cc903eb7396ccdca4c769cd0e8de317302bd805"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R1",
+        2
+      ],
+      "vector_sha256": "cf47487f600187396d13360de25226476b96d58f56c9c5b162b3bc5dd5a18a2e"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R2",
+        1
+      ],
+      "vector_sha256": "26bf4478a4714ca376c9b0090b1c18c627d2b95f7033b2f9626d8eb0f772b451"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R2",
+        2
+      ],
+      "vector_sha256": "4ed5bc03197e24a28bb405dcc5942751e9b672b464cb577f34c1c5dbf7ce1ef7"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R3",
+        1
+      ],
+      "vector_sha256": "6bae5e624d5bc40c5b4416d729a530261f8c081e1242edb74ef2a3bb094f6684"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R3",
+        2
+      ],
+      "vector_sha256": "0c61ed82beb4a1414fa368ef600a22582a20bc014b4fafc73e3a7afc8f1a983f"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R4",
+        1
+      ],
+      "vector_sha256": "d89f6f59de5568067d74dc19ebe0fa5fbad0836cd6daad2a00a6b3681ab2d792"
+    },
+    {
+      "coordinates": [
+        "sr-10",
+        "R4",
+        2
+      ],
+      "vector_sha256": "a22f53684e533d18a8f2af0450011ca6ec71a9a8028d4fe086399f6cb10a2e4e"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R0",
+        1
+      ],
+      "vector_sha256": "cde38bfbc6f802f112e731754e7c04d5e30c6c571b2ffdc1be4c318ef99512ec"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R0",
+        2
+      ],
+      "vector_sha256": "3bbab0b175c66fb51774f5adef915aafdcba7c62daa69bd85afa949eb898fe1a"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R1",
+        1
+      ],
+      "vector_sha256": "59b28fc0302135bab01549783be39bfe8f4f98eed33c5510fcc75a7b38942e42"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R1",
+        2
+      ],
+      "vector_sha256": "5724c8f07ae569ab8153712714480e9369c0e2df3de4fc12f33b23862447aa7c"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R2",
+        1
+      ],
+      "vector_sha256": "ea147c55ad8b6813286d90d440061c95afa04efadafe94dec85d32d32b6126bd"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R2",
+        2
+      ],
+      "vector_sha256": "a3bfa7446e8f9c9a603e61ba92263667795caa5f9af215900c65bb620f77d21f"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R3",
+        1
+      ],
+      "vector_sha256": "2ed36e65c6c45333ad758988695602658add8279a4bb9c1c6e820453b79b37e5"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R3",
+        2
+      ],
+      "vector_sha256": "73a1f3e6610ac11bac167b3672f0fb42e4eedd97325589a4d80ceaf47b20ebfb"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R4",
+        1
+      ],
+      "vector_sha256": "02465dd50f4578b189af2d8913b54e8e1284f74dec819d8c98772ce6545c3ae6"
+    },
+    {
+      "coordinates": [
+        "df-06",
+        "R4",
+        2
+      ],
+      "vector_sha256": "9f7f1eec969628547472b14d712292bc37ece3625658b6b7ff1b253ccb62a045"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R0",
+        1
+      ],
+      "vector_sha256": "95226ab31b0222b4250822ac3c26b2fbd13e3d595aee03abe71037472588249d"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R0",
+        2
+      ],
+      "vector_sha256": "ef41f6299a24a52df6bddee3f8f926dd09f01261917ee685c417e599da1dcc44"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R1",
+        1
+      ],
+      "vector_sha256": "0704b9604b92f809390ce35940638902da3aacb71860a7f0e47f53b17ff7f6d1"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R1",
+        2
+      ],
+      "vector_sha256": "8f329adbd89ac789cace48022059567fe5a26dffdf4f186bd6e7ccc918f56b7b"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R2",
+        1
+      ],
+      "vector_sha256": "024fab157639f8b890bf6431c79430cbee929e767eccf27c5e4025a59e95fa33"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R2",
+        2
+      ],
+      "vector_sha256": "ec5d610ca3058bed149d0865fdc211f458c0901ec331615401c34d998461dfd9"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R3",
+        1
+      ],
+      "vector_sha256": "a633d492563d4b94661834ea713f1412ca49a5788852805fe67d96b06ec8329b"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R3",
+        2
+      ],
+      "vector_sha256": "b14183eae9cf627cb817430a24eb304082ada07317bfb2c8fd35635e00c7a3fb"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R4",
+        1
+      ],
+      "vector_sha256": "24fce01d091a392a4312f3a4812244d75cdbdd6f76ed46fc90d747aeb2afd0d5"
+    },
+    {
+      "coordinates": [
+        "cep-05",
+        "R4",
+        2
+      ],
+      "vector_sha256": "cf4c775f4d6bf61bd5c7efb672019b79968667ecf2e33b6ef352d5697fddd63d"
+    }
+  ],
+  "execution_vectors_compared": 60,
+  "execution_vectors_equal": true,
+  "model_calls_performed": 0,
+  "outcome_artifacts_read": false,
+  "pilot_rerun_required": false,
+  "predecessor": {
+    "pilot_disposition": "VALID_PREDECESSOR_INSTRUMENT_VALIDATION",
+    "pilot_may_establish": [
+      "live_runner_reachability",
+      "provider_compatibility",
+      "persistence_correctness",
+      "state_continuity",
+      "pairing_integrity",
+      "leak_prevention",
+      "output_contract_viability",
+      "analysis_reconstructability"
+    ],
+    "pilot_must_not_establish": [
+      "successor_confirmatory_evidence",
+      "successor_FULL_sample_membership",
+      "successor_parameter_selection",
+      "successor_endpoint_tuning"
+    ],
+    "predecessor_case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
+    "predecessor_design_fingerprint": "3031af33611c9ae8ab0fd0bba22f0abc35147d4fe564e0e3623a174d0dfe28d9",
+    "predecessor_executable_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
+    "predecessor_experiment_id": "evidence-revision-001",
+    "predecessor_pilot_manifest_sha256": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+    "predecessor_pilot_matrix_sha256": "effd44ec461b8624e4c498b80f40884f1af0d30296b9062bda3a1f090d85a9e3",
+    "predecessor_pilot_run": "evidence-revision-001-revision-002-pilot-20260811T221724Z",
+    "predecessor_reviewed_runner_commit": "cf9b28b84a415ef33519e0866536ebd7787d567d",
+    "predecessor_revision": "revision-002",
+    "predecessor_run_json_sha256": "2be01bcdf2320c8f07b800000dcb5ed1057365b09ccc9ba304b25dede32cc989",
+    "predecessor_runner_implementation_sha256": "56f4463c2b228bb31f2c142d15e5431b8bd345114bd3707e14d386b1edfcf066"
+  },
+  "predecessor_completed_run_manifest_sha256_expected": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+  "predecessor_revision_002_scientific_artifact_verified": true,
+  "predecessor_run_json_sha256": "2be01bcdf2320c8f07b800000dcb5ed1057365b09ccc9ba304b25dede32cc989",
+  "predecessor_run_json_verified": true,
+  "provider_calls_performed": 0,
+  "runtime_source_equality": [
+    {
+      "byte_equal": true,
+      "current_sha256": "7556813eaf9bd723593ac7136c35088569789e45d49a9afec8f4a52d44aafee7",
+      "path": "ablation/eval/v2/evidence_revision_run.py",
+      "reviewed_sha256": "7556813eaf9bd723593ac7136c35088569789e45d49a9afec8f4a52d44aafee7"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "1f7bfd2ab6d1e86fe344085b38e6359ca0aae43b35ad07cfe76ddd72ff6f9aea",
+      "path": "ablation/eval/v2/provider.py",
+      "reviewed_sha256": "1f7bfd2ab6d1e86fe344085b38e6359ca0aae43b35ad07cfe76ddd72ff6f9aea"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "4020cec26cbda2a4a10aa3b534aaa233e37252879f2baea5c8a7ff97007429fb",
+      "path": "ablation/eval/v2/controller.py",
+      "reviewed_sha256": "4020cec26cbda2a4a10aa3b534aaa233e37252879f2baea5c8a7ff97007429fb"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "49158dccf73cadb3af057abe458f7cd5cb5a7971005efd034d9b17098cde60da",
+      "path": "ablation/eval/v2/channel.py",
+      "reviewed_sha256": "49158dccf73cadb3af057abe458f7cd5cb5a7971005efd034d9b17098cde60da"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "40a9b289b1078a325822dc770e9d9827e5bc6c628754b8f433e234938739905e",
+      "path": "ablation/eval/v2/dstate.py",
+      "reviewed_sha256": "40a9b289b1078a325822dc770e9d9827e5bc6c628754b8f433e234938739905e"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "0eec1f39584c7a6d6ac53322ee144e51a016d34ae054ed5661bcac1c170c138f",
+      "path": "ablation/eval/v2/decision.py",
+      "reviewed_sha256": "0eec1f39584c7a6d6ac53322ee144e51a016d34ae054ed5661bcac1c170c138f"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "1838aa35c18baa757e076741e2a9c7493f01ddcf45abb598b7adc960e2cef91c",
+      "path": "ablation/eval/v2/execution.py",
+      "reviewed_sha256": "1838aa35c18baa757e076741e2a9c7493f01ddcf45abb598b7adc960e2cef91c"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "eff906ab4d9c6251ac4cec6e0fced31681edc4221432ad181f2af007cc3ccc69",
+      "path": "ablation/eval/v2/ledger.py",
+      "reviewed_sha256": "eff906ab4d9c6251ac4cec6e0fced31681edc4221432ad181f2af007cc3ccc69"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "bc62553142594bc41968cba2a6a220f53de5e3fa7e40430f6717538233661529",
+      "path": "ablation/eval/v2/legibility.py",
+      "reviewed_sha256": "bc62553142594bc41968cba2a6a220f53de5e3fa7e40430f6717538233661529"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "4989a0fbcc2c4a4eac705b52457fb393371e2a54d9b1626e49058b85bcbb75a7",
+      "path": "ablation/eval/v2/ids.py",
+      "reviewed_sha256": "4989a0fbcc2c4a4eac705b52457fb393371e2a54d9b1626e49058b85bcbb75a7"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "643e1caf5b155369749f813efab9151111871a6e417b25d8f4027cc5084f8782",
+      "path": "ablation/eval/v2/case_inputs_v2.py",
+      "reviewed_sha256": "643e1caf5b155369749f813efab9151111871a6e417b25d8f4027cc5084f8782"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "6edc428b2558ed0585b97bc2b686d76a8ee493812c42141a9118190e1f08a64f",
+      "path": "ablation/eval/v2/marker_neutralization.py",
+      "reviewed_sha256": "6edc428b2558ed0585b97bc2b686d76a8ee493812c42141a9118190e1f08a64f"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "95712efd222388727ddd06a29f4cfea01c6e590fad07be1bf966bb4baeb79668",
+      "path": "ablation/eval/v2/sufficiency.py",
+      "reviewed_sha256": "95712efd222388727ddd06a29f4cfea01c6e590fad07be1bf966bb4baeb79668"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "384786f647f8e40eed448b1ea2d0d191c1e72d21df5631777c6b9153fe6df163",
+      "path": "ablation/eval/v2/replication.py",
+      "reviewed_sha256": "384786f647f8e40eed448b1ea2d0d191c1e72d21df5631777c6b9153fe6df163"
+    },
+    {
+      "byte_equal": true,
+      "current_sha256": "bad843502eac63689771afa83cf4d687c4e07083251b996c805a9d5f648c44cf",
+      "path": "ablation/eval/v2/validity_revision.py",
+      "reviewed_sha256": "bad843502eac63689771afa83cf4d687c4e07083251b996c805a9d5f648c44cf"
+    }
+  ],
+  "schema": "predecessor-pilot-execution-compatibility-v1",
+  "status": "PREDECESSOR_PILOT_ACCEPTED"
+}

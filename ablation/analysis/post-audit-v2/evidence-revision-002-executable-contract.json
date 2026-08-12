@@ -1,0 +1,243 @@
+{
+  "additional_provider_calls_authorized": false,
+  "arms": [
+    "R0",
+    "R1",
+    "R2",
+    "R3",
+    "R4"
+  ],
+  "case_inputs_reused_unchanged": true,
+  "case_inputs_sha256": "20fbaf97235b9bb4144582ae0bdf1527bb10a12394da38ee09931c7af4f91e1b",
+  "comparisons": {
+    "C1_evidence_effect": {
+      "arms": [
+        "R0",
+        "R1"
+      ],
+      "declared_differences": "disclosure policy only",
+      "family": "primary",
+      "question": "does delivering evidence at all change the final diagnostic claim? This is the direct test of H-EVIDENCE-REVISION."
+    },
+    "C2_legibility_governed": {
+      "arms": [
+        "R1",
+        "R2"
+      ],
+      "declared_differences": "observation rendering only",
+      "family": "primary",
+      "question": "does rendering the SAME evidence legibly change final accuracy under the governed budget?"
+    },
+    "C3_legibility_upper": {
+      "arms": [
+        "R3",
+        "R4"
+      ],
+      "declared_differences": "observation rendering only",
+      "family": "primary",
+      "question": "the same legibility contrast with evidence coverage at its upper bound, so a null in C2 cannot be attributed to there being too little evidence to render"
+    },
+    "C4_coverage_headroom": {
+      "arms": [
+        "R1",
+        "R3"
+      ],
+      "constraint": "R3 is an EXEMPT_UPPER_BOUND; this comparison bounds headroom and may not be reported as controller performance, affordable navigation, or payment optimality",
+      "declared_differences": "TWO \u2014 disclosure AND budget_semantics. This comparison does NOT isolate a single variable and may never be described as if it did (audit A-06).",
+      "family": "secondary",
+      "question": "how much of the remaining gap is attributable to evidence coverage rather than to revision?"
+    }
+  },
+  "design_fingerprint": "056284062a2ef6b2a6f6dc54ae63eceeb8802b66341d42ced7d305067d9e1d99",
+  "evidence_policy": {
+    "R0": "NONE",
+    "R1": "MASKED_K",
+    "R2": "MASKED_K",
+    "R3": "FULL",
+    "R4": "FULL"
+  },
+  "evidence_selection_seed_identity": "evidence-revision-001",
+  "executable_contract_fingerprint": "46ee79581cd6b20c1abbaf1e99e21c62ae8372949ebbd8575609d4cb23bbb6f9",
+  "execution_authorized": false,
+  "experiment_id": "evidence-revision-002",
+  "full_execution_authorized": false,
+  "full_matrix_sha256": "7812aa656347acfd26283e5f134669d4ea5c1fb72d5162bb0b1d41b34ef1e668",
+  "full_plan": {
+    "arms": [
+      "R0",
+      "R1",
+      "R2",
+      "R3",
+      "R4"
+    ],
+    "cases": [
+      "ag-04",
+      "ag-05",
+      "ag-06",
+      "ag-07",
+      "ag-08",
+      "ag-09",
+      "ag-10",
+      "ag-11",
+      "ag-12",
+      "ag-13",
+      "ag-14",
+      "cep-04",
+      "cep-05",
+      "cep-06",
+      "cep-07",
+      "cep-08",
+      "cep-09",
+      "cep-10",
+      "cep-11",
+      "cep-12",
+      "cep-13",
+      "cep-14",
+      "df-03",
+      "df-04",
+      "df-05",
+      "df-06",
+      "df-07",
+      "df-08",
+      "df-09",
+      "df-10",
+      "df-11",
+      "df-12",
+      "df-15",
+      "sr-03",
+      "sr-04",
+      "sr-05",
+      "sr-06",
+      "sr-07",
+      "sr-08",
+      "sr-09",
+      "sr-10",
+      "sr-11",
+      "sr-12"
+    ],
+    "namespace": "full:er002-full-v1",
+    "repetitions": 2
+  },
+  "masked_k": {
+    "candidate_universe": [
+      "inspect_target_binding",
+      "inspect_source_symbols",
+      "inspect_environment",
+      "inspect_permissions",
+      "inspect_fixture_integrity",
+      "validate_semantic_model"
+    ],
+    "k": 3,
+    "max_payment": 7
+  },
+  "matched_evidence_use": {
+    "absence_is_zero_utilization": false,
+    "denominator": null,
+    "derived_proxy_permitted": false,
+    "direct_utilization_instrument_present": false,
+    "estimand": null,
+    "historical_73_7_percent_disposition": "HISTORICAL_EVIDENCE_UNDER_ITS_OWN_SCORING_CONTRACT_NOT_IMPORTED",
+    "numerator": null,
+    "post_pilot_semantics_prohibited": true,
+    "predecessor_status": "PRESENT_BUT_NOT_OPERATIONALLY_FROZEN",
+    "reason": "No pre-pilot frozen rule uniquely specified arm pairing, evidence construct, utilization indicator, gate-blind versus governed scoring, population/exclusions, repetition aggregation, or missing-pair handling.",
+    "status": "NOT_EVALUATED_UNDER_THIS_EXPERIMENT",
+    "utilization_claim_permitted": false,
+    "value": null
+  },
+  "model_calls_performed": 0,
+  "owner_state": {
+    "additional_provider_calls_authorized": false,
+    "authorized_stage": null,
+    "execution_authorized": false,
+    "full_execution_authorized": false,
+    "original_10pp_threshold_preserved": true,
+    "power_issue": "OWNER_ACKNOWLEDGED_UNRESOLVED",
+    "predecessor_pilot_disposition": "VALID_PREDECESSOR_INSTRUMENT_VALIDATION",
+    "predecessor_pilot_manifest_sha256": "ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13",
+    "release_marker_issued": false,
+    "release_token_issued": false,
+    "status": "FROZEN_NOT_AUTHORIZED"
+  },
+  "predecessor_executable_fingerprint": "12eb26d72f74709a827059c2a6ccb693ef956a6d5aa7ca2bf6f292b645da010e",
+  "predecessor_pilot_compatibility_sha256": "8e36347a7f77aa3a635f3c1a5a67ccfb35307a12bcfe875227fc9ab18cdbd0f5",
+  "predecessor_pilot_not_in_full_sample": true,
+  "primary_endpoint": {
+    "construct": null,
+    "definition": "the unit's FINAL diagnostic claim names the true locus, evaluated on the primary population",
+    "gate_handling": "scored on the model's last claim, independent of the sufficiency gate's verdict, so the endpoint measures the model and not the rule",
+    "name": "R_correct",
+    "unit": "case"
+  },
+  "provider_calls_performed": 0,
+  "provider_contract": {
+    "endpoint": "https://api.z.ai/api/coding/paas/v4/chat/completions",
+    "requested_model": "glm-5.2",
+    "route": "zai-coding-plan"
+  },
+  "reused_artifacts": {
+    "case_inputs": {
+      "file_sha256": "11d47c6812a4087783c56cf038ff54822e0c6fccab99e61b484f7e07318dd3cb",
+      "path": "ablation/analysis/post-audit-v2/case-inputs-v2.json"
+    },
+    "marker_neutralization": {
+      "file_sha256": "116a9b80093c3ead405afffeff596d1272c5bac9d68e8c8cdd9fe93096a052f9",
+      "path": "ablation/analysis/post-audit-v2/evidence-revision-001-marker-neutralization-v2.json"
+    },
+    "masked_k_feasibility": {
+      "file_sha256": "713205962c86e75e4081dce11420257c00c803a883bbe8f58610fa069737212c",
+      "path": "ablation/analysis/post-audit-v2/evidence-revision-001-masked-k-feasibility-v2.json"
+    },
+    "masked_k_leakage": {
+      "file_sha256": "e1510cb536801ff9f701574c8cb217e265878898b6b1b075de084ad9bd74377e",
+      "path": "ablation/analysis/post-audit-v2/evidence-revision-001-masked-k-leakage-v2.json"
+    },
+    "pair_equality": {
+      "file_sha256": "20ed1eeffbea8ee2b9c37b58f2fa752eff261a7cc446cb7f7fcd7a28e2216b0d",
+      "path": "ablation/analysis/post-audit-v2/evidence-revision-001-pair-equality-v2.json"
+    }
+  },
+  "reviewed_runner_commit": "9c6467ae9316cc50d3415952d25e79b85097e1f7",
+  "reviewed_runner_implementation_sha256": "ad8c32bc9ab016b3051d44c8b77dc3333584f91df69732dc16d8536d52cbfdd9",
+  "reviewed_runner_matches_current": true,
+  "revision_rate": {
+    "denominator": "round1.proposed_settlement is not null AND round1.proposed_settlement != evaluator true_locus",
+    "final_claim": "gate_blind_last_model_claim",
+    "null_round1": "EXCLUDE_NO_SETTLEMENT_NO_CLAIM",
+    "numerator": "denominator AND final gate-blind claim != round1.proposed_settlement",
+    "population": "PRIMARY_POPULATION",
+    "reported_by": "arm",
+    "reporting_unit": "case_repetition",
+    "semantic_origin": "PRE_PILOT_TYPED_SEMANTICS_NOT_PILOT_OUTCOMES",
+    "source_basis": [
+      "ablation/eval/v2/evidence_revision.py::SECONDARY_ENDPOINTS[revision_rate]",
+      "ablation/eval/v2/decision.py::ControllerDecision",
+      "ablation/eval/v2/replication.py::VOCAB",
+      "ablation/eval/v2/controller.py::TASK_INSTRUCTION/FORCED_FINAL_INSTRUCTION/DiagnosticController",
+      "ablation/eval/v2/dstate.py::DiagnosticState.with_decision",
+      "ablation/eval/v2/evidence_revision.py::PRIMARY_POPULATION/PRIMARY_ENDPOINT"
+    ],
+    "status": "EVALUATED_DERIVED_TYPED",
+    "unknown_round1": "INCLUDE_AS_WRONG_WHEN_EXPLICIT_UNKNOWN_DIFFERS_FROM_EVALUATOR_TRUTH",
+    "unresolved_distinction": "STATE_METADATA_NOT_A_CLAIM",
+    "zero_denominator": "NOT_ESTIMABLE"
+  },
+  "runner_implementation_sha256": "ad8c32bc9ab016b3051d44c8b77dc3333584f91df69732dc16d8536d52cbfdd9",
+  "schema": "evidence-revision-002-executable-contract-v1",
+  "statistical_plan": {
+    "alpha": 0.05,
+    "interval": "Wilson score, 95%",
+    "mandatory_covariates": [
+      "per-arm output-truncation rate",
+      "per-arm MODEL_OUTPUT_CONTRACT_FAILURE rate"
+    ],
+    "multiple_comparisons": "three primary comparisons; the family and its size are reported with every p-value",
+    "p_value_floor": "never reported as 0; underflow reported as p < 1e-15",
+    "paired_test": "McNemar, exact binomial when b + c < 25",
+    "prespecified_effect_threshold_pp": 10,
+    "primary_unit": "case",
+    "repetition_handling": "repetitions aggregated within case before pairing (majority over reps; ties resolved as incorrect); (case, rep) pairing may be reported alongside but never alone \u2014 pseudo-replication, audit A-05",
+    "sided": "two-sided"
+  },
+  "status": "FROZEN_NOT_AUTHORIZED"
+}

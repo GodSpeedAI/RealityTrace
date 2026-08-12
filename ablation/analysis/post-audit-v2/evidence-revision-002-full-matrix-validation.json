@@ -1,0 +1,24 @@
+{
+  "checks": {
+    "R1_R2_evidence_equality": "PASS",
+    "R3_R4_evidence_equality": "PASS",
+    "affordability": "PASS",
+    "answer_channel_leak_scan": "PASS",
+    "arms": "PASS",
+    "complete_pairing": "PASS",
+    "masked_k_exact_k": "PASS",
+    "population_and_exclusions": "PASS",
+    "raw_legible_semantic_equivalence": "PASS",
+    "unique_uids": "PASS"
+  },
+  "expected_arms": 5,
+  "expected_cases": 43,
+  "expected_repetitions": 2,
+  "expected_units": 430,
+  "masked_k_deliveries_checked": 172,
+  "matrix_sha256": "7812aa656347acfd26283e5f134669d4ea5c1fb72d5162bb0b1d41b34ef1e668",
+  "model_calls_performed": 0,
+  "provider_calls_performed": 0,
+  "schema": "evidence-revision-002-full-matrix-validation-v1",
+  "validation_sha256": "ad0081ff3052bc890af7d1dcbde54978b1d583cdad6973be39ea6fd443de915f"
+}
