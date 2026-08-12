@@ -117,6 +117,15 @@ def test_round_output_classes_include_later_and_exhausted_classes():
         "terminal_state": "MODEL_OUTPUT_CONTRACT_FAILURE"}
     assert reconstruct_round_output_classes(exhausted, "R1") == [
         "VALID_DECISION", "MODEL_OUTPUT_CONTRACT_FAILURE"]
+    forced_final = {
+        "rounds": [{"repair_attempts": 0, "output_class": "VALID_DECISION"}],
+        "executions": [{"truncated": False}, {"truncated": False}],
+        "terminal_state": "BUDGET_EXHAUSTED_SETTLED"}
+    assert reconstruct_round_output_classes(forced_final, "R1") == [
+        "VALID_DECISION", "VALID_DECISION"]
+    forced_final["executions"][-1]["truncated"] = True
+    assert reconstruct_round_output_classes(forced_final, "R1") == [
+        "VALID_DECISION", "OUTPUT_TRUNCATED"]
 
 
 def test_committed_result_reconstruction_verifies_exact_matrix_and_ledger(tmp_path):

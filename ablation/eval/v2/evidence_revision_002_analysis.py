@@ -154,15 +154,19 @@ def reconstruct_round_output_classes(doc: dict, arm: str) -> list[str]:
         consumed += calls
     remaining = len(executions) - consumed
     if remaining:
-        if doc.get("terminal_state") != "MODEL_OUTPUT_CONTRACT_FAILURE":
-            # Successful forced-final calls were not predecessor RoundRecords.
-            return classes
-        max_failure_calls = frozen.ARMS[arm].max_repair_attempts + 1
-        if remaining > max_failure_calls:
-            raise ValueError("unassigned failed-round calls exceed repair contract")
+        max_forced_final_calls = frozen.ARMS[arm].max_repair_attempts + 1
+        if remaining > max_forced_final_calls:
+            raise ValueError("unassigned forced-final calls exceed repair contract")
         final_execution = executions[-1]
-        classes.append("OUTPUT_TRUNCATED" if final_execution.get("truncated") is True
-                       else "MODEL_OUTPUT_CONTRACT_FAILURE")
+        if final_execution.get("truncated") is True:
+            classes.append("OUTPUT_TRUNCATED")
+        elif doc.get("terminal_state") == "MODEL_OUTPUT_CONTRACT_FAILURE":
+            classes.append("MODEL_OUTPUT_CONTRACT_FAILURE")
+        else:
+            # A non-failure terminal proves the forced-final parser accepted the
+            # last execution as a typed decision. Intermediate calls are bounded
+            # repairs within this one final-round outcome.
+            classes.append("VALID_DECISION")
     elif not rounds and doc.get("terminal_state") == "MODEL_OUTPUT_CONTRACT_FAILURE":
         raise ValueError("contract failure has no committed execution")
     return classes
@@ -273,12 +277,26 @@ def reconstruct_committed_full(run_dir: Path, matrix: dict | None = None,
 def analyze_committed_full(run_dir: Path, matrix: dict | None = None,
                            keys_path: Path | None = None) -> dict:
     """Canonical successor analysis; matched-use is status-only, never scored."""
-    rows = reconstruct_committed_full(run_dir, matrix, keys_path)
     from .evidence_revision_002_freeze import (
-        analysis_implementation_sha256, latest_analysis_implementation_commit)
+        OUT, analysis_implementation_sha256,
+        latest_analysis_implementation_commit)
+    frozen_analysis = json.loads(
+        (OUT / "evidence-revision-002-analysis-implementation.json").read_text())
+    frozen_executable = json.loads(
+        (OUT / "evidence-revision-002-executable-contract.json").read_text())
+    current_sha = analysis_implementation_sha256()
+    current_commit = latest_analysis_implementation_commit()
+    if (current_sha != frozen_analysis["analysis_implementation_sha256"] or
+            current_sha != frozen_analysis[
+                "reviewed_analysis_implementation_sha256"] or
+            current_sha != frozen_executable["analysis_implementation"]["sha256"] or
+            current_commit != frozen_analysis["reviewed_analysis_commit"] or
+            frozen_analysis["reviewed_analysis_matches_current"] is not True):
+        raise RuntimeError("canonical analysis bytes are not frozen/reviewed")
+    rows = reconstruct_committed_full(run_dir, matrix, keys_path)
     return {
-        "analysis_implementation_sha256": analysis_implementation_sha256(),
-        "reviewed_analysis_commit": latest_analysis_implementation_commit(),
+        "analysis_implementation_sha256": current_sha,
+        "reviewed_analysis_commit": current_commit,
         "primary_endpoint": primary_endpoint(),
         "case_primary": aggregate_case_primary(rows),
         "comparisons": {name: paired_case_table(rows, name)
