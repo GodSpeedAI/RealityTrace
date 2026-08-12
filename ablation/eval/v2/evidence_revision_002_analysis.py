@@ -125,6 +125,49 @@ def secondary_endpoint_status(name: str) -> str:
 
 
 
+OUTPUT_CLASSES = (
+    "VALID_DECISION", "OUTPUT_TRUNCATED",
+    "MODEL_OUTPUT_CONTRACT_FAILURE", "PARSER_FAILURE")
+
+
+def reconstruct_round_output_classes(doc: dict, arm: str) -> list[str]:
+    """Recover round-level classes, including a repair-exhausted final round."""
+    rounds = doc.get("rounds")
+    executions = doc.get("executions")
+    if not isinstance(rounds, list) or not isinstance(executions, list):
+        raise ValueError("round/execution records have invalid type")
+    classes, consumed = [], 0
+    for round_record in rounds:
+        if not isinstance(round_record, dict):
+            raise ValueError("round record has invalid type")
+        calls = round_record.get("repair_attempts", 0) + 1
+        if not isinstance(calls, int) or calls < 1 or consumed + calls > len(executions):
+            raise ValueError("round repair/call accounting is invalid")
+        final_execution = executions[consumed + calls - 1]
+        recorded = round_record.get("output_class", "VALID_DECISION")
+        output_class = ("OUTPUT_TRUNCATED"
+                        if final_execution.get("truncated") is True
+                        else recorded)
+        if output_class not in OUTPUT_CLASSES:
+            raise ValueError("round output class is outside frozen vocabulary")
+        classes.append(output_class)
+        consumed += calls
+    remaining = len(executions) - consumed
+    if remaining:
+        if doc.get("terminal_state") != "MODEL_OUTPUT_CONTRACT_FAILURE":
+            # Successful forced-final calls were not predecessor RoundRecords.
+            return classes
+        max_failure_calls = frozen.ARMS[arm].max_repair_attempts + 1
+        if remaining > max_failure_calls:
+            raise ValueError("unassigned failed-round calls exceed repair contract")
+        final_execution = executions[-1]
+        classes.append("OUTPUT_TRUNCATED" if final_execution.get("truncated") is True
+                       else "MODEL_OUTPUT_CONTRACT_FAILURE")
+    elif not rounds and doc.get("terminal_state") == "MODEL_OUTPUT_CONTRACT_FAILURE":
+        raise ValueError("contract failure has no committed execution")
+    return classes
+
+
 def reconstruct_committed_full(run_dir: Path, matrix: dict | None = None,
                                keys_path: Path | None = None) -> list[dict]:
     """Verify ledgers and deterministically map committed runner records to rows."""
@@ -186,6 +229,7 @@ def reconstruct_committed_full(run_dir: Path, matrix: dict | None = None,
             if call_ledger.assert_scorable(call_id) != execution.get("raw_hash"):
                 raise CommitViolation(f"raw call binding mismatch: {call_id}")
         rounds = doc.get("rounds")
+        output_classes = reconstruct_round_output_classes(doc, arm)
         if not isinstance(rounds, list):
             raise ValueError(f"round records have invalid type: {uid}")
         if not rounds:
@@ -193,7 +237,7 @@ def reconstruct_committed_full(run_dir: Path, matrix: dict | None = None,
                 raise ValueError(f"round-1 decision missing: {uid}")
             round1_claim = None
             round1_unresolved = None
-            output_class = "MODEL_OUTPUT_CONTRACT_FAILURE"
+            output_class = output_classes[0]
         else:
             decision = rounds[0].get("decision")
             if not isinstance(decision, dict) or "proposed_settlement" not in decision:
@@ -215,6 +259,7 @@ def reconstruct_committed_full(run_dir: Path, matrix: dict | None = None,
             "final_gate_blind_claim": final_claim,
             "terminal_state": doc.get("terminal_state"),
             "output_class": output_class,
+            "round_output_classes": output_classes,
             "evaluator_true_locus": truth,
             "final_gate_blind_correct": final_claim == truth,
         })
@@ -229,17 +274,24 @@ def analyze_committed_full(run_dir: Path, matrix: dict | None = None,
                            keys_path: Path | None = None) -> dict:
     """Canonical successor analysis; matched-use is status-only, never scored."""
     rows = reconstruct_committed_full(run_dir, matrix, keys_path)
+    from .evidence_revision_002_freeze import (
+        analysis_implementation_sha256, latest_analysis_implementation_commit)
     return {
+        "analysis_implementation_sha256": analysis_implementation_sha256(),
+        "reviewed_analysis_commit": latest_analysis_implementation_commit(),
         "primary_endpoint": primary_endpoint(),
         "case_primary": aggregate_case_primary(rows),
         "comparisons": {name: paired_case_table(rows, name)
                         for name in comparison_specs()},
         "revision_rate": revision_rate(rows),
         "output_class_rates": {
-            arm: {output_class: sum(
-                row["arm"] == arm and row["output_class"] == output_class
-                for row in rows) / sum(row["arm"] == arm for row in rows)
-                  for output_class in sorted({row["output_class"] for row in rows})}
+            arm: {
+                output_class: (
+                    sum(row["round_output_classes"].count(output_class)
+                        for row in rows if row["arm"] == arm)
+                    / sum(len(row["round_output_classes"])
+                          for row in rows if row["arm"] == arm))
+                for output_class in OUTPUT_CLASSES}
             for arm in frozen.ARMS},
         "matched_evidence_use": {
             "status": frozen.MATCHED_EVIDENCE_USE["status"], "value": None},

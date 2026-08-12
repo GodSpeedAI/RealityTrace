@@ -188,6 +188,18 @@ def test_live_client_factory_is_unreachable_without_static_authority(tmp_path):
     assert called is False
 
 
+
+def test_canonical_analysis_has_reviewed_frozen_identity():
+    docs = build_artifacts()
+    analysis = docs["evidence-revision-002-analysis-implementation.json"]
+    executable = docs["evidence-revision-002-executable-contract.json"]
+    assert analysis["reviewed_analysis_matches_current"] is True
+    assert analysis["analysis_implementation_sha256"] == executable[
+        "analysis_implementation"]["sha256"]
+    assert analysis["reviewed_analysis_commit"] == executable[
+        "analysis_implementation"]["reviewed_commit"]
+
+
 def test_design_fingerprint_excludes_governance_only():
     before = science.contract_fingerprint()
     old = science.OWNER_STATE["status"]

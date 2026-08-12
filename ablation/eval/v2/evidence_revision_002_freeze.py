@@ -55,6 +55,9 @@ SUCCESSOR_RUNNER_IMPLEMENTATION_FILES = tuple(RUNNER_IMPLEMENTATION_FILES) + (
     "ablation/eval/v2/evidence_revision_002_freeze.py",
     "ablation/eval/v2/evidence_revision_002_run.py",
 )
+ANALYSIS_IMPLEMENTATION_FILES = (
+    "ablation/eval/v2/evidence_revision_002_analysis.py",
+)
 
 
 def _canonical(value) -> str:
@@ -105,13 +108,47 @@ def runner_implementation_sha256_at_commit(commit: str) -> str:
     return _sha(runner_implementation_manifest_at_commit(commit))
 
 
+def analysis_implementation_manifest() -> dict:
+    files = {relative: _file_sha(ROOT / relative)
+             for relative in ANALYSIS_IMPLEMENTATION_FILES}
+    return {"schema": "evidence-revision-002-analysis-implementation-v1",
+            "files": files}
+
+
+def analysis_implementation_sha256() -> str:
+    return _sha(analysis_implementation_manifest())
+
+
+def latest_analysis_implementation_commit() -> str:
+    cmd = ["git", "log", "-1", "--format=%H", "--",
+           *ANALYSIS_IMPLEMENTATION_FILES]
+    return subprocess.check_output(cmd, cwd=ROOT, text=True).strip()
+
+
+def analysis_implementation_sha256_at_commit(commit: str) -> str:
+    files = {}
+    for relative in ANALYSIS_IMPLEMENTATION_FILES:
+        content = subprocess.check_output(
+            ["git", "show", f"{commit}:{relative}"], cwd=ROOT)
+        files[relative] = hashlib.sha256(content).hexdigest()
+    return _sha({"schema": "evidence-revision-002-analysis-implementation-v1",
+                 "files": files})
+
+
 def executable_declarations(design_fp: str) -> dict:
+    analysis_sha = analysis_implementation_sha256()
+    analysis_commit = latest_analysis_implementation_commit()
     reused = {name: {"path": str(path.relative_to(ROOT)),
                      "file_sha256": _file_sha(path)}
               for name, path in sorted(REUSED_ARTIFACTS.items())}
     return {
         "schema": "evidence-revision-002-executable-contract-v1",
         "experiment_id": EXPERIMENT_ID,
+        "analysis_implementation": {
+            "sha256": analysis_sha,
+            "reviewed_commit": analysis_commit,
+            "reviewed_sha256": analysis_implementation_sha256_at_commit(
+                analysis_commit)},
         "design_fingerprint": design_fp,
         "predecessor_executable_fingerprint": PREDECESSOR["predecessor_executable_fingerprint"],
         "case_inputs_sha256": PREDECESSOR["predecessor_case_inputs_sha256"],
@@ -428,6 +465,12 @@ def build_artifacts() -> dict:
     except subprocess.CalledProcessError:
         reviewed_sha = None
     reviewed_current = reviewed_sha == runner_sha
+    analysis_manifest = analysis_implementation_manifest()
+    analysis_sha = _sha(analysis_manifest)
+    analysis_commit = latest_analysis_implementation_commit()
+    analysis_reviewed_sha = analysis_implementation_sha256_at_commit(
+        analysis_commit)
+    analysis_reviewed_current = analysis_reviewed_sha == analysis_sha
     executable = dict(executable_declarations(design_fp),
                       status="FROZEN_NOT_AUTHORIZED",
                       executable_contract_fingerprint=executable_fp,
@@ -451,6 +494,10 @@ def build_artifacts() -> dict:
         "reviewed_runner_commit": reviewed_commit,
         "reviewed_runner_implementation_sha256": reviewed_sha,
         "reviewed_runner_matches_current": reviewed_current,
+        "analysis_implementation_sha256": analysis_sha,
+        "reviewed_analysis_commit": analysis_commit,
+        "reviewed_analysis_implementation_sha256": analysis_reviewed_sha,
+        "reviewed_analysis_matches_current": analysis_reviewed_current,
         "full_matrix_sha256": matrix["matrix_sha256"],
         "case_inputs_sha256": PREDECESSOR["predecessor_case_inputs_sha256"],
         "semantic_delta": science["semantic_delta"],
@@ -469,6 +516,11 @@ def build_artifacts() -> dict:
             reviewed_runner_commit=reviewed_commit,
             reviewed_runner_implementation_sha256=reviewed_sha,
             reviewed_runner_matches_current=reviewed_current),
+        "evidence-revision-002-analysis-implementation.json": dict(
+            analysis_manifest, analysis_implementation_sha256=analysis_sha,
+            reviewed_analysis_commit=analysis_commit,
+            reviewed_analysis_implementation_sha256=analysis_reviewed_sha,
+            reviewed_analysis_matches_current=analysis_reviewed_current),
         "evidence-revision-002-lineage.json": lineage,
     }
 

@@ -1,4 +1,5 @@
 """Contract-driven successor analysis regression tests."""
+import hashlib
 import json
 
 import pytest
@@ -6,7 +7,7 @@ import pytest
 from eval.v2.evidence_revision_002_analysis import (
     EndpointNotEvaluated, aggregate_case_primary, comparison_specs,
     matched_evidence_use, paired_case_table, reconstruct_committed_full,
-    revision_rate, secondary_endpoint_status)
+    reconstruct_round_output_classes, revision_rate, secondary_endpoint_status)
 
 
 def test_case_primary_majority_and_tie_incorrect():
@@ -97,12 +98,34 @@ def test_primary_rejects_truthy_non_boolean_fixture():
         aggregate_case_primary(rows, allow_partial=True)
 
 
+
+def test_round_output_classes_include_later_and_exhausted_classes():
+    multi = {
+        "rounds": [
+            {"repair_attempts": 0, "output_class": "VALID_DECISION"},
+            {"repair_attempts": 1, "output_class": "VALID_DECISION"}],
+        "executions": [
+            {"truncated": False},
+            {"truncated": False}, {"truncated": True}],
+        "terminal_state": "CONCRETE_SETTLEMENT"}
+    assert reconstruct_round_output_classes(multi, "R1") == [
+        "VALID_DECISION", "OUTPUT_TRUNCATED"]
+    exhausted = {
+        "rounds": [{"repair_attempts": 0, "output_class": "VALID_DECISION"}],
+        "executions": [{"truncated": False}, {"truncated": False},
+                       {"truncated": False}],
+        "terminal_state": "MODEL_OUTPUT_CONTRACT_FAILURE"}
+    assert reconstruct_round_output_classes(exhausted, "R1") == [
+        "VALID_DECISION", "MODEL_OUTPUT_CONTRACT_FAILURE"]
+
+
 def test_committed_result_reconstruction_verifies_exact_matrix_and_ledger(tmp_path):
     from eval.v2.evidence_revision_002_freeze import FULL_MATRIX_NAME, build_artifacts
     from eval.v2.ledger import CommitLedger, CommitViolation
 
     matrix = build_artifacts()[FULL_MATRIX_NAME]
     ledger = CommitLedger(str(tmp_path / "result-commits.jsonl"))
+    call_ledger = CommitLedger(str(tmp_path / "call-commits.jsonl"))
     coordinates = [(case, arm, rep)
                    for case in matrix["cases"] for arm in matrix["arms"]
                    for rep in range(1, matrix["repetitions"] + 1)]
@@ -111,9 +134,11 @@ def test_committed_result_reconstruction_verifies_exact_matrix_and_ledger(tmp_pa
         doc = {
             "unit_id": uid, "case_id": case, "condition": arm, "rep": rep,
             "last_model_claim": "unknown", "executions": [],
-            "rounds": [{"decision": {
-                "proposed_settlement": None,
-                "unresolved_distinction": "synthetic offline fixture"}}],
+            "rounds": [{"repair_attempts": 0,
+                        "output_class": "VALID_DECISION",
+                        "decision": {
+                            "proposed_settlement": None,
+                            "unresolved_distinction": "synthetic offline fixture"}}],
             "runner_contract": {
                 "experiment_id": "evidence-revision-002",
                 "design_fingerprint": matrix["design_fingerprint"],
@@ -122,9 +147,24 @@ def test_committed_result_reconstruction_verifies_exact_matrix_and_ledger(tmp_pa
                 "full_matrix_sha256": matrix["matrix_sha256"]},
         }
         if uid == matrix["unit_ids"][0]:
+            raw_text = "truncated invalid response"
+            raw_hash = hashlib.sha256(raw_text.encode()).hexdigest()
             doc["rounds"] = []
             doc["terminal_state"] = "MODEL_OUTPUT_CONTRACT_FAILURE"
             doc["last_model_claim"] = None
+            doc["executions"] = [{"call_num": 1, "raw_hash": raw_hash,
+                                  "truncated": True}]
+            call_ledger.commit_raw(
+                f"{uid}:call:001", str(tmp_path / "raw" / uid / "001.txt"),
+                raw_text)
+        else:
+            raw_text = '{"candidate_loci":["unknown"],"proposed_settlement":"unknown"}'
+            raw_hash = hashlib.sha256(raw_text.encode()).hexdigest()
+            doc["executions"] = [{"call_num": 1, "raw_hash": raw_hash,
+                                  "truncated": False}]
+            call_ledger.commit_raw(
+                f"{uid}:call:001", str(tmp_path / "raw" / uid / "001.txt"),
+                raw_text)
         payload = json.dumps(doc, sort_keys=True)
         payloads[uid] = payload
         ledger.commit_raw(uid, str(tmp_path / "results" / f"{uid}.json"), payload)
@@ -132,13 +172,16 @@ def test_committed_result_reconstruction_verifies_exact_matrix_and_ledger(tmp_pa
     assert len(rows) == 430
     assert rows[0]["arm"] == matrix["arms"][0]
     assert rows[0]["round1_proposed_settlement"] is None
-    assert rows[0]["output_class"] == "MODEL_OUTPUT_CONTRACT_FAILURE"
+    assert rows[0]["output_class"] == "OUTPUT_TRUNCATED"
     orphan_call_ledger = CommitLedger(str(tmp_path / "call-commits.jsonl"))
     orphan_call_ledger.commit_raw(
         "orphan:call:001", str(tmp_path / "raw" / "orphan.json"), "{}")
     with pytest.raises(ValueError, match="call ledger.*orphan"):
         reconstruct_committed_full(tmp_path, matrix)
-    (tmp_path / "call-commits.jsonl").unlink()
+    call_lines = (tmp_path / "call-commits.jsonl").read_text().splitlines()
+    (tmp_path / "call-commits.jsonl").write_text(
+        "\n".join(line for line in call_lines
+                    if json.loads(line)["unit_id"] != "orphan:call:001") + "\n")
     first = matrix["unit_ids"][0]
     first_path = tmp_path / "results" / f"{first}.json"
     first_path.write_text("{}")
