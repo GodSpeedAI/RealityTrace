@@ -1,4 +1,5 @@
 import json
+import subprocess
 from pathlib import Path
 import pytest
 
@@ -7,6 +8,18 @@ from eval.v2 import evidence_revision_002_exec005 as x
 from eval.v2.evidence_revision_002 import contract_fingerprint
 from eval.v2.evidence_revision_run import DeterministicFakeClient, ExecutionRefused, InjectedInterruption
 from eval.v2.opencode_runtime_provider import AmbiguousTransport, OpenCodeRuntimeClient
+
+
+def _checked_out_candidate_commit() -> str:
+    """Use the production runner's repository root for authority fixtures."""
+    return subprocess.check_output(
+        ["git", "-C", str(x.ROOT), "rev-parse", "HEAD"], text=True
+    ).strip()
+
+
+def _stale_candidate_commit() -> str:
+    current = _checked_out_candidate_commit()
+    return ("0" if current[0] != "0" else "1") + current[1:]
 
 
 def _evidence(tmp_path, **changes):
@@ -26,7 +39,7 @@ def _evidence(tmp_path, **changes):
 
 def _authority(tmp_path, **changes):
     q,p,_,_=_evidence(tmp_path,**changes)
-    doc=x.mint_full_authority(q,p,"54467bd3d566ac82bbcc759cdff12ac240d99503",owner_authorized=True,authorization_timestamp="2026-08-13T00:00:00Z")
+    doc=x.mint_full_authority(q,p,_checked_out_candidate_commit(),owner_authorized=True,authorization_timestamp="2026-08-13T00:00:00Z")
     a=tmp_path/"full-authority.json";x._atomic(a,doc);return a,q,p,doc
 
 
@@ -62,13 +75,13 @@ def test_live_without_authority_refuses_before_client_construction(tmp_path):
 ])
 def test_bad_fresh_qualification_or_provenance_cannot_mint_authority(tmp_path,changes):
     q,p,_,_=_evidence(tmp_path,**changes)
-    with pytest.raises(ExecutionRefused): x.mint_full_authority(q,p,"54467bd3d566ac82bbcc759cdff12ac240d99503",owner_authorized=True)
+    with pytest.raises(ExecutionRefused): x.mint_full_authority(q,p,_checked_out_candidate_commit(),owner_authorized=True)
 
 
 def test_exec004_qualification_can_never_authorize_exec005(tmp_path):
     q,p,_,_=_evidence(tmp_path)
     doc=json.loads(q.read_text());doc["schema"]="evidence-revision-002-exec004-qualification-v1";doc["execution_revision"]="004";x._atomic(q,doc)
-    with pytest.raises(ExecutionRefused): x.mint_full_authority(q,p,"54467bd3d566ac82bbcc759cdff12ac240d99503",owner_authorized=True)
+    with pytest.raises(ExecutionRefused): x.mint_full_authority(q,p,_checked_out_candidate_commit(),owner_authorized=True)
 
 
 def test_valid_fresh_evidence_and_owner_intent_mint_authority_and_authorized_run_constructs_client(tmp_path):
@@ -129,3 +142,12 @@ def test_changed_qualification_bytes_after_mint_refuse_by_artifact_sha(tmp_path)
     changed=json.loads(q.read_text());changed["audit_note"]="tampered";x._atomic(q,changed)
     with pytest.raises(ExecutionRefused,match="authority binding drift"):
         x.initialize_run(tmp_path/"run",authority_path=a,qualification_path=q,provenance_path=p)
+
+
+
+def test_stale_valid_candidate_commit_cannot_mint_authority(tmp_path):
+    q,p,_,_=_evidence(tmp_path)
+    stale=_stale_candidate_commit()
+    assert len(stale)==40 and stale != _checked_out_candidate_commit()
+    with pytest.raises(ExecutionRefused,match="checked-out candidate"):
+        x.mint_full_authority(q,p,stale,owner_authorized=True)
