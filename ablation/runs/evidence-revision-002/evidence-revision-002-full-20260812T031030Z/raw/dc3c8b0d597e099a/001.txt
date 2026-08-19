@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "verification_plan"], "unresolved_distinction": "The verifier exited with code 101 (typically a panic in Rust), but we cannot yet distinguish whether the panic originates from the verifier process itself being misconfigured, the implementation code panicking at runtime when processing the test input, or the verification plan referencing an incorrect test target that caused the failure.", "selected_action": "act-06", "expected_information": "The verifier's command, evidence types, and direction rule will reveal whether the verifier is invoking the correct test target and what it considers a pass/fail, helping distinguish a verifier-config defect from an implementation defect.", "proposed_settlement": null}
+```

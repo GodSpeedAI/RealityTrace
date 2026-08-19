@@ -1,0 +1,1 @@
+{"arm":"B","case_id":"sr-01","determinate":true,"exact_correct":false,"namespace":"full-001","predicted_locus":"implementation","repetition":2,"scoring_version":"m2-scorer-1","semantic_model_change_fp":false,"true_locus":"verifier","unit_id":"2961cc68f16c92ed","unknown_correct":false,"unparseable":false,"unsupported_concrete":false}

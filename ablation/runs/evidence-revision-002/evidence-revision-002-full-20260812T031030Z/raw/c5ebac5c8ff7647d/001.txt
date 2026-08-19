@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "The failure shows `cargo: command not found` (exit 127), which strongly indicates the Rust toolchain is absent from the execution environment. The remaining question is whether the verifier is correctly configured to invoke `cargo` (making this purely an environment provisioning failure) or whether the verifier itself is misconfigured to reference a tool that should not be expected in this context.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

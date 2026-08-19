@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale test target name `integration_tests` is hardcoded in the verifier's own command configuration (verifier) or specified by the verification plan that orchestrates the test run (verification_plan). The target was renamed to `integration_tests_moved` but the command still references the old name.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's configured command, including whether the test target name `integration_tests` is baked into the verifier itself or supplied externally by the verification plan, resolving which locus owns the mismatch.",
+ "proposed_settlement": null}
+```

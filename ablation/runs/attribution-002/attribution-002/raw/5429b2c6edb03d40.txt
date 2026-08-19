@@ -1,0 +1,9 @@
+Looking at the evidence for case cep-12:
+
+- **SQL record** shows `verifier_exit: 1`, so the verifier ran but failed.
+- **Evidence artifact** `01KZH8DMV6QEMCNDTD47E7X795` was recorded, so evidence collection occurred.
+- **Vector** is entirely zeros across all 64 dimensions, indicating the embedding/projection step produced a degenerate (empty) representation from the collected evidence.
+
+The evidence was collected and an artifact exists, but the projection into vector space yielded nothing meaningful (all zeros), which would cause downstream verification to fail due to lack of signal.
+
+Locus: projection

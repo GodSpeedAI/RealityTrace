@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "environment"], "unresolved_distinction": "Whether cargo is genuinely absent from the system (environment) or the verifier's restricted PATH (/usr/bin:/bin) excludes an existing cargo installation (verifier) — both concrete settlements were rejected for EVIDENCE_INSUFFICIENT and no qualifying evidence was established.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

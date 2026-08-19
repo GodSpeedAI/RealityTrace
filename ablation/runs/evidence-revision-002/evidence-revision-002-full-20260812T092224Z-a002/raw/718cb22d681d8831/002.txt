@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Whether the trailing '\\n# stale\\n' was part of the original committed fixture (implementation defect) or was appended by an evidence-collection/settlement process that corrupted the file (evidence_collection).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Is the non-writable .corpus-tmpfix directory a host-level permissions misconfiguration (environment), or did the corpus/evidence-collection infrastructure fail to provision the temp directory it created (evidence_collection)?", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

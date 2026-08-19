@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verification_plan", "projection"],
+  "unresolved_distinction": "Is the test file path 'tests/test_inventory.py' correctly specified in the verification command but the file was never generated (projection failure), or is the path itself misconfigured in the verification plan (verification_plan failure)?",
+  "selected_action": "act-05",
+  "expected_information": "Whether tests/test_inventory.py or a similarly named file exists in the working tree, revealing if the path is wrong or the file was never created.",
+  "proposed_settlement": null
+}
+```

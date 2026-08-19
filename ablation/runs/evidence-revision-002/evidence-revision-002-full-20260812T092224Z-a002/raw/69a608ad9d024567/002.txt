@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "The filesystem permission issue on src/lib.rs (mode 0, unreadable) could directly cause the exit-101 failure (environment), or the actual panic may originate from a code logic error that is merely coincident with the permission anomaly (implementation). However, the unreadable src/lib.rs is the strongest concrete abnormality found.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

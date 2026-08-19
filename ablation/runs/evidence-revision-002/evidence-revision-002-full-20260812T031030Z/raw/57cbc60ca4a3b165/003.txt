@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "implementation"], "unresolved_distinction": "Whether the `unit_tests` target name is hardcoded in the verifier's command configuration or specified by a verification plan directive — and whether the implementation's rename to `unit_tests_moved` was an unauthorized change or a legitimate refactor that the verification setup failed to track.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

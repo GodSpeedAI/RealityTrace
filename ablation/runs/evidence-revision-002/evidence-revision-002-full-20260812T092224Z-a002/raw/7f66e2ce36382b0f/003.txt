@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "verification_plan"], "unresolved_distinction": "The isolated test passes without the env var, but the verifier injects AST_GREP_CONFIG pointing to a deliberately nonexistent file, causing exit 101. Is the failure caused by the verifier/verification_plan misconfiguring the environment (pointing to a nonexistent config), or by the implementation panicking instead of handling a missing config file gracefully?", "selected_action": null, "expected_information": null, "proposed_settlement": "verifier"}
+```

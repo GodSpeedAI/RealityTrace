@@ -1,0 +1,9 @@
+Looking at this case:
+
+- **SQL** shows `verifier_exit: 2` — a non-zero, non-standard exit code indicating the verifier itself errored (exit code 2 typically signals a usage/internal error in the verifier, not a clean test failure which would be exit 1).
+- **Vector** is all zeros and **FTS** is empty, indicating no meaningful content was ever processed or captured — consistent with a verifier that failed before normal evaluation could proceed.
+- The evidence exists (`01KZH8DEZH4HCVB1YPGQ6VNQC8`) and is linked in the graph, so evidence collection and provenance wiring are intact.
+
+The failure originates at the verifier's own execution, which aborted with an error code.
+
+Locus: verifier

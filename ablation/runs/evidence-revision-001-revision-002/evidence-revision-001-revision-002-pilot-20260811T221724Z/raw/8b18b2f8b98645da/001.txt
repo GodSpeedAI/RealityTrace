@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "The test panics with 'stale fixture missing', which could mean either (a) the evidence_collection pipeline never gathered/provisioned the required fixture data, or (b) the fixture exists but the environment (paths, working directory setup) is misconfigured so the test cannot locate it.", "selected_action": "act-05", "expected_information": "Whether the fixture file(s) referenced by corpus_sr10 exist at the expected path and contain expected content, distinguishing a provisioning/collection gap from an environment path issue.", "proposed_settlement": null}
+```

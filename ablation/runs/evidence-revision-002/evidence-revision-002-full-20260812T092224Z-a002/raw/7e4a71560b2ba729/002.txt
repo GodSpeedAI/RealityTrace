@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "verification_plan"],
+  "unresolved_distinction": "Whether the environment genuinely lacks the Rust toolchain (cargo not installed/PATH restricted) for a project that legitimately requires it, versus the verification plan incorrectly specifying cargo when a different build approach is expected.",
+  "selected_action": "act-04",
+  "expected_information": "The verifier's declared build command, evidence types, and direction rule will confirm whether cargo is the correct and intended command for this Rust project, or whether the plan misidentifies the build tool. This eliminates or confirms the verification_plan hypothesis and, combined with existing evidence that the toolchain is unavailable and PATH is restricted, settles the attribution to environment.",
+  "proposed_settlement": null
+}
+```

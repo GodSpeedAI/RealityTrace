@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "All dependency artifacts compiled successfully and are marked fresh, yet the verifier exited with code 101 (Rust panic). Without test-level output it is unclear whether the implementation code panicked at runtime, or whether the verifier or verification plan misconfigured the execution.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

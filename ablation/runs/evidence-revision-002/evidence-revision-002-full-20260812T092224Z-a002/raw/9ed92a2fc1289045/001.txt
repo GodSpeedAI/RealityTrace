@@ -1,0 +1,8 @@
+Looking at the failure trace, I can see a clear import chain break:
+- `cep.cli` → `cep.validation` → tries to import `iter_reality_gap_case_files` from `cep.inventory` → **fails** because that symbol doesn't exist in `cep.inventory`.
+
+This is a code-level defect where source code references a function that is absent from its expected module.
+
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is the missing symbol 'iter_reality_gap_case_files' due to incomplete source code (implementation defect) or due to a projection step that failed to generate/include the expected function in cep/inventory.py?", "selected_action": "act-02", "expected_information": "Confirm whether iter_reality_gap_case_files is truly absent from cep/inventory.py and whether any similar symbol exists, distinguishing a pure code-level missing-implementation defect from a projection/generation failure.", "proposed_settlement": null}
+```

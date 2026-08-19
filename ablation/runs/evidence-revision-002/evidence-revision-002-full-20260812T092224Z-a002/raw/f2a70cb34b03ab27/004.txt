@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "implementation"], "unresolved_distinction": "Is the fixture file corrupted during evidence collection (trailing non-JSON content '\\n\\n# stale\\n'), or is the test implementation failing to correctly handle a format it should support?", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

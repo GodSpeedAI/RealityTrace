@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Exit code 101 could stem from a panic in the implementation at runtime, a verification command targeting a non-existent or incorrect test target, or a misconfigured verifier. All dependencies compiled successfully but no main-crate artifact appears in the build output, so we cannot yet distinguish whether the main crate failed to compile, the verifier is invoking the wrong target, or the verifier itself is broken.",
+ "selected_action": "act-03",
+ "expected_information": "Whether the test target or path referenced by the verification command resolves to an existing file. If the target does not exist, the failure is likely in the verification_plan; if it does exist, the failure is more likely in the implementation or verifier configuration.",
+ "proposed_settlement": null}
+```

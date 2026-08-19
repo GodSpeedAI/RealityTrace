@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether pytest was expected to be installed in the environment (environment failure) or the verification plan incorrectly assumed pytest availability (verification_plan failure)", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

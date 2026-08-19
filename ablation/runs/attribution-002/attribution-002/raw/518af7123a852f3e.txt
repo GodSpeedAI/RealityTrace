@@ -1,0 +1,3 @@
+Candidates: verifier (verifier_exit=101; would need verifier stderr/stacktrace), implementation (repo ag/scenario ag-7; would need implementation trace or output mismatch), environment (stdin_format=car-go-json; would need harness/decoder failure evidence), evidence_collection (empty fts and all-zero vector; would need missing/partial artifact payload)
+Excluded: none
+Locus: unknown

@@ -1,0 +1,12 @@
+Looking at the diagnostic state:
+
+**Evidence summary:**
+- Build succeeded (all artifacts `fresh:true`, no compilation errors)
+- Toolchain available, directories writable (act-06)
+- Fixture file exists and matches expectations (act-08)
+- **`from_cli` symbol was NOT found** at its expected location (act-05)
+- Verifier exited 101
+
+**Key distinction:** Whether `from_cli` is genuinely required by a correctly-configured verifier (pointing to implementation) or whether the verifier is misconfigured to look for the wrong symbol (pointing to verifier). However, since this is round 3/3 and the concrete evidence already gathered — symbol absence combined with successful build, valid toolchain, and correct fixtures — all environmental factors are ruled out. The missing `from_cli` symbol is the most proximate cause of the exit-101 failure.
+
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether from_cli is a genuinely required symbol that the implementation fails to provide, versus a symbol the verifier incorrectly demands due to misconfiguration.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Is `cargo` the correctly specified toolchain for repo 'df' that is merely absent from the restricted PATH, or did the verification plan erroneously designate `cargo` when the project uses a different build system?",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's declared command and configuration will reveal whether `cargo` was explicitly prescribed by the verification plan or derived from a default, and whether the declared command matches the repo's actual toolchain expectations.",
+ "proposed_settlement": null}
+```

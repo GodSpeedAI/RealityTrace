@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation", "environment"], "unresolved_distinction": "Does the file tests/test_inventory.py actually exist in the working tree but is not being found due to a working-directory or path-resolution issue (environment), or does it genuinely not exist — and if so, is that because the verification plan references a non-existent test path (verification_plan) or because the implementation failed to create the expected test file (implementation)?", "selected_action": "act-05", "expected_information": "Whether tests/test_inventory.py resolves to an existing file in the working tree, distinguishing path/environment issues from genuinely missing files.", "proposed_settlement": null}
+```

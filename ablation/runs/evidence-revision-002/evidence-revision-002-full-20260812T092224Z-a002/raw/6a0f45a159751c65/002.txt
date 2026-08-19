@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Is the missing fixture file tests/fixtures/inventory-version-v999.json a committed artifact that should already exist in the working environment, or was it supposed to be provisioned by the evidence-collection or test-setup process?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

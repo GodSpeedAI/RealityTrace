@@ -1,0 +1,13 @@
+Looking at this diagnostic state, I see a Rust project (ast-grep-mcp-rs) where the verifier exited with code 101, and all dependency crates compiled successfully (all marked "fresh": true). The actual error message is not visible in the evidence provided.
+
+Key observations:
+- Exit code 101 is abnormal and indicates a failure
+- All dependency compilation artifacts are marked "fresh": true (successful)
+- No explicit error output is shown
+- The `[vector]`, `[graph]`, and much of `[fts]` were omitted due to context budget
+
+The failure could stem from the verifier's configuration being wrong, the implementation failing to compile/pass, or the verification plan pointing to something that doesn't exist. I need to understand what command the verifier ran and what it expected.
+
+```json
+{"candidate_loci": ["verifier", "implementation", "verification_plan"], "unresolved_distinction": "Whether the verifier's exit code 101 results from a misconfigured verification command/setup (verifier or verification_plan) versus an actual compilation or test failure in the project's own implementation code. The current evidence only shows successful dependency compilation with no error output.", "selected_action": "act-01", "expected_information": "The verifier's exact command, evidence types, and declared direction rule will reveal whether the verification was correctly configured and what it was checking, helping distinguish verifier misconfiguration from implementation failure.", "proposed_settlement": null}
+```

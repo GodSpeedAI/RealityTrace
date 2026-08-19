@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the verifier configuration correctly specifies cargo as the build tool for this Rust project (confirming environment as the failure locus) or whether it incorrectly mandates cargo (confirming verification_plan).", "selected_action": "act-02", "expected_information": "The verifier's configured command, evidence types, and direction rule will reveal whether cargo was correctly specified for this Rust project or erroneously mandated.", "proposed_settlement": null}
+```

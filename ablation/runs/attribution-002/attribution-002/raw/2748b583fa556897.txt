@@ -1,0 +1,3 @@
+Candidates: implementation, verifier, environment, verification_plan, declared_model
+Excluded: verifier (correct-detection), environment (pure-arithmetic), verification_plan (no-plan-evidence), declared_model (no-model-evidence)
+Locus: implementation

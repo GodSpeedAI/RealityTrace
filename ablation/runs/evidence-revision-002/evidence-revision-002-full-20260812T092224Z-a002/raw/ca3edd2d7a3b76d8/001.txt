@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": "The verifier exited with code 101 (typical Rust panic), but the FTS only shows successful compiler artifacts with no visible error or panic message—so it is unclear whether the failure originates from a misconfigured verifier, an implementation bug (runtime panic), or an environment deficiency.", "selected_action": "act-07", "expected_information": "The verifier's command, evidence types, and direction rule will reveal what was being tested and how the exit code was produced, helping distinguish a verifier misconfiguration from an implementation or environment failure.", "proposed_settlement": null}
+```

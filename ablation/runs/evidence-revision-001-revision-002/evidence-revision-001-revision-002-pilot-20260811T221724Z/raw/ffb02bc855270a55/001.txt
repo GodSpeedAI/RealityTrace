@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the environment was expected to have cargo installed (environment failure) or the verification plan incorrectly specified cargo as the build tool for a non-Rust project (verification_plan failure).", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

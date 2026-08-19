@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "verification_plan"],
+  "unresolved_distinction": "The act-03 observation confirms the toolchain is unavailable, but the previous 'environment' settlement was rejected as insufficient. The remaining question is whether the verifier configuration correctly mandates pytest (making the missing dependency an environment failure) or whether the verification_plan itself is misconfigured to expect a tool that was never provisioned.",
+  "selected_action": "act-05",
+  "expected_information": "The verifier's configured command and declared runner will reveal whether pytest is the intended test executor. If the configuration explicitly requires pytest, the fault lies in the environment for not providing it; if the configuration is malformed or references pytest erroneously, the verification_plan is the locus.",
+  "proposed_settlement": null
+}
+```

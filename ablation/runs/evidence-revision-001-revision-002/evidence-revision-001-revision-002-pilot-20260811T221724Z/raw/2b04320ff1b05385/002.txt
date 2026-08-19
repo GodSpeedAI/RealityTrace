@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether the Rust/Cargo toolchain is genuinely absent from the execution environment, or whether the verifier's restricted PATH prefix (/usr/bin:/bin) prevents discovery of an installed toolchain located elsewhere.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

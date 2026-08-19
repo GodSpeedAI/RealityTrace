@@ -1,0 +1,115 @@
+We need answer single line Locus: <locus>. Need diagnose failure case df-01 from retrieval context. Need infer locus. We have context: case_id df-01, evidence_id, repo df, scenario df-1, stdin_format car-go-json, verifier_exit 101. FTS entries are cargo build JSON compiler artifacts for many dependencies, all fresh true. Additional omitted. Need attribute failure to one locus. Need understand what failure recorded. verifier_exit 101 indicates verifier exited with code 101. In Rust, cargo build failure often exit code 101. The FTS context shows build artifacts, likely compilation of project dependencies. Need determine failure locus: environment? implementation? verifier? evidence_collection? Let's parse.
+
+We are a failure-diagnosis evaluator. Given retrieval context for one case, attribute observed failure to exactly one locus. Vocabulary:
+- verifier: the verifier program itself failed? e.g., verifier exit 101 due to verifier bug/panic?
+- verification_plan: plan issue?
+- projection: mapping from model to implementation?
+- implementation: the system under test code failed to compile/run?
+- environment: external dependencies/build environment issue?
+- authority: credentials/permissions?
+- evidence_collection: harness/evidence collection issue?
+- declared_model: model spec issue?
+- unknown.
+
+We need infer from context. The retrieval context is mostly cargo build artifacts. verifier_exit 101. Could be verifier attempted to build project and cargo failed with exit 101. Need know if failure due to implementation (project code compile error) or environment (dependency build issue) or verifier (verifier code compile error?) or evidence_collection (verifier harness failed to collect evidence).
+
+Let's inspect FTS. It lists many dependencies compiled successfully/fresh. No error messages included. The case metadata: repo "df", scenario "df-1", stdin_format "car-go-json" (maybe cargo JSON). verifier_exit 101. The FTS entries are cargo build messages. It seems evidence collection captured cargo build output. The build may have failed at some point after dependencies. Exit code 101 is typical Rust panic or cargo error. If cargo build fails due to compile error in implementation, locus implementation. If cargo build fails due to missing dependency/environment, locus environment. But context only shows successful dependency artifacts, no error. Additional material omitted. Need maybe infer from "verifier_exit": 101 means verifier process exited with code 101, not necessarily cargo. In Rust, a panic exits 101. If verifier itself panicked, locus verifier. But if verifier runs cargo and cargo returns 101, verifier might propagate 101. Need decide.
+
+Let's think of experiment design. They have cases with capability C. Retrieval context includes [sql] case metadata and [fts] full-text search evidence. The FTS entries are cargo build artifact JSON lines. The case df-01 likely a failure in "domainforge" repo. The evidence_id maybe from evidence collection. The verifier_exit 101. The FTS context shows build dependencies all fresh. There is no actual error line in provided context. The failure could be that the verifier could not find an artifact? Hmm.
+
+Need maybe use clues:
+- repo "df" (domainforge)
+- scenario "df-1"
+- stdin_format "car-go-json" maybe "cargo-json" (typo? car-go-json). The verifier likely invokes `cargo build --message-format json` to collect compiler artifacts. The FTS entries are exactly cargo JSON messages. The verifier exit 101. If cargo build fails, cargo emits compiler-artifact messages for dependencies then an error message. The provided FTS includes only dependency artifacts, no error. Additional omitted due to budget. The failure locus could be implementation if the project source failed to compile. But if no error shown, maybe the failure is that the verifier expected a cargo JSON artifact for the main binary but didn't get it, and exited 101. That could be verifier or evidence_collection? Let's explore.
+
+The context includes many dependency artifacts, all "fresh": true. It seems a cached build. The main crate "domainforge" artifact is not shown in the visible portion. Maybe build failed before producing main artifact. If dependencies all fresh, then failure likely compiling the main crate (implementation). But no error lines due to omitted material. Exit 101 from cargo due to compile error in main crate. Locus implementation.
+
+But maybe the FTS entries are from verifier's own build, not system under test. The repo "df" and project path /home/sprime01/projects/domainforge/target/debug/deps. The verifier might be building the project to verify. If the project fails to compile, implementation. If a dependency fails to compile due to environment (e.g., libc cfg freebsd12 on Linux?), environment? Let's inspect dependency artifacts: libc build script executed cfgs ["freebsd12"]. That is odd if target is FreeBSD? The target maybe x86_64-unknown-freebsd? But paths on Linux? Actually libc 0.2.186 build script sets cfg freebsd12 if target_os freebsd. Could be environment is FreeBSD. Not an error. All dependencies fresh. No failure in dependencies.
+
+Could be "car-go-json" stdin_format: maybe verifier expects Cargo JSON output but the project uses a custom build that doesn't emit JSON? Hmm.
+
+Let's consider the vocabulary and typical failure attribution:
+- verifier: failure in the verifier's own logic/code, not the artifact under test.
+- verification_plan: plan invalid/incomplete.
+- projection: projection from declared model to code incorrect.
+- implementation: code under verification fails to satisfy property or compile.
+- environment: external conditions (toolchain, dependencies, filesystem, network).
+- authority: authorization/identity issue.
+- evidence_collection: evidence not collected/parsed correctly.
+- declared_model: model itself wrong.
+- unknown.
+
+Given only evidence is cargo build artifacts and verifier_exit 101, likely the verifier ran a build and it failed. The failure is in the implementation (the project didn't build). But need be careful: verifier_exit 101 could be the verifier's Rust panic. The FTS entries are from building the verifier? Let's see package names: proc-macro2, quote, syn, serde, tokio, icu, regex, etc. These could be dependencies of either the verifier or the project. The repo is "df", project domainforge. The verifier might be a separate Rust program that depends on these crates. But the build output path `/home/sprime01/projects/domainforge/target/debug/deps` indicates building the domainforge project, not verifier. The verifier likely invokes cargo in that repo. So failure in domainforge implementation.
+
+However, the case metadata says "capability: C" maybe the verifier is checking capability C of the "df" repo. The failure recorded for case df-01. The retrieval context includes only build artifacts, no test result. If the build failed, the implementation cannot be verified. Locus implementation. But if the build failed due to a missing dependency version or environment, locus environment. Let's look for any anomaly in FTS:
+- `libc` build script cfgs ["freebsd12"] and target features? The libm build script env CFG_TARGET_FEATURES ["fxsr","sse","sse2"] suggests x86 Linux/FreeBSD. Not error.
+- `getrandom` build script executed no cfgs. For getrandom 0.3.4 on FreeBSD maybe should set cfg? Not necessarily.
+- `wasm-bindgen-shared` build script executed despite not wasm? Could be dependency for icu? It sets schema hash. Not error.
+- `zerocopy` build script with feature simd, no cfgs. Not error.
+- `serde_json` cfg fast_arithmetic="64". Not error.
+- `generic-array` cfg relaxed_coherence. Not error.
+- All artifacts fresh true. No "failed" messages.
+
+The FTS context may be truncated before the actual error. The omitted material could include error. But we must attribute based on available context. If no error, maybe unknown. But the task expects one locus. We need infer.
+
+Let's think of "verifier_exit": 101. In many test harnesses, exit code 101 specifically from Rust panic. If the verifier is a Rust binary and it panics, exit 101. If cargo build fails, cargo also exits 101. The FTS context is cargo build messages; if cargo failed, the verifier might exit with cargo's code. But if the verifier itself panicked while parsing cargo JSON, it would also exit 101 and maybe produce cargo messages up to panic. Which is more likely?
+
+The retrieval context includes only cargo artifact JSON lines, not any panic message. If the verifier panicked, there might be a panic stack trace in evidence, but omitted. The FTS entries are from `cargo build --message-format json` maybe captured as evidence. The verifier_exit 101 could be because cargo build failed. The failure locus then depends on what caused cargo build failure. Since only dependencies are shown and all fresh, the main crate compile error is likely. But no error line. Could be the verifier failed to parse the cargo JSON because of "car-go-json" stdin format? Hmm.
+
+Let's examine "stdin_format": "car-go-json". Could be a format for feeding evidence to verifier? The verifier might read cargo JSON messages from stdin. The evidence collection runs `cargo build --message-format json` and pipes to verifier. If the verifier exits 101, maybe because the input did not contain expected artifact. But the context includes many cargo JSON artifacts. The verifier might be a Rust program that parses them. If it panics due to a missing field or unexpected target kind, locus verifier. But we don't see panic.
+
+Maybe the case is from a benchmark of "failure diagnosis" where each case has a known failure locus. The retrieval context is intentionally limited. We need map to locus. The FTS context of cargo build artifacts suggests an "environment" failure? Let's consider if the build failed because a dependency crate `zmij@1.0.21` is suspicious. "zmij" is a real crate? Maybe not. It could be a malicious/unknown dependency causing build failure. But its build script executed and lib artifact fresh. No error. Could be a dependency named "zmij" (Russian for snake?) maybe a typo. But not failure.
+
+Maybe the failure is that the verifier expected to find a "compiler-artifact" for the main binary but the build produced only dependencies. The evidence collection may have truncated the output before the main artifact. But verifier_exit 101 due to missing artifact. If the build actually succeeded but evidence collection didn't capture the final artifact, locus evidence_collection. The context says "Additional retrieved material was omitted due to the fixed experiment context budget." So the full evidence may have more. The visible FTS entries are all dependencies; maybe the main artifact is omitted. If the main artifact was present, build succeeded. Then verifier exit 101 would be due to verifier logic. Hmm.
+
+Let's not overfit. Need answer likely "implementation" or "environment" or "verifier". Let's search memory? This might be from a dataset of "verification failure diagnosis" with loci. Cases named df-01, repo df, scenario df-1. The retrieval context includes cargo build artifacts. The failure might be "environment" because the build failed due to `proc-macro2` build script? But all fresh. Maybe the failure is "evidence_collection" because the evidence ID and FTS are build logs, but verifier_exit 101 indicates the verifier could not be built? Wait, the verifier itself might be built with cargo. The FTS entries could be from building the verifier, not the SUT. The repo "df" might be the verifier? Let's parse metadata:
+{"case_id": "df-01", "evidence_id": "01KZJ2N8YMKX2D36GJR0RG5ECN", "repo": "df", "scenario": "df-1", "stdin_format": "car-go-json", "verifier_exit": 101}
+"repo": "df" could be the repository under test. "scenario": "df-1" maybe a scenario in repo. "stdin_format": "car-go-json" maybe the format of stdin for the verifier, i.e., the verifier expects cargo JSON output. The FTS entries are from the repo's cargo build. So yes.
+
+What does "capability: C" mean? The user says "Below is the retrieval context for this case (capability: C)." Maybe each case tests a capability of a verifier? The capability C might be "compile and parse cargo JSON"? Not sure.
+
+Let's consider the loci definitions in such a verification system:
+- verifier: the program that checks evidence.
+- verification_plan: the plan specifying how to verify.
+- projection: mapping from model to implementation.
+- implementation: the code being verified.
+- environment: the execution environment.
+- authority: the authority that signs/attests.
+- evidence_collection: the process that collects evidence.
+- declared_model: the model declared by the user.
+- unknown.
+
+If a cargo build fails, that is an implementation failure (the implementation does not build). If a dependency fails to build due to environment, environment. But the FTS shows dependencies built successfully. The only missing is the implementation's own artifact. So implementation.
+
+But wait, the FTS entries include `domainforge` target directory but no `domainforge` package artifact. The dependencies are all fresh. If the implementation had a compile error, cargo would emit a `compiler-message` with error and exit 101. The FTS would include that error, but it's omitted. The visible context ends at `num-integer` dependency. The main crate may be next. The failure likely in main crate. Locus implementation.
+
+Let's see if there is any clue in "verifier_exit": 101 vs "verifier" locus. The field name "verifier_exit" might suggest the verifier process exited 101. If the failure locus were verifier, they'd maybe say verifier_exit 101. But that alone doesn't imply verifier fault; it's just the observed exit code. In a Rust verification harness, if the SUT fails to compile, the verifier might exit 101 because cargo build failed. The locus is implementation. If the verifier itself had a bug, the exit code could also be 101. Need distinguish by evidence. The evidence is cargo build logs, not verifier stack trace. So likely implementation.
+
+Let's think of "evidence_collection" possibility. The evidence collection process runs cargo and stores FTS. If cargo build fails, evidence collection still collects logs. The verifier reads logs and exits 101? Actually if evidence collection runs cargo and cargo fails, the "verifier_exit" might be cargo's exit, not verifier. The case metadata might record the exit code of the command that produced evidence. If the command is `cargo build`, exit 101. Then the failure is in the build, not evidence collection. The evidence collection succeeded in capturing logs. So not evidence_collection.
+
+Could be "environment" if the build failed because the Cargo registry dependencies were not available? But FTS shows they are available and fresh. No network. The build script for `libc` set `freebsd12`, maybe the environment is FreeBSD, but the project might expect Linux. If the implementation uses Linux-specific APIs and fails on FreeBSD, is that environment or implementation? If the declared capability requires portability, maybe implementation. But no evidence.
+
+Let's maybe search mental memory of similar tasks. The prompt: "You are a failure-diagnosis evaluator. Given the retrieval context for one case, attribute the observed failure to exactly one failure locus from this vocabulary: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown. Reply with a single line: Locus: <locus>." This is like a classification task. The retrieval context often includes logs. We need choose. For a case with only cargo build artifacts and exit 101, the intended answer might be "environment" because the failure is in the build environment (cargo dependency compilation) rather than the verifier or implementation. But let's examine.
+
+The FTS entries are all "fresh": true, meaning no actual compilation happened; cargo just reported cached artifacts. If the build failed, it wouldn't produce fresh artifacts for all dependencies? It could if dependencies are cached and main crate fails. The FTS includes no main crate. So implementation.
+
+If the failure were environment, we might see errors like "failed to find crate", "linker not found", "permission denied", or dependency build script failures. None here. If the failure were verifier, we might see verifier panic or assertion failure. None. If evidence_collection, we might see missing evidence or parse errors. None. So implementation is most plausible.
+
+But let's not ignore "Additional retrieved material was omitted due to fixed experiment context budget." The visible FTS is only a prefix of the evidence. The actual error may be omitted. We need infer from prefix. The prefix shows dependencies building. The error likely after prefix. The prefix doesn't show the error, but the fact that it's a build log and exit 101 points to implementation. However, if the omitted material included a dependency compile error, locus could be environment. But dependencies are all fresh in prefix; a dependency error would likely appear in the prefix for that dependency. The prefix includes many dependencies up to `num-integer`. The main crate likely after all dependencies. So omitted error likely main crate. Implementation.
+
+Let's consider if the main crate is `domainforge` and the scenario `df-1` maybe tests a specific capability. The failure could be a projection issue: the implementation doesn't match the declared model because a projection from model to code is wrong. But the evidence is a build failure, not a property violation. If the code doesn't compile, that's implementation, not projection. Projection would be if the mapping from model to code generated wrong code or missed a component. But if the repo is hand-written implementation, compile error is implementation.
+
+Could be "declared_model" if the model specifies an API that cannot be implemented? No.
+
+Let's maybe think of "verifier_exit 101" in Rust: cargo returns 101 on any build failure. The verifier might be running `cargo build` as part of evidence collection. The failure is "implementation" because the implementation under verification failed to compile. I'll likely answer implementation.
+
+But let's explore alternative: The FTS entries are from building the verifier itself. The verifier is a Rust program that depends on many crates. If the verifier fails to build, locus verifier. The repo "df" might be the verifier? The case_id df-01, repo df, scenario df-1. The project path `/home/sprime01/projects/domainforge/target/debug/deps` could be the verifier project named domainforge. The verifier might be a tool "domainforge" that verifies domain models. If the verifier itself fails to build, then the failure locus is verifier. But the metadata says "verifier_exit": 101, not "build_exit". If the verifier was not built, there would be no verifier exit. The FTS entries could be the verifier's own dependencies building, and then the verifier source failed to compile, causing cargo exit 101. But then the "verifier_exit" field would be the exit of the verifier build? Hmm.
+
+Let's parse the metadata fields:
+- evidence_id: unique ID for evidence.
+- repo: "df" maybe repository under analysis.
+- scenario: "df-1"
+- stdin_format: "car-go-json"
+- verifier_exit: 101
+
+If the verifier itself is being built, "verifier_exit" would not be known until it runs. The F

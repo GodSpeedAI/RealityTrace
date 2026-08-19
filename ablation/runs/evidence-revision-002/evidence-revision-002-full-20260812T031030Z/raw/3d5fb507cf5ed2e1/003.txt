@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether cargo is genuinely absent from the execution environment (environment) or the verifier is misconfigured to invoke cargo when a different toolchain path or build command was expected (verifier). The error 'cargo: command not found' with exit code 127 strongly points to environment, but prior settlement was rejected for insufficient evidence.",
+ "selected_action": "act-07",
+ "expected_information": "Whether the required Rust/cargo toolchain is installed and accessible on PATH, and whether designated working directories exist and are writable. This would confirm whether the environment genuinely lacks cargo or if the verifier is invoking an incorrect path.",
+ "proposed_settlement": null}
+```

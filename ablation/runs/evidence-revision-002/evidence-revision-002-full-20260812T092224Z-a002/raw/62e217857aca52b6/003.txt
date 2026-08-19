@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "The symbol format_matches_as_text was not found at its expected location, and the build compiled successfully without it. The key question is whether the implementation was supposed to provide this function but failed to (implementation fault), or whether the verification plan references a symbol/target that was never part of the implementation's design (verification_plan fault). Since the code compiled cleanly without this symbol, it may not be a required part of the implementation, suggesting the plan's reference is incorrect.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

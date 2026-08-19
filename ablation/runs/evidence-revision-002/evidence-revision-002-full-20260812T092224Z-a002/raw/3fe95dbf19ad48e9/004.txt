@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan", "evidence_collection"], "unresolved_distinction": "Whether the fixture file was expected to exist but is absent (environment/evidence_collection) or whether the test erroneously references a path never meant to exist (verification_plan)", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

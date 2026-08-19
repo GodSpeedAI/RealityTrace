@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the missing symbol iter_reality_gap_case_files in cep.inventory is a hand-written code defect (implementation) or was supposed to be generated from the declared semantic model but was not (projection).", "selected_action": "act-06", "expected_information": "Validation of the .sea model will reveal whether iter_reality_gap_case_files is declared in the semantic model. If declared but absent from source, this points to projection; if not declared, the import in validation.py is an implementation defect.", "proposed_settlement": null}
+```

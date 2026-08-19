@@ -1,0 +1,10 @@
+Looking at the evidence for cep-06:
+
+- **SQL** shows `verifier_exit: 2` — a non-zero, non-standard-failure exit code
+- **FTS** is empty — no textual evidence was captured
+- **Vector** is all zeros — no semantic content extracted
+- In pytest, exit code 2 indicates **test execution interrupted or internal error**, not a simple test failure (which would be exit code 1)
+
+The verifier itself errored during execution (interrupted/internal error), producing no usable output. The empty FTS and zero vector are downstream consequences of the verifier failing to complete. The root cause is the verifier crashing or being interrupted, not a flaw in the code under test, the plan, or the evidence pipeline.
+
+Locus: verifier

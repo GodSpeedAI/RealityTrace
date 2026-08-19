@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "environment", "implementation"], "unresolved_distinction": "Does the test path 'tests/test_import.py' genuinely not exist anywhere in the working tree (pointing to implementation or environment), or is it a misconfigured target path in the verification plan that doesn't match the actual location of the test file?", "selected_action": "act-05", "expected_information": "Whether 'tests/test_import.py' or an equivalent test file exists at the expected path or elsewhere in the working tree, distinguishing a wrong path in the verification plan from a genuinely missing file.", "proposed_settlement": null}
+```

@@ -1,0 +1,9 @@
+Looking at the evidence for case df-15:
+
+- **verifier_exit: 101** — This is an abnormal, non-standard exit code (101 is commonly associated with a Go panic or fatal runtime error). This is not a typical verification-mismatch exit code (e.g., 1) but rather a crash of the verifier process itself.
+- The all-zero vector and empty FTS suggest the verifier failed before it could produce meaningful output or diagnostics.
+- The stdin_format "car-go-json" and exit code 101 are consistent with a panic/crash within the verifier process when handling this case.
+
+The recorded failure is a crash of the verifier process itself, not a mismatch in evidence, projection, or implementation output.
+
+Locus: verifier

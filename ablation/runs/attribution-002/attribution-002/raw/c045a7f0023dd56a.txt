@@ -1,0 +1,10 @@
+Looking at the provenance for case df-02:
+
+- **SQL** records `verifier_exit: 101` — a non-zero, abnormal exit from the verifier itself.
+- **FTS** is empty — no text content was indexed.
+- **Vector** is all zeros across all 64 dimensions — no meaningful embedding was produced.
+- **Graph** shows only basic structural metadata, nothing anomalous.
+
+The verifier exited abnormally (code 101), and the empty FTS and all-zero vector are downstream symptoms of the verifier crashing before it could produce or process substantive output. The causal layer is the verifier's own failure.
+
+Locus: verifier

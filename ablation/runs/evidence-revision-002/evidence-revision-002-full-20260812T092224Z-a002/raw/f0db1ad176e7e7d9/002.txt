@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether `cargo` is genuinely absent from the system entirely, or is installed at a standard location (e.g., ~/.cargo/bin/) but inaccessible because the verifier's execution configuration prefixes PATH=/usr/bin:/bin, which excludes the Rust toolchain directory.", "selected_action": null, "expected_information": null, "proposed_settlement": "verifier"}
+```

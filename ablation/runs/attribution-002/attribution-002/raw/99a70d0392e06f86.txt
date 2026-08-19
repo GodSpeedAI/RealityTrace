@@ -1,0 +1,3 @@
+Candidates: verifier, implementation, environment, declared_model, verification_plan
+Excluded: none — evidence is non-discriminating (verifier_exit=1 is consistent with verifier fault, implementation defect caught, environment crash, or plan mismatch; zero vector provides no distinguishing signal; no stderr/stdout/assertion detail available to separate any locus)
+Locus: unknown

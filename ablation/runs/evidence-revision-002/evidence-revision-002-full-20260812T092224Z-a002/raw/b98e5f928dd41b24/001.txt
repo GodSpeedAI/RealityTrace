@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Was the module cep.conformance.anti_collapse expected to exist as part of the hand-written source (implementation defect: cli.py imports a non-existent module), or should it have been generated/included by a projection step that failed to emit it?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

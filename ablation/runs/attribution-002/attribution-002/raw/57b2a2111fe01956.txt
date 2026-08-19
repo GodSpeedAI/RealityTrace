@@ -1,0 +1,12 @@
+Looking at the provenance for case df-07:
+
+1. **Graph**: Shows a recorded evidence artifact exists, properly linked to the case and repo.
+2. **SQL**: The critical signal is `"verifier_exit": 101` — a non-zero, abnormal exit code from the verifier process itself.
+3. **FTS**: Empty — no textual evidence content was captured or indexed.
+4. **Vector**: All zeros — no semantic content, reinforcing that no meaningful evidence was extracted.
+
+The evidence artifact was collected and recorded (the graph and SQL confirm its existence), but the verifier exited abnormally with code 101. This exit code typically indicates the verifier process crashed or encountered an internal error (rather than running to completion and reporting a pass/fail verdict). The empty FTS and zero-vector further suggest the verifier did not produce usable output before terminating.
+
+The failure manifests directly at the verifier layer — it is the component that produced the abnormal exit, not the evidence pipeline (which did record an artifact) or the implementation under test.
+
+Locus: verifier

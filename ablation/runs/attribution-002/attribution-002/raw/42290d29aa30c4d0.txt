@@ -1,0 +1,9 @@
+Looking at the evidence for case sr-08:
+
+- The SQL record shows `verifier_exit: 101`, which is a non-zero exit code typically indicating a crash or panic.
+- The FTS section is empty and the vector is all zeros, indicating minimal useful diagnostic signal was captured.
+- Exit code 101 is characteristic of a runtime panic or crash in the program under test (common in Go/Rust ecosystems as a panic exit code).
+
+The verifier ran, invoked the solution, and the solution itself crashed (exit 101), which the verifier captured and reported. The failure originates in the solution code being executed, not in the verification apparatus, plan, environment, or evidence pipeline.
+
+Locus: implementation

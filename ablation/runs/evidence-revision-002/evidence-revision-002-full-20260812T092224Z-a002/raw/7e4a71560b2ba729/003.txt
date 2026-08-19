@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the verifier configuration correctly mandates cargo for a Rust project (making the missing toolchain an environment deficiency) or incorrectly specifies cargo when an alternative build approach is intended.", "selected_action": "act-04", "expected_information": "The verifier's declared command and evidence types will reveal whether cargo is the intended build tool for this project; if correctly configured, the failure is attributable to environment (toolchain absent), otherwise to verification_plan.", "proposed_settlement": null}
+```

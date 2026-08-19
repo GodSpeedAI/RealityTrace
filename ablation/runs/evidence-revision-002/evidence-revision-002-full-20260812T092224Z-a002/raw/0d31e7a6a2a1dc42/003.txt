@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "environment"], "unresolved_distinction": "Whether the restricted PATH (/usr/bin:/bin) prefixed by the verifier is the proximate cause excluding cargo, or whether cargo is genuinely absent from the system entirely — but the verifier's act of imposing a restricted PATH while simultaneously invoking cargo is itself the misconfiguration regardless of whether cargo exists elsewhere.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verifier"}
+```

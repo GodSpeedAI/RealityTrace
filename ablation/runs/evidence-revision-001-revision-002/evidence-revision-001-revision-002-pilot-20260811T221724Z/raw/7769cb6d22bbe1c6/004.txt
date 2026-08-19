@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is `cargo` genuinely absent from the verification environment (toolchain provisioning failure), or is the verifier misconfigured to invoke `cargo` for a project that uses a different build system?", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

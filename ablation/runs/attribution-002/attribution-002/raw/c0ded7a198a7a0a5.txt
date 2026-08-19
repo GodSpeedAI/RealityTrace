@@ -1,0 +1,22 @@
+Candidates: verifier, verification_plan, implementation, environment, evidence_collection
+
+Excluded: (none — no discriminating evidence available to support exclusion)
+
+**Reasoning:**
+
+The retrieval context for cep-08 is extremely sparse:
+- **FTS**: empty — no text content from the evidence artifact is retrievable.
+- **Vector**: all zeros — no semantic embedding content available.
+- **SQL**: only tells us `verifier_exit: 2`, `stdin_format: pytest-progress`, and basic identifiers. No error message, no stderr, no test output, no traceback.
+- **Graph**: only structural metadata (case belongs to repo, evidence linked to case).
+
+`verifier_exit: 2` tells us the verifier did not pass, but exit code 2 alone is ambiguous. In pytest it can mean collection errors, internal errors, or usage errors. Without any error text, log, or captured output, I cannot distinguish between:
+- A **verifier** crash or usage error (verifier internal bug).
+- A **verification_plan** that fed bad input to the verifier.
+- An **implementation** with syntax/import errors that caused collection failure.
+- An **environment** missing dependencies or misconfigured.
+- An **evidence_collection** issue that failed to capture the relevant diagnostic output.
+
+No candidate can be excluded with stated evidence. The FTS and vector emptiness could reflect an evidence_collection gap, but could equally reflect that the artifact simply has no searchable/indexable content. There is no positive evidence confirming any single locus.
+
+Locus: unknown

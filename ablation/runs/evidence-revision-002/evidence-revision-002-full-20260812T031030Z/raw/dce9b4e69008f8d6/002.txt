@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "implementation", "verifier"], "unresolved_distinction": "The fixture file tests/fixtures/example.py has mode 0 (completely inaccessible), which is abnormal for a fixture. The key question is whether this is an environment misconfiguration causing the verifier/implementation to panic on I/O, or whether the implementation is at fault for not handling unreadable files gracefully.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier", "implementation"], "unresolved_distinction": "Whether exit 101 stems from the unreadable src/lib.rs (mode 0) blocking compilation — an environment/file-permission issue — or whether the verifier command itself is misconfigured (wrong target/path), or the code has a genuine runtime panic independent of the permission problem.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's command and evidence-type configuration, revealing whether it invokes a compilation/test step that would be blocked by unreadable source files (supporting environment) or whether the command itself references a wrong target/path (supporting verifier).",
+ "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether the verifier is correctly configured (cargo test is the standard command for this Rust repo ast-grep-mcp-rs) and the execution environment simply lacks the Rust toolchain, or whether the verifier is misconfigured and should invoke a different command that is available in the restricted PATH.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the PermissionError is caused by incorrect filesystem permissions on the fixture file in the test environment, or by a verification plan problem where the fixture file was never properly provisioned or was assigned overly restrictive permissions during setup.", "selected_action": "act-03", "expected_information": "Filesystem permission bits on tests/fixtures/sample_settlement_recorded.json, revealing whether the file is unreadable due to environment-level permission misconfiguration or whether the permissions are normal and the issue lies elsewhere in test/fixture provisioning.", "proposed_settlement": null}
+```

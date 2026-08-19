@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether iter_reality_gap_case_files is a symbol the semantic model expects in cep.inventory (implementation gap) or whether validation.py's import is a projected artifact referencing a symbol never intended for that scope (projection defect).", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

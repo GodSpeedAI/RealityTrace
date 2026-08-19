@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "The file tests/test_inventory.py genuinely does not exist (confirmed by act-05) and the environment is healthy (act-01). The remaining question is whether this test file is part of the verification harness that the verification_plan should have provisioned (verification_plan fault), or whether the implementation was responsible for creating it and failed to do so (implementation fault).", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

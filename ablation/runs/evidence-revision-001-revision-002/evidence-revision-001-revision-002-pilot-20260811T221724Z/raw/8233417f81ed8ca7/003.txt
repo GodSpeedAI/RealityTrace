@@ -1,0 +1,7 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan", "projection"],
+ "unresolved_distinction": "Whether the `unit_tests` target reference originates from the verifier's hardcoded command configuration, from the verification plan's declared test directives, or from a projection step that renamed the target to `unit_tests_moved` without updating the upstream reference.",
+ "selected_action": "act-02",
+ "expected_information": "The verifier's configured command string and test-target parameters. If the verifier command hardcodes `unit_tests`, the locus is verifier; if it uses a variable or plan-supplied target name, the locus shifts to verification_plan or projection.",
+ "proposed_settlement": null}
+```

@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verification_plan", "implementation"],
+  "unresolved_distinction": "The verifier command targets `integration_tests` but only `integration_tests_moved` exists. Was the test target deliberately renamed (stale verification plan) or incorrectly renamed/moved (implementation fault)?",
+  "selected_action": null,
+  "expected_information": null,
+  "proposed_settlement": "verification_plan"
+}
+```

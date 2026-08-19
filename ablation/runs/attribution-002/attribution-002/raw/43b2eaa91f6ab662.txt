@@ -1,0 +1,3 @@
+Candidates: verifier, implementation, verification_plan, environment
+Excluded: none — no discriminating evidence available (verifier_exit=1 is ambiguous between verifier-crash and verifier-detected-failure; all-zero vector yields no signal; no stderr/stdout/plan/env data present)
+Locus: unknown

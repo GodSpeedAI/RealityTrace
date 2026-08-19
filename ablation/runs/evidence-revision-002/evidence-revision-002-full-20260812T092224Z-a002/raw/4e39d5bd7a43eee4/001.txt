@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether pytest is simply missing from the runtime environment (environment), or whether the verifier is misconfigured by invoking pytest when the project's test setup expects a different runner (verifier).", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

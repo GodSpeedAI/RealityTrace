@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan", "environment"], "unresolved_distinction": "Whether exit code 101 stems from a verifier misconfiguration (e.g., wrong command or evidence-type expectations), an invalid or missing test target in the verification plan, or an environment-level issue such as toolchain or working-directory problems. The FTS evidence shows only normal build artifacts with no visible compiler or runtime error, so we cannot yet distinguish between verifier-setup failure and actual test/compilation failure.",
+ "selected_action": "act-02",
+ "expected_information": "The verifier's configured command, declared evidence types, and direction rule will reveal whether the verification plan is well-formed and whether the exit code 101 is expected behavior or indicates a verifier-level configuration error.",
+ "proposed_settlement": null}
+```

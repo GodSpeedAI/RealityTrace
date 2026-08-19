@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "The symbol format_matches_as_text was not found in the source, and exit code 101 indicates a Rust compilation or runtime error. It is unclear whether the project source itself is missing this function (implementation fault) or whether the verifier harness is referencing an incorrect symbol/path in its configuration (verifier fault). Inspecting the verifier configuration will reveal what command and symbols it actually invokes.",
+ "selected_action": "act-08",
+ "expected_information": "The verifier's configured command, expected evidence types, and any direction rules will show whether it references format_matches_as_text directly or whether that symbol originates from the project's own code, distinguishing an implementation gap from a verifier misconfiguration.",
+ "proposed_settlement": null}
+```

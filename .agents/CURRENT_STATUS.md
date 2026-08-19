@@ -1,29 +1,32 @@
 # Current status
 
 ## Objective
-Correct the offline revision-002 PILOT adjudication to use the frozen `evidence_revision.py` primary endpoint, case unit, repetition aggregation, canonical comparison IDs/families, and secondary semantics without touching the completed run or contacting a provider.
+Evidence Revision 005 is implemented as the minimal authorization successor to frozen exec004. It retains ER002 scientific design and exec004 transport exactly, but adds a per-FULL-run immutable authority gate. No provider, qualification, or scientific model call was made.
 
-## Disposition
-**ANALYSIS_READY**. Integrity remains PASS. The corrected canonical case-level `R_correct` is R0 0/6, R1 2/6, R2 1/6, R3 3/6, R4 3/6.
-
-## Frozen-contract conformance
-- Primary is final gate-blind correctness across all cases; it is never conditioned on round-1 correctness.
-- Primary unit is case; two repetitions are majority aggregated and 1/1 ties are incorrect.
-- Case×rep accuracy and `revision_to_correct_conditional` are descriptive only.
-- Canonical mappings: C1 R0/R1 primary; C2 R1/R2 primary; C3 R3/R4 primary; C4 R1/R3 secondary.
-- C4 is explicitly EXEMPT_UPPER_BOUND headroom changing disclosure and budget semantics, not a single-variable isolation.
-- Frozen secondary endpoints are reported separately. `matched_evidence_use` is NOT_RECONSTRUCTABLE; `revision_rate` is PARTIAL because null/UNKNOWN membership in “wrong claim” is not operationally frozen; `response_mode` is a labelled POST-HOC/PARTIAL gate-blind case×rep operationalization.
+## Completed
+- Added `ablation/eval/v2/evidence_revision_002_exec005.py`, reusing the unchanged local OpenCode runtime adapter and preserving the 16-shard/4-worker, raw-before-score, ambiguity, and outcome-blind replacement behavior.
+- Added a hash-bound `evidence-revision-002-exec005-full-authority-v1` authority artifact. It binds exact science/executable/implementation/matrix/plan, reviewed candidate commit, qualification/provenance artifact bytes, provider/model/agent/runtime, owner intent, timestamp, and deterministic authority hash.
+- `authorize-full` validates fresh exec005 qualification **contents** (20/20 delivered, zero ambiguity, synthetic-only) and provenance contents (20 sessions, routes/agent matches, no tools, PASS), not merely stated hashes. Exec004 qualification is recorded as immutable lineage only and cannot authorize exec005.
+- `run-shard` validates sealed run authority before it constructs `OpenCodeRuntimeClient`; offline fake execution remains authority-free for tests.
+- Generated eight frozen `evidence-revision-002-exec005-*` artifacts. They remain `FROZEN_NOT_AUTHORIZED`, qualification-required, and FULL-unauthorized.
 
 ## Verification
-- 11 deterministic analysis-contract conformance tests pass.
-- Complete offline suite: 377 passed, 0 failed, 0 skipped.
-- Deterministic adjudication rerun is byte-identical.
-- Completed-run manifest before/after: `ae2827c1ea32c2860e53f19b763955908860865266791932f1454252ffeb2a13` / same.
-- Provider/model calls by correction: 0/0; experimental units: 0.
-- FULL authorized/executed: false/false.
+- Required command: `uvx --from pytest pytest eval/tests/test_v2_evidence_revision_002_exec005.py -q`: **19 passed**.
+- Complete offline ablation suite: **472 passed** in 12m30s.
+- Exec005 preflight: PASS; `full_execution_authorized=false`.
+- Help/parser and preflight only were run; no live transport command was run.
 
-## Artifacts and commit
-Corrected artifacts remain under `ablation/analysis/post-audit-v2/pilot-*revision-002*` with deterministic script `pilot_adjudication_revision_002.py`. The temporal JSONL is unchanged because its unit/call reconstruction was already correct. Correction commit: `19cacb0bf09f513e0f613fdc2d2e55531495cab0`. Previous analysis commit `a7811dd3d045a281fb0724b73a245c690b287be9` is superseded.
+## Frozen identities
+- ER002 scientific fingerprint: `056284062a2ef6b2a6f6dc54ae63eceeb8802b66341d42ced7d305067d9e1d99`.
+- exec005 executable fingerprint: `ee58587fca10d2e7d7e45676965873fd24afaf4c64f593f12998f2236443dd50`.
+- exec005 matrix SHA-256: `41c4b7d81b9de0d22f093601f5a0646514e3b4d369379eea1c5a7910d4b33d5d`.
+- exec005 shard-plan SHA-256: `fc9583bc372cb7dc27fdac741f4299baa08cc5014eb563a5ef9ed7facf90ec4e`.
+- 430 coordinates are exactly equal to exec004; all exec005 unit IDs are disjoint from exec004 IDs.
 
-## Worktree
-The completed run and unrelated historical untracked run directories remain untouched.
+## Next authorization transition (not run)
+After commit/review, a fresh synthetic exec005 qualification and matching provenance audit must pass. Mint authority only with:
+`uv run --offline --python 3.12 -m eval.v2.evidence_revision_002_exec005 authorize-full --owner-authorized --qualification <fresh-exec005-qualification.json> --provenance-audit <fresh-exec005-provenance-audit.json> --candidate-commit <reviewed-40-hex-commit> --output <authority.json>`
+Then initialize/run a shard only with the sealed evidence paths and that authority. FULL remains blocked absent that transition.
+
+## Safety boundary
+Exec004 code/artifacts and pre-existing aborted run directories were not modified or inspected. ZERO live model/provider/qualification calls occurred.

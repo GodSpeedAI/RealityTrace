@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "The verifier references test target `unit_tests` but only `unit_tests_moved` and `integration_tests` exist. Without inspecting the verification plan's declared command or the implementation's test target definitions, it is impossible to determine whether the plan carries a stale target name or the implementation renamed the target, breaking a correct reference.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

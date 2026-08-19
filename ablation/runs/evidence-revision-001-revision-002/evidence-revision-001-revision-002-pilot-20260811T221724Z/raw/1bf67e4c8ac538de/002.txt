@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "The symbol iter_reality_gap_case_files is confirmed absent from cep/inventory.py (act-07). Projection would require a model or specification to generate from, but act-04 found no .sea model in the repo — leaving open whether a non-.sea projection source exists or whether this is purely an implementation omission.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

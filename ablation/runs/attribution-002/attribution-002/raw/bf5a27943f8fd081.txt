@@ -1,0 +1,9 @@
+Looking at the provenance for sr-02:
+
+- The evidence artifact (01KZJ2EBZK2113SET1Z7W8DWBT) exists and is linked, but its content is entirely empty: the FTS index has no text, and the vector embedding is all zeros.
+- The verifier exited 101 (error), but the root issue is that no meaningful evidence was captured — the artifact is a null/empty shell.
+- An evidence ID was minted and linked in the graph, so the collection mechanism ran, but it failed to record any actual content (no stdout, no artifacts, nothing parseable).
+
+The causal layer is the one responsible for capturing and recording the substantive evidence: it produced an empty artifact, which then caused the verifier to fail downstream.
+
+Locus: evidence_collection

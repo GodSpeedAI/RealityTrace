@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is the cep.scoring module missing because the implementation never created it (implementation locus), or because the projection step should have generated it but failed (projection locus)?", "selected_action": "act-08", "expected_information": "Whether the cep.scoring package or its expected symbols (ScoreMetrics, ScoreRecord, recall, status_from_score) exist anywhere in the source tree, which would distinguish a missing/wrong-path implementation import from a failed projection output.", "proposed_settlement": null}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": "Whether the verifier exited 101 due to a misconfiguration or flaw in the verifier's own command/evidence-type/direction-rule setup, versus a genuine defect or missing symbol in the implementation being tested. The build succeeded and toolchain is available, but the from_cli symbol was not found, and we have not yet seen the verifier's actual configuration to determine whether it is correctly constructed.",
+ "selected_action": "act-03",
+ "expected_information": "The verifier's configured command, expected evidence types, and declared direction rule will reveal whether the verifier is correctly set up or whether its configuration is causing the exit-101 failure independent of the implementation.",
+ "proposed_settlement": null}
+```

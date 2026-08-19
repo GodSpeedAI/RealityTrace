@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "The `from_cli` symbol is confirmed absent from the codebase. Exit code 101 (Rust panic/compilation failure) occurs despite all dependencies building successfully. The key question is whether the implementation is incomplete (missing `from_cli` that should exist), or whether the verification plan incorrectly references a non-existent symbol.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

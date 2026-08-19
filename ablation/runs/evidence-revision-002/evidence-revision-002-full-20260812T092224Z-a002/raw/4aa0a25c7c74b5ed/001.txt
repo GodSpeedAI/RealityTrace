@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["implementation", "verification_plan", "environment"],
+  "unresolved_distinction": "Whether the verifier exit code 101 results from a Rust compilation error in the project source code (implementation), a non-existent or incorrectly resolved test target path (verification_plan), or a missing/broken toolchain (environment). The FTS data shows all dependency crates compiling successfully with no project-crate artifact visible, but we cannot yet confirm whether the main crate failed to compile or was never reached due to a path or configuration issue.",
+  "selected_action": "act-02",
+  "expected_information": "Whether the test target or path referenced by the verification command resolves to an existing file in the working tree. If the path does not resolve, the locus is likely verification_plan; if it does resolve, the failure is more consistent with a compilation error in implementation.",
+  "proposed_settlement": null
+}
+```

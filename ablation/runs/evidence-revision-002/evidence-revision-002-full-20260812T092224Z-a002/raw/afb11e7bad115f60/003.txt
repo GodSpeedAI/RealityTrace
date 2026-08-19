@@ -1,0 +1,15 @@
+Looking at this diagnostic state, I need to assess what we know and settle on a locus.
+
+Key evidence:
+1. Exit code 101 (Rust panic/crash) during test execution
+2. All infrastructure checks pass (toolchain, paths, permissions, test targets resolve)
+3. From act-07: `tests/fixtures/example-v999.py` was **NOT FOUND**, while `example.py` matches expectations
+4. The verifier runs `corpus_scenario_missing_fixture` — a scenario explicitly about a missing fixture
+5. The isolated re-run confirms the test fails (exit 101)
+6. Previous settlement of `implementation` was rejected as EVIDENCE_INSUFFICIENT
+
+The critical clue is that a fixture file (`example-v999.py`) that the test scenario depends on does not exist. The verification plan's scenario `corpus_scenario_missing_fixture` appears to be set up such that it either references a fixture that should have been provisioned but wasn't, or the plan's expectation about fixture availability is misaligned with the actual repository state. This points to the verification plan being the source of the failure, not the implementation code itself.
+
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Whether the test fails because the implementation mishandles a missing fixture (implementation bug) or because the verification plan references/provisions a fixture (example-v999.py) that was never created, making the test scenario itself misconfigured.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

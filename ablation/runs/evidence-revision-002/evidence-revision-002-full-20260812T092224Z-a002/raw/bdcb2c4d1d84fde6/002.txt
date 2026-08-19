@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Is the .corpus-tmpfix directory unwritable because the test environment has incorrect filesystem permissions on a correctly designated temp path (environment), or because the verification plan deliberately set TMPDIR to this specific path and failed to ensure it was writable (verification_plan)?", "selected_action": "act-08", "expected_information": "Whether the TMPDIR=/home/sprime01/projects/cep/.corpus-tmpfix assignment originates from the verifier's command configuration (supporting verification_plan) or is an externally imposed environment variable (supporting environment).", "proposed_settlement": null}
+```

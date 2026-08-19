@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation", "projection"], "unresolved_distinction": "Was tests/test_import.py supposed to exist at the referenced path (pointing to implementation or projection failing to produce it), or does the verification_plan cite an incorrect/non-existent test path?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,11 @@
+Looking at the diagnostic state, the key facts are:
+- Build completed successfully (all crates compiled, test binary built)
+- The test `test_observed_failure` ran and panicked with "stale fixture missing" at line 3 of `corpus_sr10.rs`
+- No observations were acquired during rounds 1–3
+- Three candidate loci remain unresolved: evidence_collection, verification_plan, environment
+
+The failure is specifically about a **fixture** being missing — not a compilation error, not a path resolution error, not a toolchain issue. A "stale fixture" in testing terminology refers to test evidence/data that should have been collected and provisioned but is absent or outdated. The test infrastructure itself works (build succeeded, binary ran); only the fixture evidence is missing.
+
+Given that no further observations were acquired to distinguish the three candidates, but the failure message most directly describes missing evidence (a fixture that should have been collected/provisioned but wasn't), I settle on evidence_collection.```json
+{"candidate_loci": ["evidence_collection", "verification_plan", "environment"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

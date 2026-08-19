@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection", "environment"], "unresolved_distinction": "Round 1 observations have already resolved the key question: act-04 confirms cep.scoring is missing from the source tree itself, and act-05 confirms the environment/toolchain is clean. The failure is caused by the implementation referencing a module that does not exist in the source.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

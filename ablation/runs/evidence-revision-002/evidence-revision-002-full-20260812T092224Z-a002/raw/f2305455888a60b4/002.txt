@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether exit code 101 stems from a source-level compilation error (missing symbols in implementation) or an incorrectly configured verifier expectation. However, act-07 confirmed compile_error with no test able to run, and act-08 confirmed format_matches_as_text is missing from the source, while act-04 confirmed the verifier is properly configured and act-05 confirmed the toolchain is available.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

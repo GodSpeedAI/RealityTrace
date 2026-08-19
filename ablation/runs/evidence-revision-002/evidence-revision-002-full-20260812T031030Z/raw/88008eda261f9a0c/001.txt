@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": "Whether exit code 101 originates from the verifier harness itself crashing (e.g., Rust panic in the verifier process) versus a test/implementation failure propagated through the verifier, versus an environment-level issue. The build artifacts all show fresh:true with no compilation errors, so the failure is likely at verification execution time, but we lack the actual error output and the verifier's command configuration to distinguish the source.",
+ "selected_action": "act-02",
+ "expected_information": "The verifier's command, declared direction rule, and evidence-type configuration will reveal what process produced exit code 101 and whether the failure is internal to the verifier logic or a propagated test/build failure.",
+ "proposed_settlement": null}
+```

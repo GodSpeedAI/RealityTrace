@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection", "implementation"], "unresolved_distinction": "Did the verification plan reference an outdated target name `integration_tests` when the codebase correctly provides `integration_tests_moved` (verification_plan fault), or was the test target supposed to be named `integration_tests` but was incorrectly renamed during code generation/build (projection or implementation fault)?", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

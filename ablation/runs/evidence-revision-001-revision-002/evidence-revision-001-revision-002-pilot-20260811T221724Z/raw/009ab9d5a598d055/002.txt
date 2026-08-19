@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Did the verification plan correctly specify `unit_tests` as the target name (meaning the implementation broke the reference by renaming it to `unit_tests_moved`), or does the plan itself carry an incorrect/stale target name that should have been `unit_tests_moved`?", "selected_action": "act-07", "expected_information": "Whether the test target `unit_tests` corresponds to any existing file or directory in the working tree (possibly renamed), or whether only `unit_tests_moved` exists, clarifying if the implementation renamed a correctly-referenced target or the plan references a name that never matched the implementation.", "proposed_settlement": null}
+```

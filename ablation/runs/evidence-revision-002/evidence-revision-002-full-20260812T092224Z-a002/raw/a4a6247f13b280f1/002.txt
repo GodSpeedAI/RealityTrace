@@ -1,0 +1,10 @@
+Looking at the evidence, I need to determine whether exit code 101 is due to an implementation bug or a verification plan issue.
+
+Key findings from round 1:
+- All files, fixtures, and test targets resolve correctly
+- The toolchain is available and paths are accessible
+- **The isolated re-run of the test passed** (act-04, exit code 0)
+- The verifier command uses `cargo test --offline --message-format json corpus_scenario` with `AST_GREP_CONFIG=/nonexistent-corpus-config.toml`
+- The isolated re-run used a *different* test name (`test_observed_failure`) and notably did **not** set the `AST_GREP_CONFIG` environment variable
+
+The critical observation is that `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` is set by the verifier (act-05, act-07) but was absent from the passing isolated re-run (act-04). This non-existent config path, introduced by the verification setup, is the most likely cause of the panic (exit 101). The implementation works when the verification environment isn't misconfigured with a bogus config path. The literal "nonexistent" in the path strongly suggests a verification-plan misconfiguration rather than an intentional error-handling test. {"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Whether exit code 101 is caused by the verification plan injecting a non-existent AST_GREP_CONFIG path (verification_plan), or by the implementation panicking when it should gracefully handle a missing config file (implementation).", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}

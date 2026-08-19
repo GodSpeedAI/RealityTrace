@@ -1,0 +1,18 @@
+Looking at this diagnostic state, I need to evaluate the evidence gathered in round 1 and decide whether to settle or acquire more evidence.
+
+**Key findings from round 1:**
+- Build artifacts are all `fresh: true` — compilation of dependencies succeeded
+- Verifier exit code 101 = Rust panic
+- The verifier sets `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` — a deliberately nonexistent config path
+- The isolated re-run of `test_observed_failure` **passed** (exit 0) — without that env var
+- All filesystem paths, permissions, fixtures, and toolchain are fine
+- Test targets resolve correctly
+
+**Analysis:** The name `nonexistent-corpus-config.toml` is clearly intentional — this is a test scenario designed to check how the implementation handles a missing config file. The implementation panics (exit 101) instead of handling the missing config gracefully (e.g., falling back to defaults or returning a clean error). Since the build succeeds, all resources are available, and the isolated test passes without the env var, the failure locus is the implementation's inability to handle a nonexistent `AST_GREP_CONFIG` path.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Whether the AST_GREP_CONFIG=/nonexistent-corpus-config.toml prefix is an intentional test of missing-config handling (implicating implementation) or an erroneous verifier/environment setup. The deliberately-named nonexistent path and passing isolated re-run without it strongly favor implementation.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

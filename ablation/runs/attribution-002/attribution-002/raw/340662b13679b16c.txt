@@ -1,0 +1,9 @@
+Looking at this case:
+
+- The SQL record shows `verifier_exit: 101`, which is a non-zero exit indicating the verifier process itself terminated abnormally (exit code 101 is typically associated with a panic or internal error).
+- The FTS retrieval returned empty `[fts]`, and the vector is all zeros, but these are downstream artifacts of the verifier failing before meaningful evidence could be processed.
+- The graph confirms basic provenance (case → repo → evidence links exist), so the recording pipeline itself functioned.
+
+The root cause is the verifier crashing/aborting with exit code 101.
+
+Locus: verifier

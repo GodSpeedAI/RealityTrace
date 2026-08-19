@@ -1,0 +1,17 @@
+Looking at this diagnostic state, I need to assess what the evidence supports for a final settlement.
+
+**Key findings:**
+- Verifier exit code 101 (Rust panic) when running `corpus_scenario_unreadable_fixture`
+- The fixture `tests/fixtures/example.py` has mode 0 (intentionally unreadable, restrictive: true)
+- The isolated re-run of `test_observed_failure` also fails with exit code 101
+- Toolchain and environment are properly available and writable
+- No symbols from the failure trace to inspect
+
+**Analysis:**
+The scenario name "corpus_scenario_unreadable_fixture" strongly suggests the unreadable fixture is an intentional test condition. The implementation panics (exit 101) when encountering this fixture, which could indicate the implementation should handle this case gracefully but doesn't — pointing to `implementation`. However, the evidence is circumstantial: no actual error message or source-level diagnostic was captured.
+
+Both prior concrete settlements (`environment` and `implementation`) were rejected for EVIDENCE_INSUFFICIENT. The governance state is CONCRETE_REJECTED, and no qualifying evidence has been acquired since. With no further evidence acquisition possible, the evidence does not definitively support attribution to exactly one locus.
+
+```json
+{"candidate_loci": ["implementation", "environment"], "unresolved_distinction": "Whether exit code 101 stems from the implementation failing to handle the intentionally unreadable fixture (implementation) or from a broken test harness setup (environment) — the scenario name suggests intent, but no error message or source-level evidence was captured to confirm.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "The build artifacts all compile successfully (fresh: true), yet the verifier exits with code 101 (typical of a Rust panic or test failure). We cannot yet distinguish whether the verifier's command/configuration is wrong, the implementation panics at runtime, or the environment is missing required runtime resources.", "selected_action": "act-04", "expected_information": "The verifier's configured command, evidence types, and direction rule will reveal whether the verification is correctly set up to invoke the built binary with the expected car-go-json stdin format, or whether the verifier itself is misconfigured.", "proposed_settlement": null}
+```

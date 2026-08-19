@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the missing symbol iter_reality_gap_case_files is a source-code implementation gap or the result of a failed code-generation/projection step that should have emitted it.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

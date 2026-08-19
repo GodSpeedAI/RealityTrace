@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the environment is missing the required Rust toolchain (cargo not installed/not on PATH) versus the verification plan incorrectly specifying cargo as the build command for a project that should use a different tool.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

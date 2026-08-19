@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the verifier configuration correctly mandates pytest as the test runner (making the missing dependency an environment provisioning failure), or whether the verification_plan itself is misconfigured to expect a tool that was never intended to be provisioned for this project.", "selected_action": "act-05", "expected_information": "The verifier's command, evidence types, and declared direction rule will reveal whether pytest is correctly and deliberately specified as the runner — confirming environment as the locus — or whether the plan erroneously references pytest when another runner should have been used, pointing to verification_plan.", "proposed_settlement": null}
+```

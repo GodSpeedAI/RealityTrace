@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Does cep/conformance/anti_collapse.py exist in canonical source but was omitted from the projected working tree (projection), or was it never created / incorrectly referenced by cep/cli.py line 22 (implementation)?", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

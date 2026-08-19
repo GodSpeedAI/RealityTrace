@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the missing symbol 'iter_reality_gap_case_files' in cep.inventory is a handwritten implementation defect (function never defined in source) or a projection defect (generated/transformed code references a symbol that the projection step failed to produce or incorrectly renamed). The round-1 settlement of 'implementation' was rejected for insufficient evidence, so we need to confirm the symbol's actual absence and its expected provenance.",
+ "selected_action": "act-01",
+ "expected_information": "Confirmation of whether 'iter_reality_gap_case_files' exists anywhere in cep/inventory.py or elsewhere in the source tree, and whether its absence appears to stem from handwritten code (implementation) or generated code (projection), strengthening or weakening the implementation attribution.",
+ "proposed_settlement": null}
+```

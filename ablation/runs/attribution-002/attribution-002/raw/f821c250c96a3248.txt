@@ -1,0 +1,21 @@
+**Candidates:** verifier, environment, evidence_collection, implementation
+
+**Analysis:**
+
+1. **verifier**: `verifier_exit` is 101 — a non-zero, panic-like exit code. This is direct evidence the verifier process itself terminated abnormally. In many harnesses, 101 specifically denotes an internal verifier crash/panic rather than a test-failure return.
+
+2. **environment**: Could external conditions (missing runtime, permissions) cause a 101? Possibly. But there is no evidence of environment-level faults — the verifier clearly launched and executed far enough to emit a process exit code, and no stderr/stdout fragments suggest missing dependencies or resource exhaustion.
+
+3. **evidence_collection**: The all-zero `vector64` and empty `[fts]` suggest sparse or missing evidence content. However, the SQL record *did* successfully capture `verifier_exit: 101`, meaning the collection pipeline was at least partially functional. The absence of richer artifacts is more consistent with the verifier crashing before producing output than with the collection mechanism failing.
+
+4. **implementation**: An implementation bug could trigger a verifier crash if the verifier mishandles bad input. But there is no evidence pointing specifically to implementation output as the cause — no malformed payload, no assertion detail, no input artifact content visible. Exit 101 without accompanying test-failure signals points away from a clean implementation-rejection path.
+
+**Excluded:**
+- environment (no-fault-evidence: verifier launched and exited)
+- evidence_collection (partial-success: exit code was captured)
+- implementation (no-output-evidence: no rejection/assertion detail)
+- verification_plan (silent: no plan artifact surfaced)
+- authority (silent)
+- declared_model (prerequisite exclusions for F-28 satisfied, but no positive evidence pointing to declared_model)
+
+**Locus: verifier**

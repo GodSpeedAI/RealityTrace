@@ -1,0 +1,9 @@
+Looking at the evidence for case ag-03:
+
+- The SQL record shows `stdin_format: "car-go-json"` — this appears to be a misspelling/malformation of the expected format (likely "cargo-json").
+- The `verifier_exit: 101` indicates the verifier crashed (typical Rust panic exit code), likely because it could not parse input delivered in a format that doesn't match the declared specification.
+- The declared input format specification is wrong, causing the verifier to receive data it cannot process.
+
+The root cause traces to the incorrectly declared format/label in the model metadata.
+
+Locus: declared_model

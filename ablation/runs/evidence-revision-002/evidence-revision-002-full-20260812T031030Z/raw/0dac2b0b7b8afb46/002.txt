@@ -1,0 +1,17 @@
+Looking at this diagnostic state, I need to synthesize the evidence from round 1 observations to determine the failure locus.
+
+**Key findings from acquired observations:**
+
+1. **act-05** (isolated re-run): Result is `compile_error` — the project's own code fails to compile
+2. **act-06** (symbol check): The symbols `format_matches_as_text` and `crate::format::format_matches_as_text` are **missing** — they don't exist in the source code
+3. **act-02**: The test target resolves fine (default test discovery works)
+4. **act-07**: The verifier configuration is valid (`cargo test --offline --message-format json corpus_scenario`)
+5. **act-01, act-03, act-04**: Fixtures exist, toolchain is available, permissions are fine
+
+The verification plan is sound — the command, targets, fixtures, and environment are all correct. The failure is that the source code is **missing expected symbols**, which causes a compilation error (exit 101). This is squarely an **implementation** failure.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether exit 101 stems from missing source symbols (implementation) or from an incorrect verification target/command (verification_plan).",
+ "selected_action": null, "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,16 @@
+Looking at the evidence:
+
+1. **act-05** shows the test fails with a `compile_error` - "compilation failed — no test could run"
+2. **act-06** shows the function `format_matches_as_text` was **not found** at its expected location in the source
+3. **act-02** confirms test targets resolve to existing files (so the verification plan is sound)
+4. **act-07** confirms the verifier (cargo-test) is correctly configured with proper exit-code mapping
+5. The FTS output shows all dependencies compiling successfully, but no main-crate artifact appears — consistent with the project's own source failing to compile
+
+The missing function `format_matches_as_text` causes the compilation failure. This is squarely an **implementation** defect — the source code lacks a function the test expects.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": null,
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "Whether the exit-code-101 failure stems from a source-level compilation error in the project code (implementation), a missing or misconfigured toolchain/runtime (environment), or a mismatched verifier command/configuration (verifier). The FTS evidence shows dependency artifacts building successfully but provides no compiler error output or verifier command details.",
+ "selected_action": "act-02",
+ "expected_information": "The verifier's exact command, evidence types, and direction rule will reveal whether the verification step is correctly configured to invoke the build and whether its expectations match the project's actual build setup.",
+ "proposed_settlement": null}
+```

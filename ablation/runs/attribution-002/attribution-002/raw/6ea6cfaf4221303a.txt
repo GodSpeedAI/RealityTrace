@@ -1,0 +1,3 @@
+Candidates: implementation, verifier, environment, unknown
+Excluded: evidence_collection (evidence-recorded), authority (no-auth-log), declared_model (insufficient-evidence)
+Locus: unknown

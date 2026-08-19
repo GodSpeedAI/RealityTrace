@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Build artifacts are all fresh (compilation succeeded), but verifier exited 101 (Rust panic). The stale fixture could cause either the implementation to panic on unexpected input at runtime, or the verifier to panic when processing mismatched fixture content. Without a captured panic message or stack trace, the distinction between a runtime implementation bug and a verifier configuration/handling defect remains unresolved.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

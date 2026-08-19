@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "The symbol format_matches_as_text was not found in the codebase (act-01), all compilation artifacts succeeded and are fresh, and the verifier exited 101 (Rust panic). The key remaining question is whether the implementation failed to provide an expected function (implementation locus) or whether the verification plan references a non-existent target/symbol that was never part of the specification (verification_plan locus).", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

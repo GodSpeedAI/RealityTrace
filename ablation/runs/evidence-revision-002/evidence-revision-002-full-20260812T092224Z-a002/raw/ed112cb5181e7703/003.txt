@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Exit code 101 could be a compile error or runtime panic in the implementation, a verification command targeting a non-existent test binary, or a misconfigured verifier — the FTS only shows dependency artifacts with no main-crate artifact, but no error message is captured to distinguish among them.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

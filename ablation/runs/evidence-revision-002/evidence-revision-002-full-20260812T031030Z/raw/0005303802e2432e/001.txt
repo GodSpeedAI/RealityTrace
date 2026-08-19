@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Whether the verification plan incorrectly references an outdated test target name 'integration_tests' (plan out of sync) or whether the implementation incorrectly renamed/moved the test target from 'integration_tests' to 'integration_tests_moved' (breaking the expected contract).", "selected_action": "act-02", "expected_information": "The verifier's configured command and declared test target name, revealing whether the plan explicitly specifies 'integration_tests' or was expected to reference 'integration_tests_moved'.", "proposed_settlement": null}
+```

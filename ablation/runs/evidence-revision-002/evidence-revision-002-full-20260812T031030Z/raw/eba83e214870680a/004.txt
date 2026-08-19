@@ -1,0 +1,13 @@
+Looking at the diagnostic state, the key facts are:
+
+1. The build completed successfully (all artifacts fresh).
+2. The isolated re-run (act-04) passed with exit code 0, ruling out `implementation`.
+3. The verifier exits 101 with `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` set (act-02/act-07).
+4. The failure hinges on this env var assignment, but the distinction between `verification_plan` (the plan embeds a bad path) and `environment` (the file should exist but is missing) remains genuinely unresolved.
+5. `verification_plan` was proposed as the settlement twice and rejected both times for EVIDENCE_INSUFFICIENT.
+
+With the round limit reached and no qualifying evidence to break the distinction, the evidence does not support a single concrete locus.
+
+```json
+{"candidate_loci": ["verification_plan", "environment", "evidence_collection"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

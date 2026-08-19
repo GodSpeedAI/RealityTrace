@@ -1,0 +1,5 @@
+Looking at this case, I need to determine whether the `PermissionError` on `tests/fixtures` (mode `0`) is caused by the environment or by the projection step.
+
+```json
+{"candidate_loci": ["environment", "projection"], "unresolved_distinction": "Whether the mode-0 permission on tests/fixtures is a broad environment/sandbox restriction affecting multiple paths, or an artifact-specific defect from the projection step that created this directory with zero permissions while sibling paths (tests/test_import.py at mode 644) are normal.", "selected_action": "act-01", "expected_information": "Whether working directories are generally writable and accessible — if they are, the permission issue is isolated to tests/fixtures and points to projection; if the entire workspace is locked down, it points to environment.", "proposed_settlement": null}
+```

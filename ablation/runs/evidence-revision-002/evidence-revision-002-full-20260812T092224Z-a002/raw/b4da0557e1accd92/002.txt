@@ -1,0 +1,13 @@
+Looking at this diagnostic state, I need to analyze the evidence to determine the failure locus.
+
+**Key evidence:**
+- Verifier exit code 101 (Rust panic/compilation error)
+- All dependencies are fresh and compiled successfully
+- act-04: The specific failing test (`test_observed_failure`) **passes when re-run in isolation** (exit 0)
+- act-02: The verifier runs `cargo test --offline --message-format json corpus_scenario` with `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` set in the environment
+- All filesystem checks pass (act-01, act-06, act-07, act-08), toolchain is available, and fixtures are correct
+
+**Analysis:**
+The test passes in isolation but fails under the verifier. The critical difference is the verifier's configuration: it sets `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` and uses `corpus_scenario` as the test filter. Since the isolated re-run of the actual failing test succeeds, the implementation itself works correctly. The failure is introduced by the verification setup — the `AST_GREP_CONFIG` environment variable pointing to a nonexistent path and/or the `corpus_scenario` test filter configuration causes the spurious exit 101. The environment checks (toolchain, paths, permissions) all pass, ruling out `environment`. The code works correctly when run properly, ruling out `implementation`.
+
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Whether exit 101 stems from the verifier's configuration (AST_GREP_CONFIG env var and/or corpus_scenario test filter mismatch causing the wrong test to run or a bad environment) or from the implementation panicking under the verifier's specific env-var setup.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}

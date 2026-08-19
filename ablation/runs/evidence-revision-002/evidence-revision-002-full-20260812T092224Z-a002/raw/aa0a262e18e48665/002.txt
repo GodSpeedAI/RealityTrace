@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether exit code 101 (Rust panic) arises from a runtime logic error in the implementation when processing the test input, or from a misconfigured verifier that invokes the wrong command, passes malformed input, or checks the wrong direction.", "selected_action": "act-03", "expected_information": "The verifier's command line, evidence types, and direction rule will reveal whether the verification harness is correctly invoking the built binary with the expected car-go-json input format, or whether a misconfiguration is causing the binary to panic due to unexpected arguments or wrong execution target.", "proposed_settlement": null}
+```

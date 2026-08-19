@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Is the malformed JSON fixture (trailing '# stale' after valid JSON) a defect in the test data file itself (implementation), or was it corrupted by some evidence-collection or artifact-generation process that appended stale markers to fixture files?", "selected_action": "act-05", "expected_information": "Confirm the fixture file exists and inspect its actual content to determine whether the trailing '# stale' is a static defect in the committed fixture or an artifact of some runtime process modifying the file.", "proposed_settlement": null}
+```

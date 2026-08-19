@@ -1,0 +1,14 @@
+Looking at this case, I need to synthesize what's known:
+- Build artifacts all show `fresh:true` — compilation succeeded
+- Exit code 101 is a Rust panic, likely from trying to load `AST_GREP_CONFIG=/nonexistent-corpus-config.toml`
+- The config file doesn't exist on the filesystem
+- This is round 3/3 (final round), so I must propose a settlement
+
+The env var points to a path that doesn't exist. The question is who owns setting this. Since `AST_GREP_CONFIG` is a domain-specific variable for this ast-grep project and its value references a "corpus-config" (test harness concept), it was most likely set by the verification plan's scenario configuration, not by the ambient environment or the implementation code. The plan instructs the verifier to use a config path that doesn't exist in the working tree.
+
+```json
+{"candidate_loci": ["verification_plan", "verifier", "environment"], "unresolved_distinction": "Whether AST_GREP_CONFIG=/nonexistent-corpus-config.toml is set by the verification plan (plan bug: references nonexistent file) or by the environment (misconfigured env), and whether the verifier should gracefully handle a missing config instead of panicking.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verification_plan"}
+```

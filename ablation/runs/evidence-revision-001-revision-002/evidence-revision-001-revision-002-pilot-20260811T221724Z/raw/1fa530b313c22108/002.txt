@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["declared_model", "verifier"], "unresolved_distinction": "Whether the registry TOML file content at line 10 is genuinely malformed (e.g., missing closing bracket or syntax error in the patterns array) pointing to declared_model, or the content is valid TOML but the verifier's parser mishandles it, pointing to verifier.", "selected_action": "act-03", "expected_information": "The actual content of the registry TOML file around line 10 will reveal whether the patterns array is syntactically valid or genuinely malformed, directly resolving whether the defect is in the declared model or the verifier's parser.", "proposed_settlement": null}
+```

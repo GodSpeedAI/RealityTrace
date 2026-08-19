@@ -1,0 +1,5 @@
+Looking at this diagnostic state, I see a Rust project build (ast-grep-mcp-rs) where all dependencies compiled successfully (marked fresh:true) but the verifier exited with code 101, which in Rust typically indicates a compilation error or panic. No actual error message is visible in the build trace — only successful dependency compilation artifacts.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether exit code 101 reflects a genuine source-code compilation/runtime failure in the ast-grep-mcp-rs project (implementation) or an incorrect verifier command/test-target configuration that causes the tool to fail before evaluating the project (verification_plan).", "selected_action": "act-01", "expected_information": "The verifier's command line, declared evidence types, and direction rule, revealing whether the verification is correctly targeting the project's test/build entry point or if the command itself is malformed.", "proposed_settlement": null}
+```

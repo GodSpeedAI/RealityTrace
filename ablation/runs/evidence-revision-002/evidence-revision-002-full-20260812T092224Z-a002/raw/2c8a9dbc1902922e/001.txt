@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier"], "unresolved_distinction": "The failure is caused by referencing a non-existent test target `integration_tests` (renamed to `integration_tests_moved`). The key question is whether the stale target name originates in the verification plan (which specifies what to run) or in the verifier's own command configuration.", "selected_action": "act-07", "expected_information": "Whether the verifier's configured command explicitly references `integration_tests` or `integration_tests_moved`, clarifying whether the fault is in the verifier configuration or the verification plan that feeds it.", "proposed_settlement": null}
+```

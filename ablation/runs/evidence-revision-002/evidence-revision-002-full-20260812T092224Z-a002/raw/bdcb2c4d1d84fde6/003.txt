@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Is .corpus-tmpfix unwritable because the verification plan explicitly assigned TMPDIR to a path it failed to make writable, or because the filesystem environment has incorrect permissions on a correctly designated temp directory?", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

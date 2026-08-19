@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "evidence_collection"], "unresolved_distinction": "Exit code 101 (Rust panic) occurred but no panic message or test output is visible in the captured evidence; need to determine whether the panic originates from the verifier tool/config, the implementation code under test, or a gap in evidence collection that failed to capture stderr.",
+ "selected_action": "act-02",
+ "expected_information": "The verifier's command line, evidence types, and direction rule will reveal what binary/test is being invoked and how stdout/stderr are captured, helping distinguish a verifier-config crash from an implementation panic.",
+ "proposed_settlement": null}
+```

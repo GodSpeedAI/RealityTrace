@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "The verifier exited with code 101 (typical Rust panic), but the evidence only shows successful dependency compilation artifacts. We need to determine whether the failure originates from a bug in the project's own code (compile error or runtime panic during test execution) or from a misconfigured verifier or verification plan that references an invalid test target or command.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's command, expected evidence types, and direction rule will reveal whether the verification setup correctly targets the project's test suite and whether the verifier invocation itself is well-formed, helping distinguish verifier/verification_plan misconfiguration from an implementation defect.",
+ "proposed_settlement": null}
+```

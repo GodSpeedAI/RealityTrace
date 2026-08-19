@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "The error shows the command references test target `unit_tests` which has been renamed to `unit_tests_moved`. The key question is whether this stale target name originates in the verifier's hardcoded command configuration or in the verification_plan's specified test targets.", "selected_action": "act-02", "expected_information": "Whether the verifier's command line or configuration hardcodes `unit_tests` as the test target, or whether it receives the target name from an external verification_plan. This will attribute the stale reference to the correct locus.", "proposed_settlement": null}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the mode-0 permission on the fixture file reflects an inherent environment configuration (e.g., a committed or provisioned fixture with restrictive permissions) or was introduced by the evidence_collection process during workspace setup.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

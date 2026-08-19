@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan", "evidence_collection"], "unresolved_distinction": "Whether the fixture file 'tests/fixtures/inventory-version-v999.json' was expected to exist in the working tree (pointing to environment or evidence_collection as the locus) or whether the test itself incorrectly references a non-existent fixture path (pointing to verification_plan).", "selected_action": "act-08", "expected_information": "Confirmation of whether the referenced fixture file exists in the working tree, and if so, whether its content matches expectations — distinguishing an environment/evidence_collection gap from a verification_plan referencing a wrong or stale path.", "proposed_settlement": null}
+```

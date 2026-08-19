@@ -1,0 +1,14 @@
+Looking at this diagnostic state, I need to determine why the test target `integration_tests` doesn't exist when the verification command references it.
+
+Key evidence gathered:
+- The verifier command is: `cargo test --offline --message-format json --test integration_tests`
+- The file `tests/integration_tests.rs` does not exist
+- Available targets are `integration_tests_moved` and `unit_tests`
+- The verifier (cargo-test) itself works correctly — it properly reports the error and lists available targets
+- Toolchain, permissions, fixtures, and environment are all fine
+
+The verifier tool is functioning correctly. The implementation has a valid test target (`integration_tests_moved`). The verification plan/command references a target name (`integration_tests`) that doesn't match the actual codebase. This is a stale reference in the verification configuration, not a broken verifier or broken implementation.
+
+```json
+{"candidate_loci": ["verification_plan", "verifier", "implementation"], "unresolved_distinction": "Whether the stale target name 'integration_tests' in the cargo test command originates from the verification plan's configuration (stale reference after test rename to 'integration_tests_moved') vs. the verifier itself being misconfigured vs. the implementation incorrectly renaming the target away from what the plan expects.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

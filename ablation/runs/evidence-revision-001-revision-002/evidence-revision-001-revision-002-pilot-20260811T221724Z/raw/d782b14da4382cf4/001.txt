@@ -1,0 +1,5 @@
+Looking at this failure, the error is clear: `cep/validation.py` tries to import `iter_reality_gap_case_files` from `cep.inventory`, but that function does not exist in `cep/inventory.py`. This is a missing source symbol at the implementation level.
+
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "The function iter_reality_gap_case_files is absent from cep/inventory.py. This could be a direct implementation defect (source code never defined the function), or a projection defect (a code-generation step failed to emit it into the inventory module). The evidence so far only shows the symbol is missing, not why.", "selected_action": "act-07", "expected_information": "Whether iter_reality_gap_case_files exists anywhere in the inventory module (or elsewhere in the codebase), which would distinguish a pure implementation omission from a misdirected projection or naming mismatch.", "proposed_settlement": null}
+```

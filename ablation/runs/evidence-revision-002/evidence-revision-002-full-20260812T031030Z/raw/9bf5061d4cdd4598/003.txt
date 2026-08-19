@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Exit code 101 (typical Rust compile error or panic) occurred after all dependencies compiled successfully, but no actual error message is visible to determine whether the failure is in the project's own source code or in verifier command configuration.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

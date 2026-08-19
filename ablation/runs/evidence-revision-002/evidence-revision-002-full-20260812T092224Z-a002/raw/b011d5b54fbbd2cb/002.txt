@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection", "implementation"], "unresolved_distinction": "Is the missing tests/test_inventory.py due to a wrong path in the verification command, a missing projection step that should have generated it, or the implementation simply never delivering the test file?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

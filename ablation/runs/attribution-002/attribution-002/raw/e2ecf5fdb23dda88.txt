@@ -1,0 +1,3 @@
+Candidates: verifier (discriminator: verifier stderr/stacktrace; absent), implementation (discriminator: expected/actual output or repo diff; absent), evidence_collection (discriminator: missing artifact contents/empty FTS-zero vector vs. sparse retrieval; ambiguous), environment (discriminator: runtime/env/stdin-parse error logs; absent)
+Excluded: none — no discriminating evidence available
+Locus: unknown

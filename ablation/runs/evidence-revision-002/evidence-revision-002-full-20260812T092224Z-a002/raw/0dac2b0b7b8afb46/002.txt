@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Whether the compile error (exit 101) is caused by missing source symbols in the project code (implementation defect) or by a verification plan referencing a symbol that was never intended to exist in this scenario.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

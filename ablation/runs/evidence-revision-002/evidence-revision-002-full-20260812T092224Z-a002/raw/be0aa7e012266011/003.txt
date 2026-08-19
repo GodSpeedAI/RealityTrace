@@ -1,0 +1,11 @@
+Looking at the evidence:
+- Build completes successfully (all compiler artifacts are fresh)
+- Verifier exits 101 (Rust runtime panic)
+- `from_cli` symbol was inspected and NOT found at expected location
+- Fixtures exist and match expectations; toolchain is available
+
+The missing `from_cli` symbol and successful compilation but runtime panic strongly point to the implementation being incomplete or having a runtime defect. The environment and fixtures have been validated as correct. Since this is the final round, I will settle.
+
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "Whether the verifier exited 101 due to its own misconfiguration (wrong command/direction rule) or because the implementation binary panicked at runtime — the missing `from_cli` symbol suggests an implementation deficiency but does not rule out a verifier configuration referencing it incorrectly.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

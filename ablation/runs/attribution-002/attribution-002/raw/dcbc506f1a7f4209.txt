@@ -1,0 +1,9 @@
+Looking at this case:
+- The verifier exited with code **101** (a crash/panic-level exit code)
+- The FTS retrieval is **empty** `[]`
+- The vector embedding is **all zeros**, indicating no meaningful content was processed
+- Evidence was recorded but appears empty/unusable
+
+The exit code 101 from the verifier itself, combined with completely empty content signals, indicates the verifier process crashed or errored during execution. The failure is at the verifier level — it could not complete its run.
+
+Locus: verifier

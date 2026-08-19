@@ -1,0 +1,5 @@
+Looking at this failure, the traceback clearly shows the root cause: the fixture file `tests/fixtures/sample_settlement_recorded.json` contains valid JSON followed by trailing `\n\n# stale\n`, causing `JSONDecodeError: Extra data`. The file exists and is found (no FileNotFoundError), but its content is malformed — it has non-JSON trailing content after the closing brace.
+
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Whether the malformed fixture file (trailing '# stale' after valid JSON) is a defect in the test implementation's committed fixture data, or an artifact of how evidence/fixture data was improperly collected and serialized into the repo.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

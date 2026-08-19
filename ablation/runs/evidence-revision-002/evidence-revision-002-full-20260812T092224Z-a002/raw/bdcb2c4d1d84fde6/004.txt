@@ -1,0 +1,13 @@
+Looking at this diagnostic state:
+
+1. The failure is that TMPDIR (`.corpus-tmpfix`) is not writable
+2. Two candidate loci remain: `environment` and `verification_plan`
+3. The concrete settlement of `verification_plan` was already rejected (EVIDENCE_INSUFFICIENT) in round 3
+4. No qualifying evidence exists to support either locus
+5. Round limit reached (3/3), no further observations possible
+
+The key unresolved distinction is whether the verification harness explicitly assigned TMPDIR to a path it failed to make writable (verification_plan), or whether the environment had incorrect filesystem permissions on a correctly designated temp directory (environment). The evidence shows TMPDIR was explicitly set and the directory was not writable, but this alone cannot determine root cause responsibility — the directory may have been correctly configured by the plan but corrupted by the environment, or improperly configured by the plan. Since the concrete attempt was rejected and no qualifying evidence supports the alternative, the evidence is insufficient.
+
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Is .corpus-tmpfix unwritable because the verification plan explicitly set TMPDIR to a path without ensuring writability, or because the environment has incorrect filesystem permissions on a correctly designated temp directory?", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

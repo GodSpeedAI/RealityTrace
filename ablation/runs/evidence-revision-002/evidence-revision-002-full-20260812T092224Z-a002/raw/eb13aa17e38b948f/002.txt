@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "act-07 confirmed the symbol cep.conformance.anti_collapse is absent at its expected location, but we have not yet ruled out that the module is supposed to be generated or mapped by a build/packaging step that the verifier configuration controls or expects — which would make it a projection defect rather than a missing-source implementation defect.",
+ "selected_action": "act-05",
+ "expected_information": "Whether the verifier's command and configuration include a build, install, or packaging step that should generate or expose the module cep.conformance.anti_collapse — or whether it directly invokes pytest against the source tree, confirming the module must exist in source (implementation defect).",
+ "proposed_settlement": null}
+```

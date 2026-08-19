@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "declared_model"], "unresolved_distinction": "Whether iter_reality_gap_case_files was simply never implemented in cep/inventory.py (implementation defect) or whether the declared model/projection specifies a mismatched symbol name that the implementation faithfully followed (declared_model defect).", "selected_action": "act-05", "expected_information": "Confirm whether iter_reality_gap_case_files exists in cep/inventory.py or whether a similarly-named function is present, distinguishing a missing implementation from a naming mismatch.", "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the .corpus-tmpfix directory was created with wrong permissions by the evidence-collection harness (evidence_collection) or the environment simply lacks write access to the working directory (environment).", "selected_action": "act-08", "expected_information": "Filesystem permission details on .corpus-tmpfix and its parent—ownership, mode bits, and whether the directory was created by the harness or pre-existed—which will determine if this is an environment configuration failure or an evidence-collection setup defect.", "proposed_settlement": null}
+```

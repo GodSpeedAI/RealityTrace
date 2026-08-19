@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "The verifier references test target `unit_tests` but only `unit_tests_moved` and `integration_tests` exist. Is the verification_plan stale (referencing the pre-rename name), or did the implementation break a correct plan by renaming the target?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verification_plan"}
+```

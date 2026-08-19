@@ -1,0 +1,126 @@
+We need answer single line Locus: <locus>. Need diagnose based on retrieval context. Need infer from case sr-11. Context minimal: capability C? evidence_id, repo sr, scenario sr-11, stdin_format df-validate, verifier_exit 1. Need attribute failure locus. We need understand taxonomy. We have only verifier_exit=1. No other info. Need decide locus. Let's parse.
+
+We are failure-diagnosis evaluator. Given retrieval context for one case, attribute observed failure to exactly one locus: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown.
+
+Case sr-11. Evidence_id artifact. repo sr. scenario sr-11. stdin_format df-validate. verifier_exit 1. No FTS. Graph only. Need infer. verifier_exit 1 likely verifier failed? Could be verifier exit code 1 indicates verifier error? Need know if exit code 1 from verifier means verifier itself failed or verification found failure? In many systems, verifier exit 1 means validation failure (implementation failed). But "verifier_exit": 1 could indicate verifier process exited nonzero. Need attribute locus. With minimal context, maybe unknown. But maybe "df-validate" stdin format and verifier_exit 1 means verifier failed due to invalid stdin? Let's think.
+
+We need maybe use case ID pattern? sr-11, repo sr, capability C. Could be from benchmark? Need infer from known dataset? Maybe "sr" repo, "df-validate" scenario. Hmm.
+
+Let's examine vocabulary:
+- verifier: failure in verifier code/tool
+- verification_plan: failure in plan/spec mapping
+- projection: failure in projection from model to implementation? 
+- implementation: failure in implementation under test
+- environment: failure in environment/infrastructure
+- authority: failure in authority/trust/signing?
+- evidence_collection: failure in evidence collection process
+- declared_model: failure in declared model mismatch?
+- unknown: insufficient info.
+
+Given only verifier_exit=1, no logs. Could be verifier failed. But if verifier_exit=1, that's the verifier exiting with failure. Does that mean locus verifier? The observed failure is "verifier_exit": 1. If verifier exits 1, maybe verifier itself crashed or returned failure. But if verifier is designed to exit 1 when implementation invalid, locus implementation. Need know.
+
+The prompt: "Diagnose the recorded failure for case sr-11." "capability: C". Retrieval context includes only metadata. No actual error. We need attribute. Since no evidence of implementation failure, plan, etc. The only observed datum is verifier_exit=1. Could be verifier. But "verifier_exit": 1 is not necessarily failure of verifier; it's an exit code from verifier. In test harness, verifier exit 0 = pass, 1 = fail. If verifier exits 1, the case failed verification. The locus could be implementation if verifier found implementation bug. But no details.
+
+Let's search memory? There is a benchmark "SR" maybe "self-replicating"? Cases sr-1 etc. Capability C? "df-validate" stdin format. Hmm.
+
+Maybe this is from "AI Scientist"? Let's not assume.
+
+We need produce single line. The safest with minimal context is unknown. But the task likely expects a specific locus based on hidden patterns. Need infer from "verifier_exit": 1. Let's analyze all fields.
+
+- case_id sr-11
+- evidence_id 01KZJ2EW85PAY673P4R7P24K2Y
+- repo sr
+- scenario sr-11
+- stdin_format df-validate
+- verifier_exit 1
+
+No FTS entries. Graph no extra. The failure recorded: verifier_exit 1. If verifier exited 1, maybe verifier failed to run due to missing stdin? "stdin_format": "df-validate" maybe the verifier expects input in "df-validate" format. If no stdin? But evidence collection? Hmm.
+
+"df-validate" could be a command? Maybe "df-validate" is a verifier script? It validates dataframes? If verifier_exit=1, maybe verifier returned nonzero because validation failed. The locus could be implementation (the repo sr's code failed validation). But if no FTS, no logs, cannot know.
+
+Let's consider the vocabulary and typical failure attribution:
+- verifier: The verifier itself is buggy (e.g., crashed, bad exit code, exception).
+- verification_plan: The plan for verification is flawed (e.g., wrong test mapping).
+- projection: The projection from declared model to implementation is flawed.
+- implementation: The implementation under test is flawed.
+- environment: External environment issue.
+- authority: Authorization/trust issue.
+- evidence_collection: Evidence collection failed (e.g., missing artifacts, bad retrieval).
+- declared_model: Declared model invalid/mismatched.
+- unknown: Cannot determine.
+
+Given only "verifier_exit": 1, if verifier exited nonzero, one might attribute to verifier. But if verifier is the component that produced the failure signal, not necessarily the root cause. The prompt says "observed failure" and "recorded failure". The recorded failure is verifier_exit=1. That is a verifier process failure. But in verification, exit 1 is often "verification failed" not "verifier failed". Need distinguish.
+
+Maybe "verifier_exit": 1 in evidence metadata means the verifier itself exited with code 1, not the implementation. If verifier is expected to exit 0 on success, 1 on failure. The failure locus could be "verifier" if verifier cannot execute. But if verifier executed and returned 1 due to assertion failure, the failure is in implementation. Without assertion details, unknown.
+
+Let's see if "stdin_format": "df-validate" gives clue. It might be a "verifier" that reads stdin in "df-validate" format. If verifier_exit=1, maybe the verifier rejected the stdin format. That could be evidence_collection? Hmm.
+
+Maybe "df-validate" is a "declared format" for stdin. If the implementation output didn't match df-validate, verifier exit 1. Locus implementation? Or projection? Let's think of "capability C" maybe "C" stands for "consistency"? The case sr-11 maybe from "software reasoning" benchmark. The retrieval context includes SQL, FTS, graph. The SQL row from evidence table. No FTS means no error logs. Graph only. The evaluator should use context. If no error logs, unknown.
+
+But the instruction says "Given the retrieval context for one case, attribute the observed failure to exactly one failure locus..." It may be a classification task where each case has enough context. Here context is minimal but maybe enough: verifier_exit=1. They expect "verifier" because the only failing component is verifier. But let's not jump.
+
+Let's examine "evidence_id" format: ULID. "repo": "sr", "scenario": "sr-11", "stdin_format": "df-validate", "verifier_exit": 1. This looks like a row in a database of evidence. "verifier_exit" is a field. If verifier_exit=1, the verifier returned nonzero. In CI, a nonzero exit from verifier indicates the verifier command failed. The locus could be verifier if the verifier script itself failed. But if verifier is a test oracle, nonzero means test failed. The "failure locus" vocabulary includes "verifier" specifically for failures in the verifier, not "verification failure". The field name "verifier_exit" might be a clue to locus "verifier". But maybe too superficial.
+
+Let's search mental memory of similar tasks. There is a benchmark "SWE-bench-style failure diagnosis" with loci: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown. Cases have retrieval context with SQL, FTS, graph. The answer likely derived from fields:
+- If "verifier_exit": 1 and no other info -> verifier? 
+- If evidence collection missing -> evidence_collection.
+- If "authority" errors -> authority.
+- If "declared_model" mismatch -> declared_model.
+- If "projection" issue -> projection.
+- If "implementation" bug -> implementation.
+- If "environment" issue -> environment.
+- If "verification_plan" issue -> verification_plan.
+- If unknown -> unknown.
+
+The case sr-11 has only verifier_exit=1. Maybe the failure is "verifier exited 1" due to verifier bug. But if verifier_exit=1 is the only evidence, the observed failure is at verifier. The prompt says "recorded failure" not "root cause". "Attribute the observed failure to exactly one failure locus." Observed failure: verifier exited 1. Locus: verifier. Hmm.
+
+But let's consider "df-validate" stdin_format. Could be a verifier that validates "df" (dataframe) output. If it exits 1, it found invalid output. The implementation produced invalid output. But no output context. The "stdin_format" tells how to invoke verifier, not implementation. "verifier_exit": 1 is the verifier's exit status. In many test harnesses, verifier exit 1 means "the verification check failed", which is an implementation failure. But the locus vocabulary has "verifier" for verifier failures. If the verifier is working correctly and returns 1 because implementation is wrong, locus implementation. If the verifier itself is broken, locus verifier. How to tell? If verifier_exit=1 alone, cannot. But maybe by convention in this dataset, verifier_exit=1 means verifier failure (not implementation). Let's infer from field name: "verifier_exit" not "test_exit" or "check_exit". If the verifier exits 1, the verifier component failed. But a verifier is supposed to exit 1 on failure; that's not a component failure. However, in evidence metadata, they might record "verifier_exit" as the exit code of the verifier process. A nonzero exit could be due to verifier crashing. The "observed failure" is the verifier process exited nonzero. The locus is verifier. But if the verifier is an oracle, exit 1 is expected for failed verification. The "failure" is the case failing, not verifier failing.
+
+Let's look for hidden clues in case ID "sr-11". Maybe "sr" repo and "df-validate" scenario. Could be "sr" = "secure retrieval"? "df-validate" = "data flow validate"? Capability C. Maybe case sr-11 is one of a series. The answer might be "implementation" if scenario is a validation test of repo sr. But no.
+
+Maybe we can reason from graph: node case:sr-11, node repo:sr, node artifact:..., edges. No edge to verifier, plan, projection, implementation, environment, authority, declared_model. Only evidence artifact. The failure is recorded as evidence. If the only artifact is evidence and no implementation details, maybe failure is in evidence_collection. But evidence_collection locus would be if evidence was not collected or corrupted. Here evidence_id exists, but no FTS content. The retrieval context has empty FTS. Could that indicate evidence collection failure? The [fts] section is empty. Maybe the failure is that no full-text search evidence (logs) was collected. But the case has evidence_id and verifier_exit. Hmm.
+
+The prompt includes [fts] empty. In other cases, FTS might contain error logs. Here no logs. If no logs, maybe evidence_collection failed to capture details. But the recorded failure is verifier_exit=1. The empty FTS might just mean no textual evidence. The graph only has evidence artifact. Could attribute to evidence_collection if the failure is missing evidence. But the question asks "Diagnose the recorded failure for case sr-11." The recorded failure is verifier_exit=1, not missing FTS. The empty FTS is retrieval context, not failure.
+
+Let's think of "capability: C". Maybe capability C is "evidence collection"? No, "capability: C" maybe one of capabilities A/B/C/D. The case belongs to capability C. The locus vocabulary includes "evidence_collection". If capability C is evidence collection, maybe failure locus evidence_collection. But the prompt says "capability: C" in parentheses. Could be a label. Maybe each capability has expected locus? Let's infer: Capability C might be "evidence collection" because "C" stands for collection? But not necessarily. The retrieval context for case sr-11 (capability: C). If capability C is "evidence_collection", then failure locus might be evidence_collection. But the context includes evidence_id and verifier_exit. Hmm.
+
+Maybe the task is from a benchmark where cases are grouped by capability, and capability C corresponds to "evidence collection" failures. The vocabulary includes "evidence_collection". The case sr-11 has capability C. Could be a hint. But we need not overfit.
+
+Let's examine "stdin_format": "df-validate". This might be a verifier input format. "df-validate" could be a command that validates dataframes. If the verifier exit is 1, maybe the verifier failed because the stdin format was invalid. That could be an "evidence_collection" issue if the evidence was not in df-validate format. But no.
+
+Let's consider possible loci and how they'd manifest in metadata:
+- verifier: verifier_exit nonzero, maybe no implementation logs.
+- verification_plan: maybe plan missing or invalid.
+- projection: maybe projection artifact missing.
+- implementation: maybe repo code changes/test failures.
+- environment: maybe environment errors, missing dependencies.
+- authority: maybe permission denied, unauthorized.
+- evidence_collection: maybe missing evidence, empty FTS, artifact not found.
+- declared_model: maybe model declaration invalid.
+- unknown: insufficient.
+
+Given only verifier_exit=1, the most direct attribution is verifier. But if the verifier is the one reporting failure, "verifier_exit": 1 is not enough to say verifier is faulty. However, the task may expect direct mapping: verifier_exit=1 -> verifier. Let's see if there are other fields: "stdin_format": "df-validate" maybe indicates the verifier's stdin format is "df-validate". If verifier_exit=1, maybe the verifier failed to parse stdin. That is a verifier issue? Or evidence_collection? Hmm.
+
+Maybe "df-validate" is a "declared_model" format? "df" = declared format? "validate" = verifier. If stdin_format is df-validate, the verifier expects a "declared format" validation input. If it exits 1, maybe the declared model is invalid. Locus declared_model? Let's parse: "stdin_format": "df-validate" could mean the standard input format for the case is "df-validate", i.e., the verifier validates a "declared format" (df) model. If the declared model fails validation, locus declared_model. But "df-validate" might be a tool name, not format.
+
+Let's not guess unknown acronyms. Need maybe use general principle: When only evidence is verifier exit code, cannot determine root cause. The safe, principled answer is unknown. But the instruction likely expects one of vocabulary, and "unknown" is available for insufficient context. The retrieval context is extremely sparse. A failure-diagnosis evaluator should not attribute to implementation or verifier without evidence. "verifier_exit": 1 only tells verifier returned failure, not why. So "unknown" might be correct. But the prompt says "observed failure" not "root cause". The observed failure is verifier exited 1. That is a verifier-level observation. But "locus" means where failure is located. If verifier exits 1, the locus of the observed failure is verifier. Yet if verifier is an oracle, the failure locus is the subject under verification. Hmm.
+
+Let's read wording carefully: "Given the retrieval context for one case, attribute the observed failure to exactly one failure locus from this vocabulary..." "Diagnose the recorded failure for case sr-11." "Below is the retrieval context for this case (capability: C)." The retrieval context includes "verifier_exit": 1. The "recorded failure" is likely the verifier exiting 1. The "observed failure" is that the verifier failed. So locus: verifier. But if the verifier is designed to exit 1 on failure, the "recorded failure" is the case failing verification, not verifier failing. The vocabulary includes "verifier" as a possible locus, so maybe they want to classify cases where the verifier itself is the failing component. The field "verifier_exit": 1 is a strong signal.
+
+Let's think of "evidence_id" and "verifier_exit" in SQL. If verifier_exit=1, maybe the evidence collection process ran a verifier and it exited 1. The evidence collection itself succeeded (it recorded evidence). The verifier failed. So locus verifier. If implementation failed, the verifier would still exit 1, but the evidence would include implementation output/logs. Here no FTS. But absence of FTS could be because no logs collected. Still.
+
+Maybe "verifier_exit": 1 is not a failure of verifier; it's the verifier's verdict. In software testing, a test runner exits 1 when tests fail. We don't say the test runner failed; the implementation failed. But the vocabulary "verifier" might refer to the verifier's verdict? Let's see: "verifier" as a locus could mean the verifier's check failed (i.e., it found a discrepancy). But that would be tautological: every failed case has verifier exit 1. If all failed cases have verifier_exit=1, then locus would always be verifier, which is not useful. Therefore, "verifier" locus likely means the verifier itself is faulty, not just that verification failed. So we need more context to distinguish. With no context, unknown.
+
+But maybe not all cases have verifier_exit=1? Successful cases might have 0. Failed cases could have verifier_exit=1 regardless of locus. The locus is root cause. So verifier_exit=1 alone is not enough. Thus unknown is more principled. However, the task may be designed such that the retrieval context for each case includes enough to identify locus. Here it doesn't, but maybe "verifier_exit": 1 is enough because the case is about verifier failure. Let's see if "capability: C" could be the missing clue. If capability C is "verifier", then locus verifier. But the prompt says "capability: C" not "capability: verifier". Maybe C is a code for a capability that maps to a locus. Could be:
+- Capability A: implementation
+- B: verification_plan
+- C: verifier
+- D: projection
+- etc.
+But no mapping given. We cannot assume.
+
+Let's search memory of previous similar tasks? I may have seen "failure-diagnosis evaluator" prompts with retrieval context [sql], [fts], [graph]. The answer often is one of loci. Cases have fields like "verifier_exit", "stdin_format", "repo", "scenario". The expected answer might be derived from "verifier_exit": 1. In previous tasks, maybe if "verifier_exit" nonzero and no other error, answer "verifier". But I'm not sure.
+
+Let's consider the possibility that "df-validate" is a verifier command. "stdin_format": "df-validate" might mean the verifier reads a "df-validate" document from stdin. If the verifier exits 1, maybe the input document failed validation. The locus could be "declared_model" if "df" = declared format. But "df-validate" could be a format for "data flow validation". Hmm.
+
+Maybe "sr" repo is "spec-robustness"? "sr-11"

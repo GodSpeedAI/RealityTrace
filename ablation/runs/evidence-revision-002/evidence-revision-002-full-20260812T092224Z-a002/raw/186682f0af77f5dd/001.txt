@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "implementation", "evidence_collection"], "unresolved_distinction": "Whether the fixture file tests/fixtures/inventory-version-v999.json was expected to exist in the working tree but was never deployed/created (environment or evidence_collection issue), or whether the test code itself incorrectly asserts the presence of a fixture that was never meant to exist (implementation issue).", "selected_action": "act-07", "expected_information": "Whether the referenced fixture file or analogous fixture files exist in the working tree, and what their expected content should be — this will distinguish a missing-fixture environment problem from a test-code referencing error.", "proposed_settlement": null}
+```

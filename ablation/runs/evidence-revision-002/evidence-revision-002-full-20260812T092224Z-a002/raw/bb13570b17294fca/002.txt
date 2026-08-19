@@ -1,0 +1,7 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "implementation"],
+ "unresolved_distinction": "The `from_cli` symbol is confirmed missing from expected locations, and environment/fixture issues are ruled out. The key question is whether the verifier/verification_plan incorrectly references a non-existent target (`from_cli`), or whether the project's own implementation is incomplete and should provide `from_cli` but doesn't — and whether exit code 101 stems from a compilation failure referencing this missing symbol versus a verifier misconfiguration.",
+ "selected_action": "act-03",
+ "expected_information": "The verifier's configured command, evidence types, and direction rule will reveal whether it directly references `from_cli` or delegates to a build/test command, distinguishing between a verifier misconfiguration, an incorrect verification_plan target, or a genuine implementation gap.",
+ "proposed_settlement": null}
+```

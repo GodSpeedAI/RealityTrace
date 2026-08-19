@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection", "implementation"], "unresolved_distinction": "Is the test path 'tests/test_inventory.py' correctly specified in the verification plan but the file is absent from the working tree (pointing to projection or implementation), or does the verification plan itself reference a wrong/non-existent test path (pointing to verification_plan)?", "selected_action": "act-02", "expected_information": "The verifier's configured command, test target path, and evidence-type declarations will reveal whether 'tests/test_inventory.py' is intentionally referenced by the plan or is a misconfiguration, distinguishing verification_plan from projection/implementation.", "proposed_settlement": null}
+```

@@ -1,0 +1,53 @@
+{
+  "experiment_id": "attribution-002",
+  "namespace": "attribution-002",
+  "kind": "attribution-loop-ablation-H-ATTRIBUTION",
+  "retrieval_substrate": "Arm D (SQL+FTS+graph+vector) frozen from \u00a723.1",
+  "arm_D_frozen_reason": "owner adjudication 2026-08-09: diagnostic decision success (see owner_adjudication_23-1.json)",
+  "supersedes": "attribution-001",
+  "supersession": {
+    "superseded_experiment": "attribution-001",
+    "superseded_provider": "clinepass",
+    "superseded_status": "superseded_before_execution",
+    "committed_units_under_superseded": 0,
+    "reason": "Clinepass monthly quota exhausted before first scored unit (0/360 committed); provider-route substitution to Z.ai GLM Coding Plan per owner directive 2026-08-10. Only provider/access route changed; all experimental semantics frozen (GLM-5.2, Arm D, C-loop/D-direct, 32K pack-v1, prompts, scorer, unknown semantics, FP def)."
+  },
+  "provider_route": {
+    "provider": "zai-coding-plan",
+    "endpoint": "https://api.z.ai/api/coding/paas/v4/chat/completions",
+    "route_kind": "Z.ai GLM Coding Plan (dedicated endpoint, not pay-as-you-go)",
+    "auth": "Zhipu signed-JWT HS256 (sign_type=SIGN)"
+  },
+  "methods": [
+    "C-loop",
+    "D-direct"
+  ],
+  "reps": 3,
+  "model_identity_tag": "f30937b14820fe883a69c79d0d6458edbe3d9d1c8f06e1e8836a809c81efc797",
+  "model": {
+    "model_id": "glm-5.2",
+    "provider": "cline-pass",
+    "temperature": 0.0,
+    "context_budget_tokens": 32000,
+    "max_tokens": 4096
+  },
+  "scaffold_hashes": {
+    "C-loop": "dde4f8b0cd9df765e7f0cc4dc6bb700ce66ee4d6b964f75ffc0e6e75e757ce4a",
+    "D-direct": "938d623df81043dff926b2d82f37507fe1ffadebb19c95b1e7ead7142de554ca"
+  },
+  "primary_measure": "semantic-model-change false-positive rate",
+  "secondary_measures": [
+    "unknown termination rate (honest non-answer = success)",
+    "time/tokens to a supported locus"
+  ],
+  "h_attribution": "C-loop (diagnostic loop) has materially lower FP than D-direct (direct classification) at acceptable extra cost",
+  "scorer_version": "m2-scorer-1",
+  "packer_version": "pack-v1",
+  "interpretation_caveat": "\u00a723.1 used Clinepass (finalProvider fireworks); \u00a723.2 uses Z.ai Coding Plan. Cross-experiment absolute rates are NOT directly comparable; only the internal C-loop vs D-direct comparison is causal.",
+  "hashes": {
+    "corpus_cases": "7612b9881bb807ab208fc02b73982052a451cf436b31e39889a2274a0d794520",
+    "sealed_key_manifest": "10f677535412ef52b3150ca3c28865aec560da970ac2ff27c73b50f40b5c8e17",
+    "sxr_git_head": "9deecac6c4209feb3da81660d5cc60e7aa2309ae"
+  },
+  "contract_hash": "d8343be36cf02eb2cd8f84582d58db3852a7a13d71b3dcc09142c35b2bc04862"
+}

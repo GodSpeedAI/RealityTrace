@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is cep.scoring a missing source module/package (implementation defect), or is it present on disk but not properly mapped/exposed by the project configuration (projection defect)?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "The isolated re-run (act-05) produced a compile_error, and act-07 found the symbol format_matches_as_text missing from expected locations, strongly suggesting an implementation defect. However, it remains conceivable that the verification plan references a symbol or module path that doesn't match the actual codebase layout. The distinction is whether the code itself is broken (implementation) or the test harness points to a non-existent symbol path (verification_plan).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

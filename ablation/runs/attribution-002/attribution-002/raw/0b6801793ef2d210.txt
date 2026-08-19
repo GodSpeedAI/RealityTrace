@@ -1,0 +1,9 @@
+Looking at this case:
+- FTS is empty
+- The vector embedding is all zeros (no semantic content captured)
+- Verifier exited with code 101 (failure)
+- The artifact is linked in the graph but has no extractable/embeddable content
+
+The root cause is that the evidence collection pipeline produced empty/meaningless representations—no text indexed in FTS and a zero vector. The artifact exists but was never properly ingested or had no extractable content, causing downstream verification to fail.
+
+Locus: evidence_collection

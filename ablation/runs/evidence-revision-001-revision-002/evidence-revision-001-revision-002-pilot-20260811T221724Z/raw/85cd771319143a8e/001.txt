@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "evidence_collection", "environment"], "unresolved_distinction": "The test panics with 'stale fixture missing' - we need to determine whether the fixture file genuinely does not exist on the filesystem (environment or evidence_collection failure) versus whether the verification plan references a fixture path that was never provisioned or is incorrectly specified (verification_plan failure).", "selected_action": "act-04", "expected_information": "Whether the fixture or data file referenced by corpus_sr10.rs exists on disk and contains expected content, distinguishing a missing/misplaced file from an incorrectly referenced path.", "proposed_settlement": null}
+```

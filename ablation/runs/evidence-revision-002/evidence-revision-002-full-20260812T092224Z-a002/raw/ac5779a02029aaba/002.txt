@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["projection", "implementation"], "unresolved_distinction": "Whether the '# stale' trailing content in the fixture file was injected by a projection/generation step that produces or regenerates test artifacts, or is simply corrupt committed fixture data in the implementation.", "selected_action": "act-01", "expected_information": "Whether the declared semantic model (.sea) defines a projection that generates or regenerates fixture files like sample_settlement_recorded.json; if the model governs fixture generation, the stale marker implicates projection; otherwise the fixture is implementation-owned.", "proposed_settlement": null}
+```

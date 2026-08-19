@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "declared_model"], "unresolved_distinction": "Whether iter_reality_gap_case_files was never implemented in cep/inventory.py (implementation defect) or whether a declared model specified a mismatched symbol name (declared_model defect).", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

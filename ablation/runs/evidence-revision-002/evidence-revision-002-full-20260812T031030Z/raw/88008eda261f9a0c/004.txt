@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "environment"], "unresolved_distinction": "Whether AST_GREP_CONFIG=/nonexistent-corpus-config.toml was set by the verification plan (plan bug referencing nonexistent file), by the environment (misconfiguration), or whether the verifier itself is at fault for not gracefully handling a missing config file. Exit code 101 indicates a Rust panic consistent with loading a nonexistent config, but the source of the env var and the locus of responsibility cannot be determined from available evidence.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

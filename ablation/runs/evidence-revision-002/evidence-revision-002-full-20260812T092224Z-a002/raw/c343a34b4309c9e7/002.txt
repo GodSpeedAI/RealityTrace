@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "The key distinction is whether cep.scoring is absent from the source tree itself (implementation) versus present but undiscovered due to packaging/path configuration (projection). Round 1 act-06 already confirmed cep.scoring is missing, and act-08 confirmed environment paths and toolchain are clean/default, strongly favoring implementation.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

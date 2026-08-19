@@ -1,0 +1,14 @@
+Looking at the evidence, the key facts are:
+
+1. The verifier runs `cargo test corpus_scenario` with `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` injected
+2. Exit code 101 is a Rust panic
+3. The isolated re-run of a different test passed (without the env var)
+4. All paths, fixtures, toolchain, and test targets resolve correctly
+
+The failure occurs specifically because the implementation panics (exit 101) when `AST_GREP_CONFIG` points to a non-existent file. Exit code 101 in Rust is a panic — a well-implemented application should handle a missing config file gracefully (error message, default config, etc.) rather than panicking. The deliberately-named "nonexistent-corpus-config" path appears to be an intentional test of missing-config handling, which the implementation fails by panicking instead of degrading gracefully.
+
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": null,
+  "selected_action": null, "expected_information": null,
+  "proposed_settlement": "implementation"}
+```

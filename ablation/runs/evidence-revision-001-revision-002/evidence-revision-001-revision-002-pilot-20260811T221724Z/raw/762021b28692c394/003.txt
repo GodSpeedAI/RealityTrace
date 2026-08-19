@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["declared_model", "projection"], "unresolved_distinction": "Whether the registry TOML file is malformed as originally authored (declared_model) or was truncated/corrupted during a projection or generation step (projection).", "selected_action": "act-03", "expected_information": "Whether the registry TOML fixture file exists and contains the incomplete array (`patterns = [` without closing `]`) as-authored, or whether its content is missing or differs from what the error trace reports, which would indicate projection-stage corruption.", "proposed_settlement": null}
+```

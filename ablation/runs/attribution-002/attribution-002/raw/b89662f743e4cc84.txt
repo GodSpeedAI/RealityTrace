@@ -1,0 +1,7 @@
+Looking at this case:
+
+- **FTS context**: All Cargo build artifacts compiled successfully (all marked `"fresh": true`). No compilation errors in the dependency tree.
+- **SQL record**: `verifier_exit: 101` — this is the standard Rust panic exit code, indicating the verifier process itself crashed/panicked during execution.
+- The build environment was clean and all dependencies resolved. The failure is not in the build, projection, or evidence pipeline — it is in the verifier's own execution.
+
+Locus: verifier

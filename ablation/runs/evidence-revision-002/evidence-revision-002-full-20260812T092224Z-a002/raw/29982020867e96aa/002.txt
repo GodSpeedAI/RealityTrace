@@ -1,0 +1,5 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verifier's command correctly references tests/test_import.py as a test target that the projection step should have generated (pointing to projection), or whether the verification plan itself specifies a stale or incorrect path that was never intended to exist (pointing to verification_plan).",
+ "selected_action": "act-02", "expected_information": "The verifier's configured command and declared test-target expectations will reveal whether tests/test_import.py is a legitimately expected artifact or a misconfigured reference.",
+ "proposed_settlement": null}
+```

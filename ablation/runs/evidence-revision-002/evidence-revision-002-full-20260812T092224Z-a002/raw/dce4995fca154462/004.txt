@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "authority"], "unresolved_distinction": "Whether the PermissionError on 'tests/fixtures' is caused by the directory having restrictive filesystem permissions in the execution environment (environment locus), or by the executing process/user lacking the proper credentials or ownership to access the path (authority locus).", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

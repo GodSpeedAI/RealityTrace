@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan", "environment"], "unresolved_distinction": "The build output shows all Cargo artifacts compiling successfully (fresh: true), yet the verifier exited with code 101. We cannot yet distinguish whether the verifier configuration itself is faulty (wrong command or rule), the verification plan references a non-existent or incorrect test target, or the environment lacks a required toolchain or working directory.",
+ "selected_action": "act-01",
+ "expected_information": "The verifier's configured command, evidence types, and declared direction rule will reveal what the verifier was attempting and whether its configuration is consistent with the case's stdin_format and expected targets.",
+ "proposed_settlement": null}
+```

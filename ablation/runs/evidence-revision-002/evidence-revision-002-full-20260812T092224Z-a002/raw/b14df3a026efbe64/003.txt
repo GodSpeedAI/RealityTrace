@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the fixture tests/fixtures/inventory-version-v999.json was expected to be provisioned by the environment (environment failure) or whether the test incorrectly references a fixture that was never intended to exist (verification_plan failure). The unrealistic version number v999 and the 'stale fixture' label in the assertion strongly suggest the test is probing for deliberately-absent or obsolete data.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

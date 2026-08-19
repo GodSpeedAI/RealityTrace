@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "The test asserts existence of 'tests/fixtures/inventory-version-v999.json' but the file is absent. Is this fixture supposed to be part of the repository/environment (environment failure — missing fixture on disk) or was the evidence-collection or test-setup process responsible for provisioning it and failed to do so (evidence_collection failure)?", "selected_action": "act-01", "expected_information": "Whether the fixture file tests/fixtures/inventory-version-v999.json exists anywhere in the working tree or repo history, which would distinguish a missing-from-environment problem from a never-created/provisioning problem.", "proposed_settlement": null}
+```

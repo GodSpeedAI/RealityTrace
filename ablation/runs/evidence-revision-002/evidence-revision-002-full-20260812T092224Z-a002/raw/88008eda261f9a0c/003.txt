@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 is caused by the environment pointing AST_GREP_CONFIG to a non-existent file (environment), by the verifier failing to handle that missing config gracefully (verifier), or by the verification plan referencing an invalid target (verification_plan).", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether cargo is genuinely absent from the system entirely (environment), or whether the verifier's execution configuration—specifically the prefixed PATH=/usr/bin:/bin—excludes cargo's installation location, making a present toolchain unreachable (verifier).", "selected_action": null, "expected_information": null, "proposed_settlement": "verifier"}
+```

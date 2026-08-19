@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Was iter_reality_gap_case_files supposed to be hand-written in cep.inventory (implementation defect) or emitted by a code-generation/projection step that failed to run? The absence of a .sea model (act-04) weakens the projection hypothesis, but prior settlement on 'implementation' was rejected as evidence-insufficient.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

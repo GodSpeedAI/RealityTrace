@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is `cargo` expected to be available in this environment (pointing to an environment setup failure), or is the verifier incorrectly configured to invoke `cargo` when a different tool should be used (pointing to a verifier misconfiguration)?", "selected_action": "act-02", "expected_information": "Confirm whether the Rust toolchain (cargo/rustc) is installed and accessible on PATH, and whether the working directories are writable — distinguishing an environment provisioning gap from a verifier configuration error.", "proposed_settlement": null}
+```

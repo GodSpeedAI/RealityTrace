@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "The build completed successfully (all artifacts fresh, no compile errors) yet the process exited with code 101 (Rust panic). The expected symbol format_matches_as_text is absent from the source. It remains unclear whether the implementation is genuinely missing required functionality (causing a runtime panic) or whether the verifier's expectations reference an incorrect symbol path.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

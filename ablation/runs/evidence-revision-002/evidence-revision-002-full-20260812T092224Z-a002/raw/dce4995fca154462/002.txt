@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "authority"], "unresolved_distinction": "Whether the PermissionError is due to the directory tests/fixtures having mode 0 (restrictive filesystem state in the environment) or due to the executing user lacking proper credentials for otherwise-accessible permissions.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

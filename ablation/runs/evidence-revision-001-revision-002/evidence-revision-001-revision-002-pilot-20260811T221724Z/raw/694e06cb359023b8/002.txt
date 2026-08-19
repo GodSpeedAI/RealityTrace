@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verifier command's reference to `unit_tests` is a stale target name in the verification plan that should have been updated to `unit_tests_moved`, or whether the project's build configuration (projection) incorrectly renamed the target away from the expected `unit_tests`.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

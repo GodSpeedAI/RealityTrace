@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "Whether the verifier exit code 101 originates from the verifier's own configuration/execution logic (e.g., missing test target, wrong command) or from a runtime panic or assertion failure in the project's implementation code.",
+ "selected_action": "act-02",
+ "expected_information": "The verifier's command line, declared evidence types, and direction rule, revealing what the verifier intended to execute and whether the observed cargo build output plus exit 101 is consistent with the verifier's configured behavior.",
+ "proposed_settlement": null}
+```

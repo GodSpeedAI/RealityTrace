@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "The error 'No module named pytest' could indicate either that the environment is missing the pytest dependency (environment), or that the verification plan incorrectly specified pytest as the runner without ensuring its availability (verification_plan). However, the error message is highly diagnostic of a missing toolchain dependency.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

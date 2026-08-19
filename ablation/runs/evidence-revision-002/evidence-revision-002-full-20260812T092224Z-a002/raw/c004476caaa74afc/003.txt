@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "verification_plan"],
+  "unresolved_distinction": "Whether pytest is absent because the runtime environment failed to provision a standard testing dependency (environment), or because the verification plan's configuration specified pytest as the test runner without declaring or ensuring its installation as a prerequisite (verification_plan).",
+  "selected_action": "act-05",
+  "expected_information": "The verifier's declared command, evidence types, and direction rule will reveal whether the verification plan includes a pytest installation step or assumes pytest availability, directly distinguishing a verification_plan defect (missing prerequisite declaration) from an environment defect (provisioning gap).",
+  "proposed_settlement": null
+}
+```

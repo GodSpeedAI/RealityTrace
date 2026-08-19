@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "The build artifacts all compiled successfully (fresh: true), but the verifier exited 101 (Rust panic). It is unclear whether the panic originates from the implementation under test, a mismatch in the verifier's configuration, or an environment-level issue (e.g., platform mismatch given libc cfg 'freebsd12').", "selected_action": "act-01", "expected_information": "The verifier's command, expected evidence types, and direction rule will reveal what test is being run and how exit code 101 is interpreted, helping distinguish verifier misconfiguration from implementation panic.", "proposed_settlement": null}
+```

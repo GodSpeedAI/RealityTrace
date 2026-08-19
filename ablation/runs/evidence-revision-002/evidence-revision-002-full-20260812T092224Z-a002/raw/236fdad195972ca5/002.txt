@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Is iter_reality_gap_case_files absent from cep.inventory due to incomplete implementation, or is the test importing a module/symbol that was never intended to exist in this state?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

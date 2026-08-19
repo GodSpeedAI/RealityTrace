@@ -1,0 +1,11 @@
+## Analysis
+
+**SQL record**: `verifier_exit: 101`
+
+Exit code 101 is the standard Rust panic exit code. The field `verifier_exit` records the verifier process's own exit code—meaning the verifier itself panicked or crashed during execution, rather than cleanly rejecting an incorrect implementation (which would typically yield a different, deliberate exit code).
+
+The all-zero vector and empty FTS sections are consistent with the verifier failing before it could produce meaningful diagnostic output or structured evidence.
+
+No evidence suggests the implementation's output was wrong but correctly caught; the failure is the verifier's own crash.
+
+Locus: verifier

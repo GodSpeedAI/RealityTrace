@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "Whether the fixture file for corpus_sr10 was never provisioned (evidence_collection) or exists but is unreachable due to path misconfiguration (environment)", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

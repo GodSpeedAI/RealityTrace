@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verification_plan explicitly commands running test target `unit_tests` (stale reference after the target was renamed to `unit_tests_moved`), or whether the projection incorrectly renamed the target from `unit_tests` to `unit_tests_moved`, causing a mismatch with a correct plan reference.", "selected_action": "act-05", "expected_information": "Whether the verifier's configured command explicitly references the test target name `unit_tests` versus `unit_tests_moved` or a generic test invocation, revealing whether the stale name originates in the verification_plan specification or arose from the projection renaming the target.", "proposed_settlement": null}
+```

@@ -1,0 +1,9 @@
+Looking at this case:
+
+- **verifier_exit: 101** — This is a Rust-style panic exit code, indicating the verifier itself crashed/aborted abnormally.
+- **FTS is empty** and **vector is all zeros** — No meaningful verification content was ever produced, consistent with the verifier faulting before completing its work.
+- The evidence artifact exists in the graph but contains no useful semantic content, reinforcing that the verifier never reached a normal evaluation path.
+
+The root cause is the verifier faulting (exit 101 = panic), not an issue with the plan, projection, implementation, or environment.
+
+Locus: verifier

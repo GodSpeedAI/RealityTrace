@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "Whether the PermissionError stems from incorrect filesystem permissions set on tests/fixtures in the environment (mode 0, fully restrictive) versus the test code improperly referencing a path it should not access.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

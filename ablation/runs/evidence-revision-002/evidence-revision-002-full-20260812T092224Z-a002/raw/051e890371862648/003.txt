@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 stems from a runtime panic in the implementation under test (since all Cargo build artifacts compiled fresh with no compiler errors) versus a misconfigured verifier or verification plan — but with no runtime/stderr output available, the exact source of the panic cannot be directly observed.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

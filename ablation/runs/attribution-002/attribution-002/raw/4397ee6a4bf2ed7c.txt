@@ -1,0 +1,10 @@
+Looking at the evidence for case ag-12:
+
+- **SQL** records `verifier_exit: 101`, an abnormal exit code typically indicating a crash or panic.
+- **FTS** is completely empty — no searchable content was produced.
+- **Vector** is all zeros — no meaningful embedding was generated.
+- **Graph** confirms the evidence artifact node exists (`01KZH8E5Y8WDK51T7RPV298Y1D`), but the artifact has no substantive content.
+
+The evidence ID was registered, but the verifier exited abnormally (code 101), and as a consequence no usable evidence content (FTS text, vector embedding) was produced. The crash during verification is the root cause: the verifier failed to complete its run, leaving behind an empty evidence record.
+
+Locus: verifier

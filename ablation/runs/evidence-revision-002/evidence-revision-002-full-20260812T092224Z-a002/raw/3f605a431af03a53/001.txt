@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "verification_plan", "evidence_collection"],
+  "unresolved_distinction": "Whether the PermissionError on the fixture file is caused by the runtime environment having incorrect filesystem permissions on an existing file (environment), or whether the verification/evidence-collection setup script incorrectly prepared or locked the fixture file's permissions (verification_plan or evidence_collection).",
+  "selected_action": "act-03",
+  "expected_information": "The actual filesystem permissions (owner, group, mode bits) on tests/fixtures/sample_settlement_recorded.json, which will reveal whether the file exists but is unreadable due to environment-level permission misconfiguration, or whether something in the setup pipeline deliberately or erroneously restricted it.",
+  "proposed_settlement": null
+}
+```

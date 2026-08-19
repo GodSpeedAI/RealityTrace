@@ -1,0 +1,17 @@
+Looking at this diagnostic state, I need to determine whether exit code 101 stems from an implementation defect or a verification plan misconfiguration.
+
+**Key evidence gathered so far:**
+
+1. **act-07**: Re-running the test in isolation produced `compile_error` — "compilation failed — no test could run". Exit code 101 is consistent with a Rust compilation failure.
+2. **act-08**: The symbols `crate::format::format_matches_as_text` and `format_matches_as_text` were **not found** at their expected locations in the source.
+3. **act-06**: The test target resolves correctly (default test discovery works).
+4. **act-04**: The verifier (cargo-test) and its command are properly configured — `cargo test --offline --message-format json corpus_scenario`.
+5. **act-02, act-03, act-05**: Permissions, fixtures, and toolchain are all fine.
+
+The verification plan is correctly configured: the test command is valid, the test target resolves, fixtures exist, and the toolchain is available. The failure is squarely a compilation error caused by missing source symbols in the implementation.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": null,
+ "selected_action": null, "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

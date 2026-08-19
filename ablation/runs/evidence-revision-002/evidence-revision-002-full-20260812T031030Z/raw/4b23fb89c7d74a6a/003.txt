@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Exit code 101 (Rust panic) was observed after all dependencies compiled successfully with no compiler errors, but no runtime/test output is available to determine whether the panic originated inside the implementation under test or within the verifier's own process.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether cep.scoring is a source module that the implementation incorrectly references (and was never created or was deleted), or whether a projection/generation step was supposed to produce cep.scoring from some model or specification that failed to run.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

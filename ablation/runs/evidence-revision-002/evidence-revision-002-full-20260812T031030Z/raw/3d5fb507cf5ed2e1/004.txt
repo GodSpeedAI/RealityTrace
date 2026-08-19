@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether cargo is genuinely absent from the execution environment (environment) or the verifier is misconfigured to invoke cargo when a different toolchain path or build command was expected (verifier). Prior settlement on 'environment' was rejected as EVIDENCE_INSUFFICIENT and no additional observations were acquired.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

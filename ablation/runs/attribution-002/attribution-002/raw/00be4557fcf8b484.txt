@@ -1,0 +1,3 @@
+Candidates: implementation, verifier, verification_plan, evidence_collection
+Excluded: verifier (ran, exit=1 indicates execution not crash), implementation (no traceback/log content), verification_plan (no plan text available), evidence_collection (artifact id present but content unretrieved)
+Locus: unknown

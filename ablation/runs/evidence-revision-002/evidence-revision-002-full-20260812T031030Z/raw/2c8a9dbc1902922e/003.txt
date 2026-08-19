@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale target name `integration_tests` in the cargo test command originates from the verifier's own hardcoded configuration or was injected by the verification plan that orchestrates the run. act-07 confirms the verifier command contains `--test integration_tests` but does not reveal whether that argument was set by the verifier config or supplied by the plan.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "Whether the verifier exit code 101 originates from the verifier's own execution/crash or from the implementation under test panicking at runtime; all build artifacts compiled successfully as fresh, so the failure is at execution or verification time, not compilation.",
+ "selected_action": "act-05",
+ "expected_information": "The actual runtime error message, panic backtrace, or assertion failure output from re-running the test, which will disambiguate whether the verifier itself crashed or the implementation panicked.",
+ "proposed_settlement": null}
+```

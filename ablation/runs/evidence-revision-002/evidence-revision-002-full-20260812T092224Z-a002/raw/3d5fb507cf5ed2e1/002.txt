@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "verifier"],
+  "unresolved_distinction": "Is cargo the correct and intended build tool for repo 'ag' (so its absence indicates an environment provisioning failure), or is the verifier misconfigured to invoke cargo when the repo expects a different build tool?",
+  "selected_action": "act-03",
+  "expected_information": "The verifier's configured command will reveal whether cargo is the intended invocation for repo 'ag'. If the verifier configuration correctly specifies cargo as the build tool, the failure is environmental (cargo not provisioned). If the configuration erroneously invokes cargo for a non-Rust repo, the locus is the verifier.",
+  "proposed_settlement": null
+}
+```

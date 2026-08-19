@@ -1,0 +1,11 @@
+Looking at the evidence:
+- `tests/fixtures` has mode `0` (completely restrictive) — clearly wrong
+- `tests/test_import.py` has normal mode `644`
+- The test simply calls `os.listdir("tests/fixtures")` which fails with `PermissionError`
+- The directory exists but is inaccessible due to filesystem permissions in the test environment
+
+The mode-0 permission on `tests/fixtures` is a filesystem state problem in the environment where the test runs. Whether it was set during provisioning or by the harness, the failure manifests as an environment permission issue — the test environment does not provide the required filesystem access for the test to pass. No evidence points specifically to the evidence_collection pipeline as the origin.
+
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

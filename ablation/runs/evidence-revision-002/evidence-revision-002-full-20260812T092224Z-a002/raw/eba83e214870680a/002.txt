@@ -1,0 +1,16 @@
+Looking at this case, I need to synthesize what the round 1 observations revealed:
+
+**Key evidence pattern:**
+- act-04: The test `test_observed_failure` **passes** when run in isolation with default environment (exit_code 0)
+- act-02/act-07: The verifier injects `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` — an environment variable pointing to a file that literally doesn't exist
+- act-06: All test targets exist and resolve correctly
+- act-01/act-08: All source files and fixtures are accessible and valid
+
+The critical distinction is now narrow: the implementation works correctly in isolation, and the only differentiator between pass and fail is the verifier's own environment configuration, which assigns a path to a nonexistent config file. This causes the implementation to panic (exit 101) at runtime. The verifier's environment setup is defective — it injects a broken configuration that the test scenario does not intend.
+
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "Whether the panic (exit 101) is caused by the verifier injecting a defective AST_GREP_CONFIG pointing to a nonexistent file (verifier locus), or by the implementation failing to gracefully handle a missing config path (implementation locus). The isolated re-run passing under default env strongly implicates the verifier's env assignment.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verifier"}
+```

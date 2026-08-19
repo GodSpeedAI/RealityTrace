@@ -1,0 +1,14 @@
+Looking at the evidence accumulated over two rounds:
+
+1. **Exit code 101** (Rust panic) with all dependencies compiling fine
+2. **Fixture `tests/fixtures/example.py` has mode 0** (completely unreadable, restrictive)
+3. **Fixture content is "out of date"** — doesn't match expectations
+4. **Scenario name**: `corpus_scenario_unreadable_fixture` — deliberately tests unreadable fixture handling
+5. **Test `test_observed_failure`** failed in isolation with exit 101, from `tests/unit_tests.rs`
+6. **Verifier (cargo-test)** is correctly configured; all test targets resolve; toolchain is available
+
+The scenario deliberately sets up an unreadable fixture to test the implementation's error handling. The implementation panics (exit 101) instead of gracefully handling the unreadable file. The verifier is correctly configured, test targets exist, and the toolchain works. The failure originates in the project's own code.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

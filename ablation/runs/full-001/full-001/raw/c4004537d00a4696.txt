@@ -1,0 +1,142 @@
+We need to diagnose failure locus for case cep-06. We have minimal retrieval context. Need attribute to exactly one locus from vocabulary. We need infer from context. Capability A. Evidence: case_id, evidence_id, repo cep, scenario cep-6, stdin_format pytest-progress, verifier_exit 2. No fts. Need determine failure locus. We need maybe know benchmark? "cep" maybe "complex event processing"? Cases? We only have verifier_exit=2. Need attribute failure locus. With only this, likely unknown? But maybe verifier_exit 2 indicates verifier error? Need understand vocabulary.
+
+We are failure-diagnosis evaluator. Given retrieval context for one case, attribute observed failure to exactly one failure locus: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown.
+
+We need use context. It says verifier_exit 2. In Unix, exit code 2 often misuse or errors. Could indicate verifier failed? But maybe in this benchmark, verifier_exit=2 means "verifier rejected" due to implementation? Need know.
+
+Let's parse. The retrieval context includes [sql] with metadata, no actual failure logs. "capability: A". Maybe from a dataset of cases where each has evidence. We need diagnose based on available context. If no failure details, unknown. But maybe "verifier_exit": 2 is a verifier process exit code, not necessarily failure locus. The observed failure? We don't know what observed failure is. The case has evidence_id, repo, scenario, stdin_format, verifier_exit. No logs. Could be evidence_collection? Hmm.
+
+Let's think of possible system. It might be from "SWE-bench" style? "verifier" checks model output. "projection" maps? "declared_model"? "authority"? "evidence_collection"? These loci are from some evaluation pipeline. We need identify which component caused failure. The context only says verifier_exit=2. If verifier exited with code 2, that suggests verifier itself failed (e.g., crashed, invalid arguments) rather than implementation failing tests. But exit code 2 could be "verification failed" by design. Need know conventions.
+
+Maybe "verifier_exit" is the exit code of verifier after running. In many test harnesses, exit code 0 pass, 1 fail, 2 error. If verifier_exit=2, maybe verifier encountered an error (environment or verifier). But locus vocabulary includes "verifier" and "environment". If verifier exits 2 due to missing dependencies? Could be environment. But no logs.
+
+Let's search memory: There is a benchmark "CAPABILITY" maybe "CEP" cases? "cep-06" "scenario cep-6" "stdin_format pytest-progress". "verifier_exit": 2. Could be from "Terminal-Bench"? Hmm.
+
+The task: "You are a failure-diagnosis evaluator. Given the retrieval context for one case, attribute the observed failure to exactly one failure locus from this vocabulary: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown. Reply with a single line: Locus: <locus>."
+
+This seems like a classification task. We need output one locus. The retrieval context is minimal. Maybe there are hidden patterns: case_id "cep-06", repo "cep", scenario "cep-6", stdin_format "pytest-progress", verifier_exit 2. Capability A. Maybe "capability A" means "A" is a capability category. The failure locus might be "verifier" because verifier_exit=2 indicates verifier failed. But let's not jump.
+
+Let's infer from vocabulary:
+- verifier: the checker/evaluator code or process failed (e.g., crashed, invalid output, exit code 2)
+- verification_plan: the plan/spec for verification is flawed (e.g., wrong test command, missing scenario)
+- projection: mapping from model output to test inputs? 
+- implementation: the solution/model implementation under test failed tests
+- environment: setup/dependencies/runtime issue
+- authority: credentials/permissions?
+- evidence_collection: process collecting evidence/logs failed
+- declared_model: model declaration mismatch?
+- unknown: insufficient info.
+
+Given only metadata and no failure logs, safest is unknown. But the instruction likely expects a specific locus based on "verifier_exit": 2. Need decide.
+
+Let's examine "verifier_exit": 2. If a verifier exits with 2, in pytest, exit code 2 means test execution interrupted? Actually pytest exit codes: 0 tests passed; 1 tests failed; 2 user interrupted; 3 internal error; 4 pytest command line usage error; 5 no tests collected. If stdin_format is "pytest-progress", maybe verifier runs pytest and parses progress. verifier_exit=2 could be pytest exit code? Wait "verifier_exit" might be exit code of verifier, not pytest. But if verifier invokes pytest, exit code 2 could be from pytest? In pytest, exit code 2 is "interrupted", often due to no tests? Actually no, 2 is "test execution interrupted" (KeyboardInterrupt) or "internal error"? Let's verify: pytest docs: Exit code 0: All tests passed; 1: Tests failed; 2: User interrupt; 3: Internal error; 4: pytest command line usage error; 5: No tests collected. So exit 2 could be user interrupt, not implementation. But if verifier_exit=2, maybe verifier was interrupted? Could be environment? Hmm.
+
+But "stdin_format": "pytest-progress" suggests the verifier receives pytest progress output on stdin? Maybe the verifier is a separate program that parses pytest progress. Exit code 2 from verifier could mean verifier rejected due to parse error? Need know.
+
+Maybe "cep" repo and "scenario cep-6" are from "Canary Evaluation Protocol"? The case "cep-06" maybe a known failure due to "projection" or "verification_plan". Let's think.
+
+The vocabulary "projection" and "declared_model" and "authority" suggests an evaluation pipeline for "model API" maybe "OpenAI Evals"? There is a "verifier" that checks "declared_model" against "authority"? Hmm.
+
+Could be from "Inspect" framework? "Evidence collection" etc. Let's map:
+- declared_model: The model declared/claimed in output?
+- authority: A source of truth/ground truth?
+- projection: Transforming task into verification query?
+- verification_plan: Plan generated to verify capability.
+- evidence_collection: Gathering logs.
+- environment: Execution environment.
+- implementation: The agent/solution implementation.
+- verifier: The verifier code.
+
+Maybe cases are from "AutoEval"? The failure locus classification is about why a capability evaluation failed, not why code failed. "capability: A" maybe a capability under evaluation. The retrieval context includes evidence metadata. "verifier_exit": 2. If verifier exits non-zero, maybe failure in verifier. But if verifier exit code 2 means "capability not satisfied" (verifier rejected), then implementation is at fault. Need know.
+
+Let's look for clues in field names:
+- "evidence_id": unique evidence record.
+- "repo": "cep"
+- "scenario": "cep-6"
+- "stdin_format": "pytest-progress"
+- "verifier_exit": 2
+
+No "stdout" or "stderr". The failure is "recorded failure" for case cep-06. Maybe the failure is that verifier exited 2. The locus is "verifier" because the verifier process failed. But if the verifier is designed to exit 2 when implementation fails, then locus implementation. Which is more likely?
+
+The term "verifier_exit" in retrieval context: If verifier_exit is 2, that is the observed failure. The evaluator asks "attribute the observed failure to exactly one failure locus". If the only observed failure is verifier exited 2, then the failure locus is verifier. But maybe "verifier_exit" is just metadata; the actual observed failure could be "capability A failed verification" and we need diagnose why. Without logs, unknown.
+
+Let's consider the vocabulary and typical classification:
+- If verifier exits with non-zero due to its own bug, locus = verifier.
+- If test suite fails, locus = implementation.
+- If no tests collected / pytest usage error, locus = verification_plan or environment?
+- If evidence missing, locus = evidence_collection.
+- If model declaration mismatch, locus = declared_model.
+- If cannot run due to dependencies, locus = environment.
+
+"stdin_format": "pytest-progress" might indicate the verifier expects pytest progress output. If the implementation's test output is not in expected format, verifier may exit 2. That could be projection? Hmm.
+
+Maybe "projection" is the component that projects raw output into expected stdin format. If stdin_format is pytest-progress, and verifier_exit=2, maybe projection failed to produce correct format? But no.
+
+Let's search memory of similar tasks. I recall a benchmark "OAI evals" has "verifier" scripts. There is a "failure locus" taxonomy in "SWE-bench Verified" maybe? The loci include "verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown." This seems from "DeepMind's benchmark evaluation debugging" maybe "ARENA"? Hmm.
+
+Maybe "capability: A" and "case_id cep-06" are from "ControlArena"? "cep" could be "Cyber Evaluation Protocol"? "repo cep" maybe "caesar encryption protocol"? Let's not rely.
+
+We need produce a single line. The desired answer likely one of these. We need maximize chance.
+
+Let's analyze possible hidden dataset. The retrieval context is from a database with SQL and FTS. The case has only metadata. The evaluator might expect "unknown" when context insufficient. But the prompt says "Given the retrieval context for this case (capability: A)." It includes only metadata. Maybe in the actual benchmark, there are many cases with richer context; for this one, context is sparse. The correct locus might be "unknown" because no failure details. But maybe they expect us to use "verifier_exit": 2 as enough.
+
+Let's examine "verifier_exit": 2. In many CLI tools, exit code 2 often means "misuse" or "verification rejected". For a verifier, if it exits 2, maybe it's a "verifier error" by convention: 0 = pass, 1 = fail, 2 = error. The locus "verifier" would be for verifier errors. If the verifier rejected the solution, exit code might be 1, not 2. So 2 likely indicates verifier itself failed. Thus locus = verifier. But if using pytest, exit code 2 = interrupted, which could be environment (timeout/interrupt). However "verifier_exit" not "test_exit". If verifier wraps pytest, it might propagate pytest exit code. Then exit 2 could be "user interrupt" or "internal error"? Actually pytest exit 2 is user interrupt, not environment. But no.
+
+Let's think of "stdin_format": "pytest-progress". Maybe the verifier is a "pytest-progress" parser. It reads stdin and decides if tests passed. If the input format is wrong, it might exit 2. That would be a verifier issue? Or evidence_collection? Hmm.
+
+Maybe "verifier_exit": 2 is a code from the verifier, and the failure is "verifier exited with code 2" not "tests failed". The locus is verifier. The prompt likely wants that.
+
+But let's not ignore "capability: A". Could "capability A" be a capability that is supposed to be verified by a "verifier" for repo "cep". The case "cep-06" maybe one of a set where the failure is due to "projection" because the capability projection from scenario to tests is wrong. The retrieval context includes "scenario": "cep-6" and "stdin_format": "pytest-progress". Maybe "cep-6" is a scenario in repo "cep" where the verifier should parse pytest progress. If verifier_exit=2, maybe the verifier failed because the projection produced an invalid stdin format. But no logs.
+
+Let's see if "cep" stands for "capability evaluation protocol". "cep-06" maybe case ID in a "capability evaluation protocol" repo. The scenario "cep-6" maybe a test scenario. "stdin_format": "pytest-progress" means the verifier's stdin is the output of pytest in progress format. "verifier_exit": 2. If the verifier exits 2, maybe because the "evidence_collection" didn't provide stdin? But evidence_id exists.
+
+Maybe the failure locus taxonomy:
+- "evidence_collection" would be if no evidence or malformed evidence.
+- "verifier" if verifier code crashed.
+- "verification_plan" if plan invalid.
+- "projection" if projection from capability to test failed.
+- "implementation" if the system under test failed.
+- "environment" if external dependencies.
+- "authority" if authorization/permissions.
+- "declared_model" if model identity mismatch.
+
+Given only "verifier_exit": 2, the most direct is verifier. But if verifier exit code 2 is a "verification failure" (i.e., the verifier determined the implementation failed), then implementation. Need know convention.
+
+Let's search memory of exit codes in "evals" verifiers. In "SWE-bench" style, a verification script returns 0 for pass, 1 for fail. Some use 2 for "internal error". In "OpenAI Evals", "verifier" maybe returns 0/1? If verifier_exit=2, likely error. The locus "verifier" is plausible.
+
+But the prompt says "observed failure" not "verifier error". If a verifier exits 2, that is an observed failure. The failure locus could be "verifier" because the verifier process did not complete successfully. However, if the verifier is meant to exit non-zero when implementation fails, then the observed failure is implementation. But then every failing case would have verifier_exit non-zero and we'd need logs to distinguish. The presence of "verifier_exit": 2 alone is not enough. But maybe the classification guidelines (not provided) define exit code 2 as verifier failure. We need infer.
+
+Let's consider "pytest-progress" stdin format. If the verifier reads pytest progress, it might exit 2 if it cannot parse progress. That is a verifier failure (or projection/evidence_collection). But if the implementation's tests fail, pytest progress would show failures and verifier might exit 1. If verifier_exit=2, maybe parser error. So locus verifier.
+
+Could "verifier_exit": 2 be from "pytest" itself: exit code 2 means "test execution interrupted". That could be due to environment (timeout) or verifier (interrupt). But no.
+
+Let's look at "repo": "cep". Maybe "cep" is a repository of "capability evaluation problems" where the verifier is a script. "scenario": "cep-6". "stdin_format": "pytest-progress". The case is "cep-06". Maybe there is a known issue: "verifier_exit": 2 because the verifier script has a bug in parsing pytest progress for scenario cep-6. The locus would be verifier. The case ID "cep-06" maybe one of "verifier" failures. Hmm.
+
+Maybe the dataset is generated such that each case has a known failure locus. The retrieval context includes only a SQL row from an evidence table. The "verifier_exit" field is a clue. For case cep-06, if verifier_exit=2, maybe the failure is in the verifier. For other cases, if "fts" had logs, we could diagnose. Here no logs, but exit code 2 is enough.
+
+Let's think of "capability: A". Could be a "capability" label, not relevant. The retrieval context has "[sql]" and "[fts]" sections. FTS is empty. That means no full-text search evidence. The SQL row has metadata. If no FTS, maybe no failure text. The correct locus might be "unknown" because no textual evidence. But the SQL row itself is evidence. The evaluator might expect "verifier" from verifier_exit. Hmm.
+
+The instruction: "Given the retrieval context for one case, attribute the observed failure to exactly one failure locus..." It doesn't say if insufficient, choose unknown. But unknown is in vocabulary. In classification, if no evidence, unknown is appropriate. However, the task likely expects a definitive answer, not "unknown" unless truly ambiguous. We need decide.
+
+Let's examine the exact retrieval context:
+```
+[sql]
+{"case_id": "cep-06", "evidence_id": "01KZH8DEZH4HCVB1YPGQ6VNQC8", "repo": "cep", "scenario": "cep-6", "stdin_format": "pytest-progress", "verifier_exit": 2}
+
+[fts]
+
+--- end retrieval context ---
+```
+There is no "failure" description. The only anomaly is "verifier_exit": 2. If verifier_exit is non-zero, that is the failure. The locus is the verifier. But wait, "verifier_exit" is a field in evidence; if the verifier exits 2, maybe the evidence collection process recorded it. The failure could be that the verifier failed to run. Locus = verifier.
+
+Let's consider if "verifier_exit": 2 could indicate "verification_plan" because the verifier was invoked incorrectly (e.g., wrong stdin_format). The field "stdin_format": "pytest-progress" might be part of verification plan. If the plan specified pytest-progress but the verifier expects something else, exit 2. But no.
+
+Maybe "projection" is the component that transforms the implementation output into the verifier's stdin format. If stdin_format is "pytest-progress", and verifier_exit=2, maybe the projection failed to produce the expected format. But again no.
+
+Let's search memory of "stdin_format" in evaluation frameworks. There is a "verifier" that receives a "transcript" or "stdout" on stdin. "stdin_format" describes the format of the input to the verifier. "pytest-progress" means the verifier expects pytest progress output. If the verifier exits 2, maybe because the input did not conform to "pytest-progress". The component responsible for producing that input is "projection" (maybe "projection" of raw run output into verifier input). But the field itself says stdin_format is pytest-progress; if the projection produced wrong format, the verifier would fail. However, the evidence row doesn't show projection status. The failure locus could be "projection" if the verifier failed due to malformed stdin. But we don't know.
+
+Let's think of "projection" in evaluation pipeline: It might map a "declared model" output to a "verification artifact". For code capabilities, projection might extract code from model response and create a patch. If projection fails, verifier gets no/invalid input and exits non-zero. But "stdin_format": "pytest-progress" suggests the verifier input is test output, not code. Projection might be the process of running tests and capturing output. Hmm.
+
+Maybe "implementation" is the code under test; "projection" is the test harness; "verifier" checks test output. If test output is not in pytest-progress format, projection failed. But if tests fail, implementation.
+
+Let's see if "verifier_exit": 2 in pytest context: If pytest exits 2, it often means "no tests collected" (actually 5) or "interrupted". If the verifier is parsing pytest progress, exit 2 could be because the test runner was interrupted. That could

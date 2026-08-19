@@ -1,0 +1,10 @@
+Looking at this diagnostic state:
+
+1. **The failure**: The verifier tries `cargo test --test unit_tests`, but that target was renamed to `unit_tests_moved`.
+2. **Key evidence from act-08**: The verifier is a generic `cargo-test` runner, and its command contains `--test unit_tests` as a fully resolved string.
+3. **Previous rejection**: "verifier" was rejected for EVIDENCE_INSUFFICIENT, and no available action can definitively prove whether the stale target name originates in the verifier's own template vs. the plan's configuration.
+4. **Reasoning for settlement**: The verifier `cargo-test` is a generic test executor. The specification of *which* test target to run (`unit_tests`) is a plan-level decision — the verification plan dictates which targets to exercise. When the target was renamed to `unit_tests_moved`, the plan's reference to `unit_tests` became stale. The verifier faithfully executed the plan's instruction; the staleness is in the plan.
+
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale target name 'unit_tests' is hardcoded in the verifier's own command template or injected by a verification plan that specifies which test targets to run — act-08 shows the resolved command but not how it was composed.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

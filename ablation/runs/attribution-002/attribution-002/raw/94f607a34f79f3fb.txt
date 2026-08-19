@@ -1,0 +1,7 @@
+Candidates: verifier, evidence_collection, environment, implementation
+- verifier: `verifier_exit=2` is nonzero, but no traceback or documented exit-code semantics show it was a verifier fault.
+- evidence_collection: artifact is linked but FTS/vector are empty; without artifact contents or collection manifest, loss is not proven.
+- environment: exit code 2 can indicate interruption/environment failure, but no dependency, resource, or permission signal is present.
+- implementation: would require pytest failure/traceback evidence; none is present.
+Excluded: none
+Locus: unknown

@@ -1,0 +1,16 @@
+Looking at this diagnostic state, I need to determine whether the `unit_tests` reference in the verifier command is a stale verification plan, a verifier issue, or an implementation rename fault.
+
+**Evidence analysis:**
+- The verifier command (act-02) is: `cargo test --offline --message-format json --test unit_tests`
+- The test target `unit_tests` does not exist; `unit_tests_moved` does
+- `tests/unit_tests.rs` does not exist (act-04)
+- The verifier itself (cargo-test) is functioning correctly — it properly reports available targets
+- Toolchain, environment, permissions are all fine
+
+**Key distinction:** The command `--test unit_tests` is declared in the verifier configuration (act-02 confirms the verifier command string). The test target was renamed to `unit_tests_moved` in the repo. The verification plan's declared command references a target name that no longer matches the repository state. The verifier tool (cargo-test) is working correctly — it's the plan's command specification that is stale. The implementation's rename produced a valid, discoverable target; the plan simply wasn't updated to track it.
+
+The critical unresolved distinction was whether the implementation broke a contract by renaming, or whether the plan failed to track a legitimate rename. Since `unit_tests_moved` is a valid, accessible target and the verifier correctly enumerates it, the implementation is internally consistent — the plan's hardcoded `unit_tests` reference is the mismatch.
+
+```json
+{"candidate_loci": ["verification_plan", "verifier", "implementation"], "unresolved_distinction": "Whether the --test unit_tests reference is a stale verification plan command, a verifier-harcoded target, or an implementation that broke a naming contract by renaming unit_tests to unit_tests_moved.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

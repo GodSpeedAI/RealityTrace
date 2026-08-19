@@ -1,0 +1,9 @@
+Looking at this diagnostic state, I need to determine why the `.corpus-tmpfix` directory is not writable, and whether this is an environment constraint or a verification plan misconfiguration.
+
+The previous settlement as "environment" was rejected for insufficient evidence. The key distinction is: **why** is this directory not writable? Is it because the host filesystem restricts permissions (environment), or because the verification plan set an incorrect/improperly prepared TMPDIR path (verification_plan)?
+
+The most targeted evidence acquisition would be to inspect the actual filesystem permissions on `.corpus-tmpfix` — this directly reveals whether the directory has restrictive host-level permissions or was simply not created/prepared correctly by the verification infrastructure.
+
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the .corpus-tmpfix directory has restrictive host filesystem permissions (environment) or was never properly created/provisioned by the verification plan's TMPDIR configuration (verification_plan).", "selected_action": "act-05", "expected_information": "Actual filesystem permission bits, ownership, and existence state of .corpus-tmpfix, revealing whether non-writability stems from host-level ACL/permission constraints or from the directory being absent/misconfigured by the test harness setup.", "proposed_settlement": null}
+```

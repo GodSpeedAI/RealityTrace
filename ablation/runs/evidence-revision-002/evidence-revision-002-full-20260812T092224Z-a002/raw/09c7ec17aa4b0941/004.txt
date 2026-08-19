@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation", "projection"], "unresolved_distinction": "Is tests/test_inventory.py genuinely absent from the working tree (implementation/projection never produced it), or does the file exist at a different path while the verification command references the wrong location (verification_plan misconfiguration)?", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

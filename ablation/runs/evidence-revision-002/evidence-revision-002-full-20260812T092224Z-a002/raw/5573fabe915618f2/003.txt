@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Whether exit code 101 (standard rustc error) stems from a compilation failure in the project's own source code versus a misconfigured verifier invocation — but all dependency artifacts compiled fresh and no project crate artifact appeared, strongly suggesting the project's own code failed to compile.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

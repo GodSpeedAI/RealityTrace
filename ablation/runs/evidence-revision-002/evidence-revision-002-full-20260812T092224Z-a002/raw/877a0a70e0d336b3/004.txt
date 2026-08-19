@@ -1,0 +1,5 @@
+Looking at the diagnostic state, the failure is a `ModuleNotFoundError: No module named 'cep.scoring'` triggered by an import chain through hand-written source files (`cep/cli.py` → `cep/benchmarks/authority.py` → `cep/scoring/common`). The missing module contains domain-specific types (`ScoreMetrics`, `ScoreRecord`, `recall`, `status_from_score`) that are characteristic of hand-written application code rather than model-generated projections. No `.sea` model declarations or generation artifacts have been observed, and the import chain originates entirely in hand-written source files. Since the round limit is reached and `unknown` was already rejected, I must settle on the most supported concrete locus.
+
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

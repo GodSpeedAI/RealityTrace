@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "implementation"], "unresolved_distinction": "Whether the verifier/verification_plan correctly references `unit_tests` (and the implementation broke the contract by renaming to `unit_tests_moved`), or whether the verifier/verification_plan configuration is stale and should reference `unit_tests_moved`.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

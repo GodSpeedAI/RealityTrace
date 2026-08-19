@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Was iter_reality_gap_case_files supposed to be hand-written in cep.inventory (implementation defect), or was it supposed to be generated into inventory.py by the projection step from the semantic model (projection defect)?", "selected_action": "act-08", "expected_information": "Whether the declared semantic model (.sea) defines iter_reality_gap_case_files as a symbol to be projected into inventory.py, which would distinguish a projection failure (model declares it but projection didn't emit it) from an implementation defect (model does not declare it, so it was expected to be hand-written).", "proposed_settlement": null}
+```

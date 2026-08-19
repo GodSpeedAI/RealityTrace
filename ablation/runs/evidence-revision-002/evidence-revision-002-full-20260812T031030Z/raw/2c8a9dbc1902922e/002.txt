@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale test target name `integration_tests` is hardcoded in the verifier's own command string (verifier) or injected by the verification plan that orchestrates the run (verification_plan).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verifier"}
+```

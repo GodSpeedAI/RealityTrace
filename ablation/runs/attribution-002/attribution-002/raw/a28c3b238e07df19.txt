@@ -1,0 +1,22 @@
+Candidates: verifier, implementation, verification_plan, environment, evidence_collection
+
+**Analysis:**
+
+1. **verifier**: `verifier_exit: 101` is the sole observable. Exit code 101 is commonly associated with runtime panic (e.g., Rust unwinding), which *could* implicate the verifier. However, the exit-code semantics for this specific verifier are not documented in the retrieval context, so this remains speculative.
+
+2. **implementation**: The implementation may have produced malformed output (given `stdin_format: car-go-json`) causing the verifier to crash. But no stdout/stderr from the implementation is available.
+
+3. **verification_plan**: An incorrect or malformed plan could cause the verifier to fail. No plan details are retrievable.
+
+4. **environment**: Missing dependencies or misconfiguration could cause a non-zero exit. No environment logs are present.
+
+5. **evidence_collection**: The FTS payload is empty and the vector embedding is all zeros, indicating no semantic content was captured from artifact `01KZJ2EBZK2113SET1Z7W8DWBT`. This suggests the evidence artifact's contents were not properly ingested — but this is a limitation of available diagnostic data, not necessarily the root cause of the verifier's exit 101.
+
+**Exclusion check:**
+- No artifact content (empty FTS, zero vector) means there is no stderr, no stdout, no logs, and no plan text to inspect.
+- Verifier, verification_plan, implementation, and environment **cannot** be explicitly excluded because there is zero content evidence to rule any of them in or out.
+- Per F-28, `declared_model` requires explicit exclusion of all four — which is impossible here.
+
+Excluded: *(none excludable — silence)*
+
+Locus: unknown

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Exit code 101 (Rust panic convention) was observed, but the FTS data only shows successful compilation artifacts with no runtime or test output. We cannot yet determine whether the panic occurred inside the implementation code under test or within the verifier's own process/configuration.",
+ "selected_action": "act-03",
+ "expected_information": "Re-running the failing test in isolation will produce the actual panic message and stack trace, revealing whether the panic originates in the implementation's code path or in the verifier harness itself.",
+ "proposed_settlement": null}
+```

@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verifier", "implementation"],
+  "unresolved_distinction": "The verifier references test target `unit_tests` which does not exist; the repo has `unit_tests_moved` instead. The question is whether the verifier configuration incorrectly specifies the old target name, or whether the implementation improperly renamed/moved the test target away from the expected `unit_tests`.",
+  "selected_action": "act-05",
+  "expected_information": "The verifier's configured command and test target name will reveal whether it is hardcoded to invoke `unit_tests` when it should invoke `unit_tests_moved`, pointing to a verifier misconfiguration versus an implementation-side rename.",
+  "proposed_settlement": null
+}
+```

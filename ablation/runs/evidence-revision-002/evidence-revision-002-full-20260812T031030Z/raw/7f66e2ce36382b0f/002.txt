@@ -1,0 +1,17 @@
+Looking at the evidence:
+
+1. All build artifacts compiled successfully (`fresh:true`), ruling out build failures
+2. The test passes in isolation (act-04: exit 0)
+3. The verifier configuration (act-07) reveals the environment variable `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` is set during verification
+4. The isolated test `test_observed_failure` passes, but the actual verifier runs `corpus_scenario` with the bogus config path
+5. Exit code 101 is a Rust panic — the implementation panics when it encounters the nonexistent config file path
+6. All test targets exist (act-03), permissions are fine (act-01), fixtures are present (act-08), and the toolchain is available (act-05)
+
+The chain is clear: the implementation under test receives `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` and panics (exit 101) instead of handling the missing config file gracefully. The verification environment deliberately sets this path (its name is descriptive — "nonexistent-corpus-config"), and the implementation's failure to handle it is the root cause.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether the exit-101 panic originates from the implementation failing to handle a nonexistent AST_GREP_CONFIG path, or from the verifier/plan incorrectly injecting that env var when it should reference a real config.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

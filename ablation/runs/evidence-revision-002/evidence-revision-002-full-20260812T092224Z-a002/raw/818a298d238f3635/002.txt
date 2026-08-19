@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "The toolchain inspection confirms pytest is unavailable, but we don't yet know whether the verifier's configuration correctly requires pytest (making this an environment deficiency) or incorrectly mandates pytest when the project uses a different test runner (making this a verifier misconfiguration).", "selected_action": "act-05", "expected_information": "The verifier's declared command, expected evidence types, and direction rule will reveal whether requiring pytest is intentional and correct for this project, or a misconfiguration.", "proposed_settlement": null}
+```

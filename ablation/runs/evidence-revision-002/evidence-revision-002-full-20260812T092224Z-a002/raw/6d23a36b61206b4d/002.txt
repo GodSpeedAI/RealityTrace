@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "The verifier exited with code 101 and dependency compilation shows all artifacts as fresh, but no explicit error message is visible. The missing fixture tests/fixtures/example-v999.py (inspected and not found) could indicate either a verification_plan referencing a non-existent fixture, a verifier misconfiguration, or an implementation that references a non-existent file. We need to know the exact verifier command and its declared evidence expectations to distinguish between these.",
+ "selected_action": "act-05",
+ "expected_information": "The verifier's exact command, declared evidence types, and direction rule will reveal whether it references the missing fixture example-v999.py or whether the failure is in the project's own compilation/test execution, settling the distinction between verification_plan, verifier, and implementation.",
+ "proposed_settlement": null}
+```

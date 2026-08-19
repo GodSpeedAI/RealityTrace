@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the source file src/cep/conformance/anti_collapse.py physically exists on disk (which would indicate a projection or packaging defect) or is absent entirely (indicating the module was never implemented).", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "authority"], "unresolved_distinction": "Whether the mode-0 permission on tests/fixtures is a broken filesystem state within the environment (directory itself is misconfigured) versus a broader inability of the executing user/process to write or access designated working directories (authority locus). The prior 'environment' settlement was rejected as EVIDENCE_INSUFFICIENT, so we need to confirm whether the restriction is isolated to tests/fixtures or reflects a systemic authority deficit.",
+ "selected_action": "act-01",
+ "expected_information": "Whether required toolchain and designated working directories are writable by the current process. If directories are writable but tests/fixtures specifically has mode 0, this isolates the problem to a per-directory filesystem-state issue (environment). If directories broadly lack writability, authority becomes the stronger locus.",
+ "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "The key distinction is between an implementation defect (missing symbol / compile error) and an environment or verifier issue. However, act-03 confirmed the symbol format_matches_as_text is absent from the source, and act-04 confirmed the test cannot compile at all (compile_error). Environment probes (act-01, act-02, act-05, act-06) all passed, and the verifier config (act-08) is standard cargo-test. These findings collectively resolve the ambiguity.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

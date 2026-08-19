@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "The evidence shows cargo build artifacts all marked fresh:true (compilation succeeded) but verifier_exit is 101 (Rust panic). We cannot yet distinguish whether the verifier configuration itself is faulty (wrong command or target), the verification plan references a missing test path, or the implementation panicked during actual test execution.",
+ "selected_action": "act-08",
+ "expected_information": "The verifier's configured command, evidence types, and direction rule will reveal what the verifier was attempting to execute, whether the test target path is valid, and whether the exit code 101 originates from the verifier harness or from the test invocation.",
+ "proposed_settlement": null}
+```

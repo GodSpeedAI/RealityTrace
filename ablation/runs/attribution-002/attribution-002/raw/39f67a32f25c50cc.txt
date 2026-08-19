@@ -1,0 +1,3 @@
+Candidates: verifier, evidence_collection, environment, implementation
+Excluded: none — no discriminating evidence available (empty [fts], all-zero vector, only verifier_exit=4 with no logs/output)
+Locus: unknown

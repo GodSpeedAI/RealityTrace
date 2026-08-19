@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "projection", "evidence_collection"], "unresolved_distinction": "Whether the PermissionError on 'tests/fixtures' arises from restrictive runtime filesystem permissions (environment), from the projection step materializing the test tree with incorrect directory permissions (projection), or from the evidence-collection harness misconfiguring the sandbox (evidence_collection).", "selected_action": "act-01", "expected_information": "The actual permission bits and ownership of 'tests/fixtures' and its parent directories, which will reveal whether the directory is unreadable due to OS-level restrictions, was created with wrong modes during projection, or was locked down by sandbox setup.", "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the `.corpus-tmpfix` directory lacks write permissions due to a pre-existing environment configuration problem, or because the evidence collection harness created or set the directory with incorrect permissions during test setup.", "selected_action": "act-06", "expected_information": "Filesystem permissions on `/home/sprime01/projects/cep/.corpus-tmpfix` (owner, mode, parent directory writability), which will confirm whether the directory was misconfigured by the harness or is a general environment permission deficit.", "proposed_settlement": null}
+```

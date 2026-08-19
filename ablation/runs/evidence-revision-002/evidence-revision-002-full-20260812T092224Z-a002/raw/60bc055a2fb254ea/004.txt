@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether cep.conformance.anti_collapse is a source module never written (implementation) or an artifact expected from a code-generation step that did not run (projection)", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

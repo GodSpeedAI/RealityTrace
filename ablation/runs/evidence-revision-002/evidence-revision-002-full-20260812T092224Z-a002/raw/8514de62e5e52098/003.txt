@@ -1,0 +1,15 @@
+Looking at this diagnostic state, I need to analyze the evidence carefully.
+
+**Key evidence:**
+- TMPDIR is set to `/home/sprime01/projects/cep/.corpus-tmpfix` — a clearly harness-created directory (the `.corpus-tmpfix` name is evidence-collection infrastructure naming)
+- The directory exists (it resolves) but is not writable
+- Toolchain is available; all other file permissions are normal (644, readable)
+- Previous settlement of `environment` was rejected as EVIDENCE_INSUFFICIENT
+- We are at the final round (3/3)
+
+**Analysis:**
+The `.corpus-tmpfix` directory was clearly provisioned by the evidence-collection/corpus harness itself — its name is a direct indicator. The directory exists but was created or permissioned incorrectly by the harness. The toolchain works, fixture files are accessible with normal permissions, so this is not a general environment problem. The failure is specifically that the harness set up a temp directory that it then couldn't write to — a provisioning defect in the evidence collection pipeline.
+
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the .corpus-tmpfix directory was provisioned by the evidence-collection harness with incorrect permissions, or the runtime environment simply lacks write access to an otherwise correctly-provisioned path.", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

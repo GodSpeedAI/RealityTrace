@@ -1,0 +1,3 @@
+Candidates: verifier, implementation, evidence_collection
+Excluded: evidence_collection-recorded, environment-unobserved, verification_plan-unobserved, authority-unobserved, projection-unobserved, declared_model-unobserved
+Locus: unknown

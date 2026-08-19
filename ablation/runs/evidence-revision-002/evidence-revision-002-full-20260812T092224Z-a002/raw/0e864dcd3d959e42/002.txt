@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Did the verification plan always reference a non-existent test target name `integration_tests` (plan defect), or did the implementation rename/move the test from `integration_tests` to `integration_tests_moved` after the plan was authored (code change that broke the plan)?", "selected_action": "act-06", "expected_information": "Whether the test target `integration_tests` resolves to an existing file or directory in the working tree, or whether only `integration_tests_moved` is present—indicating the implementation moved/renamed the target, which would distinguish a stale plan from a defective one.", "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the '.corpus-tmpfix' directory was created with incorrect permissions by the verification plan's setup logic (verification_plan), or whether the underlying environment imposes restrictive filesystem permissions on that path independent of the plan's configuration (environment).", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

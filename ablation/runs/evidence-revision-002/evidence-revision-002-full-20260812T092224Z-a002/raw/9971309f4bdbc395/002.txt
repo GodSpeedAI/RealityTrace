@@ -1,0 +1,9 @@
+Looking at the evidence accumulated across rounds:
+
+1. **All dependencies compiled successfully** (fresh artifacts, no compiler errors)
+2. **Environment checks all passed**: toolchain available, files readable/writable, test targets resolve
+3. **act-04 isolated re-run**: exit code 101 (Rust panic) — the test compiles and runs but the code under test panics at runtime in `unit_tests`
+4. **act-03**: `tests/fixtures/example-v999.py` is missing, which aligns with the scenario name `corpus_scenario_missing_fixture`
+5. **act-08**: The verifier command is standard `cargo test` with a sane direction rule
+
+The panic (exit 101) originates from the implementation code running and hitting a runtime panic — not from compilation failure, not from environment misconfiguration, and not from a misconfigured verifier. The scenario tests a missing-fixture condition, and the implementation crashes instead of handling it gracefully. {"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "Whether exit code 101 stems from a runtime panic in the implementation code under test (e.g., unhandled missing fixture) versus an environment or verifier configuration problem.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}

@@ -1,0 +1,25 @@
+Candidates: verifier, implementation, environment, evidence_collection, verification_plan
+
+**Step 1 — Candidate enumeration and discriminating evidence:**
+
+- **verifier**: Exit code 101 is non-zero. In many runtime contexts (e.g., Rust panics), 101 specifically signals a crash within the verifier process itself. Discriminating evidence: stderr/stack trace from verifier, or assertion-level output. Neither is present.
+- **implementation**: The system under test could have produced incorrect output or crashed, causing the verifier to exit abnormally. Discriminating evidence: stdout/captured model output, expected-vs-actual diff. Neither is present.
+- **environment**: Missing dependencies, resource exhaustion, or misconfiguration could cause a process to exit 101. Discriminating evidence: environment logs, filesystem/resource diagnostics. Not present.
+- **evidence_collection**: The FTS payload is completely empty (`[fts]` yields nothing) and the vector embedding is all zeros (64 dimensions, all 0.0), suggesting either no evidence was captured or the artifact is void. Discriminating evidence: non-empty artifact contents, actual log/output data. This absence is notable but could also be a retrieval-index gap rather than a collection failure.
+- **verification_plan**: An incorrect or malformed plan could cause verifier failure. Discriminating evidence: the plan document and its expectations. Not present.
+
+**Step 2 — Exclusion by evidence (not silence):**
+
+- **verifier**: Cannot exclude — exit 101 is consistent with verifier crash, but also with other causes. No confirming or disconfirming evidence.
+- **implementation**: Cannot exclude — no output data to confirm or deny.
+- **environment**: Cannot exclude — no env diagnostics available.
+- **evidence_collection**: The all-zero vector and empty FTS suggest the evidence artifact may be void or unindexed, but this alone doesn't prove collection failure vs. indexing/retrieval gaps.
+- **verification_plan**: Cannot exclude — plan contents unavailable.
+- **declared_model**: Cannot settle here per F-28 friction rule, since verifier, verification_plan, implementation, and environment have **not** been explicitly excluded with stated evidence.
+
+**Step 3 — Settlement:**
+
+The only hard data point is `verifier_exit: 101`. There is no textual output, no stack trace, no assertion detail, no environment log, and no plan content. No locus can be confirmed or excluded with positive evidence.
+
+Excluded: (none — insufficient evidence to exclude any candidate)
+Locus: unknown

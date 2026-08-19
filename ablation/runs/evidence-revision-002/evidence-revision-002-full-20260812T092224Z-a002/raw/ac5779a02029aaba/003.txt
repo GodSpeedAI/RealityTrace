@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["projection", "implementation"], "unresolved_distinction": "Whether the trailing '# stale' content appended after the valid JSON was injected by a projection/generation step that regenerates test artifacts, or is corrupt committed fixture data in the implementation.", "selected_action": null, "expected_information": null, "proposed_settlement": "projection"}
+```

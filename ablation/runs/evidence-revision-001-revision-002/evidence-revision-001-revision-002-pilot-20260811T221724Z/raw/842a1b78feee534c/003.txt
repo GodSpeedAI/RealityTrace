@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is the verifier correctly configured to invoke cargo for this Rust repo (making missing cargo an environment failure), or is the verifier misconfigured to call cargo when a different build command is expected (verifier locus)?", "selected_action": "act-07", "expected_information": "Whether the verifier's command configuration correctly designates cargo for this Rust repo, confirming the expected toolchain and distinguishing environment-missing-toolchain from verifier-misconfiguration.", "proposed_settlement": null}
+```

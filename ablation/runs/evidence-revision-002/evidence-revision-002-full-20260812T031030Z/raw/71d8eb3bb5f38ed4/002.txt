@@ -1,0 +1,15 @@
+Looking at the evidence accumulated across rounds:
+
+1. **act-05** (isolated re-run): The test resulted in `compile_error` — "compilation failed — no test could run"
+2. **act-07** (symbol check): The symbols `crate::format::format_matches_as_text` and `format_matches_as_text` are **missing** from the codebase
+3. **act-04** (environment): Toolchain available, directories writable — environment is sound
+4. **act-06** (verifier config): cargo-test verifier is properly configured with correct direction rule
+5. **act-01/act-08** (fixtures/permissions): All fixtures exist, permissions are normal
+
+The build artifacts in the FTS evidence are all dependency crates (proc-macro2, serde, tokio, etc.) showing as fresh — these are not the implementation under test. The implementation itself fails to compile because the expected symbol `format_matches_as_text` does not exist in the source. The verifier (cargo test) correctly reported this as exit code 101.
+
+The environment locus is ruled out by act-04 and act-08. The verifier locus is ruled out by act-06 (properly configured) and act-05 (the verifier correctly surfaces the compilation failure). The implementation is the source of the failure: a missing function causes compilation to fail.
+
+```json
+{"candidate_loci": ["verifier", "environment", "implementation"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

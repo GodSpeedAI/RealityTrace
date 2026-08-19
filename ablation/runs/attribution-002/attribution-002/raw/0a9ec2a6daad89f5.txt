@@ -1,0 +1,10 @@
+Looking at the evidence for case `cep-07`:
+
+1. **SQL record** shows `verifier_exit: 2` — the verifier process itself exited abnormally (exit code 2, typically indicating a usage/runtime error in the verifier, not a normal pass/fail result).
+2. **FTS** section is empty — no textual evidence was captured.
+3. **Vector** is all zeros — no meaningful feature content was extracted.
+4. **Graph** confirms the case and evidence exist, but provides no diagnostic detail.
+
+The all-zero vector and empty FTS are consistent downstream symptoms: the verifier crashed before producing meaningful output. The root cause is the verifier's abnormal termination (exit code 2), which prevented any valid evidence from being generated or processed.
+
+Locus: verifier

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": "Whether exit code 101 reflects a verifier misconfiguration (wrong command/inputs producing a panic-like failure) or a genuine runtime panic in the implementation under test, given that the build artifacts show successful compilation.",
+ "selected_action": "act-01",
+ "expected_information": "The verifier's command line, evidence types, and direction rule will reveal whether the verification is correctly configured—if so, exit 101 most likely points to an implementation panic rather than a verifier or environment issue.",
+ "proposed_settlement": null}
+```

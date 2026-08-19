@@ -1,0 +1,15 @@
+Looking at the evidence:
+
+1. **act-06**: The test `test_observed_failure` fails when run in isolation (exit 101), with a real test failure in `unit_tests` — confirming the failure is in the test/code, not in the verifier infrastructure.
+
+2. **act-03 / act-07**: `tests/fixtures/example.py` has mode 0 (completely unreadable) and is stale (exists but wrong content). The scenario name from act-08's verifier command is `corpus_scenario_unreadable_fixture`, suggesting this is a deliberate test of unreadable-fixture handling.
+
+3. **act-08**: The verifier is `cargo-test` with a clear command and direction rule (exit 0→supports, nonzero→contradicts). It is functioning correctly — it ran the test and reported the nonzero exit.
+
+4. **act-01/act-05**: Toolchain available, test targets all resolve. No infrastructure malfunction.
+
+The verifier is working correctly; the test genuinely fails. The implementation does not handle the unreadable/stale fixture scenario as expected by the test.
+
+```json
+{"candidate_loci": ["implementation", "environment"], "unresolved_distinction": "Whether the test failure stems from the implementation failing to handle the unreadable/stale fixture (mode 0, stale content) or from the environment misconfiguring the fixture file permissions and content.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

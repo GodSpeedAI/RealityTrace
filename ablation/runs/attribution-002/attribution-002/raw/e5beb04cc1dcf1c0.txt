@@ -1,0 +1,10 @@
+Looking at the evidence for case df-11:
+
+- **SQL**: `verifier_exit: 1` — the verifier ran but returned a failure code.
+- **Vector**: All 64 dimensions are zero — no meaningful content features were extracted.
+- **FTS**: Empty — no searchable text content was indexed.
+- **Graph**: An evidence artifact (`01KZKADTR77NV91MAQ8SZ4VA19`) is linked, so the process ran, but the artifact evidently carried no usable content.
+
+The evidence was nominally collected (an artifact ID exists), but it produced no actual content — zero vector, empty FTS. The verifier then failed because it had nothing meaningful to verify. The root cause is that the evidence capture itself yielded an empty/void artifact.
+
+Locus: evidence_collection

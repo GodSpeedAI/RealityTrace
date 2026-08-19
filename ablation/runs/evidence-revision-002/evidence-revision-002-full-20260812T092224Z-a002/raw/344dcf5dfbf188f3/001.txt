@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "The verifier exited with code 101 (Rust panic code), but the FTS only shows successful compilation artifacts. We cannot distinguish whether the panic originates from the verifier's own configuration/command, a non-existent or incorrect test target in the verification plan, or a runtime panic in the implementation under test.", "selected_action": "act-08", "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal whether the verifier is correctly configured and what it is invoking, helping distinguish a verifier misconfiguration from a test-target or implementation issue.", "proposed_settlement": null}
+```

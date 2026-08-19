@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Cannot determine whether `iter_reality_gap_case_files` is absent from cep.inventory due to an implementation defect (symbol never defined/renamed in source) or a projection defect (model specifies it but code generation did not emit it). Round 1 settlement on 'implementation' was rejected as insufficient, and no further evidence was acquired in rounds 2-3.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

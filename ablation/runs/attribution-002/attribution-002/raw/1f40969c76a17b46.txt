@@ -1,0 +1,3 @@
+Candidates: verifier, implementation, environment, evidence_collection, declared_model
+Excluded: none (verifier_exit=101 alone does not discriminate among verifier crash, implementation failure, environment error, or missing evidence; empty FTS/zero vector are silence, not exclusions)
+Locus: unknown

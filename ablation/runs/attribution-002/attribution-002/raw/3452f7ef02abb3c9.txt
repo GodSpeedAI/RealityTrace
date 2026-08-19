@@ -1,0 +1,10 @@
+Looking at the evidence for case ag-06:
+
+- **SQL** records `verifier_exit: 101` — a non-zero, abnormal exit code indicating the verifier process itself crashed or errored out.
+- **Evidence** was still recorded (artifact `01KZH8DY8GSCTA8HGB75S1WEBB` exists in the graph), so evidence collection and environment were functioning.
+- The case metadata (repo, scenario, stdin_format) is all present and intact.
+- The **vector** is all zeros, which is a downstream symptom of the verifier not producing a proper result/trace, not an independent failure.
+
+The root cause is the verifier process exiting abnormally (code 101), meaning the verifier itself failed during execution.
+
+Locus: verifier

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether exit code 101 (Rust panic) originates from a runtime panic in the project's own code (implementation) or from a failure in the verifier harness itself (verifier). All build artifacts are fresh:true confirming successful compilation, but no panic message or stack trace is available.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

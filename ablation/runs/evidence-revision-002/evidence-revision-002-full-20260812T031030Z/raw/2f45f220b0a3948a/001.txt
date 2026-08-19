@@ -1,0 +1,7 @@
+Looking at this diagnostic state, the error is clear: the verification system tries to run a test target named `unit_tests`, but that target has been renamed to `unit_tests_moved`. The build system reports the target doesn't exist and lists what's actually available.
+
+The core question is whether the stale `unit_tests` reference originates from the verifier's own configuration (command setup) or from the verification plan (the specification of what to verify).
+
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Does the stale `unit_tests` target name originate from the verifier's runtime command configuration, or from the verification plan that defines what should be tested? Inspecting the verifier's configuration (command, evidence types, direction rule) will reveal where the incorrect target name is encoded.", "selected_action": "act-08", "expected_information": "The verifier's configured command line will show whether it hardcodes `unit_tests` as the target name, distinguishing a verifier configuration error from a verification plan error. If the command references `unit_tests` directly, the locus is verifier; if the plan feeds the target name, the locus is verification_plan.", "proposed_settlement": null}
+```

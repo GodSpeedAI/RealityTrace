@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "The symbol format_matches_as_text is confirmed missing from the codebase, but it is unclear whether this is because the implementation is incomplete (missing a required function) or because the verifier's command/configuration incorrectly references a symbol that was never part of the intended API. Inspecting the verifier configuration will reveal whether the verifier's expectations are correct.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's command, evidence types, and declared direction rule will show whether the verifier correctly expects format_matches_as_text or whether the verifier itself is misconfigured.",
+ "proposed_settlement": null}
+```

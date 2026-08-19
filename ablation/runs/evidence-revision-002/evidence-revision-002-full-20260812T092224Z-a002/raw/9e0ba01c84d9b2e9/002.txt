@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the '.corpus-tmpfix' directory is created and permissioned by the verification plan's setup logic (making it a verification_plan defect), or whether the underlying environment imposes restrictive filesystem permissions on that path independent of the plan's configuration.", "selected_action": "act-03", "expected_information": "Whether the verifier's configuration declares or manages TMPDIR and the '.corpus-tmpfix' directory, which would establish whether the verification plan is responsible for ensuring that directory's writability.", "proposed_settlement": null}
+```

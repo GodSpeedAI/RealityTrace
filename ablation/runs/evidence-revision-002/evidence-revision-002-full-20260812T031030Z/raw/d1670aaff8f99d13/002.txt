@@ -1,0 +1,17 @@
+Looking at this diagnostic state, I need to determine whether the failure is due to a stale verification plan or a projection that renamed the test target without updating references.
+
+**Evidence analysis:**
+- The verifier command references `--test integration_tests` (from act-07)
+- The test target `integration_tests` does not exist; `tests/integration_tests.rs` is absent (from act-03)
+- Available targets are `integration_tests_moved` and `unit_tests`
+- The `_moved` suffix on the actual target strongly indicates a rename/migration transformation occurred
+- All 8 probes were already executed in round 1; re-running them is unlikely to yield new distinguishing information
+
+The naming pattern `integration_tests_moved` is the critical signal: it indicates a projection (code transformation) renamed/moved the test target, but the verification command was not updated to match. This is a classic projection failure — the transformation modified artifacts without propagating the change to dependent verification configuration.
+
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verification plan was always authored with a wrong target name, or whether a projection renamed the target to integration_tests_moved without updating the verification command — the _moved suffix strongly suggests the latter.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "projection"}
+```

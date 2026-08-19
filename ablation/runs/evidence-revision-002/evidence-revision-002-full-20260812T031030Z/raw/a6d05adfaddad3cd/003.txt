@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "verifier"],
+  "unresolved_distinction": "Is the environment correctly expected to provide cargo for this Rust repo but failing to provision it, or is the verifier misconfigured to invoke cargo under a restricted PATH?",
+  "selected_action": null,
+  "expected_information": null,
+  "proposed_settlement": "environment"
+}
+```

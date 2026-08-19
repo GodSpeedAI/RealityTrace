@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the PermissionError is caused by incorrect filesystem permissions on an existing fixture file (environment) or by the fixture file being absent/misplaced during evidence setup (evidence_collection).", "selected_action": "act-01", "expected_information": "Filesystem permission bits and ownership of 'tests/fixtures/sample_settlement_recorded.json' — whether the file exists and whether its permissions would deny read access to the test runner.", "proposed_settlement": null}
+```

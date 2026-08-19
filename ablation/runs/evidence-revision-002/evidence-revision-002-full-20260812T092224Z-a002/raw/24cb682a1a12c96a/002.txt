@@ -1,0 +1,7 @@
+Looking at this diagnostic state, I need to determine whether `flow_tests` is an incorrectly referenced target (verifier/verification_plan issue) or a missing target (implementation issue).
+
+The error clearly shows the verification command is looking for `flow_tests` but only `cli_tests` exists. The critical question is whether the verifier configuration itself defines this target name correctly or if it's been misconfigured.
+
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "Is `flow_tests` the correct target name that the verifier configuration intends to run (meaning implementation is at fault for not providing it), or is the verifier/verification_plan incorrectly specifying `flow_tests` when it should reference `cli_tests`?", "selected_action": "act-07", "expected_information": "The verifier's configured test command and target specification will reveal whether `flow_tests` is an intentional reference (pointing to implementation failure) or a misconfiguration that should be `cli_tests` (pointing to verifier or verification_plan failure).", "proposed_settlement": null}
+```

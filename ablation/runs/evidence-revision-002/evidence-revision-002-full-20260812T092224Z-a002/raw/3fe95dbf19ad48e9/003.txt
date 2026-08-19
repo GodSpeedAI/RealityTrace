@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verification_plan", "evidence_collection"], "unresolved_distinction": "Whether the fixture file 'tests/fixtures/inventory-version-v999.json' was expected to exist in the working tree but is absent due to an incomplete or misconfigured environment, or whether the test itself erroneously references a fixture path that was never meant to exist (verification_plan defect).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

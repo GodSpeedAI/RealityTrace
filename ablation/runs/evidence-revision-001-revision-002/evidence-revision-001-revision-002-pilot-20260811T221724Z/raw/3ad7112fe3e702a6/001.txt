@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["declared_model", "projection", "verifier"],
+  "unresolved_distinction": "The registry TOML file is malformed (invalid array at line 10), but it is unclear whether the file is inherently broken in the declared model, was generated incorrectly by a projection step, or is being misread by the verifier's own parser.",
+  "selected_action": "act-01",
+  "expected_information": "Whether the declared semantic model (.sea) and its registry configuration pass schema validation, which would confirm or rule out that the registry file is malformed at the source (declared_model) versus produced or consumed incorrectly downstream.",
+  "proposed_settlement": null
+}
+```

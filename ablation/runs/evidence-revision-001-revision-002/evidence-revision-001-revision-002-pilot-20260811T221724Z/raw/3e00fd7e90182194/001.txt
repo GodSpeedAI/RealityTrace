@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment", "implementation"], "unresolved_distinction": "The test panicked with 'stale fixture missing', but it is unclear whether the fixture was never collected/staged (evidence_collection), the working environment lacks the expected file (environment), or the test code itself references a non-existent or incorrectly-named fixture (implementation).", "selected_action": "act-05", "expected_information": "Whether the fixture or data file referenced by the corpus_sr10 test exists at its expected path and contains the expected content, which would distinguish an evidence/environment gap from an implementation error in the test.", "proposed_settlement": null}
+```

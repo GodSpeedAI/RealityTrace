@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment", "verification_plan"], "unresolved_distinction": "The test panicked with 'stale fixture missing', but it is unclear whether a fixture file was never collected/provided (evidence_collection), whether the working environment lacks expected files (environment), or whether the verification plan references an incorrect or non-existent fixture path (verification_plan).", "selected_action": "act-07", "expected_information": "Whether the fixture or data file referenced by corpus_sr10.rs exists at the expected path and contains valid content, which would distinguish a missing-provision problem from an incorrect-path problem.", "proposed_settlement": null}
+```

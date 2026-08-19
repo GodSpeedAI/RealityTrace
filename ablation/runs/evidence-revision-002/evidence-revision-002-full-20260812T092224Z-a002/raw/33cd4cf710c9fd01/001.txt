@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Was the fixture file authored with invalid JSON content (trailing '# stale' comment after the JSON object), pointing to implementation? Or was valid JSON later corrupted by an evidence-collection or verification process that appended the '# stale' marker?", "selected_action": "act-07", "expected_information": "Full content of tests/fixtures/sample_settlement_recorded.json and whether the trailing '# stale' annotation is part of the committed fixture or was injected by a process, confirming whether the fixture itself is malformed.", "proposed_settlement": null}
+```

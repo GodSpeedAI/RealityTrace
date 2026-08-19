@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "The verifier exited 101 (panic) but compilation artifacts are all fresh/successful. The missing symbol format_matches_as_text (act-01) could indicate either a verifier misconfiguration pointing to a wrong path, a verification plan referencing a non-existent target, or an implementation where the symbol was renamed/moved. Inspecting the verifier's actual command and declared evidence model is needed to distinguish these.",
+ "selected_action": "act-08",
+ "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal whether the verifier is invoking a non-existent symbol path, using the wrong evidence format, or misconfigured in a way that causes the panic — versus the implementation being at fault.",
+ "proposed_settlement": null}
+```

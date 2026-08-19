@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether iter_reality_gap_case_files is a hand-written symbol the implementation failed to define, or a symbol that a projection step from the declared semantic model should have generated into cep/inventory.py but did not.", "selected_action": "act-06", "expected_information": "Whether the .sea semantic model declares iter_reality_gap_case_files as a symbol to be projected into cep/inventory.py, which would confirm a projection failure; absence would support an implementation locus.", "proposed_settlement": null}
+```

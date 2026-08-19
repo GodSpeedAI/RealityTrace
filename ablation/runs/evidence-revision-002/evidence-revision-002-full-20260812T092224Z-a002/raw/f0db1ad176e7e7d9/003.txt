@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether the restricted PATH (excluding ~/.cargo/bin) causing cargo to be unavailable is an environment provisioning failure or a verifier/verification-plan configuration that should have extended PATH before invoking cargo.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

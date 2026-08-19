@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "Whether the 'stale fixture missing' panic indicates that evidence/fixtures were never collected or persisted (evidence_collection), versus the environment lacking expected fixture setup at runtime (environment).", "selected_action": "act-01", "expected_information": "Whether the fixture file(s) referenced by corpus_sr10.rs exist in the working tree and contain expected content, distinguishing a collection/persistence gap from an environment provisioning gap.", "proposed_settlement": null}
+```

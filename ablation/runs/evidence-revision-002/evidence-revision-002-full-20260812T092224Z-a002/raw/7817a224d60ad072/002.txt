@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["evidence_collection", "implementation"], "unresolved_distinction": "Whether the trailing '# stale' line appended to the valid JSON fixture was introduced by an evidence-collection/archival process marking the file as stale, or was authored as-is as part of the test implementation.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Missing pytest could be an environment deficiency (toolchain unavailable) or a verifier misconfiguration (incorrectly mandating pytest for a project that uses a different test runner); act-05 to inspect the verifier's configuration was never executed, leaving this unresolved.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

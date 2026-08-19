@@ -1,0 +1,11 @@
+Looking at this diagnostic state, I need to analyze what's available:
+
+- The verifier exited with code 101 (typically indicating a panic or hard error)
+- The FTS data shows many dependency crates compiling successfully, but the actual test target and error are not visible
+- No specific error message or failing test output is shown
+
+The key question is whether the verifier itself failed (misconfiguration, panic), the test target doesn't exist, or the implementation under test has a bug.
+
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "Whether the verifier exited 101 due to its own misconfiguration/crash, due to a test target that doesn't resolve, or due to an actual compilation/runtime error in the project source code", "selected_action": "act-01", "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal what was being tested and whether the verifier invocation itself is well-formed", "proposed_settlement": null}
+```

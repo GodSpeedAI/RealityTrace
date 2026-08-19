@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "The file tests/integration_tests.rs does not exist and the target was renamed to integration_tests_moved, but we still cannot tell whether the verifier command's reference to 'integration_tests' was hardcoded in the verification plan (plan fault) or whether the declared model specifies 'integration_tests' and code generation incorrectly renamed it (projection fault). Inspecting the verifier's actual configured command will reveal the origin of the target name.",
+ "selected_action": "act-03",
+ "expected_information": "The verifier configuration—specifically the exact command string and evidence-type declarations—will show whether 'integration_tests' is explicitly baked into the verification plan or derived from a model artifact, settling whether the naming mismatch is a plan error or a code-generation/projection error.",
+ "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+Candidates: verifier, implementation, verification_plan, environment
+Excluded: evidence_collection(recorded), declared_model(F-28-unmet)
+Locus: unknown

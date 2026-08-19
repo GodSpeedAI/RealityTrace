@@ -1,0 +1,14 @@
+Looking at the diagnostic state, I need to reason through the evidence:
+
+1. **tests/test_inventory.py does not exist** (act-05 confirmed)
+2. **No .sea model in repo** (act-02) — cannot confirm what projection should have produced
+3. **Verifier command explicitly references** `tests/test_inventory.py` (act-03)
+4. **Environment, toolchain, fixtures all fine** (acts-01, 07, 08)
+5. **`projection` was rejected** as EVIDENCE_INSUFFICIENT — no model/manifest confirms projection was supposed to generate this file
+6. **`unknown` was rejected** as AFFORDABLE_ACTION_REMAINS
+
+With projection ruled out (insufficient evidence that projection owed this file) and unknown ruled out, the remaining candidate is `verification_plan`. The verification plan specifies a test target (`tests/test_inventory.py`) that resolves to no file in the working tree, and absent any .sea model confirming projection should have created it, the most supportable attribution is that the plan itself references a path that was never produced or was misconfigured.
+
+```json
+{"candidate_loci": ["projection", "verification_plan"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

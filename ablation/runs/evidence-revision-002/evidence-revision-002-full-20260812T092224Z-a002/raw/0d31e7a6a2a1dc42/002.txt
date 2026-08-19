@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether cargo is genuinely absent from the execution environment's default PATH, or whether the verifier is imposing a restricted PATH (/usr/bin:/bin) that excludes a properly installed cargo location, making this a verifier misconfiguration rather than a true environment deficit.", "selected_action": "act-03", "expected_information": "Whether the verifier's configuration explicitly sets or prepends the restricted PATH, and whether the verifier's declared command is 'cargo' directly (requiring PATH resolution) or a resolved absolute path — this determines if the verifier is responsible for the toolchain being unreachable.", "proposed_settlement": null}
+```

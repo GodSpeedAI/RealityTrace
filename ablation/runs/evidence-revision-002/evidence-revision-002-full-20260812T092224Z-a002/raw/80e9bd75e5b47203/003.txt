@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is the cep.scoring module absent because the implementation never created it, or because a projection/code-generation step should have produced it but failed?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

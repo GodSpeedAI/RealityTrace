@@ -1,0 +1,5 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Is the path 'tests/test_import.py' correctly specified in the verification plan (meaning the projection step failed to generate it), or is the path itself wrong in the verifier configuration (verification_plan error)?",
+ "selected_action": "act-02", "expected_information": "The verifier's command, declared test targets, and direction rule will reveal whether 'tests/test_import.py' is the intended path. If it matches what projection should generate, the failure is projection; if the path is misconfigured, it is verification_plan.",
+ "proposed_settlement": null}
+```

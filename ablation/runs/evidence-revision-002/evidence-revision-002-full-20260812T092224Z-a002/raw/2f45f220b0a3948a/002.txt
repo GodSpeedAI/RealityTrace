@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier"], "unresolved_distinction": "Whether the `--test unit_tests` argument is dictated by the verification plan's declared command or is hardcoded in the verifier configuration itself.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

@@ -1,0 +1,5 @@
+Candidates: verifier, implementation, environment, verification_plan, evidence_collection
+
+Excluded: (none excludable — no textual or semantic evidence exists; only `verifier_exit: 2` remains, which is ambiguous across multiple loci)
+
+Locus: unknown

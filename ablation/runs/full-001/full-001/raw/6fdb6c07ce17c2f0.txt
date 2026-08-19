@@ -1,0 +1,146 @@
+We need to diagnose failure locus for case sr-06 based on retrieval context. Need choose exactly one from vocabulary. Context minimal: case_id, evidence_id, repo sr, scenario sr-6, stdin_format car-go-json, verifier_exit 101. Need infer locus. We need understand likely benchmark? We are failure-diagnosis evaluator. Given retrieval context for one case, attribute observed failure to exactly one failure locus. We have only that. verifier_exit 101 maybe verifier crashed? Need decide.
+
+We need reason from available fields. Capability A? "sr" maybe "secure retrieval"? "car-go-json" stdin format. verifier_exit 101. Evidence collection? Hmm.
+
+We need map failure locus. Vocabulary:
+- verifier: the verifier program itself has bug/crash
+- verification_plan: plan/spec mismatch?
+- projection: mapping from model to verification artifact?
+- implementation: system under test implementation bug
+- environment: external environment issue
+- authority: authority/trust issue?
+- evidence_collection: evidence collection process issue
+- declared_model: declared model mismatch?
+- unknown.
+
+Given only verifier_exit 101. Exit code 101 often Rust panic? In many test harnesses, verifier exit 101 indicates verifier crashed/panicked. If verifier exits non-zero with code 101, likely verifier failure. But could be implementation failure causing verifier to exit? Need inspect context: "verifier_exit": 101. No other info. The failure recorded for case sr-06. We need attribute to one locus. If verifier exit 101, maybe verifier crashed due to inability to parse stdin? But if verifier is expected to run and exit 0 for pass, non-zero indicates failure. Which locus? Could be implementation if verifier detected failure and exited 101? But exit code 101 specifically often "verifier error" not "test failure". Need know conventions.
+
+Let's think of possible benchmark structure. There are cases with evidence_id, repo, scenario, stdin_format, verifier_exit. Capability A. Maybe "sr" repo? "car-go-json" stdin format. "verifier_exit": 101. The retrieval context includes only metadata. We need diagnose based on that. If verifier_exit is 101, maybe verifier process exited with code 101 due to uncaught exception. That points to verifier. But maybe "verifier_exit" is just recorded exit code of verifier after evaluating implementation; if non-zero, observed failure. Need attribute to implementation? Hmm.
+
+Let's parse: "Given the retrieval context for one case, attribute the observed failure to exactly one failure locus from this vocabulary..." The retrieval context is evidence metadata. It includes "verifier_exit": 101. There is no actual error message. We need infer from exit code. In many systems, exit code 101 is used by verifier to signal "not satisfied" or "verifier error"? Let's search memory: In Rust, process exit code 101 is default panic exit code. In Python, exceptions often exit 1. In Bash, exit 101 maybe custom. In "cargo" test? Rust program panics -> exit code 101. If verifier is written in Rust and panics, verifier_exit 101. That strongly suggests verifier bug. But if verifier intentionally returns exit code 101 for "verification failed"? Need know.
+
+The vocabulary includes "verifier" as a locus. If verifier_exit 101, likely verifier. But let's not jump. The case has "capability: A" maybe from "SWE-bench"? Hmm.
+
+Maybe there is a known taxonomy: failure loci in "verification pipeline" for "runtime verification of LLM-generated code"? Cases have evidence_id, repo, scenario, stdin_format, verifier_exit. The failure could be due to:
+- verifier: verifier crashed (exit 101)
+- verification_plan: plan invalid
+- projection: projection failed
+- implementation: implementation under test failed
+- environment: environment setup failed
+- authority: authority/signature issue
+- evidence_collection: evidence collection failed
+- declared_model: declared model mismatch
+- unknown.
+
+Given only metadata, if verifier_exit 101, maybe "verifier" because verifier process exited abnormally. But if verifier_exit is non-zero, could be because implementation failed and verifier reports failure. However, "verifier_exit" field itself is about verifier process. Need know expected exit codes. If verifier_exit 101, not 0. In many test harnesses, verifier returns 1 on failure, 2 on error. 101 is abnormal. So verifier.
+
+Let's consider "evidence_id" "01KZJ2EN56MV2E2TZYMGNSJG84" ULID. "repo": "sr", "scenario": "sr-6", "stdin_format": "car-go-json". "verifier_exit": 101. Maybe "sr" stands for "spec router"? "car-go-json" maybe "cargo json"? Wait "car-go-json" maybe "cargo-json"? stdin_format "car-go-json" maybe "cargo json" output? The repo "sr" maybe "stacked borrows"? Hmm.
+
+Could be from "SR" benchmark for "software reasoning"? Capability A. The verifier reads stdin in "car-go-json" format. If verifier exit 101, maybe because input format mismatch? That could be environment/evidence_collection? Let's think.
+
+"stdin_format": "car-go-json" maybe a format for "cargo" JSON? If the verifier expects "car-go-json" and the evidence collection feeds it, but if the input is malformed, verifier panics. The locus could be evidence_collection if evidence was not collected properly. But the context only says stdin_format, not that it was malformed. We need not over-infer.
+
+Maybe "car-go-json" is a typo/obfuscation? "car-go-json" = "cargo json"? In Rust, `cargo` commands output JSON. Exit code 101 is Rust panic. If verifier is a Rust binary, panic. The failure locus is verifier.
+
+Let's examine possible hidden pattern: The user asks "Diagnose the recorded failure for case sr-06. Below is the retrieval context for this case (capability: A)." The retrieval context has [sql] and [fts] but fts empty. The SQL row includes fields. We need output single line. This is likely a classification task where each case has a known locus based on fields. We need infer from field values. There may be a dataset where:
+- If `verifier_exit` is 101 -> verifier
+- If `verifier_exit` is 0 but maybe something else -> implementation?
+- If evidence_id missing -> evidence_collection
+- If repo/scenario missing -> environment?
+But we only see one case.
+
+Let's think of "capability: A" maybe "A" means "verifier" capability? Hmm.
+
+The vocabulary "verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown" suggests a pipeline:
+1. declared_model: a model declaration of system behavior
+2. verification_plan: plan to verify capability
+3. projection: transforms model/plan into executable verifier? 
+4. implementation: system under test
+5. environment: execution environment
+6. evidence_collection: collects evidence
+7. authority: trusted authority?
+8. verifier: checks evidence
+9. unknown.
+
+Case sr-06: evidence_id exists, repo, scenario, stdin_format, verifier_exit 101. If verifier exited 101, maybe the verifier itself failed. If evidence collection had failed, there might be no evidence_id or verifier not run. If implementation failed, verifier would exit with some failure code maybe 1. If environment failed, verifier might not run. So verifier.
+
+But let's not ignore "capability: A" maybe "A" is "authority"? Could be capability A means "authority" and failure locus authority? Hmm. The prompt says "capability: A" in parentheses. Maybe capability labels correspond to loci? If capability A, maybe "A" = "authority"? But vocabulary includes authority. Could be a clue? Let's explore.
+
+The retrieval context: "capability: A" maybe from a table where capability is a column. The case is for capability A. The failure locus might be related to capability? But not necessarily. "capability: A" could be a code for a type of test. If capability A is "authority"? In security, "A" could stand for "authentication/authority". But the repo "sr" and scenario "sr-6" maybe "security requirement 6". stdin_format "car-go-json". Hmm.
+
+Maybe the failure loci are tied to "capability" letters? Let's infer from vocabulary:
+- verifier (V)
+- verification_plan (P)
+- projection (J?)
+- implementation (I)
+- environment (E)
+- authority (A)
+- evidence_collection (C)
+- declared_model (D)
+- unknown (U)
+
+Capability A could map to "authority" if A. But the prompt says "capability: A" not "capability: authority". Could be a hint that the case is in capability A, and failure locus might be authority? But we need diagnose observed failure, not capability. Let's not overfit.
+
+Maybe "capability: A" means the case is testing capability "A" (e.g., "Applicative"?). The failure locus could be "authority" if capability A is "authority" and the verifier exit 101 indicates authority failure? Hmm.
+
+Let's search memory: There is a benchmark "V-Bench" maybe with capabilities: A = "authority", B = "evidence_collection"? The vocabulary includes "authority" as a failure locus. The case ID "sr-06" maybe "security requirement 06". Capability A maybe "authentication"? The stdin_format "car-go-json" maybe "cargo json" for Rust. Verifier exit 101. Hmm.
+
+Let's consider if "verifier_exit": 101 could be an "authority" failure. In some verification systems, exit code 101 might mean "authority violation" (e.g., signature verification failed). But no, exit code 101 is not standard for authority. Could be a custom code: 101 = "authority failure"? Let's see common exit codes:
+- 0 success
+- 1 general failure
+- 2 misuse
+- 64-78 sysexits.h: 64 usage, 65 data, 66 noinput, 67 nouser, 68 nohost, 69 service unavailable, 70 internal software error, 71 os error, 72 critical file missing, 73 temp failure, 74 io error, 75 temp fail, 76 protocol, 77 permission, 78 config.
+- 101 Rust panic.
+So 101 likely panic.
+
+If verifier is written in Rust and panics, locus verifier. But if the panic is due to malformed input from evidence_collection, the root cause could be evidence_collection. However, a robust verifier should handle malformed input gracefully; but in failure attribution, if verifier panics on bad input, maybe verifier. Yet if evidence collection produced invalid input, locus evidence_collection. We don't have input content.
+
+The retrieval context includes `stdin_format`: "car-go-json". Maybe if the verifier expects "car-go-json" and the evidence collection provides that, no issue. If verifier exit 101, maybe verifier cannot parse "car-go-json" due to bug. Locus verifier.
+
+Let's think of "sr-06" scenario. "sr" maybe "simple rust" repo. "scenario sr-6". "stdin_format car-go-json" maybe the verifier receives Cargo's JSON output. If a Rust program panics, cargo test outputs JSON with exit code 101? Wait `cargo test --format json` may report test failure; the `cargo` process exit code could be 101 if a test binary panics? Actually `cargo` returns 101 on test failure? Let's check: Cargo returns 101 on test failure? I recall cargo returns 101 when tests fail? Let's verify from memory: Cargo exit status: 0 success, 1 if cargo itself failed, 101 if tests fail? Hmm. In Rust, `cargo test` returns 101 on test failure? I think yes? Let's recall: When a Rust program panics, exit code 101. When `cargo test` test fails, the test runner process exits 101, and cargo propagates? I have seen `cargo test` exits 101 on test failure. For example, GitHub Actions: "Process completed with exit code 101." often due to failed Rust tests or panic. So `verifier_exit: 101` could be the exit code of a verifier that runs `cargo` or Rust test harness; if the implementation under test fails a test, the verifier exits 101. In that case, the failure locus might be implementation, not verifier. Hmm! Important.
+
+The field is "verifier_exit": 101, not "implementation_exit". If the verifier is a Rust test harness, exit 101 could indicate the implementation failed the verification. But the verifier itself might be using cargo? Let's parse "stdin_format": "car-go-json" maybe "cargo-json". That suggests the verifier consumes Cargo JSON output. The verifier exit code 101 could be because the underlying `cargo` command failed due to implementation bug. But the field says verifier_exit, so the verifier process exited 101. If verifier is a Rust binary that panics, 101. If verifier runs cargo and cargo exits 101, verifier might propagate 101. In either case, the root cause could be implementation if tests fail. Need more context.
+
+Let's examine "repo": "sr", "scenario": "sr-6", "stdin_format": "car-go-json". Maybe "sr" is a repo with Rust code. The verifier might be `cargo`? "car-go-json" is likely "cargo-json" (misspelled with hyphen? "car-go-json" to avoid exact?). If stdin_format is cargo JSON, the verifier reads JSON from cargo. `verifier_exit: 101` could be from cargo test failure. In Rust, `cargo test --format json` exits 101 when tests fail. The failure locus could be implementation (the code under test failed tests). But if the verifier itself is a Rust program, 101 panic. Which is more likely?
+
+Let's think of the taxonomy. If the verifier is supposed to check implementation by running tests and parsing cargo JSON, a non-zero exit code could be:
+- 101: test failure (implementation)
+- 1: verifier error
+But not necessarily.
+
+Maybe the benchmark records "verifier_exit" as the exit code of the verifier after evaluating the implementation. If the verifier exits 0, pass. If non-zero, fail. The locus could be implementation if verifier correctly detected failure. But the task is to diagnose "observed failure" from retrieval context. We need attribute to a failure locus, not just "test failed". If verifier exit 101, maybe the observed failure is "verifier crashed" because the verifier should exit 0 or 1, not 101. But in Rust, 101 is a normal test failure exit code. Hmm.
+
+Let's search memory of exit codes in "cargo test": I recall:
+- `cargo test` returns 101 if tests fail.
+- `cargo build` returns 101 if compile errors? Actually rustc returns 101 on compile error? Let's check: rustc exits 101 on compilation error? I think rustc uses 101 for compilation errors. Cargo returns 101 if build failed. So 101 is common for Rust failures, not verifier panic only.
+- A Rust binary that calls `std::process::exit(101)`? Not typical.
+
+If the verifier is a Rust program and it panics, exit code 101. If it runs `cargo` and cargo fails, it might exit 101. The root cause could be implementation compile/test failure. But the field "verifier_exit" alone doesn't tell.
+
+Maybe the "stdin_format": "car-go-json" indicates the verifier's input is the output of `cargo` in JSON. If the implementation fails, cargo JSON would contain failure events; the verifier should parse them and exit with a code. If the verifier exits 101, maybe it didn't parse and just propagated cargo's exit code. That could be a verifier issue? Hmm.
+
+Let's consider the broader task. The user likely expects a single locus based on a known dataset. The retrieval context is minimal; maybe the correct answer is "verifier" because the only signal is `verifier_exit: 101`. The evaluator may have a ground truth. We need maximize chance.
+
+Let's infer from field names:
+- `evidence_id`: an identifier for evidence collected.
+- `repo`, `scenario`, `stdin_format`: context for evidence.
+- `verifier_exit`: exit code of verifier.
+If the failure is "recorded failure for case sr-06", the observed failure is likely "verifier exited 101". The locus is "verifier" by definition. If the failure were implementation, there would be maybe "implementation_exit" or "test_result" fields. Since only verifier_exit is present, the failure is in verifier. But wait, the verifier exit code is the observed outcome of the whole verification; it doesn't mean the verifier is at fault. However, in a retrieval context for failure diagnosis, they might include only the verifier exit code because that's the symptom. The diagnosis requires mapping symptom to locus. If verifier exited non-zero, locus could be implementation if verifier worked correctly and found a bug. But how to distinguish? Maybe exit code 101 specifically means verifier internal error, while exit code 1 means implementation failure. Let's see if there are conventions in this hypothetical benchmark.
+
+The vocabulary includes "verifier" and "implementation". A verifier can fail in two ways:
+- It crashes/errors (verifier locus)
+- It reports failure of implementation (implementation locus)
+The exit code might encode which:
+  - 0: pass
+  - 1: implementation failed verification
+  - 2: verifier error
+  - 101: verifier panic
+But not sure.
+
+Maybe "verifier_exit": 101 is a Rust panic exit code, so verifier error. If implementation failed, verifier would exit 1 (or maybe 101 if it's cargo). But the field "verifier_exit" not "cargo_exit". If the verifier is a Rust binary, 101 = panic. So verifier.
+
+Let's look at "stdin_format": "car-go-json". Could be "cargo-json" but hyphenated as "car-go-json" maybe to obfuscate. If the verifier expects cargo JSON, and the implementation is Rust, the verifier might be a Rust binary. Exit 101 could be from the verifier panicking while parsing cargo JSON. That is verifier. But if the implementation's cargo test failed, the verifier might receive cargo JSON with failure and exit 1. If the verifier panics because of unexpected JSON, verifier.
+
+Maybe the case ID "sr-06" and scenario "sr-6" could be a known "sr" (safety requirement) case where the failure is in the verifier. The retrieval context includes no FTS (full-text search) snippets, which might contain error messages. Empty FTS means no error message. If there were an implementation error, FTS might show test failure. Here only SQL metadata. The absence of FTS might indicate the failure is not in implementation but in verifier process. Hmm.
+
+Let's think of "evidence_id" "01KZJ2EN56MV2E2TZYMGNSJG84" maybe ULID generated. If evidence collection succeeded, evidence_id exists. If verifier_exit 101, maybe verifier failed. If evidence collection

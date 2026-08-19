@@ -1,0 +1,10 @@
+Looking at the retrieval context for case sr-12:
+
+1. **SQL** shows `verifier_exit: 1` (failure recorded)
+2. **FTS** section is completely empty — no text content indexed
+3. **Vector** is all zeros — no semantic content captured
+4. **Graph** shows an artifact node exists with a `recorded_evidence` edge, but the actual content representations are entirely absent
+
+The artifact reference was created in the graph, but no actual evidence content was captured — the FTS index is empty and the embedding vector is all zeros. This means the evidence collection process recorded a reference without gathering the substantive content needed for verification. The all-zero vector and empty FTS are downstream consequences of evidence that was never actually collected into a usable form.
+
+Locus: evidence_collection

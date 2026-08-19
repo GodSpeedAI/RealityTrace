@@ -1,0 +1,14 @@
+Looking at the evidence, I can identify the key issue. The build completed successfully (all artifacts fresh), but the verifier exited 101. The critical finding is:
+
+1. **act-04** shows that when the test is run in isolation (without the problematic env var), it **passes** (exit_code: 0). This rules out `implementation`.
+2. **act-02** reveals the verifier configuration includes `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` — an environment assignment pointing to a **nonexistent** config file.
+3. **act-07** confirms this env var is set, and the toolchain itself is available.
+
+The verification plan's own configuration injects a broken environment variable (`/nonexistent-corpus-config.toml`) that causes the test to fail under the verifier, even though the implementation is correct.
+
+```json
+{"candidate_loci": ["verification_plan", "evidence_collection", "implementation"], "unresolved_distinction": "Whether the verifier's env assignment AST_GREP_CONFIG=/nonexistent-corpus-config.toml is an error in the verification_plan configuration or a misconfigured environment; the isolated re-run (act-04) passed, ruling out implementation.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verification_plan"}
+```

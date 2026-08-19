@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation", "projection"], "unresolved_distinction": "Whether the verification plan misnames the test target as `flow_tests` (should reference existing `cli_tests`), or whether the implementation/projection failed to generate the expected `flow_tests` target.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

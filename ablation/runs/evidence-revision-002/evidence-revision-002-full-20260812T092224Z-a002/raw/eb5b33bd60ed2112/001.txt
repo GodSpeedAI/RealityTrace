@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection", "environment"], "unresolved_distinction": "Does the path 'tests/test_import.py' referenced in the verification command not exist because the plan specifies an incorrect path, because the projection failed to generate the expected test file, or because the working directory is misconfigured?", "selected_action": "act-07", "expected_information": "Whether the path 'tests/test_import.py' resolves to an existing file in the working tree, distinguishing a missing-file/projection failure from a path-resolution/verification_plan or environment issue.", "proposed_settlement": null}
+```

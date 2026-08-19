@@ -1,0 +1,1 @@
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether mode-0 permissions on the fixture file were set by the environment's filesystem state or by the verification plan's provisioning step", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}

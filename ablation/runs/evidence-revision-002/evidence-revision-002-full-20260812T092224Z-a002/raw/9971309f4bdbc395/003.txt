@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "Whether exit code 101 (Rust panic) originates from a runtime defect in the implementation code (e.g., failure to gracefully handle a missing fixture file 'example-v999.py') versus a verifier or environment misconfiguration, though environment and verifier checks have largely ruled out the latter two.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

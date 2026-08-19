@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether exit code 101 stems from a defect in the project source code (compilation error or runtime panic in the main crate) or from a misconfigured verification command that references a non-existent or incorrect test target/path.",
+ "selected_action": "act-04",
+ "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal whether the verification is correctly targeting an existing test or binary, or whether the command itself is malformed — distinguishing verification_plan misconfiguration from an implementation defect.",
+ "proposed_settlement": null}
+```

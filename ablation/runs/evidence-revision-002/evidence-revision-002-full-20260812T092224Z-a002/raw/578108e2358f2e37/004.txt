@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the fixture tests/fixtures/example.py with mode 0 is an environment permissions defect on a correctly-referenced fixture or a verification_plan path misconfiguration that causes the verifier to fail on an inaccessible file", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

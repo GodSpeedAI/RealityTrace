@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the non-writable .corpus-tmpfix directory reflects a host-level filesystem permission constraint (environment) or a failure by the verification plan to properly create/provision/configure the TMPDIR directory (verification_plan)", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

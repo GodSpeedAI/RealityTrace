@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Whether exit 101 stems from a compilation/runtime error in the project's own source (implementation), an incorrect verification command or target path (verification_plan), or verifier harness misconfiguration (verifier). All dependencies compile successfully but no main-crate error message is visible.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

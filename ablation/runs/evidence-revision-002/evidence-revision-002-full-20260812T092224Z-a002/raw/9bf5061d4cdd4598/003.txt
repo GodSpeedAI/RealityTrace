@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "environment"], "unresolved_distinction": "Exit code 101 (Rust compiler error) was produced but no compiler error text is visible. All dependency artifacts compiled successfully (fresh=true) yet the project's own crate (ast-grep-mcp-rs) never appears as a successful artifact, suggesting compilation failed in the project source — but without the error message we cannot rule out a missing/misconfigured test target (verification_plan) or a toolchain/working-directory issue (environment).", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

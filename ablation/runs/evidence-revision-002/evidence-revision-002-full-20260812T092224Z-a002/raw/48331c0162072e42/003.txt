@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 stems from a compile error or runtime panic in the project's own code (implementation), or from a misconfigured verifier command that never correctly invokes the project build target (verifier/verification_plan). All dependency artifacts compiled fresh but no project-level artifact appeared, which could indicate either a project compilation failure or a verifier that doesn't target the correct build.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

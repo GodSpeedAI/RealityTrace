@@ -1,0 +1,14 @@
+Looking at the evidence collected across rounds:
+
+1. **act-01** found `tests/fixtures/example.py` has mode `0` (completely unreadable, restrictive).
+2. **act-02** confirms the same fixture exists but is "stale."
+3. **act-03** reproduces the failure (exit 101) in isolation with `cargo test`.
+4. **act-04** confirms all test targets resolve — no missing targets.
+5. **act-05** confirms the toolchain and directories are available and writable.
+6. **act-07** confirms the verifier configuration (cargo-test, standard direction rule) is standard.
+
+The build succeeded (all `fresh:true`), the verifier command is a standard `cargo test` invocation, targets resolve, and the toolchain is fine. The only anomaly is the fixture file `tests/fixtures/example.py` with mode `0` (unreadable), which directly explains the exit-code 101 panic when the test attempts to read it.
+
+```json
+{"candidate_loci": ["environment", "verification_plan", "verifier"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

@@ -1,0 +1,16 @@
+Looking at this diagnostic state, I need to determine whether the missing `iter_reality_gap_case_files` function in `cep.inventory` is due to incomplete implementation code or a failed projection from a semantic model.
+
+**Key evidence from round 1:**
+- act-05 confirmed the symbol `iter_reality_gap_case_files` is NOT present in `cep.inventory`
+- act-01 found "no .sea model in repo" — this is critical evidence
+
+The absence of any `.sea` semantic model in the repository means there is no model from which a projection step could have generated (or failed to generate) the missing function. This strongly points to the code being hand-written, and the function simply was never implemented in `cep/inventory.py`.
+
+I can settle this now without further evidence acquisition.
+
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the missing symbol 'iter_reality_gap_case_files' is due to incomplete hand-written implementation code or a projection failure that failed to generate the function — now resolvable because no .sea model exists in the repo, eliminating projection as a candidate.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

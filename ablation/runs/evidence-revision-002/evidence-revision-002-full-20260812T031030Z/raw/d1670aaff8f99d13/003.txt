@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verification plan was authored with a stale target name from the start, or whether a projection renamed the target to integration_tests_moved and failed to update the verification command. The _moved suffix is circumstantial evidence for projection, but no direct evidence of a projection operation was obtained, and the prior 'projection' settlement was rejected as insufficient.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether exit code 101 originates from a runtime panic in the project's own code (implementation) or from a misconfigured or broken verifier execution path (verifier). The build artifacts all show fresh:true, suggesting compilation succeeded, but we cannot yet determine if the failure is in the verified program or the verifier itself.",
+ "selected_action": "act-05",
+ "expected_information": "The verifier's command, declared evidence types, and direction rule will reveal whether the verifier is correctly configured and whether exit 101 is expected behavior or indicates the verifier itself is broken.",
+ "proposed_settlement": null}
+```

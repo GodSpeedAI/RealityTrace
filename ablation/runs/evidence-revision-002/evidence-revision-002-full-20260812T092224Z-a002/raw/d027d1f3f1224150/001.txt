@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the missing symbol 'iter_reality_gap_case_files' in cep.inventory is a direct source-code defect (implementation) or was omitted during code generation from the semantic model (projection). However, the traceback already confirms the symbol is absent from the expected module, which is a concrete code-level gap.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

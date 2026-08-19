@@ -1,0 +1,7 @@
+Looking at this case, the failure is a TOML parse error in a registry file. The candidate loci are `declared_model` (registry malformed as authored) and `projection` (registry corrupted/truncated during generation). A previous settlement attempt on `declared_model` was rejected for insufficient evidence, and the observations acquired since then (toolchain available, no symbols in trace, validation re-confirming the error) do not distinguish between the two hypotheses. No evidence has been gathered to confirm whether the malformed array was authored or corrupted during projection. With no further evidence acquisition possible, the evidence is insufficient to settle on either locus.
+
+```json
+{"candidate_loci": ["declared_model", "projection"], "unresolved_distinction": "declared_model vs projection — whether the registry TOML was malformed as authored or corrupted during a generation/projection step",
+  "selected_action": null, "expected_information": null,
+  "proposed_settlement": "unknown"}
+```

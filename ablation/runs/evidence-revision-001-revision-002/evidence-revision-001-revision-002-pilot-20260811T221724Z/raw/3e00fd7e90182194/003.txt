@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "implementation"], "unresolved_distinction": "Whether data/corpus-v998.json should have been staged by the evidence-collection pipeline but was not, or whether corpus_sr10.rs references a fixture path that was never part of the evidence pipeline (a test-code/implementation defect).", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "The exit code 101 (Rust panic) occurs after successful compilation of all dependencies. We need to determine whether the panic originates from a bug in the project's own source code (implementation), a misconfigured verification command or missing test target (verification_plan), or the verifier tooling itself (verifier). The cargo build artifact stream shows no compilation errors, so the failure is at runtime, but we have no error message or stack trace to pinpoint the locus.",
+ "selected_action": "act-07",
+ "expected_information": "The actual panic message, backtrace, and stderr/stdout output from re-running the failing test in isolation. This will reveal whether the panic occurs in project code, in test harness setup, or in the verifier itself, directly settling the locus.",
+ "proposed_settlement": null}
+```

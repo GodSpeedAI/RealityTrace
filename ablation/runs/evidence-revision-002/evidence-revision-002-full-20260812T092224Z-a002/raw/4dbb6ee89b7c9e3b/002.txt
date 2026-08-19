@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "Whether exit code 101 originates from the verifier's own configuration/command logic (e.g., incorrect invocation, malformed evidence handling) or from a runtime panic in the implementation under test during execution — noting that all build artifacts compiled successfully and the fixture tests/fixtures/example.py was flagged as out of date.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's exact command, declared evidence types, and direction rule, which will reveal whether the verifier is correctly configured and invoking the right test — if the configuration is sound, the panic is more likely in the implementation; if misconfigured, the verifier itself is the locus.",
+ "proposed_settlement": null}
+```

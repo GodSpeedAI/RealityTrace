@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verification_plan incorrectly references the test target `unit_tests` (stale name) when the actual target is `unit_tests_moved`, or the projection incorrectly generated/renamed the test target, creating the mismatch.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

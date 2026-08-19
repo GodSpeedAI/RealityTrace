@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is cargo the intended build tool for repo 'ag' (environment failure) or is the verifier misconfigured to invoke cargo when a different tool should be used (verifier failure)?", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

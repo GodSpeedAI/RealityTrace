@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["implementation", "projection"],
+  "unresolved_distinction": "Whether the semantic model and registry define iter_reality_gap_case_files as a symbol that should exist in cep.inventory (indicating an implementation gap where inventory.py is incomplete) versus validation.py being a projected artifact that incorrectly generates an import for a symbol never intended to exist in that scope (indicating a projection defect).",
+  "selected_action": "act-06",
+  "expected_information": "Validation of the declared semantic model (.sea) against its schema and registry will reveal whether iter_reality_gap_case_files is a registered/expected symbol in the cep.inventory scope, settling whether the implementation is missing a required function or the projection incorrectly references a non-existent symbol.",
+  "proposed_settlement": null
+}
+```

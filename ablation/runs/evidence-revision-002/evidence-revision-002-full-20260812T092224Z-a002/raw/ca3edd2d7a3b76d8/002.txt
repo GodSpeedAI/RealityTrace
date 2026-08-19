@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "The symbol format_matches_as_text was not found at its expected location (act-06), which could mean the implementation is missing or misnamed a required function, or the verifier's configuration references a symbol path that was never the correct target. We need to see the verifier's declared command and direction rule to determine whether its expectations are sound.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's command, evidence types, and direction rule will reveal whether the expected symbol reference is part of a correct verification specification or a misconfiguration, settling whether the missing format_matches_as_text is an implementation gap or a verifier error.",
+ "proposed_settlement": null}
+```

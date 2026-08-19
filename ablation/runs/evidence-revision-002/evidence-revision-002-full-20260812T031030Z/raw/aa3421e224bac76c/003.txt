@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verifier", "verification_plan"],
+  "unresolved_distinction": "Whether the stale test target name 'unit_tests' was hardcoded in the verifier's cargo-test command template or was supplied by the verification_plan's scenario configuration for case ag-04.",
+  "selected_action": null,
+  "expected_information": null,
+  "proposed_settlement": "verification_plan"
+}
+```

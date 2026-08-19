@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "The symbol from_cli is confirmed missing from the source. The key question is whether the verification plan legitimately expects from_cli (making its absence an implementation defect) or whether the verification command incorrectly references a non-existent symbol or test target (making it a verification_plan defect). Inspecting the verifier configuration will reveal what command and evidence types it declares.",
+ "selected_action": "act-03",
+ "expected_information": "The verifier's declared command, evidence types, and direction rule—specifically whether the command references from_cli or a test target that depends on it, confirming whether the expectation is correctly part of the plan or not.",
+ "proposed_settlement": null}
+```

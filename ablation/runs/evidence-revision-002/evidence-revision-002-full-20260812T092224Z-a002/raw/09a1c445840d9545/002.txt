@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["projection", "verification_plan"], "unresolved_distinction": "Was tests/test_import.py supposed to exist as a projected artifact but the projection step failed to create it, or does the verification plan incorrectly reference a test file that was never part of the expected output?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "projection"}
+```

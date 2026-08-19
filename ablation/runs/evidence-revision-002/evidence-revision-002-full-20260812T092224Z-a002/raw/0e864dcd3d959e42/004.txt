@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Whether the verification plan always specified the target name `integration_tests` (plan defect), or whether the implementation renamed/moved the test to `integration_tests_moved` after the plan was authored (code change that invalidated the plan).", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

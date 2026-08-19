@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 stems from a runtime panic in the application code under test (implementation) or from a misconfigured verifier command, evidence pipeline, or direction rule (verifier/verification_plan). The build artifacts all show fresh dependencies with no compiler errors, so the failure is likely at runtime or in test invocation, but no error output is available to pinpoint the source.",
+ "selected_action": "act-08",
+ "expected_information": "The verifier's command line, evidence-type declarations, and direction rule will reveal whether the test invocation is correctly configured (e.g., correct stdin format, correct target, proper cargo test invocation). A misconfiguration here would point to verifier or verification_plan; a correct configuration would narrow the failure to implementation.",
+ "proposed_settlement": null}
+```

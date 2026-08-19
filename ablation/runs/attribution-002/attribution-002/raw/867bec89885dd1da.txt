@@ -1,0 +1,3 @@
+Candidates: verifier, evidence_collection, implementation, environment
+Excluded: (none — no discriminating positive evidence available to exclude any candidate)
+Locus: unknown

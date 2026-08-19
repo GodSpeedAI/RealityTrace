@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verification_plan", "verifier"],
+  "unresolved_distinction": "The verifier attempted to run test target `integration_tests`, but it was renamed/moved to `integration_tests_moved`. The key question is whether the stale target name originates from the verification plan (which specifies what to test) or from the verifier's own command configuration (how it invokes the test runner).",
+  "selected_action": "act-03",
+  "expected_information": "The verifier's configured command and evidence type declarations will reveal whether the test target name `integration_tests` is hardcoded in the verifier invocation or passed through from the verification plan. If the verifier command template contains `integration_tests` directly, the locus is verifier; if the command template uses a placeholder populated by the plan, the locus is verification_plan.",
+  "proposed_settlement": null
+}
+```

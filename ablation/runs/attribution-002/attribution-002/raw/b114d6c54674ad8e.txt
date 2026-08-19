@@ -1,0 +1,3 @@
+Candidates: verifier, implementation, verification_plan, environment, evidence_collection
+Excluded: implementation(no artifact/error signal), verification_plan(no plan mismatch signal), environment(no env/infra error signal), evidence_collection(evidence artifact exists and case row is present)
+Locus: verifier

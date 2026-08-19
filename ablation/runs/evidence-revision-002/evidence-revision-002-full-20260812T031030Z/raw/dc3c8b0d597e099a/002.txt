@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "verification_plan"], "unresolved_distinction": "The build completed successfully (all artifacts fresh), yet the verifier exited 101 (Rust panic). We need the actual panic message/backtrace to determine whether the panic originates in the verifier harness itself, in the project's implementation code at runtime, or because the verification plan points to a wrong target causing the verifier to fail.",
+ "selected_action": "act-04",
+ "expected_information": "The stdout/stderr and panic backtrace from re-running the failing test in isolation, revealing the exact panic location and message—distinguishing whether it originates in the verifier, the implementation, or a resolution error in the verification plan.",
+ "proposed_settlement": null}
+```

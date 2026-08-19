@@ -1,0 +1,12 @@
+Looking at this diagnostic state, I need to evaluate the evidence for the two candidate loci (implementation vs. projection) for the missing symbol `iter_reality_gap_case_files` in `cep.inventory`.
+
+Key findings:
+- **act-05** confirmed the symbol is definitively missing from `cep.inventory`
+- **act-01** confirmed there is **no .sea model** in the repo
+- All infrastructure, files, and toolchain checks passed (act-02, act-04, act-07, act-08)
+
+The critical distinguishing fact: there is no semantic model present. Projection failures require a model that was incorrectly projected into code. Since no `.sea` model exists, the projection hypothesis is unsupported—the missing symbol is a concrete code-level gap in the implementation. The import chain (`cep.cli` → `cep.validation` → `cep.inventory`) references a function that was never implemented in the source.
+
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the missing symbol is a source-code defect (implementation) or a failed code-generation step (projection) — now largely resolved by the absence of any .sea model.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

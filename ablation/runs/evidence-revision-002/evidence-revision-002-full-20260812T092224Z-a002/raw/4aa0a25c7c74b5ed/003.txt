@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Whether the unit_tests exit code 101 results from the stale fixture causing incorrect test expectations (verification_plan) or from a genuine logic bug in the project source that is independent of fixture staleness (implementation). All code compiled and ran; the only flagged anomaly is the stale fixture content.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

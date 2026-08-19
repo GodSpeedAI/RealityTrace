@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "Does the required fixture file for corpus_sr10 actually exist on disk (pointing to evidence_collection failure to provision it), or does it exist but is unreachable due to path/working-directory misconfiguration (pointing to environment)?", "selected_action": "act-05", "expected_information": "Whether the fixture or data file referenced by corpus_sr10 exists at the expected path and contains expected content, directly distinguishing a provisioning gap from an environment/path issue.", "proposed_settlement": null}
+```

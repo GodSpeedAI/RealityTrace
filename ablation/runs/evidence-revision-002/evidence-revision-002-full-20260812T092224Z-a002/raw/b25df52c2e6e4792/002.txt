@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "Whether the missing fixture tests/fixtures/inventory-version-v999.json should have been staged by the evidence-collection pipeline or is an environment artifact that is simply absent from this checkout.", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

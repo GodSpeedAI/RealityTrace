@@ -1,0 +1,6 @@
+Looking at this diagnostic state, I need to determine why the "stale fixture missing" panic occurs. The key evidence so far:
+- The fixture `data/corpus-v998.json` is confirmed missing (act-07)
+- The environment is healthy (act-02)
+- The test compiled and ran (verification_plan partially works)
+
+The critical unresolved question is whether the verifier is correctly referencing a fixture that *should* have been provided by evidence collection, or whether the verifier/plan itself points to a non-existent fixture path. Inspecting the verifier's configuration would resolve this.{"candidate_loci": ["evidence_collection", "verification_plan"], "unresolved_distinction": "The fixture data/corpus-v998.json is confirmed missing. We need to determine whether the verifier configuration correctly references this fixture (meaning evidence_collection failed to provide it) or whether the verification plan itself specifies an incorrect fixture path or evidence type.", "selected_action": "act-01", "expected_information": "The verifier's declared command, evidence types, and direction rule will reveal whether the fixture path data/corpus-v998.json is a correct part of the plan (pointing to evidence_collection failure) or an erroneous reference (pointing to verification_plan failure).", "proposed_settlement": null}

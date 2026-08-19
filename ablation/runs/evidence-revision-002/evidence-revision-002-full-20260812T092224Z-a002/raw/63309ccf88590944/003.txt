@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the fixture file's mode-0 permissions were caused by a runtime environment process stripping read access externally, or by a verification-plan deficiency that provisions the fixture without correct permissions.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

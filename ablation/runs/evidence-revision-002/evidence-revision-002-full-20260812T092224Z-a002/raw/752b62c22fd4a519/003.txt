@@ -1,0 +1,11 @@
+Looking at this diagnostic state, I need to analyze the failure where `test_observed_failure` asserts the existence of `tests/fixtures/inventory-version-v999.json` which doesn't exist.
+
+**Candidate analysis:**
+- **implementation**: The test itself asserts existence of a fixture for version "v999" — a clearly non-existent/placeholder version number. The assertion message "stale fixture missing" comes from the test code itself, suggesting the test logic is faulty.
+- **environment/evidence_collection**: The fixture file might have been expected to be provisioned in the test environment but wasn't set up properly.
+
+**Key distinction:** Was the fixture `inventory-version-v999.json` supposed to exist (provisioning failure), or does the test incorrectly reference a fixture that was never intended to exist (test logic defect)?
+
+**Assessment:** The version "v999" is clearly a fabricated/placeholder version number — no real inventory system would have version 999. A well-formed test would either create its own fixtures during setup or reference real fixture files. The test incorrectly asserts the existence of a file that was never part of the codebase, making this a defect in the test implementation itself.
+
+{"candidate_loci": ["implementation", "environment", "evidence_collection"], "unresolved_distinction": "Whether the fixture inventory-version-v999.json was supposed to be provisioned in the environment (environment/evidence_collection) or whether the test incorrectly asserts the existence of a fixture for a fabricated version v999 that was never intended to exist (implementation).", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}

@@ -1,0 +1,15 @@
+Looking at the evidence, the key findings are:
+
+1. **act-03**: `tests/fixtures/example.py` has mode `0` (completely unreadable, restrictive)
+2. **act-07**: `tests/fixtures/example.py` is flagged as "out of date" — exists but content doesn't match expectations
+3. **act-06**: Isolated re-run of the test fails with exit code 101 (runtime failure, not compilation)
+4. **act-08**: Verifier maps nonzero→contradicts; the scenario is `corpus_scenario_unreadable_fixture`
+
+The fixture file is simultaneously unreadable (mode 0) and has stale/incorrect content. The test compiles and runs but fails at runtime. The scenario name suggests testing with an unreadable fixture, but the fixture's state goes beyond what a controlled test scenario would set up — mode 0 with out-of-date content indicates the test environment's fixture setup is broken, not that the implementation mishandled a properly-configured test case.
+
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "Whether the unreadable/out-of-date fixture file is an intentional test condition the implementation should handle (implementation failure) or a broken fixture setup in the test environment (environment failure).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

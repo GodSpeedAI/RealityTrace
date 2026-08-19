@@ -1,0 +1,7 @@
+Candidates: verifier, implementation, environment, evidence_collection
+- verifier: supported by `verifier_exit=101`, but no stderr/stack trace isolating a verifier-internal fault.
+- implementation: would need failed model output or mismatch evidence; absent.
+- environment: would need dependency/resource/config failure evidence; absent.
+- evidence_collection: metadata/artifact row exists, but FTS is empty and vector is all-zero; not enough to prove collection failure.
+Excluded: none
+Locus: unknown

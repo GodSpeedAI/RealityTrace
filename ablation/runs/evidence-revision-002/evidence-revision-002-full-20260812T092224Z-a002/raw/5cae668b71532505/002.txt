@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection", "environment"], "unresolved_distinction": "Whether tests/test_import.py is absent because the verification_plan specifies a wrong path, because projection failed to generate it, or because the environment's working directory is incorrect.", "selected_action": "act-05", "expected_information": "Whether tests/test_import.py resolves to an existing file in the working tree, distinguishing environment (wrong CWD) from verification_plan/projection (file genuinely absent).", "proposed_settlement": null}
+```

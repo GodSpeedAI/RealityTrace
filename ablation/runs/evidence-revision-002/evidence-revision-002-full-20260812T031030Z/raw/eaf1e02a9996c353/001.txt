@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "environment"], "unresolved_distinction": "The verifier exited with code 101 (typical Rust panic or compilation failure) but no actual error output is available. The dependency artifacts all compiled successfully, so the failure could be in the project's own code (implementation), a misconfigured test command (verification_plan), or a toolchain/environment mismatch (environment). We need to know what command the verifier ran and what error was produced.",
+ "selected_action": "act-03",
+ "expected_information": "The verifier's command line, evidence types, and direction rule will reveal what was being tested and whether the verification setup itself could cause exit code 101 (e.g., wrong target, malformed command, missing test specification).",
+ "proposed_settlement": null}
+```

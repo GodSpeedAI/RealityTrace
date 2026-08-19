@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "All 8 probes have been exhausted; the only missing component is the pytest module itself, but the prior 'environment' settlement was rejected as insufficient. The distinction is whether pytest was expected to be pre-provisioned (environment) versus whether the plan should have included an install step (verification_plan). No remaining action can resolve intent.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

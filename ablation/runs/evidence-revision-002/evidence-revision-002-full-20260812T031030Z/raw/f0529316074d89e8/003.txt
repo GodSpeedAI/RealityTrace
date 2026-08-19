@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verifier's command hardcodes the stale target name 'integration_tests' (verification_plan) or whether the target name is derived from the project/Cargo.toml state that the projection altered by renaming it to 'integration_tests_moved' (projection).", "selected_action": "act-03", "expected_information": "The exact verification command and configuration will reveal whether 'integration_tests' is explicitly specified in the plan's command string (confirming verification_plan) or whether the target name is resolved from project metadata (pointing to projection).", "proposed_settlement": null}
+```

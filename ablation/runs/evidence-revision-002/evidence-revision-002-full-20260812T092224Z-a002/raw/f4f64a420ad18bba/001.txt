@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": "The evidence shows only successful cargo dependency compilation artifacts and a verifier exit code of 101, but no actual error message or project-crate compilation output. The failure could be due to (a) the verifier being misconfigured or crashing itself, (b) a compilation error in the project source, or (c) an environment problem during the build.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal what the verifier was attempting, how it invoked the build, and whether the exit code 101 reflects a verifier-side panic versus a propagated build failure.",
+ "proposed_settlement": null}
+```

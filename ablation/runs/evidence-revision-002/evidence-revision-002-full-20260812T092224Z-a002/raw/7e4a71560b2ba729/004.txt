@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the environment genuinely lacks the required Rust toolchain for a project that legitimately requires cargo, versus the verification plan incorrectly specifying cargo when an alternative build approach is intended.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

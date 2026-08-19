@@ -1,0 +1,3 @@
+Candidates: verifier, evidence_collection, environment, implementation
+Excluded: evidence_collection (artifact-recorded), environment (no-environment-error), implementation (no-implementation-error)
+Locus: verifier

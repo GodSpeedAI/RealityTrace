@@ -1,0 +1,15 @@
+Looking at the evidence:
+- Exit code 101 (Rust panic) after successful compilation
+- Test `test_observed_failure` in `unit_tests.rs` fails in isolation with panic
+- The scenario is named `corpus_scenario_stale_fixture`
+- Act-01 found `tests/fixtures/example.py` was "out of date"
+- The verifier (cargo-test) ran correctly; test targets resolve; toolchain is available
+
+The scenario name and the stale fixture finding are the decisive signals. The test is intentionally exercising a stale-fixture condition, and the implementation panics (exit 101) instead of handling it gracefully. The verifier works, the test target exists, and the verification plan correctly sets up the stale fixture scenario — the bug is in the project's own code.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Whether the exit-101 panic originates from the project source code mishandling a stale fixture (implementation) or from the test plan incorrectly setting up fixture state (verification_plan). The scenario name 'corpus_scenario_stale_fixture' and act-01 finding the fixture 'out of date' strongly suggest the stale fixture is the intended test condition, but a panic rather than a clean assertion failure needs confirmation.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

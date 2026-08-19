@@ -1,0 +1,15 @@
+Looking at this diagnostic state, I need to assess whether the evidence supports `verification_plan` or `projection`, given that the previous attempt at `verification_plan` was rejected.
+
+Key analysis:
+- The error "no test target named `unit_tests`" with `unit_tests_moved` available suggests a renamed target
+- However, the critical unresolved question is whether the verifier command **explicitly names** `unit_tests` (verification_plan) or uses a **generic test invocation** resolved by the build system (projection)
+- The distinguishing evidence — the verifier's actual command configuration (act-02) — was never acquired
+- The previous `verification_plan` settlement was already rejected as EVIDENCE_INSUFFICIENT
+- No qualifying evidence has been obtained to conclusively resolve the distinction
+- We are at round 3/3 with no further evidence acquisition possible
+
+Without knowing whether the verifier explicitly names the stale target or delegates to generic target resolution, I cannot definitively attribute the failure to one locus over the other.
+
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Does the verifier command explicitly name the stale target `unit_tests` (verification_plan), or does it use a generic test invocation whose target resolution is governed by the build system (projection)?", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

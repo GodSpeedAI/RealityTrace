@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier"], "unresolved_distinction": "Whether the stale test target name `integration_tests` originates from the verifier's own built-in command configuration or from a command declared in the verification plan that the verifier merely executes.", "selected_action": "act-02", "expected_information": "Inspecting the verifier's configuration (command, evidence types, direction rule) will reveal whether the verifier itself hardcodes the `integration_tests` target name or delegates to the verification plan's declared command, directly distinguishing between the verifier and verification_plan loci.", "proposed_settlement": null}
+```

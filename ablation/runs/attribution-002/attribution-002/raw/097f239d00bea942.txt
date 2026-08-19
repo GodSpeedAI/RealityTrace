@@ -1,0 +1,7 @@
+Looking at the provenance chain for cep-15:
+
+- The evidence artifact exists (01KZH8DR4EDQKFBWEEBFJD0WNZ) but its content is effectively empty: the FTS index is blank and the vector embedding is all zeros.
+- The verifier executed (verifier_exit: 1) but had no meaningful evidence to work with.
+- The artifact was captured but contains no signal — no text, no semantic content — indicating the evidence collection layer failed to gather or record usable output from the system under test.
+
+Locus: evidence_collection

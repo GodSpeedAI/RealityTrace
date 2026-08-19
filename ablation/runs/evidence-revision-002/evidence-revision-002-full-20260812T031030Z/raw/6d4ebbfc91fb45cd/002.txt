@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "The verifier command from act-08 shows 'cargo test --test unit_tests' embedded directly in the verifier's own configuration. Is this stale target name hardcoded in the verifier's command template (verifier locus), or injected by a verification plan that specifies which targets to run (verification_plan locus)?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verifier"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment", "implementation"], "unresolved_distinction": "The key distinction is now largely resolved: act-01 confirmed that the required fixture data/corpus-v998.json is missing, while act-02, act-06, and act-07 rule out environment/permission/path issues, and act-08 confirms the model is valid. The remaining question is whether the test references the correct fixture path (implementation) versus the fixture simply never being collected (evidence_collection), but all environment-side checks pass and the test's error message is a deliberate fixture-presence check rather than a path-resolution error.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

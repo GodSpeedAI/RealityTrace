@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "environment_vs_verifier", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

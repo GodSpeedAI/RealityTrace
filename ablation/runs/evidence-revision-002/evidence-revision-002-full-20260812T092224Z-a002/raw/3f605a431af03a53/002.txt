@@ -1,0 +1,17 @@
+Looking at this diagnostic state, I need to determine why the fixture file has mode `0` (completely locked permissions).
+
+**Analysis of evidence:**
+- act-03: `tests/fixtures/sample_settlement_recorded.json` has mode `0`, is not readable, and is marked restrictive
+- act-04: Environment is standard — default paths, available toolchain, no special env assignments
+- act-05: The fixture file exists but is marked "stale"
+- act-06: Re-running in isolation reproduces the same failure
+- act-07: Verifier configuration is standard with no special env assignments
+
+The file having mode `0` is not a natural environment state — something in the setup/collection process stripped all permissions. The environment itself is otherwise clean (standard paths, available toolchain). The verification plan's configuration (act-07) is standard. This points to the evidence collection process incorrectly preparing the fixture file's permissions.
+
+```json
+{"candidate_loci": ["evidence_collection", "environment", "verification_plan"], "unresolved_distinction": "Whether the mode-0 permission on the fixture was imposed by the evidence collection setup process versus an inherent environment misconfiguration, though the otherwise-standard environment (act-04) and standard verifier config (act-07) strongly favor evidence_collection.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

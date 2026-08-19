@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "The source file authority.py imports from cep.scoring.common, which does not exist. The key question is whether the source code itself incorrectly references a non-existent module (implementation defect) or whether a build/projection step was supposed to generate or relocate the scoring module but failed to do so (projection defect).", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

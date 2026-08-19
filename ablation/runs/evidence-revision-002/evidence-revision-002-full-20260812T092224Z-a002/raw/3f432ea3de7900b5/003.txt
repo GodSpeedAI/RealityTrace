@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether cep.scoring is authored source missing from the repository tree (implementation defect) or an artifact that should have been generated from the semantic model via a code-projection step that failed to materialize (projection defect).", "selected_action": "act-05", "expected_information": "Whether the semantic model (.sea) declares scoring components (e.g., ScoreMetrics, recall, status_from_score) that should be projected into cep.scoring, which would indicate a projection defect; absence of such declarations would point to an implementation defect.", "proposed_settlement": null}
+```

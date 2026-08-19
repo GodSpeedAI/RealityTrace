@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether exit code 101 originates from a runtime panic in the project's own code (implementation) or from the verifier harness itself (verifier). No panic message, stack trace, or acquired observations exist to distinguish these.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

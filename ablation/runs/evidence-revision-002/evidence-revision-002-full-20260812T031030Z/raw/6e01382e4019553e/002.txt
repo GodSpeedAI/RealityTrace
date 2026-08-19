@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "All dependencies compiled successfully (fresh=true) but the verifier exited with code 101 (Rust panic). The key question is whether the test target binary exists and was correctly invoked — if it exists and was run, the panic likely originates from the implementation; if the target path doesn't resolve, the failure is in the verifier or environment setup.",
+ "selected_action": "act-03",
+ "expected_information": "Whether the test target or path referenced by the verification command resolves to an existing file in the working tree. If the target is missing, the locus is verifier or environment; if present, the panic likely comes from the implementation under test.",
+ "proposed_settlement": null}
+```

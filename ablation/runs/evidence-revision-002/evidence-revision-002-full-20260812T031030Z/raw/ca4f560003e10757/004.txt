@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "implementation", "verifier"], "unresolved_distinction": "Cannot determine whether exit 101 was caused by the implementation panicking on the unreadable fixture (tests/fixtures/example.py, mode 0 — environment), a logic error in the implementation code, or a verifier misconfiguration targeting a non-existent or wrong test path. No error message or main-crate artifact is available to disambiguate.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

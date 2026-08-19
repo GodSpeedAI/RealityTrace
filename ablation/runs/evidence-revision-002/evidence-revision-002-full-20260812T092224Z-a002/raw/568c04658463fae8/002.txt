@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "The exit code 101 could indicate a Rust compilation failure (implementation) or a verifier-internal panic (verifier). act-05 showed compile_error and act-03 showed a missing from_cli symbol, but we have not yet seen the specific compiler error message to confirm the root cause is in the project source versus a verifier misconfiguration.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

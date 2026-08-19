@@ -1,0 +1,3 @@
+Candidates: verifier, evidence_collection, environment, implementation
+Excluded: evidence_collection(silence), environment(silence), implementation(silence)
+Locus: verifier

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "environment"], "unresolved_distinction": "Whether the missing fixture tests/fixtures/inventory-version-v999.json was supposed to be committed as repository test data (implementation) or provisioned by an external environment setup step (environment) — no provisioning mechanism or setup script has been observed, and sibling fixtures exist normally in the same directory.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

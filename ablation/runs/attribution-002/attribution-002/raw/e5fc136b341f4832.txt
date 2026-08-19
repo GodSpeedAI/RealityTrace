@@ -1,0 +1,11 @@
+Looking at this failure case:
+
+- The test `test_corpus_scenario_assertion_bug` in `corpus_sr1.rs` failed at line 3 with a simple assertion `left == right` where `left: 2, right: 3`.
+- The build compiled successfully (`build-finished success: true`), all dependencies compiled cleanly, and the environment executed correctly.
+- The failure is a runtime assertion mismatch: the system under test produced a value of 2 where 3 was expected.
+- There is no evidence of an authority issue, evidence-collection problem, or projection error—the test ran and produced a concrete numerical result.
+- The verifier (the test itself) correctly caught a discrepancy between actual and expected behavior.
+
+The implementation under test returned an incorrect value (2 instead of the expected 3), indicating a logic defect in the code being verified, not in the verification apparatus itself.
+
+Locus: implementation

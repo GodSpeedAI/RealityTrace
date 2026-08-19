@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "authority"],
+  "unresolved_distinction": "Whether the PermissionError on 'tests/fixtures' is caused by incorrect filesystem permission bits on the directory itself (environment) versus the test runner process operating under an identity/context that lacks authority to traverse or read it despite nominally correct permissions (authority).",
+  "selected_action": "act-07",
+  "expected_information": "Filesystem permission bits (owner, group, other read/execute) on 'tests/fixtures' will reveal whether the directory ACLs are misconfigured (supporting environment) or reasonable-but-denied (supporting authority).",
+  "proposed_settlement": null
+}
+```

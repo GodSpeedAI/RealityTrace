@@ -1,0 +1,16 @@
+Looking at this diagnostic state, I need to assess what the evidence supports.
+
+Key observations:
+1. **Verifier exits 101** (Rust panic) — all dependencies compiled successfully (all `fresh: true`)
+2. **Fixture is both stale and unreadable**: `tests/fixtures/example.py` has mode `0` (unreadable) and is marked stale
+3. **Scenario name**: `corpus_scenario_unreadable_fixture` — the scenario explicitly involves an unreadable fixture
+4. **Verifier config** (act-07) looks reasonable: `cargo test` with direction rule `exit_code: 0→supports, nonzero→contradicts`
+5. Both prior concrete settlements were **rejected** — `environment` (round 2) and `verification_plan` (round 3), both for EVIDENCE_INSUFFICIENT
+
+The unresolved distinction is between whether the panic stems from the **verification plan**'s scenario design (unreadable + stale fixture triggering an unexpected panic path in the test) versus the **verifier**'s own configuration. The evidence is ambiguous: the unreadable fixture could be intentionally part of the plan's design but cause an unintended panic, or the verifier could be failing to handle this gracefully. Both concrete attempts were rejected, and no further evidence acquisition is possible.
+
+```json
+{"candidate_loci": ["verification_plan", "verifier"], "unresolved_distinction": "verification_plan vs verifier — whether the panic stems from the plan's scenario design (unreadable+stale fixture causing unexpected panic) or the verifier's own handling",
+  "selected_action": null, "expected_information": null,
+  "proposed_settlement": "unknown"}
+```

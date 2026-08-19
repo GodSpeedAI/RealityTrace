@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "The FTS shows only successful dependency compilation artifacts (all fresh:true) with no error message, yet the verifier exited 101 (Rust panic/compile-failure code). We cannot distinguish whether the main crate failed to compile (environment/toolchain issue), the test binary panicked at runtime (implementation bug), or the verifier's command/expectation is misconfigured.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's command line, expected evidence types, and direction rule will reveal what the verifier actually invoked and whether its configuration matches the project's build/test setup, helping distinguish verifier misconfiguration from implementation or environment failures.",
+ "proposed_settlement": null}
+```

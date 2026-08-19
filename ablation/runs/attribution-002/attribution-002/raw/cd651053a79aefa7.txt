@@ -1,0 +1,7 @@
+Looking at the evidence for case cep-08:
+
+- **verifier_exit: 2** — A non-zero, non-success exit code from the verifier itself.
+- **FTS empty** and **vector all zeros** — No meaningful textual or semantic evidence was captured.
+- The verifier failed to properly execute (exit code 2 typically indicates a usage/execution error in the verifier process), which is the direct cause of the recorded failure.
+
+Locus: verifier

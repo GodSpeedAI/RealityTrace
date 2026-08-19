@@ -1,0 +1,18 @@
+Candidates: verifier, evidence_collection, implementation, environment
+
+**Discriminating evidence per candidate:**
+- **verifier**: verifier_exit=4 (non-zero) could indicate verifier-internal fault, but could equally be a normal "tests failed" signal; no verifier stderr/stdout to discriminate.
+- **evidence_collection**: FTS payload is entirely empty `[fts]` and vector64 is all-zeros — the artifact 01KZH8DD0GSKG4GS3KW0BF66GM appears to contain no retrievable content, suggesting either nothing was captured or the artifact is empty.
+- **implementation**: No stdout/stderr/log content from the implementation under test is present to confirm an implementation defect.
+- **environment**: No environment signal (e.g., missing dependency, permission error) is present.
+
+**Exclusion analysis:**
+- verifier cannot be excluded — exit 4 is ambiguous without verifier semantics.
+- evidence_collection cannot be excluded — empty retrieval is consistent with a capture failure.
+- implementation cannot be excluded — no test output to the contrary.
+- environment cannot be excluded — no environmental error trace.
+
+No candidate can be affirmatively excluded by the available evidence. The retrieval context contains only a single metadata field (verifier_exit=4) plus an empty FTS block and an all-zero vector — this is insufficient to discriminate among the candidate loci.
+
+Excluded: (none — insufficient discriminating evidence)
+Locus: unknown

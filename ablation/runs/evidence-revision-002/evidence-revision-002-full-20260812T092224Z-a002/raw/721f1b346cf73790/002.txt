@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "Whether the exit-code-101 is caused by a missing source-level symbol (implementation) or by a misconfigured verifier command (verifier); environment is less likely since all dependency artifacts compiled successfully.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

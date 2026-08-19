@@ -1,0 +1,7 @@
+```json
+{"candidate_loci": ["environment", "verifier", "implementation"],
+ "unresolved_distinction": "The fixture tests/fixtures/example.py has mode 0 (completely inaccessible), which is abnormal. The key unresolved question is whether the verifier itself panics when it tries to read/compare the fixture (verifier locus), or whether the implementation under test panics because it cannot access the expected fixture (environment locus as root cause, with implementation failing to handle the I/O error gracefully). Understanding the verifier's command and evidence-collection flow will clarify who attempts the file access that triggers the panic.",
+ "selected_action": "act-01",
+ "expected_information": "The verifier's configuration will reveal whether the verifier directly reads the fixture file (suggesting verifier locus) or invokes the implementation binary which then accesses the fixture (suggesting environment/implementation locus). It will also show whether the verifier's command references tests/fixtures/example.py and how evidence is collected.",
+ "proposed_settlement": null}
+```

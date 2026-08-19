@@ -1,0 +1,7 @@
+Looking at the evidence:
+
+- The SQL record shows `verifier_exit: 101`, a non-zero exit indicating the verifier itself failed or crashed during execution.
+- The FTS context is empty, and the graph/vector provide only linkage and embedding metadata with no indication of implementation output or projection mismatch.
+- The failure is directly tied to the verifier's own process exiting abnormally (code 101), rather than an implementation producing incorrect results, a projection mapping issue, or an environment/authority problem.
+
+Locus: verifier

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is cargo the correct and intended build tool for repo 'ag' (making its absence an environment provisioning failure), or is the verifier misconfigured to invoke cargo when a different tool should be used?",
+ "selected_action": "act-07",
+ "expected_information": "Whether the Rust toolchain (cargo/rustc) is expected to be installed in the execution environment and whether designated working directories are writable, confirming whether this is an environment provisioning gap versus a verifier misconfiguration.",
+ "proposed_settlement": null}
+```

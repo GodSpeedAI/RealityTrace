@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation", "projection"], "unresolved_distinction": "Whether tests/test_inventory.py was a test target the implementation or projection was expected to produce but failed to, or whether the verification plan references a wrong or stale path that was never intended to exist.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

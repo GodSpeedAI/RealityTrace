@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier"], "unresolved_distinction": "Whether the stale test target name `integration_tests` was declared by the verification_plan (which should track the rename to `integration_tests_moved`) or hardcoded in the verifier's own configuration.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verification_plan"}
+```

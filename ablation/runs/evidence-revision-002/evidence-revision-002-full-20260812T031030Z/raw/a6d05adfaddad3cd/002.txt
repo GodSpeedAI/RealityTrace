@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is the environment correctly expected to provide the Rust toolchain (cargo) for this Rust repo but failing to provision it, or is the verifier misconfigured to invoke cargo when the scenario should use a different command?",
+ "selected_action": "act-03",
+ "expected_information": "The verifier's declared command, evidence types, and direction rule will reveal whether invoking cargo is the intended behavior for this scenario or a configuration error.",
+ "proposed_settlement": null}
+```

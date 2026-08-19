@@ -1,0 +1,13 @@
+Looking at the evidence accumulated across rounds:
+
+- **act-04**: Re-running the failing test in isolation produced exit code 101 (panic) — the test binary compiled and ran but the code panicked at runtime.
+- **act-07**: All referenced test targets resolve to existing files — no misconfigured test path.
+- **act-08**: Verifier is standard `cargo-test` with correct exit-code semantics — no verifier misconfiguration.
+- **act-01/02/03**: Toolchain available, permissions fine, existing fixtures present; `example-v999.py` is intentionally absent (the scenario name `corpus_scenario_missing_fixture` suggests the test exercises a missing-fixture code path).
+- **act-06**: No `.sea` model to validate — not relevant.
+
+All infrastructure (toolchain, paths, verifier config, build) checks out. The only remaining explanation is that the project's own code panics when handling the scenario — the implementation fails to gracefully process the missing fixture.
+
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Whether exit-101 stems from a runtime panic in the project's own code (implementation) versus a misconfigured test target (verification_plan) or broken verifier (verifier) — now resolved: all infrastructure checks pass and the isolated re-run confirms a code-level panic.",
+ "selected_action": null, "expected_information": null,
+ "proposed_settlement": "implementation"}

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Whether the missing symbol format_matches_as_text indicates the implementation failed to provide a required function (causing the Rust compiler exit 101), or whether the verification plan/verifier incorrectly references a function that was never part of the implementation's scope.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

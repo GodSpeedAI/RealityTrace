@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether pytest is expected to be present in the environment (environment defect) or the verifier was misconfigured to invoke pytest instead of an available test harness.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

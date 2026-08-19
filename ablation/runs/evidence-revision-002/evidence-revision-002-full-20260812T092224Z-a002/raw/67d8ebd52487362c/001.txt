@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "Verifier exit code 101 is the standard Rust panic exit code, but it is unclear whether the panic originates from a bug in the implementation under test, an environment/dependency configuration issue (missing files, permissions), or the verifier tooling itself. The FTS evidence only shows successful build artifacts; no error message or trace is visible.",
+ "selected_action": "act-04",
+ "expected_information": "The actual panic message, backtrace, and stderr/stdout output from re-running the failing test, which will pinpoint whether the failure is a code-level bug, an environment problem, or a verifier misconfiguration.",
+ "proposed_settlement": null}
+```

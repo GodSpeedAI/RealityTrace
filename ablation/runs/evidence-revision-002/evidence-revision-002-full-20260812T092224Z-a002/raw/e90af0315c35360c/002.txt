@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the mode-0 permission on tests/fixtures was set by environment provisioning (e.g., incorrect chmod during setup) or by the evidence/harness collection pipeline creating or modifying the directory with wrong permissions.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

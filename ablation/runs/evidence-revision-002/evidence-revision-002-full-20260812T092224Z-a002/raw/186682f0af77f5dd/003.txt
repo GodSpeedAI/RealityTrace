@@ -1,0 +1,12 @@
+Looking at this diagnostic state, I need to analyze the failure where `tests/fixtures/inventory-version-v999.json` is missing, causing a test assertion failure.
+
+Key evidence gathered:
+- act-07 confirms the fixture file `tests/fixtures/inventory-version-v999.json` does NOT exist in the working tree
+- Another fixture `tests/fixtures/sample_settlement_recorded.json` DOES exist and matches expectations
+- Environment is healthy (act-02: toolchain available, act-04: permissions fine)
+- Test fails consistently in isolation (act-01)
+- Previous "implementation" settlement was REJECTED for EVIDENCE_INSUFFICIENT
+
+The critical distinction is whether this fixture was supposed to be provisioned/collected as part of test evidence setup but wasn't, versus whether the test code itself is wrong to expect it. Since "implementation" was already rejected and all environment checks pass, the fixture data that this test depends on was not collected/provisioned in the working tree.
+
+{"candidate_loci": ["evidence_collection", "environment", "implementation"], "unresolved_distinction": "Whether the fixture inventory-version-v999.json was supposed to be provisioned/collected as test evidence but was omitted from the evidence collection process, versus whether it was expected to exist as a committed artifact that was never created.", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}

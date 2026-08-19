@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "projection"], "unresolved_distinction": "Whether the PermissionError on 'tests/fixtures' arises from the runtime environment's filesystem permission configuration (e.g., sandbox restrictions or wrong user context) versus the projection step having created the directory with restrictive permissions during artifact generation.", "selected_action": "act-07", "expected_information": "The concrete filesystem permission bits and ownership of 'tests/fixtures' and its parent path, revealing whether permissions are misconfigured at the environment level or were set incorrectly during projection.", "proposed_settlement": null}
+```

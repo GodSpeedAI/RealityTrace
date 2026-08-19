@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether the verifier exit code 101 originates from a compilation or test failure in the target project (ast-grep-mcp-rs), or from a malfunction in the verifier infrastructure itself — the FTS output shows many dependency artifacts marked fresh but no main crate artifact or explicit error message.", "selected_action": "act-08", "expected_information": "The verifier's command, expected evidence types, and direction rule will reveal whether the verifier is correctly configured to build/test the project and whether exit 101 is a signal the verifier is designed to interpret or an unexpected crash.", "proposed_settlement": null}
+```

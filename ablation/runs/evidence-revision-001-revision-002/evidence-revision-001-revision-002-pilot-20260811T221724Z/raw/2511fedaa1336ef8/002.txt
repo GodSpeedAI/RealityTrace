@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "declared_model"], "unresolved_distinction": "Whether the malformed TOML registry (invalid `patterns` array at line 10) belongs to the verification plan's configuration for how tests are run, or to the declared semantic model's own registry specification that is being validated.", "selected_action": null, "expected_information": null, "proposed_settlement": "declared_model"}
+```

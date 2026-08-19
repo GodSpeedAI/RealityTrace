@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "The symbol format_matches_as_text is absent from the codebase, the build succeeded, and the verifier panicked (exit 101). It remains unclear whether the implementation failed to provide an expected function, or whether the verification plan references a symbol that was never part of the project contract.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

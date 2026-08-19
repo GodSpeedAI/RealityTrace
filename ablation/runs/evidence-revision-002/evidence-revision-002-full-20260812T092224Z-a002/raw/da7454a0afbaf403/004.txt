@@ -1,0 +1,13 @@
+Looking at this diagnostic state:
+
+- The failure is an `ImportError`: `iter_reality_gap_case_files` is missing from `cep.inventory`, imported by `cep.validation`, triggered via `cep.cli`.
+- Candidate loci: `implementation` vs `projection`.
+- The concrete settlement `implementation` was already **rejected** in round 1 (EVIDENCE_INSUFFICIENT).
+- Observations confirm the symbol is genuinely absent, but provide **no qualifying evidence** to determine whether it was a hand-written omission (`implementation`) or a failed code-generation step (`projection`).
+- Round limit reached; no further evidence acquisition is possible. The key distinguishing action (`act-06` — validate the semantic model) was never executed.
+
+The evidence is insufficient to resolve the implementation/projection distinction, and the prior concrete claim was already rejected.
+
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the missing symbol iter_reality_gap_case_files in cep.inventory is a hand-written code defect (implementation) or a failure of code generation from the declared semantic model (projection).", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

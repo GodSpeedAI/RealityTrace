@@ -1,0 +1,7 @@
+Looking at the evidence:
+
+- **verifier_exit: 101** — The verifier process itself terminated with a non-zero (error) exit code.
+- The all-zero vector and empty FTS indicate no meaningful verification output was produced, consistent with the verifier crashing or failing before completing.
+- The provenance trail shows evidence was recorded and linked, so collection and authority appear intact; the failure manifests at the verification step itself.
+
+Locus: verifier

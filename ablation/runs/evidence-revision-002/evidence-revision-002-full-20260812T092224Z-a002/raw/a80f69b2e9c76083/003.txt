@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the PermissionError on 'sample_settlement_recorded.json' stems from a pre-existing restrictive filesystem permission in the execution environment, or was introduced by the evidence-collection apparatus locking or creating the fixture with incorrect permissions.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

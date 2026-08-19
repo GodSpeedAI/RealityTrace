@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the PermissionError is caused by an environment-level filesystem permission misconfiguration on the fixture file (environment), or by the test harness/evidence pipeline failing to properly provision the fixture with correct read permissions (evidence_collection).", "selected_action": "act-06", "expected_information": "Whether the fixture file exists and what its actual permission bits are, distinguishing a filesystem-level permission issue from a fixture-provisioning issue.", "proposed_settlement": null}
+```

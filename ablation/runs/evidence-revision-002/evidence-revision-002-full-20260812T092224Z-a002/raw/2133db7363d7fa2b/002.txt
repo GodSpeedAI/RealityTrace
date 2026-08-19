@@ -1,0 +1,7 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"],
+ "unresolved_distinction": "Whether the .corpus-tmpfix directory was already non-writable due to a pre-existing environment issue, or was created/set non-writable by the evidence collection harness that prefixed TMPDIR with it.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

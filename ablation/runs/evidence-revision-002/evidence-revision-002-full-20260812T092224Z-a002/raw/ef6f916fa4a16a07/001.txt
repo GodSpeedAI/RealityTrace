@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Is the `.corpus-tmpfix` directory not writable due to a systemic environment misconfiguration (wrong filesystem permissions), or because the evidence-collection harness failed to properly create/permission this working directory during setup?",
+ "selected_action": "act-05",
+ "expected_information": "Whether the required working directories (including `.corpus-tmpfix`) exist and are writable, clarifying if the environment itself lacks proper permissions or if the harness should have configured them.",
+ "proposed_settlement": null}
+```

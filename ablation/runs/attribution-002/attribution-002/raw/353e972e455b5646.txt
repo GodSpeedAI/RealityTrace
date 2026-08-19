@@ -1,0 +1,10 @@
+Looking at the provenance for case cep-15:
+
+1. **Evidence**: An evidence artifact (`01KZH8DR4EDQKFBWEEBFJD0WNZ`) was recorded and linked to the case — provenance chain is intact.
+2. **Verifier**: The verifier executed and produced `verifier_exit: 1`, a non-zero exit code.
+3. **Format**: The input was `pytest-progress`, and the exit code 1 in a pytest context standardly indicates that tests were collected and run but at least one failed.
+4. **Retrieval signals**: The empty FTS and all-zero vector indicate no meaningful content discrepancies or anomalies in the pipeline — the infrastructure (evidence collection, projection, verification plan) functioned; the verifier simply reported a negative result.
+
+The verifier ran successfully (it produced a definitive exit code, not a crash), evidence was collected and properly linked, and the provenance chain is unbroken. Exit code 1 from a pytest-progress verifier means the subject under test did not pass the checks — the system being verified is at fault.
+
+Locus: implementation

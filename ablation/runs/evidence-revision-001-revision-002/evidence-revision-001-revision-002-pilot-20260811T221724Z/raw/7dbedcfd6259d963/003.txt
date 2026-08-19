@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "evidence_collection"], "unresolved_distinction": "Whether the verifier/evidence pipeline was configured to produce data/corpus-v998.json but failed to do so (evidence_collection), or whether the verification plan references a fixture path that was never intended to be created (verification_plan).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

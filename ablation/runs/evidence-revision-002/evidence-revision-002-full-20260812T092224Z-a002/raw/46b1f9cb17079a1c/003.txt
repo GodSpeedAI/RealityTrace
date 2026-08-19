@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the verifier's configuration correctly designates pytest as the required test runner (making the missing module an environment setup failure) or whether the verification plan incorrectly assumed pytest when the project should have used a different invocation method.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's configured command and evidence type will reveal whether pytest was intentionally specified as the test runner for this project. If the configuration explicitly requires pytest, the failure is an environment setup issue; if the configuration is generic or incorrect, the verification plan bears responsibility.",
+ "proposed_settlement": null}
+```

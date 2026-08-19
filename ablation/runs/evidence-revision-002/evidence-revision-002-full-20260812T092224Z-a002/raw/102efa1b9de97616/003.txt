@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 originates from a runtime panic in the application code (implementation) or from a verifier/verification_plan misconfiguration. Build artifacts are all fresh with no compiler errors, test targets resolve, fixtures exist, and files are accessible — strongly pointing to a runtime panic, but no actual error output has been captured to confirm.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

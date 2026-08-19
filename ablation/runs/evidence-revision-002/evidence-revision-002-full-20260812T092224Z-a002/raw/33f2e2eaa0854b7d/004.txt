@@ -1,0 +1,1 @@
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}

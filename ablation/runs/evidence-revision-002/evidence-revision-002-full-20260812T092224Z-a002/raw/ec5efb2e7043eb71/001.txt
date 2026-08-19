@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the PermissionError stems from inherent filesystem permission settings in the test environment (e.g., fixture file committed or generated with restrictive permissions) or was introduced by the evidence collection process that set up the test workspace.", "selected_action": "act-02", "expected_information": "The actual filesystem permissions (owner, group, mode bits) on tests/fixtures/sample_settlement_recorded.json and whether they explain the [Errno 13] denial, distinguishing an environment-level permission misconfiguration from an artifact introduced during collection.", "proposed_settlement": null}
+```

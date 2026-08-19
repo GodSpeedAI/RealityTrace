@@ -1,0 +1,16 @@
+Looking at this diagnostic state, I need to assess whether the evidence supports a concrete locus.
+
+**Key observations:**
+1. The failure is `TMPDIR is not writable` for `.corpus-tmpfix` — a directory whose name clearly associates it with the corpus/evidence-collection infrastructure.
+2. When the test is re-run in isolation under the default environment (act-04), it **passes** — confirming the failure only manifests under the harness-configured `TMPDIR` assignment.
+3. The harness explicitly sets `TMPDIR=/home/sprime01/projects/cep/.corpus-tmpfix` (act-05, act-08).
+4. Two concrete settlement attempts on `evidence_collection` were both rejected (EVIDENCE_INSUFFICIENT).
+
+**Analysis of the unresolved distinction:**
+The critical question is whether `.corpus-tmpfix` was created without proper write permissions by the harness (evidence_collection) or whether the underlying filesystem had restrictive permissions applied at the system level (environment). The observations confirm the directory is not writable but provide **no evidence about its mode, ownership, or provenance** — i.e., who created it or why it lacks write permissions. This is precisely the information needed to distinguish between the two candidate loci, and no further evidence acquisition is possible.
+
+Since `evidence_collection` has been rejected twice and the remaining distinction between `evidence_collection` and `environment` cannot be resolved with the available evidence, the appropriate settlement is `unknown`.
+
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "evidence_collection vs environment — whether .corpus-tmpfix is non-writable due to harness setup failure or systemic filesystem permissions", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

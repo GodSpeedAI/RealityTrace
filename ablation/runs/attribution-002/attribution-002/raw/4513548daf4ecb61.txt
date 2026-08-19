@@ -1,0 +1,12 @@
+## Analysis
+
+**Provenance walk:**
+
+1. **Graph**: Case `cep-12` is linked to repo `cep` and to an evidence artifact (`01KZH8DMV6QEMCNDTD47E7X795`).
+2. **SQL**: An evidence record exists with `verifier_exit: 1` and `stdin_format: pytest-progress`. The case was processed and evidence was nominally recorded.
+3. **FTS**: Completely empty — no textual content was indexed from the evidence artifact.
+4. **Vector**: All 64 dimensions are zero — no semantic content was extracted.
+
+**Interpretation**: The evidence artifact identifier exists, but its actual content was never captured or indexed. The FTS index is empty and the vector is a null embedding, meaning the evidence pipeline produced an artifact reference without substance. The verifier exited with code 1, but the underlying issue is that the evidence content was not properly collected or rendered — leaving the verification process with nothing meaningful to evaluate.
+
+Locus: evidence_collection

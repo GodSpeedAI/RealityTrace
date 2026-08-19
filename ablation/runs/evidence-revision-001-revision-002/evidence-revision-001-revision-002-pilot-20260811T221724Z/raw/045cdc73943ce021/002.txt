@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "evidence_collection"], "unresolved_distinction": "Whether the test harness (verifier) has a bug referencing a fixture it should manage, or whether evidence_collection failed to persist the required fixture data/corpus-v998.json that the test legitimately expects.", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

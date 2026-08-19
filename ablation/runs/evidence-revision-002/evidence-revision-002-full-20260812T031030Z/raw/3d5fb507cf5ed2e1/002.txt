@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether the Rust/cargo toolchain is genuinely absent from the execution environment (environment), or the verifier configuration is invoking cargo incorrectly when a different toolchain path or build command was expected (verifier).", "selected_action": "act-07", "expected_information": "Whether the required cargo/Rust toolchain and designated working directories are present and writable in the execution environment, which would confirm or refute the missing-toolchain hypothesis versus a verifier misconfiguration.", "proposed_settlement": null}
+```

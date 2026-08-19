@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": "Whether exit code 101 stems from a verifier misconfiguration (wrong command/inputs), a runtime panic in the implementation under test, or an environment/toolchain issue during build or execution", "selected_action": "act-01", "expected_information": "The verifier's command line, evidence-type expectations, and direction rule will reveal whether the verification was correctly configured to build and run the ast-grep-mcp-rs target, or whether a misconfigured verifier caused the non-101 exit", "proposed_settlement": null}
+```

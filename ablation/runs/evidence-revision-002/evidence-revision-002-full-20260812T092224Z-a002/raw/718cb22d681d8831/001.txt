@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "The fixture file contains malformed JSON (trailing '\\n# stale\\n' after the closing brace). Is this a broken test fixture in the codebase (implementation), or was the file corrupted by an evidence-recording/settlement process that appended the stale marker (evidence_collection)?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

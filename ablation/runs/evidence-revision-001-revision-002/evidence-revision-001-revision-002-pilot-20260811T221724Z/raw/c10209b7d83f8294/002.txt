@@ -1,0 +1,12 @@
+Looking at this diagnostic state, I need to determine whether the stale test-target name `unit_tests` comes from the verification plan's specification or the verifier's own command configuration.
+
+**Key evidence from act-02:** The verifier's command line is `cargo test --offline --message-format json --test unit_tests` with "variable assignments prefixed to the command: (none)". This means the target name `unit_tests` is baked directly into the verifier's own fixed command — no verification-plan variables or parameters are being injected to supply or override the target name. The verifier independently hardcodes the now-stale target.
+
+Since the previous settlement of `verification_plan` was rejected for insufficient evidence, and act-02 directly shows the verifier's own configuration carries the stale target with no external plan-derived input, the evidence points to the verifier's command configuration as the failure locus.
+
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale target name `unit_tests` is injected by the verification plan as a parameter (plan-owned) or is a fixed, hardcoded element of the verifier's own command configuration (verifier-owned).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verifier"}
+```

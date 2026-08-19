@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Is the malformed fixture file (sample_settlement_recorded.json with trailing '# stale' comment causing JSONDecodeError) a defect in the repo's committed test data/implementation, or was it improperly generated/collected as evidence?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

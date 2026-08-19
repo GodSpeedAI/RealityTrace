@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the fixture tests/fixtures/inventory-version-v999.json was expected to be provisioned by the environment (making this an environment failure) or whether the test incorrectly references a fixture that was never intended to exist (making this a verification_plan failure). The suspicious version number v999 and the 'stale fixture' label suggest the test may be probing for deliberately-absent data, but the fixture could also simply be missing from the working tree.",
+ "selected_action": "act-02",
+ "expected_information": "Inspecting the verifier configuration will reveal whether the verification plan deliberately expects this fixture to be absent (confirming verification_plan failure) or whether it assumes the fixture should exist (pointing to environment failure).",
+ "proposed_settlement": null}
+```

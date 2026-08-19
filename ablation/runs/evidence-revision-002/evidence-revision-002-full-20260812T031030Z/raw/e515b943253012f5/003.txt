@@ -1,0 +1,15 @@
+Looking at this case, I need to synthesize all evidence gathered across rounds 1-3.
+
+**Key facts:**
+- Verifier exit code 101 = Rust panic (runtime or compile-time)
+- `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` is prefixed to the command — a path that literally does not exist
+- All dependency crates compiled successfully (all "fresh": true)
+- No main-crate (ast-grep-mcp-rs) artifact appears in the FTS, suggesting either a compile failure or runtime panic in the project itself
+- All test targets resolve to existing files (act-07)
+- Toolchain is available (act-04)
+
+**Analysis:** The distinction between `implementation` and `verification_plan` hinges on whether the `AST_GREP_CONFIG` env var is an intentional test parameter or a misconfiguration. The config path name (`nonexistent-corpus-config.toml`) reads as deliberately descriptive — a planned test of error handling. Exit 101 (panic) on encountering a missing config file indicates the implementation fails to handle this gracefully, which is an implementation defect. If it were a verification_plan issue (wrong path), we'd more likely see a "file not found" error with a non-panic exit code, or the plan would reference a file that the test harness expected to exist. The panic behavior points to the code itself not defending against a missing config path.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether exit 101 is caused by the implementation panicking on a deliberately-set nonexistent AST_GREP_CONFIG path (implementation defect), or by the verification plan incorrectly specifying that path (verification_plan defect). The panic exit code and deliberate-looking path name lean toward implementation.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

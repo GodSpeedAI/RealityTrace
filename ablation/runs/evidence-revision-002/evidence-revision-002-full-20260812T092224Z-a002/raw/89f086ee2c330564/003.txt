@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 reflects a genuine compilation or test failure in the project's own implementation code, or a misconfigured verifier invocation — the evidence shows all dependencies compiled successfully (fresh: true) with no error output captured.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

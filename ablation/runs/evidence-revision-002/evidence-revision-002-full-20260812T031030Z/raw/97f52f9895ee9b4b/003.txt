@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "Whether the exit code 101 reflects a runtime panic in the implementation under test versus a misconfigured verifier that invokes the wrong target or command, given that the FTS evidence shows all dependencies compiling successfully but no error output from the verification step itself is visible.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

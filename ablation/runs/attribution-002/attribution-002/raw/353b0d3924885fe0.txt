@@ -1,0 +1,11 @@
+Candidates: implementation, verification_plan, environment, verifier
+
+Excluded:
+- **environment** — build-finished with `success:true`; all dependencies compiled; no env errors
+- **verifier** — cargo compiled and executed the test correctly; produced a clear assertion-failure result with exit code 101; no verifier malfunction
+- **evidence_collection** — full build log, test output, and SQL/graph/vector artifacts were all captured and are present in context
+- **verification_plan** — the test is a simple `assert_eq!` at line 3 of a corpus scenario test; there is no indication of a malformed plan, missing step, or plan-level error; the test was discovered, compiled, and invoked properly
+
+Settling: The assertion `left == right` with `left: 2, right: 3` shows the code under test produced a value of 2 where the expected correct value is 3. The build chain, verifier, evidence pipeline, and test harness all functioned correctly. The remaining explanation is that the implementation under test computes an incorrect result (e.g., off-by-one, missing item, incorrect count).
+
+Locus: implementation

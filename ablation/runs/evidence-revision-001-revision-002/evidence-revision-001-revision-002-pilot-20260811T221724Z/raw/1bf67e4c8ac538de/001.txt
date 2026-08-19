@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is the missing symbol iter_reality_gap_case_files absent from cep/inventory.py because the source implementation never defined it (implementation), or because a code-generation/projection step failed to emit it into the expected module location (projection)?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

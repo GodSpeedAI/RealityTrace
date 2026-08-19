@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "All dependencies compiled successfully (fresh: true), yet the verifier exited 101 (Rust panic). We cannot distinguish whether the verifier's command/configuration is incorrect (pointing to a wrong target or invoking a bad command) or the implementation has a genuine runtime panic.",
+ "selected_action": "act-08",
+ "expected_information": "The verifier's configured command, evidence types, and direction rule will reveal whether the verification is invoking the correct binary/target correctly, or whether the configuration itself could cause the exit-101 failure.",
+ "proposed_settlement": null}
+```

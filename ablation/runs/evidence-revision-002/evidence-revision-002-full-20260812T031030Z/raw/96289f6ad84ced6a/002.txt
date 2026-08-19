@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Whether exit code 101 stems from a compilation error in the project's own source code (implementation), from the verification command referencing a nonexistent or incorrect test target (verification_plan), or from a misconfigured verifier harness (verifier). The FTS shows all dependencies compiling but provides no error from the main crate build.",
+ "selected_action": "act-02",
+ "expected_information": "The verifier's actual command, evidence types, and declared direction rule will reveal whether the verification command targets a valid test binary/path and whether the harness configuration is correct, helping distinguish verification_plan or verifier misconfiguration from an implementation-level compilation failure.",
+ "proposed_settlement": null}
+```

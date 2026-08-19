@@ -1,0 +1,11 @@
+Looking at the diagnostic state, I need to evaluate the failure where a test expects `tests/fixtures/inventory-version-v999.json` to exist but it doesn't. The previous "environment" settlement was rejected for insufficient evidence, and we're at the final round (3/3).
+
+Key reasoning:
+- The fixture name "inventory-version-v999" with version 999 appears to be an artificially generated test artifact, not a naturally committed repository file.
+- The assertion message "stale fixture missing" suggests this fixture represents a recorded/observed state that should have been provisioned.
+- Since "environment" was already rejected, and the fixture pattern suggests it was meant to be provisioned by a setup/collection process, "evidence_collection" is the strongest remaining candidate.
+- We're at round 3/3 with no qualifying evidence for a concrete environment claim, so taking another action risks being unable to settle.
+
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the missing fixture tests/fixtures/inventory-version-v999.json was a committed repository artifact absent from the working tree (environment) or a fixture that should have been provisioned by the evidence-collection or test-setup pipeline (evidence_collection).", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["projection", "verification_plan"], "unresolved_distinction": "The file tests/test_inventory.py does not exist, but there is no evidence about whether the projection step was supposed to generate it (projection failure) or whether the verification_plan references a path that was never part of any projection output (verification_plan failure). Prior settlement on projection was rejected as EVIDENCE_INSUFFICIENT, and no available action can reveal what the projection step intended to produce.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

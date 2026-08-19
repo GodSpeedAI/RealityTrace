@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier"], "unresolved_distinction": "Whether the stale reference to test target `unit_tests` originates from the verification plan's declared command or is hardcoded in the verifier's own built-in configuration.", "selected_action": "act-07", "expected_information": "Whether the verifier's configuration contains a hardcoded reference to the `unit_tests` test target, or whether the command referencing it is supplied externally by the verification plan.", "proposed_settlement": null}
+```

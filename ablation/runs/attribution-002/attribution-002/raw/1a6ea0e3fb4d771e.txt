@@ -1,0 +1,20 @@
+Candidates: implementation, verifier, verification_plan, environment, evidence_collection
+
+**Reasoning through each candidate:**
+
+- **implementation**: Plausible by default — verifier_exit=1 with pytest-progress format typically signals a failing test, which often points to an implementation bug. However, no test output, assertion text, traceback, or source artifact content is available (FTS is empty `[fts]`, vector is all-zeros). No evidence confirms this.
+
+- **verifier**: Plausible — verifier_exit=1 could reflect a verifier-side crash or misconfiguration rather than a genuine test failure. But no stderr, no verifier logs, and no abnormal signal info are present to distinguish a verifier fault from a normal test failure exit.
+
+- **verification_plan**: Plausible — the plan could specify an inapplicable or malformed check. But no plan artifact, spec, or schema detail is available to confirm or refute.
+
+- **environment**: Plausible — a missing dependency, wrong Python version, or path issue could cause exit 1. But no environment manifest, dependency list, or platform info is present.
+
+- **evidence_collection**: The `[fts]` block is empty and the semantic vector is all-zeros, suggesting minimal or no textual evidence was captured. However, this describes the *quality* of recorded evidence, not necessarily the *cause* of the original failure.
+
+**Exclusion check:**
+No candidate can be excluded by positive evidence. The F-28 asymmetric friction on `declared_model` is not triggered because I am not considering it. Verifier, verification_plan, implementation, and environment each remain possible — none has been explicitly excluded with stated evidence.
+
+Excluded: *(none — insufficient evidence to exclude any)*
+
+Locus: unknown

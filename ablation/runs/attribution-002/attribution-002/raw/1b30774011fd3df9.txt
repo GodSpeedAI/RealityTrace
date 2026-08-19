@@ -1,0 +1,7 @@
+Candidates: verifier, implementation, verification_plan, environment  
+- verifier: support would require verifier-internal panic/error/stack trace; only `verifier_exit=101` is shown, with no verifier log.  
+- implementation: support would require failed assertion, output mismatch, or SUT crash evidence; none shown.  
+- verification_plan: support would require invalid plan/stdin schema or scenario mismatch evidence; none shown.  
+- environment: support would require setup, dependency, permission, or resource error evidence; none shown.  
+Excluded: none  
+Locus: unknown

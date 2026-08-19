@@ -1,0 +1,15 @@
+Looking at this diagnostic state, I need to assess what's known and what remains unresolved at this final round.
+
+**Key evidence summary:**
+- Exit code 101 (Rust panic) occurs during verification
+- `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` is injected by the verification setup (act-05, act-07)
+- The test **passes** in isolation under default environment (act-04, exit 0)
+- All referenced files, targets, and fixtures resolve correctly (act-01, act-03, act-08)
+
+**The unresolved distinction:** The verification plan injects a path to a nonexistent config file. This could mean (a) the verification plan is *wrong* to inject that path, or (b) the implementation is *wrong* to panic instead of gracefully handling a missing config. Both are equally consistent with all observed evidence — the test passes without the env var, and panics with it.
+
+**Why no further action helps:** This is round 3/3. The previous concrete attempt at `verification_plan` was rejected as EVIDENCE_INSUFFICIENT. The core ambiguity — whether the nonexistent config path is an intentional test scenario (making this an implementation bug) or an erroneous plan detail — cannot be resolved by any available action (filesystem, symbols, fixtures, toolchain all already checked and clear).
+
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Whether the injected AST_GREP_CONFIG=/nonexistent-corpus-config.toml path is an erroneous detail in the verification plan (plan bug) or an intentional test of missing-config handling that the implementation fails by panicking with exit code 101 (implementation bug) — both are fully consistent with all acquired observations.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

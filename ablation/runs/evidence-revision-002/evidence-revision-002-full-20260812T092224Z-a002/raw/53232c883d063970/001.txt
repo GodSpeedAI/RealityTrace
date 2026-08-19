@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "environment"], "unresolved_distinction": "Whether verifier exit code 101 originates from a compilation error in the project's own source code (implementation) versus an environment/toolchain problem such as missing dependencies or incorrect build configuration (environment). The FTS evidence shows all dependency crates compiled successfully with fresh artifacts, but no artifact for the ast-grep-mcp-rs project target itself appears, suggesting the failure may occur when compiling the project's own code—but without the actual error output we cannot rule out an environment cause.",
+ "selected_action": "act-07",
+ "expected_information": "Re-running the failing test in isolation will produce the actual compiler or runtime error message, revealing whether the failure is a source-code error (pointing to implementation), a missing toolchain/resource error (pointing to environment), or a test harness issue (pointing to verifier).",
+ "proposed_settlement": null}
+```

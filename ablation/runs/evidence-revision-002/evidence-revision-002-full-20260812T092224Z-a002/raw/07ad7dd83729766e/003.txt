@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is the restricted PATH=/usr/bin:/bin that excludes cargo a property of the execution environment itself (cargo not installed or not on PATH), or is it imposed by a misconfigured verifier that should be setting a broader PATH or invoking cargo via its full install path?", "selected_action": "act-04", "expected_information": "The verifier's declared command, environment variable assignments (especially PATH), and evidence-type configuration to determine whether the restricted PATH originates from verifier configuration or the surrounding environment.", "proposed_settlement": null}
+```

@@ -1,0 +1,10 @@
+Looking at the retrieval context for case cep-09:
+
+- The `[fts]` section is completely empty
+- The `[vector]` is all zeros (64 dimensions), indicating no meaningful embedding was produced
+- The evidence artifact node exists in the graph, but the content behind it is absent
+- `verifier_exit: 1` indicates a failure occurred
+
+The all-zero vector and empty full-text search index, despite an evidence artifact node being present, indicate the evidence was not properly captured, indexed, or embedded. The artifact reference exists but the substantive evidence content is missing or was never collected.
+
+Locus: evidence_collection

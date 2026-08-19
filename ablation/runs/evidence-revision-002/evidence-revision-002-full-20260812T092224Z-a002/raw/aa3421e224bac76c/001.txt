@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "The verifier attempted to invoke test target `unit_tests`, but the actual available target is `unit_tests_moved`. The key question is whether the `unit_tests` reference originates from the verifier's own hardcoded command configuration or from the verification plan's declared test target specification.", "selected_action": "act-02", "expected_information": "Inspecting the verifier's configuration will reveal the exact command string and whether `unit_tests` is hardcoded in the verifier itself versus being supplied by an external verification plan, settling whether the misconfiguration is in the verifier or the plan.", "proposed_settlement": null}
+```

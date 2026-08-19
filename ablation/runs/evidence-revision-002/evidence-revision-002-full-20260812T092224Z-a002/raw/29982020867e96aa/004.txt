@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["projection", "verification_plan"], "unresolved_distinction": "Whether tests/test_import.py was a valid target that projection should have generated, or a stale/incorrect path in the verification plan itself.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

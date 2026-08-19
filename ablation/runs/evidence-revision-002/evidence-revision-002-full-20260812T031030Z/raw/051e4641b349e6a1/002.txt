@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale 'unit_tests' target name is embedded in the verifier's own command configuration or is specified by the verification plan's test-selection recipe.", "selected_action": "act-07", "expected_information": "Whether the verifier's command string or direction rule hardcodes the target name 'unit_tests', or whether that target name is injected by the verification plan's recipe. If the verifier config references 'unit_tests' directly, the locus is verifier; if not, the stale name originates from the verification_plan.", "proposed_settlement": null}
+```

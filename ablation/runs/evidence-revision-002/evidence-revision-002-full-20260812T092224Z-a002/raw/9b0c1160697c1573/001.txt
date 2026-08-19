@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "Is the fixture 'tests/fixtures/inventory-version-v999.json' missing because the evidence/test-data collection process failed to stage it, or because the working environment (checkout, working directory) is incomplete?", "selected_action": "act-05", "expected_information": "Whether the referenced fixture file exists in the working tree, and whether other sibling fixtures in tests/fixtures/ are present — distinguishing a targeted collection gap from a broad environment/checkout problem.", "proposed_settlement": null}
+```

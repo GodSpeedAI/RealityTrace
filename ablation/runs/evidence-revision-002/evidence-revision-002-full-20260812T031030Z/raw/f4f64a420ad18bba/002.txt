@@ -1,0 +1,14 @@
+Looking at the evidence:
+
+1. **act-02** (isolated re-run): `compile_error` — the main crate fails to compile, so no test can run.
+2. **act-01**: Symbol `from_cli` is **missing** from the source — this is the likely cause of the compile error.
+3. **act-05**: Toolchain is available and writable.
+4. **act-07**: Test targets exist.
+5. **act-08**: File permissions are fine.
+6. **act-06**: Verifier is `cargo-test` with a reasonable configuration.
+
+The distinction between implementation, environment, and verifier is now resolved: the toolchain works, targets exist, permissions are fine, and the verifier is correctly configured. The root cause is that the source code is missing a required symbol (`from_cli`), causing a compilation failure (exit 101). This is squarely an **implementation** defect.
+
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

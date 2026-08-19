@@ -1,0 +1,10 @@
+Looking at this diagnostic state, I need to determine why the verifier exited with code 101. The FTS evidence shows all dependency crates compiling successfully, but we see no main-crate artifact or any error message — the build output stops at dependency compilation without showing the project crate itself.
+
+The key question is whether the verifier ran the correct command correctly, or whether the implementation genuinely failed. Inspecting the verifier configuration is the cheapest way to eliminate two of the three candidate loci.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 stems from the project source failing to compile or panicking at runtime (implementation), the verifier invoking an incorrect or malformed build/test command (verifier), or the verification plan specifying a nonexistent or wrong test target (verification_plan). The cargo artifact stream shows only dependency crates building successfully with no visible main-crate artifact or error text.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's actual command line, declared evidence types, and direction rule will reveal whether the build/test invocation is well-formed. If the command is correct, the implementation locus is strongly implicated; if malformed or pointing to a nonexistent target, verifier or verification_plan is implicated.",
+ "proposed_settlement": null}
+```

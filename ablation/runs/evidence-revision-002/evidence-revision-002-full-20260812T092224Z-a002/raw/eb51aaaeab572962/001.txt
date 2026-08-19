@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verification_plan", "implementation"],
+  "unresolved_distinction": "Whether `flow_tests` is an incorrectly specified test target name in the verification command (verification_plan error), or a test target that should exist in the codebase but was never created or was renamed to `cli_tests` (implementation error).",
+  "selected_action": "act-07",
+  "expected_information": "The verifier's configured command will reveal whether `flow_tests` is the intended target name in the verification setup or a misconfiguration, helping determine if the reference originated from an incorrect plan or correctly references a target the implementation failed to provide.",
+  "proposed_settlement": null
+}
+```

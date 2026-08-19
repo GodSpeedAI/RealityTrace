@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "The isolated re-run (act-03) confirms a genuine test failure in unit_tests (exit 101, 'test failed, to rerun pass --test unit_tests'), but we have not yet seen the actual panic/error message from the test to confirm whether the implementation mishandles the missing-fixture scenario versus a verifier/plan misconfiguration.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

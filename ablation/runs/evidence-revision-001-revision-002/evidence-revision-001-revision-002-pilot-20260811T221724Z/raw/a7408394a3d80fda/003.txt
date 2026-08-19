@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is the restricted PATH and missing cargo due to verifier-imposed environment restrictions, or is the Rust toolchain genuinely absent from the execution environment?", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

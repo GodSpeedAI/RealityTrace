@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "The test target tests/test_inventory.py does not exist. Is this because the verification_plan specified an incorrect path (the actual test file lives elsewhere), or because the implementation never delivered the expected test file? Prior 'implementation' settlement was rejected for insufficient evidence.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verification_plan"}
+```

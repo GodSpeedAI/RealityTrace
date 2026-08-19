@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verification_plan"], "unresolved_distinction": "All dependency crates compiled successfully (fresh:true), but the verifier exited 101. We need to determine whether the failure originates from a bug in the project's own source (implementation), a toolchain/working-directory problem (environment), or an incorrect verification command or target path (verification_plan). The current evidence shows no compilation error message and no project-crate artifact in the trace.",
+ "selected_action": "act-05",
+ "expected_information": "Re-running the failing test in isolation will produce the actual stderr/stdout and error message, revealing whether the failure is a Rust panic, a compilation error in the main crate, a missing test target, or an environment-level issue such as a missing binary or permission error.",
+ "proposed_settlement": null}
+```

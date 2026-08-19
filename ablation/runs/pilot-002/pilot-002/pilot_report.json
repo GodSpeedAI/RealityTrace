@@ -1,0 +1,255 @@
+{
+  "pilot_id": "pilot-002",
+  "namespace": "pilot-002",
+  "classification": "PILOT \u2014 NOT INFERENTIAL; NOT FOR ARM SELECTION",
+  "n_units": 60,
+  "pooled": {
+    "scoring_version": "m2-scorer-1",
+    "determinate": {
+      "n": 48,
+      "exact_correct": 31,
+      "unknown_correct": 0,
+      "unsupported_concrete": 0,
+      "semantic_model_change_fp": 0,
+      "unparseable": 3,
+      "exact_accuracy": 0.6458
+    },
+    "unknown": {
+      "n": 12,
+      "exact_correct": 0,
+      "unknown_correct": 4,
+      "unsupported_concrete": 8,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "exact_accuracy": 0.0
+    },
+    "pooled": {
+      "n": 60,
+      "exact_correct": 31,
+      "unknown_correct": 4,
+      "unsupported_concrete": 8,
+      "semantic_model_change_fp": 0,
+      "unparseable": 3,
+      "exact_accuracy": 0.5167
+    }
+  },
+  "per_arm": {
+    "A": {
+      "n": 15,
+      "exact_correct": 8,
+      "unknown_correct": 2,
+      "unsupported_concrete": 1,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "agg": {
+        "scoring_version": "m2-scorer-1",
+        "determinate": {
+          "n": 12,
+          "exact_correct": 8,
+          "unknown_correct": 0,
+          "unsupported_concrete": 0,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.6667
+        },
+        "unknown": {
+          "n": 3,
+          "exact_correct": 0,
+          "unknown_correct": 2,
+          "unsupported_concrete": 1,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.0
+        },
+        "pooled": {
+          "n": 15,
+          "exact_correct": 8,
+          "unknown_correct": 2,
+          "unsupported_concrete": 1,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.5333
+        }
+      }
+    },
+    "B": {
+      "n": 15,
+      "exact_correct": 6,
+      "unknown_correct": 2,
+      "unsupported_concrete": 1,
+      "semantic_model_change_fp": 0,
+      "unparseable": 1,
+      "agg": {
+        "scoring_version": "m2-scorer-1",
+        "determinate": {
+          "n": 12,
+          "exact_correct": 6,
+          "unknown_correct": 0,
+          "unsupported_concrete": 0,
+          "semantic_model_change_fp": 0,
+          "unparseable": 1,
+          "exact_accuracy": 0.5
+        },
+        "unknown": {
+          "n": 3,
+          "exact_correct": 0,
+          "unknown_correct": 2,
+          "unsupported_concrete": 1,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.0
+        },
+        "pooled": {
+          "n": 15,
+          "exact_correct": 6,
+          "unknown_correct": 2,
+          "unsupported_concrete": 1,
+          "semantic_model_change_fp": 0,
+          "unparseable": 1,
+          "exact_accuracy": 0.4
+        }
+      }
+    },
+    "C": {
+      "n": 15,
+      "exact_correct": 8,
+      "unknown_correct": 0,
+      "unsupported_concrete": 3,
+      "semantic_model_change_fp": 0,
+      "unparseable": 2,
+      "agg": {
+        "scoring_version": "m2-scorer-1",
+        "determinate": {
+          "n": 12,
+          "exact_correct": 8,
+          "unknown_correct": 0,
+          "unsupported_concrete": 0,
+          "semantic_model_change_fp": 0,
+          "unparseable": 2,
+          "exact_accuracy": 0.6667
+        },
+        "unknown": {
+          "n": 3,
+          "exact_correct": 0,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.0
+        },
+        "pooled": {
+          "n": 15,
+          "exact_correct": 8,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 2,
+          "exact_accuracy": 0.5333
+        }
+      }
+    },
+    "D": {
+      "n": 15,
+      "exact_correct": 9,
+      "unknown_correct": 0,
+      "unsupported_concrete": 3,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "agg": {
+        "scoring_version": "m2-scorer-1",
+        "determinate": {
+          "n": 12,
+          "exact_correct": 9,
+          "unknown_correct": 0,
+          "unsupported_concrete": 0,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.75
+        },
+        "unknown": {
+          "n": 3,
+          "exact_correct": 0,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.0
+        },
+        "pooled": {
+          "n": 15,
+          "exact_correct": 9,
+          "unknown_correct": 0,
+          "unsupported_concrete": 3,
+          "semantic_model_change_fp": 0,
+          "unparseable": 0,
+          "exact_accuracy": 0.6
+        }
+      }
+    }
+  },
+  "determinate": {
+    "scoring_version": "m2-scorer-1",
+    "determinate": {
+      "n": 48,
+      "exact_correct": 31,
+      "unknown_correct": 0,
+      "unsupported_concrete": 0,
+      "semantic_model_change_fp": 0,
+      "unparseable": 3,
+      "exact_accuracy": 0.6458
+    },
+    "unknown": {
+      "n": 0
+    },
+    "pooled": {
+      "n": 48,
+      "exact_correct": 31,
+      "unknown_correct": 0,
+      "unsupported_concrete": 0,
+      "semantic_model_change_fp": 0,
+      "unparseable": 3,
+      "exact_accuracy": 0.6458
+    }
+  },
+  "unknown": {
+    "scoring_version": "m2-scorer-1",
+    "determinate": {
+      "n": 0
+    },
+    "unknown": {
+      "n": 12,
+      "exact_correct": 0,
+      "unknown_correct": 4,
+      "unsupported_concrete": 8,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "exact_accuracy": 0.0
+    },
+    "pooled": {
+      "n": 12,
+      "exact_correct": 0,
+      "unknown_correct": 4,
+      "unsupported_concrete": 8,
+      "semantic_model_change_fp": 0,
+      "unparseable": 0,
+      "exact_accuracy": 0.0
+    }
+  },
+  "resource": {
+    "units_with_usage": 0,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0,
+    "total_latency_ms": 0.0,
+    "total_retries": 0,
+    "avg_latency_ms": null
+  },
+  "projected_full_run": {
+    "per_unit_cost": 0.0,
+    "full_720_est_cost": 0.0,
+    "attribution_360_est_cost": 0.0,
+    "full_720_est_tokens": 0,
+    "attribution_360_est_tokens": 0,
+    "note": "projected from actual pilot measurements; not a commitment"
+  },
+  "scoring_bytes_hash": "{\"arm\":\"B\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"006704f6b1e1c1bf\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"04bbcdf4bcd398be\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"06cc9097a5499a89\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"0c2e95536bf9d498\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"10d523b4cb7e82d8\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"1a458ef00526b101\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":true}\n{\"arm\":\"C\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"245fe709d1e66e3b\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"310eb54e1cfbcf85\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"implementation\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"369972ce5f0b17f2\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"371ddcc00a047226\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"396174fd13199b12\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"implementation\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"3bbd79e4bd513cbe\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"3c9d7de380ffef19\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":true}\n{\"arm\":\"C\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":null,\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"3ce0d8cf68295196\",\"unknown_correct\":false,\"unparseable\":true,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"3d1f5ed1551e1061\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":true}\n{\"arm\":\"C\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"401644e46b667b0d\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"420b640cec114a4e\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"4501c093d260b24c\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"4568940c60e18c9c\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"51d1bb754d9d778f\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"534c203a95c6c662\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"570c7ec46af4e87c\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"57dbd3e7b6f241df\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"5d18b44754ecc074\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"6127d1cb0d573179\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"63711ff4d1d44174\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"unknown\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"65854d275e1c45fb\",\"unknown_correct\":true,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"unknown\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"6ba7c97a1bca34e9\",\"unknown_correct\":true,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"6c7912b741a81044\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"73e63d002f50ba0d\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"7475d81274f1732a\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"unknown\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"7580ceca48267223\",\"unknown_correct\":true,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"75869c363c3fc05a\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"7885c4ec59abcfc1\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":true}\n{\"arm\":\"B\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"7a3c9e201300cb7c\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"7afb1a68ce184943\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"7edcccf72d69639d\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":true}\n{\"arm\":\"C\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"7f975a5aded1af20\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"88a5b0ca808e0bd3\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"8b91406c8ca39fd4\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":true}\n{\"arm\":\"A\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"environment\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"90fb4b5c9601d657\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"962efcb41010cef9\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"980211d89075ff52\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"9e8954b315445f28\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"a1242c0cd3c11cff\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"a83d79f32cee6915\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"c40a933ec3c222e3\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"c5eb7600204f9655\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"cb1ffca0e8e5fd8e\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"df-01\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":null,\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"cba319d146be3bc2\",\"unknown_correct\":false,\"unparseable\":true,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"unknown\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"d306a6419ae7d274\",\"unknown_correct\":true,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"C\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"d598a612af3ecd9c\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":true}\n{\"arm\":\"D\",\"case_id\":\"sr-13\",\"determinate\":false,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"unknown\",\"unit_id\":\"e06ff12d352e774f\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":true}\n{\"arm\":\"D\",\"case_id\":\"cep-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"e1a0c342fe4a7812\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"e5aa2f0b0dddf245\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"ebfea76cb41667de\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":null,\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"f2c1f5bdf5f088c2\",\"unknown_correct\":false,\"unparseable\":true,\"unsupported_concrete\":false}\n{\"arm\":\"D\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":2,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"f55c47d2431357bf\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"B\",\"case_id\":\"sr-10\",\"determinate\":true,\"exact_correct\":false,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":3,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"evidence_collection\",\"unit_id\":\"f7d2f6807bba00a4\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n{\"arm\":\"A\",\"case_id\":\"ag-01\",\"determinate\":true,\"exact_correct\":true,\"namespace\":\"pilot-002\",\"predicted_locus\":\"verifier\",\"repetition\":1,\"scoring_version\":\"m2-scorer-1\",\"semantic_model_change_fp\":false,\"true_locus\":\"verifier\",\"unit_id\":\"ff108534347f2e6b\",\"unknown_correct\":false,\"unparseable\":false,\"unsupported_concrete\":false}\n"
+}

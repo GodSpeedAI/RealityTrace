@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "authority"], "unresolved_distinction": "Whether the PermissionError on 'tests/fixtures' is caused by the directory having restrictive filesystem permissions in the execution environment (environment locus), or by the executing process/user lacking the proper credentials or ownership to access the path (authority locus).", "selected_action": "act-07", "expected_information": "Filesystem permission bits, owner, and group of the 'tests/fixtures' directory, revealing whether the directory itself is locked down or the running process lacks sufficient authority.", "proposed_settlement": null}
+```

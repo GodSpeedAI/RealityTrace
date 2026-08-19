@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is the absence of pytest a defect in the test environment (it should have been installed but wasn't), or is the verifier misconfigured to invoke pytest when a different test runner or setup step was intended?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

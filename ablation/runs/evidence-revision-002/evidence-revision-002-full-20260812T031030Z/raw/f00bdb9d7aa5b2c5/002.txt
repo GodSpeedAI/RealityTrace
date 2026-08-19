@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "implementation"], "unresolved_distinction": "Whether exit code 101 stems from a verification_plan misconfiguration or from the implementation missing the required symbol format_matches_as_text; however, act-06 confirmed this symbol is absent, and act-03/act-08 confirmed the test target and fixtures resolve correctly, strongly implicating the implementation.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

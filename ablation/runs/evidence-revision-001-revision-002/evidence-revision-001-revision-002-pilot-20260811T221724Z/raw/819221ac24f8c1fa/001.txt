@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["declared_model", "verifier"], "unresolved_distinction": "Is the registry TOML file part of the project's declared model (malformed configuration authored by the project), or is it an internal file the verifier generates/manages (verifier bug producing bad TOML)?", "selected_action": null, "expected_information": null, "proposed_settlement": "declared_model"}
+```

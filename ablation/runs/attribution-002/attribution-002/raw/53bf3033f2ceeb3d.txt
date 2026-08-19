@@ -1,0 +1,9 @@
+Looking at the provenance for case ag-12:
+
+- The SQL record shows `verifier_exit: 101`, which is a non-zero exit indicating the verifier process itself crashed or panicked (exit code 101 is a conventional panic/abort code).
+- The evidence collection completed (evidence ID exists), and the graph links are intact.
+- There is no indication that the implementation under test was reached and failed; rather, the verification harness itself abnormally terminated.
+
+The failure occurred within the verifier layer itself—it crashed before it could complete its assessment.
+
+Locus: verifier

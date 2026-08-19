@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Whether exit code 101 stems from the implementation missing expected functionality (from_cli not found), a misconfigured verifier command/rule, or an environmental issue such as a missing toolchain or unwritable target directory.",
+ "selected_action": "act-03",
+ "expected_information": "The verifier's exact command, expected evidence types, and direction rule will reveal whether it expects a symbol like from_cli or a specific test target, clarifying if the 101 exit is due to a verifier misconfiguration versus a genuine implementation gap.",
+ "proposed_settlement": null}
+```

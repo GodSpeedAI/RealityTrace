@@ -1,0 +1,8 @@
+Looking at this case, I see verifier exit code 101 (Rust panic), successful build artifacts, and a suspicious environment assignment `AST_GREP_CONFIG=/nonexistent-corpus-config.toml`. I need to understand the verifier's configuration to distinguish whether the panic comes from the verifier's own logic or from how it invokes the implementation.
+
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "Whether the exit code 101 (panic) is caused by the verifier's own logic failing to handle the 'car-go-json' stdin format or the AST_GREP_CONFIG environment, by a misconfigured verification plan that sets up invalid runtime conditions, or by the implementation panicking at runtime when given the nonexistent config path — act-05 will reveal the verifier's command structure, evidence expectations, and direction rule to disambiguate.",
+ "selected_action": "act-05",
+ "expected_information": "The verifier's command, how it handles the 'car-go-json' stdin_format, whether it sets or propagates the AST_GREP_CONFIG environment variable, and what evidence types and direction rules it uses — this will clarify whether the panic is in the verifier's logic or triggered by the plan/implementation.",
+ "proposed_settlement": null}
+```

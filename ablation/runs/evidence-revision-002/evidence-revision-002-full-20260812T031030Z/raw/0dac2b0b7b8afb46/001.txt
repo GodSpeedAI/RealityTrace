@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether exit code 101 stems from a compilation error in the project's own source code (implementation) or from an incorrect verification command or target path (verification_plan), since the FTS evidence only shows successful dependency builds with no captured error message.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's command, declared evidence types, and direction rule will reveal whether the verification invocation correctly targets the project's test or binary, or whether the configuration itself is malformed.",
+ "proposed_settlement": null}
+```

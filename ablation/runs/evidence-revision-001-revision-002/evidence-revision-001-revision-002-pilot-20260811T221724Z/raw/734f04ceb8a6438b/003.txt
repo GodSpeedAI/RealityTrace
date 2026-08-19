@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether 'iter_reality_gap_case_files' is genuinely absent from the handwritten source of cep/inventory.py (implementation defect) or was expected to be generated or renamed by a code-projection step that failed (projection defect).", "selected_action": "act-01", "expected_information": "Direct confirmation of whether the symbol 'iter_reality_gap_case_files' exists in cep/inventory.py, establishing whether the defect is in handwritten source code or in a generation/transformation pipeline.", "proposed_settlement": null}
+```

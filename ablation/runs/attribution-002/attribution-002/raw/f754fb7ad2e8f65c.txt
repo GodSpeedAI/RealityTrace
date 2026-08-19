@@ -1,0 +1,15 @@
+Candidates: verifier, implementation, evidence_collection, environment
+
+**Discriminating evidence assessment:**
+
+- **verifier**: verifier_exit=101 is abnormal, but I lack the verifier's exit-code convention (is 101 an internal crash vs. a passed-through failure verdict?). No verifier logs or stderr in FTS/vector. Cannot confirm.
+- **implementation**: No implementation output, diff, or error trace present anywhere in FTS, graph, or vector (all-zero vector, empty FTS). Cannot confirm.
+- **evidence_collection**: The vector is all-zeros and FTS is entirely empty despite an artifact being linked (edge to 01KZJ2EBZK2113SET1Z7W8DWBT). This is consistent with missing evidence, but could also simply reflect how frozen Arm D presents an artifact without inline content — not definitive.
+- **environment**: No environment configuration, runtime logs, or system errors present. Cannot confirm or exclude.
+
+**Exclusion attempt:**
+Every candidate is unsupported rather than affirmatively excluded. The FTS is empty, the vector carries no semantic signal, the SQL provides only metadata (exit code, scenario label, stdin format), and the graph confirms only linkages — none of which isolate a fault to any single locus. Verifier_exit=101 alone is equally compatible with a verifier defect, an implementation bug caught by a working verifier, an environment crash, or lost evidence.
+
+Excluded: none (insufficient evidence for affirmative exclusion of any locus)
+
+Locus: unknown

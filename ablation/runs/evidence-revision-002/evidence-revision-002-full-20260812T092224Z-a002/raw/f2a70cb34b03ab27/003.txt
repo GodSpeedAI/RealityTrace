@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["evidence_collection", "implementation"],
+  "unresolved_distinction": "Whether the test implementation (test_observed_failure / json.load usage) is intact and correct — in which case the stale fixture points to evidence_collection — or whether the implementation itself is malformed and should handle the annotated/stale fixture format.",
+  "selected_action": "act-04",
+  "expected_information": "Confirmation that source symbols in tests/test_import.py (the test_observed_failure function and the json.load call) are present and correctly implemented at expected locations, which would rule out implementation and confirm the failure originates from the corrupted fixture (evidence_collection).",
+  "proposed_settlement": null
+}
+```

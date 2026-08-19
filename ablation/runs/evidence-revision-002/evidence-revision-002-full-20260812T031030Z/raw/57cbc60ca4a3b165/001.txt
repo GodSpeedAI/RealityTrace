@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "implementation"], "unresolved_distinction": "The verifier attempted to run test target `unit_tests` but only `unit_tests_moved` exists. Is the target name `unit_tests` specified by an outdated verification plan/verifier configuration, or did the implementation rename/move the test target away from what the verification expects?", "selected_action": "act-02", "expected_information": "The verifier's configured command and test-target reference will reveal whether `unit_tests` is hardcoded in the verifier, inherited from the verification plan, or expected by the declared model—distinguishing a verifier/plan configuration fault from an implementation rename.", "proposed_settlement": null}
+```

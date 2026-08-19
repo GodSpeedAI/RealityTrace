@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["implementation", "verifier", "verification_plan"],
+  "unresolved_distinction": "Whether exit code 101 originates from a panic in the application code under test (implementation), a misconfiguration of the verifier command or evidence pipeline (verifier/verification_plan), or a missing/misreferenced test target. The FTS data only shows cargo build artifacts with all dependencies fresh; no compiler error or runtime panic message is visible, so the actual failure output is needed.",
+  "selected_action": "act-03",
+  "expected_information": "The full stderr/stdout from re-running the failing test in isolation, revealing whether the 101 exit is a Rust panic, a compilation error in the project crate, or a verifier-internal failure.",
+  "proposed_settlement": null
+}
+```

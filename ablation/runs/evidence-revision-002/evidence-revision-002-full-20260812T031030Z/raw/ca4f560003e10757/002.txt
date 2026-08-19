@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "environment", "verifier"], "unresolved_distinction": "Whether exit 101 stems from a runtime panic in the project's own code (implementation), from the unreadable tests/fixtures/example.py file (mode 0) disrupting the test (environment), or from a misconfigured verifier targeting a non-existent or wrong test path (verifier). No error message or main-crate artifact is visible to disambiguate.",
+ "selected_action": "act-03",
+ "expected_information": "Whether the verifier's referenced test target or path resolves to an existing file in the working tree; if it does not, the failure is attributable to verifier misconfiguration rather than implementation or environment.",
+ "proposed_settlement": null}
+```

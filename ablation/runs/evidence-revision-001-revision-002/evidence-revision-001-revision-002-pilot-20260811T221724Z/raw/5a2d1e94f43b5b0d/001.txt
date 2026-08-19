@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is `cargo` expected to be installed in this execution environment but is missing (environment), or has the verifier been misconfigured to invoke `cargo` when a different toolchain should be used (verifier)?", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

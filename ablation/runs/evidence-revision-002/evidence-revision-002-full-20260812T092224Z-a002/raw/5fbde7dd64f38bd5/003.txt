@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "Is the mode-0 permission on tests/fixtures an environmental misconfiguration in the sandbox, or was it intentionally set, making the test code at fault for not handling the error?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

@@ -1,0 +1,17 @@
+Looking at the evidence:
+
+1. **act-05** (isolated re-run): `compile_error` — "compilation failed — no test could run"
+2. **act-03**: `from_cli` symbol is **missing** from the source
+3. **act-08**: Toolchain is available, working directories writable
+4. **act-06**: All file permissions are fine (644, readable, not restrictive)
+5. **act-01**: Verifier uses standard `cargo test --offline --message-format json corpus_scenario` — nothing unusual
+
+The build artifacts (FTS) show all dependencies compiled successfully, but when the actual project test ran (act-05), it hit a compile error. The missing `from_cli` symbol (act-03) explains why: the implementation code references a symbol that doesn't exist, causing a compilation failure that produces exit code 101. The verifier command is straightforward `cargo test`, and the environment checks all passed.
+
+This conclusively points to the **implementation** as the failure locus — the code itself doesn't compile due to a missing symbol, which is a bug in the implementation, not in the verifier, environment, or any other component.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": null,
+ "selected_action": null, "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

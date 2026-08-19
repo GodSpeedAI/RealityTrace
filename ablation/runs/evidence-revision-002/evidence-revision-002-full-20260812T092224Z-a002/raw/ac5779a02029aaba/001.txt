@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["projection", "implementation"], "unresolved_distinction": "Whether the trailing '# stale' content appended after the valid JSON in the fixture file was introduced by a projection/generation step that produced the artifact, or is a bug in the committed fixture data itself (implementation)", "selected_action": "act-02", "expected_information": "Exact contents of the fixture file tests/fixtures/sample_settlement_recorded.json, confirming the trailing non-JSON content and revealing whether it originates from the committed source or a build/projection pipeline", "proposed_settlement": null}
+```

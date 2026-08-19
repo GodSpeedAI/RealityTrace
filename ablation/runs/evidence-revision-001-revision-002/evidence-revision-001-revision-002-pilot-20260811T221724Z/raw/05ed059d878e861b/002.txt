@@ -1,0 +1,16 @@
+Looking at this case, I need to determine whether the mismatch between the verifier's expected target name (`unit_tests`) and the project's actual target name (`unit_tests_moved`) is a stale verification plan or an incorrect project projection.
+
+Key evidence:
+- The verifier command explicitly references `--test unit_tests`
+- The project has `unit_tests_moved` as an available target (suggesting an intentional rename/move)
+- The file `tests/unit_tests.rs` doesn't exist, confirming the target was moved/renamed
+- The name `unit_tests_moved` strongly suggests a deliberate action, not an accidental misconfiguration
+
+The project artifact (Cargo.toml) appears to have been intentionally updated to rename the target. The verification plan was not updated to match. This is a staleness issue in the plan, not a misconfiguration in the project.
+
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Was the test target intentionally renamed to 'unit_tests_moved' (making the verification plan stale for not tracking the change), or was the rename itself an erroneous projection change?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verification_plan"}
+```

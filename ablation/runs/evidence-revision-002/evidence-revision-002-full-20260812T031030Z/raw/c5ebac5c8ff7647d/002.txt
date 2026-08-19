@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "The key distinction is whether the verifier is correctly configured to invoke cargo for a Rust project (making this purely an environment provisioning failure) or whether the verifier itself is misconfigured to reference cargo when it should not. Round-1 observations now provide complementary evidence: act-05 confirms the verifier is 'cargo-test' with command 'cargo test --offline ... corpus_scenario' — appropriate for a Rust repo (ast-grep-mcp-rs) — and act-02 confirms the toolchain is unavailable with PATH restricted to /usr/bin:/bin.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

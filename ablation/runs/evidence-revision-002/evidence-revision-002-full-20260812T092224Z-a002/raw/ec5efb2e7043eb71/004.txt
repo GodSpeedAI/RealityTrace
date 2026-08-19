@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the mode-0 permission on tests/fixtures/sample_settlement_recorded.json was introduced by environment-level filesystem provisioning or by the evidence_collection workspace setup process.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

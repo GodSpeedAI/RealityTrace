@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verification_plan", "projection", "implementation"],
+  "unresolved_distinction": "tests/test_inventory.py is confirmed absent (act-05, act-06), but no available action can determine whether the verification_plan points to a wrong/misnamed path (real test exists elsewhere), projection failed to generate the file, or implementation never created it. All eight actions have been exercised without yielding distinguishing evidence, and we are in the final round.",
+  "selected_action": null,
+  "expected_information": null,
+  "proposed_settlement": "unknown"
+}
+```

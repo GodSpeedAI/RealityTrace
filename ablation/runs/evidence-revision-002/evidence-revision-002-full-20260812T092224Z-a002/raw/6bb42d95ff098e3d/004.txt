@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the PermissionError stems from a pre-existing filesystem permission misconfiguration in the environment versus permissions being altered or locked during evidence collection or test setup.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

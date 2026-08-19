@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "authority"], "unresolved_distinction": "Whether the PermissionError on 'tests/fixtures' is caused by incorrect filesystem permission bits on the directory itself (environment) versus the test runner process operating under an identity/context that lacks the authority to traverse or read it despite nominally reasonable permissions (authority).", "selected_action": "act-07", "expected_information": "The actual permission mode and ownership of 'tests/fixtures' will reveal whether the directory permissions are misconfigured (pointing to environment) or appear correct but are inaccessible due to the runner's identity/context (pointing to authority).", "proposed_settlement": null}
+```

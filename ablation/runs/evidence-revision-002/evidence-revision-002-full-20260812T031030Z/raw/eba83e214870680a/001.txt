@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "evidence_collection"], "unresolved_distinction": "The build completed (all artifacts fresh), but the verifier exited 101. We need to determine whether the verifier's test command and expected-output configuration are correct (verification_plan), whether evidence was properly captured (evidence_collection), or whether the code itself produces wrong results at runtime (implementation).", "selected_action": "act-02", "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal whether the verification setup correctly targets the intended test/path, or whether the plan itself is misconfigured.", "proposed_settlement": null}
+```

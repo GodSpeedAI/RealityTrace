@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "environment", "evidence_collection"], "unresolved_distinction": "The verifier exits 101 while the implementation passes in isolation (act-04). The verifier sets AST_GREP_CONFIG=/nonexistent-corpus-config.toml (act-02/act-07), which is the proximate cause. Is this env assignment an error in the verification_plan's scenario configuration (a bad path embedded in the plan), or an environment misconfiguration (the file should exist in the environment but is missing)?", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

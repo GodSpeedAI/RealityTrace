@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "projection"], "unresolved_distinction": "Whether the mode-0 permission on tests/fixtures is an environment/sandbox-wide filesystem restriction versus an artifact-specific defect from the projection step that created this directory with zero permissions while sibling paths (tests/test_import.py at mode 644) are normal.", "selected_action": null, "expected_information": null, "proposed_settlement": "projection"}
+```

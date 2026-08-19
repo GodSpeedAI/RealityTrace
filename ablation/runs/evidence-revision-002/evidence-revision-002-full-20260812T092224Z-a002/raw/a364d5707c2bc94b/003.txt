@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verification_plan", "implementation", "projection"],
+  "unresolved_distinction": "Whether tests/test_import.py was supposed to be created by the implementation/projection (and is missing due to a build or generation failure) or whether the verification_plan references an incorrect test path that was never expected to exist. Round 1 observations confirmed the file is absent and the verifier targets it, but no observation establishes whether this path is mandated by the project specification or is an error in the verification plan.",
+  "selected_action": null,
+  "expected_information": null,
+  "proposed_settlement": "unknown"
+}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Is the .corpus-tmpfix directory unwritable due to incorrect filesystem permissions in the test environment (environment), or because the verification plan configured an improper TMPDIR path that points to a non-writable location (verification_plan)?", "selected_action": "act-04", "expected_information": "Filesystem permissions on .corpus-tmpfix will confirm whether the directory exists with wrong permissions (environment) or whether the path itself is misconfigured by the harness (verification_plan).", "proposed_settlement": null}
+```

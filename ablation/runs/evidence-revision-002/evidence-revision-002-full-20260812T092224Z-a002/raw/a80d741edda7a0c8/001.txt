@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "The failure is a ModuleNotFoundError for 'cep.scoring' — we need to determine whether the cep.scoring package is genuinely absent from the source tree (implementation defect: code references a module that was never created or was removed) or whether it exists in the repository but was omitted from the installed/built package (projection defect).",
+ "selected_action": "act-02",
+ "expected_information": "Whether cep/scoring/ (or cep/scoring.py) exists in the working tree at the expected location. If present, the issue is projection (packaging/build omitted it); if absent, the issue is implementation (the module was never created or was deleted while still referenced).",
+ "proposed_settlement": null}
+```

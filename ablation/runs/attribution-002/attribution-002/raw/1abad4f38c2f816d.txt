@@ -1,0 +1,3 @@
+Candidates: verification_plan, implementation, verifier, environment
+Excluded: verifier (correct), implementation (absent), environment (nominal)
+Locus: verification_plan

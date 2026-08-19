@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether cargo-test is the correct verifier for this Rust project (making the missing toolchain an environment failure) or the verifier is wrongly configured to invoke cargo when an alternative should be used (verifier failure).", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

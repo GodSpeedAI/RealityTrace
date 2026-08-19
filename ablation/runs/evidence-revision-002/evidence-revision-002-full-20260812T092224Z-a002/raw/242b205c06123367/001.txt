@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan", "environment"], "unresolved_distinction": "The FTS evidence shows dependency crates compiling successfully (all fresh), but verifier exit code 101 suggests a panic or hard error. The key question is whether the failure originates from a misconfigured verifier command (wrong test target/path), an environment issue (missing toolchain/directories), or an actual implementation defect (compile error or test panic in the project crate). We currently see no error message or project-crate compilation output.",
+ "selected_action": "act-01",
+ "expected_information": "The verifier's exact command, evidence types, and direction rule will reveal whether the verification is targeting a valid test path and whether the command structure is correct, helping distinguish verifier misconfiguration from implementation or environment failures.",
+ "proposed_settlement": null}
+```

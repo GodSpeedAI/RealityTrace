@@ -1,0 +1,16 @@
+Looking at the evidence, I need to synthesize what we've learned across both rounds.
+
+Key observations:
+- **act-03**: `format_matches_as_text` was NOT found at expected locations in the source
+- **act-04**: Re-running the test in isolation produced `compile_error` — "compilation failed — no test could run"
+- **act-01, act-02, act-05, act-06**: All filesystem paths, test targets, fixtures, and toolchain are valid and accessible
+- **act-08**: Verifier configuration (cargo-test) is correctly set up
+- All dependency crate artifacts show `fresh: true`, but the main crate/test binary fails to compile due to a missing symbol
+
+The FTS data showing successful builds is for dependency crates only. The actual project crate fails to compile because it references `format_matches_as_text` which doesn't exist in the implementation. The exit code 101 aligns with cargo's behavior on compilation errors.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": null,
+ "selected_action": null, "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

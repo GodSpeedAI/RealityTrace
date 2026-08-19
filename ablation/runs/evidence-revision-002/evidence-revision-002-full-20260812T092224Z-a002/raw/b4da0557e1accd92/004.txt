@@ -1,0 +1,9 @@
+Looking at the diagnostic state:
+- Both concrete settlements attempted (verification_plan in round 2, implementation in round 3) were rejected as EVIDENCE_INSUFFICIENT.
+- The test passes in isolation (act-04) but fails under the verifier, which prefixes `AST_GREP_CONFIG=/nonexistent-corpus-config.toml`.
+- The unresolved distinctions center on whether the deliberately-set nonexistent config path (verification_plan) or the implementation's failure to handle it gracefully (implementation) is the root cause — but neither could be confirmed.
+- No further evidence acquisition is possible (round 3/3, governance CONCRETE_REJECTED).
+
+```json
+{"candidate_loci": ["verification_plan", "implementation", "environment"], "unresolved_distinction": "Whether exit 101 is caused by the verification plan deliberately setting AST_GREP_CONFIG=/nonexistent-corpus-config.toml (verification_plan) or by the implementation panicking on the missing config file (implementation), or by an environment misconfiguration (environment).", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

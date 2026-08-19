@@ -1,0 +1,14 @@
+Looking at the evidence:
+- All dependency crates compiled successfully (fresh), so the failure is in the project crate itself
+- act-06 showed the isolated test run resulted in a **compile_error** — no test could run
+- act-07 revealed **src/lib.rs has mode 0 (completely unreadable)** — this is highly abnormal and would prevent the Rust compiler from reading the crate root, causing a compilation failure
+- The toolchain is available (act-08), test targets exist (act-02), fixtures are fine (act-04)
+
+The compile error is most parsimoniously explained by the unreadable `src/lib.rs` file (mode 0), which is an environment/permission problem rather than a genuine code defect.
+
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "Whether the compile_error (act-06) is caused by the unreadable src/lib.rs (mode 0, environment/permission issue) or by a genuine Rust compile error in the source code (implementation defect). The abnormal mode 0 on src/lib.rs strongly suggests the compiler cannot read the crate root, which would produce exit code 101.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

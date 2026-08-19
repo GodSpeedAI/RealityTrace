@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "Whether the verifier exit code 101 stems from a misconfigured verifier invocation or test-target resolution (verifier/verification_plan locus) versus an actual compilation or runtime failure in the project's implementation, given that all dependency artifacts compiled fresh with no visible error.", "selected_action": "act-06", "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal whether the verification invocation is well-formed and targets a valid test path, distinguishing verifier/plan misconfiguration from an implementation failure.", "proposed_settlement": null}
+```

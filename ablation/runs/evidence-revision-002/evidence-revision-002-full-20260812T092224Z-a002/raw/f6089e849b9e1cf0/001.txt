@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the missing symbol 'iter_reality_gap_case_files' in cep.inventory is due to incomplete hand-written implementation code or a projection failure where the semantic model's projection step failed to generate the expected function into inventory.py", "selected_action": "act-05", "expected_information": "Confirmation that iter_reality_gap_case_files is absent from cep/inventory.py, and structural clues about whether inventory.py is a hand-written or projected artifact, helping distinguish implementation defect from projection defect", "proposed_settlement": null}
+```

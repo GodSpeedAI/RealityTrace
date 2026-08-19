@@ -1,0 +1,36 @@
+## Diagnostic Loop — Case sr-01
+
+### Step 1: Enumerate plausible candidate loci
+
+**Candidate 1: implementation**
+The test `test_corpus_scenario_assertion_bug` in `corpus_sr1.rs` panicked at line 3 with `assert_eq!(left, right)` where `left: 2` (actual) ≠ `right: 3` (expected). In Rust convention, `left` is the computed value from the code under test, `right` is the expected literal. This directly indicates the implementation returned 2 when the expected answer is 3.
+
+**Candidate 2: verification_plan**
+The test's expected value (`right: 3`) could itself be wrong — i.e., the corpus test plan encodes an incorrect oracle. If the correct answer is 2, then the plan is at fault, not the code.
+
+**Candidate 3: declared_model**
+The abstract specification could declare the wrong expected output (3 instead of 2), which would propagate into both the test oracle and the implementation's contract.
+
+**Candidate 4: environment**
+A build or runtime environment problem could cause incorrect computation.
+
+**Candidate 5: verifier**
+The test harness (cargo) could be misreporting results.
+
+### Step 2 & 3: Discriminating evidence and exclusion
+
+- **environment** → EXCLUDED: `"build-finished","success":true`; all crates compiled; test binary built and executed without infrastructure errors. License warnings are benign.
+- **verifier** → EXCLUDED: Cargo correctly compiled the test, executed it, captured the panic message with precise file/line/values, and returned exit code 101. The verifier behaved exactly as designed.
+- **evidence_collection** → EXCLUDED: Full build log, test stdout, panic details, and artifact graph are all present and coherent.
+- **authority** → EXCLUDED: No permission or signing failures; the artifact graph shows valid signatures.
+- **projection** → EXCLUDED: No projection/transformation step is involved; this is a direct assertion in an integration test.
+- **verification_plan** → WEAKENED but not fully excludable: The test name `test_corpus_scenario_assertion_bug` and the corpus structure suggest a deliberately constructed oracle. However, there is no evidence that the oracle (right=3) is itself incorrect — no counter-evidence from the declared spec or an alternative oracle contradicts it.
+- **declared_model** → Cannot settle here per F-28: I cannot explicitly exclude both `implementation` and `verification_plan` with stated evidence, since the test source body is not visible (only line 3 and the assertion values).
+
+### Step 4: Settlement
+
+The build succeeded, the verifier ran correctly, and the only observed anomaly is that the implementation-under-test produced `2` where the test oracle expects `3`. There is no evidence that the oracle is wrong; there is direct evidence that the computed value is `2`. The simplest supported attribution is to the code under test.
+
+Candidates: implementation, verification_plan, declared_model, environment, verifier
+Excluded: environment (build-ok), verifier (ran-correctly), evidence_collection (captured), authority (no-errors), projection (not-applicable), verification_plan (no-evidence-of-bad-oracle), declared_model (cannot-exclude-implementation)
+Locus: implementation

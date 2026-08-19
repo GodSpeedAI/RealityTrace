@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "Whether the verifier exit 101 stems from a mis-specified verification plan (wrong test target/symbols expected) or from an incomplete implementation missing required symbols, now partially resolved by act-04 showing compile_error and act-03 showing missing symbols.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

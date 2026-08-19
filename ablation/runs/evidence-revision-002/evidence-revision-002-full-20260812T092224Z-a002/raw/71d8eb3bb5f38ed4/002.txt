@@ -1,0 +1,12 @@
+Looking at the evidence:
+
+1. **act-05** (isolated test re-run): Result was `compile_error` — compilation failed, no test could run
+2. **act-07** (symbol check): `format_matches_as_text` is **missing** from the codebase — both `crate::format::format_matches_as_text` and bare `format_matches_as_text` are absent
+3. **act-06** (verifier config): Verifier is `cargo-test` with a standard command — configuration looks correct
+4. **act-01, act-04, act-08**: Fixtures exist, toolchain available, permissions fine — environment is not the issue
+
+The build artifacts are fresh for dependencies, but the **implementation itself fails to compile** because a referenced symbol (`format_matches_as_text`) is missing from the source. The verifier configuration and environment are sound. Exit code 101 is the standard Rust compiler/panic exit code, and here it corresponds to a compilation failure in the implementation.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "The key distinction was whether exit code 101 stemmed from a misconfigured verifier or from an actual code defect. The isolated re-run (act-05) confirmed a compile_error, and act-07 confirmed the symbol format_matches_as_text is missing from the codebase, settling the question in favor of implementation.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

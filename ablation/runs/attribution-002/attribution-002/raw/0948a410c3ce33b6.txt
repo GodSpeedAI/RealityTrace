@@ -1,0 +1,3 @@
+Candidates: verifier, evidence_collection, implementation, environment
+Excluded: declared_model-silence, authority-silence, projection-silence
+Locus: unknown

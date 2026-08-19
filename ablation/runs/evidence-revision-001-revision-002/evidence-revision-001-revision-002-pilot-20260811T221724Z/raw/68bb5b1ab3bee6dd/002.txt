@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "Whether the 'stale fixture missing' panic reflects a fixture/data file that was never collected or persisted (evidence_collection) versus the runtime environment missing a fixture that was expected to be set up externally (environment).", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

@@ -1,0 +1,9 @@
+Looking at this diagnostic state, the core failure is clear: a verification command references test target `unit_tests`, which no longer exists (it was renamed to `unit_tests_moved`). The two candidate loci are `verifier` (if the verifier's own config hardcodes the target name) and `verification_plan` (if the plan prescribes which target to invoke).
+
+The acquired observations (act-03, act-05, act-07) confirm the target file is missing and that permissions/fixtures are fine, but none of them distinguish whether the stale `unit_tests` reference originates from the verifier's hardcoded configuration or from the verification plan's declared target. The one action that would have resolved this — act-02 (inspect verifier's configuration) — was available but not taken, and the round limit has been reached.
+
+Since the evidence does not support a definitive attribution to either candidate locus, I must settle on `unknown`.
+
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale reference to test target `unit_tests` is hardcoded in the verifier's own command configuration (locus: verifier) or prescribed by the verification plan that declares which target to invoke (locus: verification_plan). The distinguishing observation (act-02) was not acquired before the round limit.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

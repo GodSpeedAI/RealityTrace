@@ -1,0 +1,7 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"],
+ "unresolved_distinction": "Whether the verification plan's command hardcodes the stale target name 'integration_tests' that was renamed to 'integration_tests_moved' (verification_plan locus), versus the projection having moved/renamed the test target in Cargo.toml or directory structure without updating all build-config references that the verifier derives from (projection locus).",
+ "selected_action": "act-03",
+ "expected_information": "The verifier's configured command string and direction rule, revealing whether 'integration_tests' is explicitly specified in the verification plan command or is resolved dynamically from projection state, settling which locus owns the stale reference.",
+ "proposed_settlement": null}
+```

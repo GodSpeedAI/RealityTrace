@@ -1,0 +1,3 @@
+Candidates: verifier (panic exit code 101), evidence_collection (empty FTS, zero vector indicating missing payload), implementation (no stdout/stderr produced), environment
+Excluded: none (insufficient_evidence)
+Locus: unknown

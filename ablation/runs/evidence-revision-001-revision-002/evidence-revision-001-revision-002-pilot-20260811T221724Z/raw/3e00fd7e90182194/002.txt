@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "implementation"], "unresolved_distinction": "The fixture data/corpus-v998.json is confirmed missing (act-05), but it is unclear whether this file should have been staged by the evidence-collection pipeline (evidence_collection) or whether the test code in corpus_sr10.rs references an incorrect or non-existent fixture path that was never part of the evidence pipeline (implementation).", "selected_action": "act-01", "expected_information": "The source of corpus_sr10.rs at line 3 will reveal what fixture path the test checks and how it resolves it, determining whether the reference is a legitimate evidence dependency or an incorrect hardcoded path.", "proposed_settlement": null}
+```

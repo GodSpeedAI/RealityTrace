@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is the failure due to cargo (Rust toolchain) genuinely missing from the execution environment, or is the verifier misconfigured to invoke cargo when a different tool or path should be used?", "selected_action": "act-07", "expected_information": "Whether the required toolchain (cargo/Rust) is installed and accessible in the designated working directory, distinguishing an environment gap from a verifier misconfiguration.", "proposed_settlement": null}
+```

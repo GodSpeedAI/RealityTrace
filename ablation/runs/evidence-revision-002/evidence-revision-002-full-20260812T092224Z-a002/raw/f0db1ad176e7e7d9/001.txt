@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether `cargo` is genuinely absent from the execution environment (toolchain not installed / not on PATH) versus the verifier or verification plan invoking `cargo` when a different command or path was intended.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

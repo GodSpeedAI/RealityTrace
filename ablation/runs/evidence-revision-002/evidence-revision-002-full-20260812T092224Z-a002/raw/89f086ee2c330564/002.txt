@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "verification_plan"], "unresolved_distinction": "Whether exit code 101 stems from a genuine test/runtime failure in the project's own code (implementation), or from a misconfigured or incorrectly invoked verification command (verifier or verification_plan) — the evidence only shows successful dependency compilation with no error output.",
+ "selected_action": "act-01",
+ "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal whether the verification invocation itself is well-formed and targets the correct test/binary, or whether a misconfiguration caused the non-zero exit before any implementation defect could be implicated.",
+ "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "environment"], "unresolved_distinction": "Whether the mode-0/stale fixture is an intentional part of the 'corpus_scenario_unreadable_fixture' test design (pointing to implementation mishandling) or an erroneous environment setup that corrupts the fixture before the test runs.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

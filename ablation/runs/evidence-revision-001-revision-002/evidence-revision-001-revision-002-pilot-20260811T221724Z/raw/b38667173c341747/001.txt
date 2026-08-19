@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation", "environment"], "unresolved_distinction": "The error 'file or directory not found: tests/test_inventory.py' could mean (a) the verification plan references a test path that was never expected to exist, (b) the implementation failed to create the test file, or (c) the working directory is misconfigured so the file cannot be found. We need to determine whether the referenced path should resolve to an existing file in the working tree.", "selected_action": "act-05", "expected_information": "Whether tests/test_inventory.py exists in the repository working tree, and whether the verification command's target path is correctly configured relative to the working directory.", "proposed_settlement": null}
+```

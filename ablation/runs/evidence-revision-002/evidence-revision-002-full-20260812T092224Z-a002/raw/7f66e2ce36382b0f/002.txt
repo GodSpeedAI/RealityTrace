@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "The isolated test passes under default environment (act-04), but the verifier injects AST_GREP_CONFIG=/nonexistent-corpus-config.toml (act-05, act-07). Need to determine whether the verifier's env assignment is the direct cause of the exit-101 failure, or whether the implementation has a bug only triggered by that env var.", "selected_action": null, "expected_information": null, "proposed_settlement": "verifier"}
+```

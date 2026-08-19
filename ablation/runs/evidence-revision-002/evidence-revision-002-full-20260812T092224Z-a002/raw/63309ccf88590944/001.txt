@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the PermissionError on the fixture file is caused by incorrect filesystem permissions in the runtime environment (e.g., file ownership or mode set wrong externally) versus a verification-plan deficiency that fails to provision or restore the fixture file with proper read permissions before the test runs.", "selected_action": "act-06", "expected_information": "The current filesystem permissions (mode, owner) on 'tests/fixtures/sample_settlement_recorded.json' and its parent directories, revealing whether the denial stems from an environment-level permission restriction or a setup/telemetry gap in the verification plan.", "proposed_settlement": null}
+```

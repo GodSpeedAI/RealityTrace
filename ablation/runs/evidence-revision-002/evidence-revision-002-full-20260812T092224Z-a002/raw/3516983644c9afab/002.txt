@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Exit code 101 indicates a Rust panic or compilation error, but we have no stderr or error message to determine whether the failure is a genuine bug in the project's own source code, an incorrect verifier command/configuration for this case, or a missing/misconfigured environment element. All dependency artifacts compiled fresh, suggesting the problem is in the project crate itself or in how the verifier invokes it.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's exact command, evidence types, and direction rule will reveal whether the verifier is correctly configured for this case (e.g., running the right cargo subcommand or test target) or whether a misconfiguration is causing exit code 101.",
+ "proposed_settlement": null}
+```

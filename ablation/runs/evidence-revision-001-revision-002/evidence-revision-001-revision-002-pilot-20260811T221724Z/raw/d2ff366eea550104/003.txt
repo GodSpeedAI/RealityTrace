@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is `iter_reality_gap_case_files` absent from `cep.inventory` because the implementation never defined it, or because the projection in `cep.validation` uses a wrong/mis-projected symbol name that doesn't match what inventory actually exports?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

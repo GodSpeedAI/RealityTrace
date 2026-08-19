@@ -1,0 +1,13 @@
+Looking at the accumulated evidence from round 1:
+
+- **Environment is clean**: toolchain available (act-01), permissions fine (act-06), paths readable.
+- **Test targets resolve**: all referenced targets exist (act-05), no missing files in the plan.
+- **Verifier is correctly configured**: cargo-test with proper exit-code mapping (act-04).
+- **Dependencies compile**: all `"fresh": true` in FTS.
+- **Test compiles but fails**: act-03 shows the test ran (`Running unittests...`, `Running tests/unit_tests.rs...`) and produced `error: test failed` — a runtime assertion failure, not a compilation error.
+- **No verifier misconfiguration**: the command, evidence types, and direction rule are all coherent.
+- **Fixture intentionally missing** (`example-v999.py`) is part of the scenario design, and `example.py` exists and matches.
+
+The failure is consistently reproducible in isolation, the build succeeds, the test target exists, the verifier is properly configured — the only remaining locus is the project's own code failing the test assertion.
+
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}

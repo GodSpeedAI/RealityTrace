@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": "All dependencies compiled successfully (fresh), but the verifier exited 101 (Rust panic). Without the actual error message, we cannot determine whether the verifier's command/configuration is misdirected (e.g., wrong test target), the implementation panics at runtime, or the environment lacks a runtime prerequisite.", "selected_action": "act-03", "expected_information": "The verifier's exact command, evidence types, and direction rule will reveal whether it invokes the correct test target and arguments, or whether a misconfiguration is triggering the panic.", "proposed_settlement": null}
+```

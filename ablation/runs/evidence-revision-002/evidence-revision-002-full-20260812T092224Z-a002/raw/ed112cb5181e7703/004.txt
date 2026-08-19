@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "The FTS shows all dependencies compiled successfully with no main-crate artifact and no error message, making it impossible to distinguish a compile/runtime failure in the implementation from a verifier targeting a non-existent binary or a misconfigured verifier.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

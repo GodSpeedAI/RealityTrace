@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "The symbol format_matches_as_text is confirmed absent from the codebase, but we cannot determine whether the verifier legitimately expects this symbol (implementation is incomplete) or incorrectly references a non-existent symbol (verifier misconfiguration) without inspecting the verifier's command/rule configuration.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["declared_model", "projection"], "unresolved_distinction": "Whether the malformed TOML array ('patterns = [' without closure) exists in the authored registry/model declaration itself, or was introduced by a projection step that generates the registry artifact from a correct source.", "selected_action": null, "expected_information": null, "proposed_settlement": "declared_model"}
+```

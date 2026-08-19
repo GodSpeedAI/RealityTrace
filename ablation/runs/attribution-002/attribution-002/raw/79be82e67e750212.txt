@@ -1,0 +1,3 @@
+Candidates: verifier, evidence_collection, implementation, environment
+Excluded: implementation(no-output-distinction-available), environment(no-config-signal), evidence_collection(zero-vector-is-symptom-not-cause)
+Locus: verifier

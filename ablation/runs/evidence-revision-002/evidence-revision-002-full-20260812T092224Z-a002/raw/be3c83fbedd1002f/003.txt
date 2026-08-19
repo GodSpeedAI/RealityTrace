@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether tests/test_inventory.py was expected to be created by the implementation deliverable but was omitted, or whether the verification plan's test-path specification references a file that was never intended to exist in the project tree", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

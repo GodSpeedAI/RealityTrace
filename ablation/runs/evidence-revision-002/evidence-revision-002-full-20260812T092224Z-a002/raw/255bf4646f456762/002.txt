@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "All build artifacts are fresh:true (compilation succeeded), yet verifier exited 101 (Rust panic). The panic could originate from the implementation code being exercised by the test, or from the verifier/verification_plan infrastructure using a wrong command, missing test target, or malformed configuration that causes the verifier itself to panic.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's command line, evidence-type declarations, and direction rule will reveal whether the verification plan correctly targets the intended test binary and whether the command is well-formed. A misconfigured command would point to verification_plan or verifier; a correctly formed command targeting a real test would shift suspicion toward implementation.",
+ "proposed_settlement": null}
+```

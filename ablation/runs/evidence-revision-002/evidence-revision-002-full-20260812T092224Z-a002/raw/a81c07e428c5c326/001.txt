@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether the module file cep/conformance/anti_collapse.py is entirely absent from the source tree (implementation failure — code references something never created) or exists in source but is excluded from the installed package (projection failure).", "selected_action": "act-02", "expected_information": "Confirmation of whether cep/conformance/anti_collapse.py (and the symbol run_reality_gap_anti_collapse) exists at the expected filesystem location under src/cep/conformance/.", "proposed_settlement": null}
+```

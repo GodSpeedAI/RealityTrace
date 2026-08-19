@@ -1,0 +1,15 @@
+Candidates: implementation, verification_plan
+
+Excluded: verifier (exit 101 is standard Rust test-failure code; assertion fired correctly), environment (build-finished success:true; all deps compiled), evidence_collection (full panic stdout and exit code captured), authority (no permission or signing errors visible), projection (no projection-layer artifact invoked; plain unit test), declared_model (blocked by F-28 until implementation and verification_plan are adjudicated)
+
+**Reasoning:**
+
+The test `test_corpus_scenario_assertion_bug` in `corpus_sr1.rs:3` asserts `left == right` and fails with left=2, right=3. In Rust's `assert_eq!`, left is the computed/actual value and right is the expected literal.
+
+- **verification_plan** would be the locus if the test itself encodes the wrong expected value (e.g., the spec says the answer is 2 but the test hard-codes 3). To support this, we would need the specification or model to confirm the correct value is 2. No such evidence is present in the retrieval context — there is no spec excerpt, no declared-model document, and no indication the expectation in the test was mis-derived from requirements.
+
+- **implementation** is supported by the fact that the test compiled, linked, and ran to completion against the built library artifact. The only failure is a value mismatch: the implementation-under-test returned 2 where the test expected 3. The verifier (cargo test) performed its job correctly — it executed the binary, evaluated the assertion, and reported the discrepancy. This is the canonical signature of an implementation defect: the harness is sound, the environment is sound, but the artifact produces a wrong result.
+
+Since the build succeeded, the test executed, and the assertion mechanism itself is correct, the remaining explanatory gap is that the code under test computes the wrong value. There is no evidence in the record suggesting the test's expected value (3) is itself erroneous.
+
+Locus: implementation

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether cargo is genuinely missing from the environment (toolchain not provisioned), or the verifier is misconfigured to invoke cargo when it should use a different command. However, exit code 127 and the explicit 'cargo: command not found' message strongly indicate the toolchain is absent.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

@@ -1,0 +1,16 @@
+Looking at this failure, the error message clearly states that test target `integration_tests` doesn't exist, but `integration_tests_moved` and `unit_tests` are available. This points to the verification referencing a stale/renamed test target name.
+
+Let me enumerate candidates and determine the locus.
+
+The two most plausible candidates are:
+1. **verification_plan** — The plan instructs running test target `integration_tests`, which has been renamed to `integration_tests_moved`. The plan is stale.
+2. **projection** — The project's build configuration moved/renamed the test target, breaking consistency with what the verification expects.
+
+The key distinction is whether the plan itself contains the wrong target reference (plan error) or the project structure changed out from under a correct plan (projection error). However, the evidence is quite clear: `integration_tests_moved` exists, indicating an intentional rename that the verification command did not track. The verification command references a target name that no longer exists — this is fundamentally a verification plan that references an outdated target identifier.
+
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verification plan specifies a stale test target name (`integration_tests`) versus the projection having moved/renamed the target without updating references.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verification_plan"}
+```

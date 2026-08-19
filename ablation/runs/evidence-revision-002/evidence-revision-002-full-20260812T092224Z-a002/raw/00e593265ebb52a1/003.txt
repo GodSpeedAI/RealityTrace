@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "The build completed successfully and all external artifacts (test targets, fixtures, permissions) check out, yet verifier exit 101 indicates a runtime panic. The remaining question is whether the verifier's configuration invokes the binary incorrectly or the implementation genuinely panics at runtime.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether pytest is a legitimate project test runner that is simply absent from the restricted runtime environment (PATH=/usr/bin:/bin, toolchain unavailable), or whether the verifier is misconfigured to invoke pytest when the project does not actually use it.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **SQL** shows `verifier_exit: 101` — exit code 101 is the standard Rust panic/abort exit code, indicating the verifier process crashed.
+- **Vector** is entirely zeros, indicating no meaningful feature content was captured or projected.
+- **FTS** is empty, confirming no textual evidence was indexed.
+- The evidence was still recorded (graph/SQL entries exist), so collection infra partially functioned.
+
+The dominant signal is the verifier crashing with a panic exit code (101), which prevented normal evaluation from completing. The zeroed vector and empty FTS are downstream consequences of the verifier failing before it could produce or expose meaningful output.
+
+Locus: verifier

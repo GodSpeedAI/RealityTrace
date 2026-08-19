@@ -1,0 +1,7 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection", "verifier"],
+ "unresolved_distinction": "Whether the mode-0 permission on the fixture file was set by the evidence-collection or verifier pipeline during workspace setup (making the pipeline the root cause), or whether it is an inherent environment filesystem misconfiguration independent of any pipeline action.",
+ "selected_action": "act-03",
+ "expected_information": "Verifier configuration details (command, evidence types, direction rule) that may reveal workspace-setup or file-permission-handling steps capable of explaining why only the fixture file has mode 0 while all other files are normal.",
+ "proposed_settlement": null}
+```

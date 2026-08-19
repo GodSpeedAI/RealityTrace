@@ -1,0 +1,10 @@
+Looking at the retrieval context:
+
+- **Vector**: all zeros (no semantic content captured/embedded)
+- **FTS**: empty (no text indexed)
+- **SQL**: `verifier_exit: 1` (verifier failed)
+- **Graph**: an evidence artifact ID exists but yields no retrievable content
+
+The evidence artifact was nominally recorded but contains no parseable substance — the zero vector and empty FTS indicate nothing meaningful was collected. The verifier failure (exit 1) is a downstream consequence of being fed empty evidence.
+
+Locus: evidence_collection

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "Whether the mode-0 permission on tests/fixtures/example.py is the root environment defect causing the program to fail, or whether the implementation should gracefully handle unreadable fixture files instead of panicking (exit 101). The prior 'environment' settlement was rejected for insufficient evidence, and no runtime trace or compiler error for the main crate has been observed.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

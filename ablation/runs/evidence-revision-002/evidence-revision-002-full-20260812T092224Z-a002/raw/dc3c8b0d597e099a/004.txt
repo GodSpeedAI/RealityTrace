@@ -1,0 +1,13 @@
+Looking at the diagnostic state:
+
+1. **Exit code 101** is recorded but no actual error message is visible in the evidence.
+2. The FTS evidence shows only successful dependency compilation artifacts (all marked `fresh: true`), with no error output or panic trace.
+3. The previous concrete settlement of `implementation` was rejected as `EVIDENCE_INSUFFICIENT`.
+4. No observations were acquired (0/7 payments used), so no additional evidence was gathered after the rejection.
+5. The unresolved distinctions remain entirely unresolved — we cannot distinguish between compilation error, runtime panic, or verifier misconfiguration.
+
+With no error message, no verifier command output, and no acquired observations to narrow the cause, the evidence does not support attribution to any single locus.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan", "environment"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

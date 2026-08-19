@@ -1,0 +1,14 @@
+Looking at this failure, I can see a clear import chain break in the source code itself:
+
+1. `tests/test_import.py` → imports `cep.cli`
+2. `cep/cli.py` line 39 → imports from `cep.validation`
+3. `cep/validation.py` line 7 → imports `iter_reality_gap_case_files` from `cep.inventory`
+4. **FAILS**: `iter_reality_gap_case_files` does not exist in `cep.inventory`
+
+The import dependency chain is entirely within the project's own source code. The function `iter_reality_gap_case_files` is expected by `validation.py` but missing from `inventory.py`. This is a defect in the source implementation—a symbol referenced in one module is absent from the module that should define it.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Is iter_reality_gap_case_files missing from cep.inventory due to an implementation defect (e.g., function never written, renamed, or deleted), or is the test/verification plan importing a module that was never intended to be importable in this state?",
+ "selected_action": null, "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

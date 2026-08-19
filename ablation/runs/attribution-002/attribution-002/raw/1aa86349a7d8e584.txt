@@ -1,0 +1,3 @@
+Candidates: verifier, implementation, evidence_collection, unknown
+Excluded: implementation(no-output-detail), evidence_collection(artifact-recorded)
+Locus: verifier

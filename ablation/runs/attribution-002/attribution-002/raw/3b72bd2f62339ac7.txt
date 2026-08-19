@@ -1,0 +1,17 @@
+Candidates: verifier, implementation, environment, evidence_collection, unknown
+
+**Discriminating evidence per candidate:**
+
+- **verifier**: `verifier_exit: 101` is the Rust panic exit code. If the verifier code itself panicked while processing the cargo JSON stream, this would be the locus. However, no panic message or backtrace is present to confirm the verifier's own code faulted (versus something it invoked).
+
+- **implementation**: All compiler artifacts are `"fresh": true` and all build scripts executed without error, so the domainforge crate compiled. But there is no runtime trace, test output, or stderr showing an implementation-level fault during verification.
+
+- **environment**: Every dependency (proc-macro2, serde, tokio, libc, etc.) compiled and is fresh; build scripts executed cleanly. No missing-library or platform error is visible. This strongly **excludes** environment.
+
+- **evidence_collection**: The exit code was successfully recorded (`verifier_exit: 101`), and build artifacts were captured. However, no stderr/stdout or panic backtrace from the verifier was captured, so collection may be incomplete — but the key signal (exit code) is present.
+
+- **unknown**: The only failure signal is a bare exit code 101 with no accompanying error message, no panic location, no test assertion failure, and no stderr. We cannot distinguish whether the verifier panicked on its own logic, choked on malformed input from the implementation, or hit an unhandled edge case in the cargo-JSON parsing.
+
+**Excluded:** environment (clean-build-all-fresh), evidence_collection (exit-code-recorded), implementation (no-runtime-trace), declared_model (F-28 gate: cannot settle without explicit exclusion of all four — verifier not fully excluded since panic origin unknown).
+
+Locus: unknown

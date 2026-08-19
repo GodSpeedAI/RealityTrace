@@ -1,0 +1,8 @@
+Looking at this failure:
+
+- The test `test_corpus_scenario_assertion_bug` in `corpus_sr1.rs:3:5` panics on a hardcoded assertion `left == right` with left: 2, right: 3.
+- This is a corpus scenario test exercising the sea-forge-core implementation, checking a specific expected value.
+- The implementation under test produced a value of 2, but the test expected 3 — the code being tested returned an incorrect/wrong count or result for the scenario.
+- The build succeeded, the environment is fine, and the verifier (cargo test runner) executed correctly and reported the failure honestly. The test logic itself is straightforward (a value comparison), so the defect lies in the system-under-test producing the wrong output.
+
+Locus: implementation

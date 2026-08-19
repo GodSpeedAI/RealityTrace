@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["projection", "verification_plan"],
+  "unresolved_distinction": "Whether projection was expected to generate tests/test_inventory.py but failed (projection), or whether the verification plan specifies an incorrect path (verification_plan), cannot be resolved: there is no .sea model or manifest confirming what projection should have produced, and all available evidence actions have been exhausted.",
+  "selected_action": null,
+  "expected_information": null,
+  "proposed_settlement": "unknown"
+}
+```

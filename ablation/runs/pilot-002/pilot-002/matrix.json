@@ -1,0 +1,617 @@
+{
+ "experiment_id": "pilot-002",
+ "cases": [
+  "ag-01",
+  "cep-01",
+  "df-01",
+  "sr-10",
+  "sr-13"
+ ],
+ "seed": 20260809,
+ "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+ "unit_count": 60,
+ "order": [
+  "ff108534347f2e6b",
+  "f2c1f5bdf5f088c2",
+  "7afb1a68ce184943",
+  "7f975a5aded1af20",
+  "f55c47d2431357bf",
+  "534c203a95c6c662",
+  "5d18b44754ecc074",
+  "cb1ffca0e8e5fd8e",
+  "a1242c0cd3c11cff",
+  "51d1bb754d9d778f",
+  "9e8954b315445f28",
+  "570c7ec46af4e87c",
+  "0c2e95536bf9d498",
+  "006704f6b1e1c1bf",
+  "e1a0c342fe4a7812",
+  "6c7912b741a81044",
+  "73e63d002f50ba0d",
+  "04bbcdf4bcd398be",
+  "396174fd13199b12",
+  "a83d79f32cee6915",
+  "7475d81274f1732a",
+  "980211d89075ff52",
+  "401644e46b667b0d",
+  "420b640cec114a4e",
+  "369972ce5f0b17f2",
+  "63711ff4d1d44174",
+  "962efcb41010cef9",
+  "cba319d146be3bc2",
+  "75869c363c3fc05a",
+  "7a3c9e201300cb7c",
+  "4501c093d260b24c",
+  "371ddcc00a047226",
+  "90fb4b5c9601d657",
+  "245fe709d1e66e3b",
+  "4568940c60e18c9c",
+  "3bbd79e4bd513cbe",
+  "06cc9097a5499a89",
+  "310eb54e1cfbcf85",
+  "88a5b0ca808e0bd3",
+  "6127d1cb0d573179",
+  "e5aa2f0b0dddf245",
+  "10d523b4cb7e82d8",
+  "c5eb7600204f9655",
+  "c40a933ec3c222e3",
+  "57dbd3e7b6f241df",
+  "f7d2f6807bba00a4",
+  "ebfea76cb41667de",
+  "3ce0d8cf68295196",
+  "7885c4ec59abcfc1",
+  "7edcccf72d69639d",
+  "e06ff12d352e774f",
+  "6ba7c97a1bca34e9",
+  "8b91406c8ca39fd4",
+  "3d1f5ed1551e1061",
+  "d306a6419ae7d274",
+  "d598a612af3ecd9c",
+  "3c9d7de380ffef19",
+  "65854d275e1c45fb",
+  "1a458ef00526b101",
+  "7580ceca48267223"
+ ],
+ "units": [
+  {
+   "unit_id": "ff108534347f2e6b",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "A",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "5d18b44754ecc074",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "A",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "9e8954b315445f28",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "A",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "f2c1f5bdf5f088c2",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "B",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "534c203a95c6c662",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "B",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "51d1bb754d9d778f",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "B",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "7f975a5aded1af20",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "C",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "cb1ffca0e8e5fd8e",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "C",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "a1242c0cd3c11cff",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "C",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "7afb1a68ce184943",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "D",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "f55c47d2431357bf",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "D",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "570c7ec46af4e87c",
+   "experiment_id": "pilot-002",
+   "case_id": "ag-01",
+   "arm": "D",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "0c2e95536bf9d498",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "A",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "73e63d002f50ba0d",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "A",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "980211d89075ff52",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "A",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "006704f6b1e1c1bf",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "B",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "396174fd13199b12",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "B",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "420b640cec114a4e",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "B",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "6c7912b741a81044",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "C",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "a83d79f32cee6915",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "C",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "401644e46b667b0d",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "C",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "e1a0c342fe4a7812",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "D",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "04bbcdf4bcd398be",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "D",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "7475d81274f1732a",
+   "experiment_id": "pilot-002",
+   "case_id": "cep-01",
+   "arm": "D",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "962efcb41010cef9",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "A",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "4501c093d260b24c",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "A",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "90fb4b5c9601d657",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "A",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "369972ce5f0b17f2",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "B",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "7a3c9e201300cb7c",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "B",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "3bbd79e4bd513cbe",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "B",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "cba319d146be3bc2",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "C",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "75869c363c3fc05a",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "C",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "245fe709d1e66e3b",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "C",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "63711ff4d1d44174",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "D",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "371ddcc00a047226",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "D",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "4568940c60e18c9c",
+   "experiment_id": "pilot-002",
+   "case_id": "df-01",
+   "arm": "D",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "06cc9097a5499a89",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "A",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "10d523b4cb7e82d8",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "A",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "57dbd3e7b6f241df",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "A",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "6127d1cb0d573179",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "B",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "e5aa2f0b0dddf245",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "B",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "f7d2f6807bba00a4",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "B",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "88a5b0ca808e0bd3",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "C",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "c5eb7600204f9655",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "C",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "3ce0d8cf68295196",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "C",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "310eb54e1cfbcf85",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "D",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "c40a933ec3c222e3",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "D",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "ebfea76cb41667de",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-10",
+   "arm": "D",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "7885c4ec59abcfc1",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "A",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "d306a6419ae7d274",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "A",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "65854d275e1c45fb",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "A",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "6ba7c97a1bca34e9",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "B",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "8b91406c8ca39fd4",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "B",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "7580ceca48267223",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "B",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "7edcccf72d69639d",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "C",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "d598a612af3ecd9c",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "C",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "3c9d7de380ffef19",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "C",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "e06ff12d352e774f",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "D",
+   "repetition": 1,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "3d1f5ed1551e1061",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "D",
+   "repetition": 2,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  },
+  {
+   "unit_id": "1a458ef00526b101",
+   "experiment_id": "pilot-002",
+   "case_id": "sr-13",
+   "arm": "D",
+   "repetition": 3,
+   "config_hash": "7af188744aea282c25214d3b8f73dd7461645615ae468ade4161540edb489ca6",
+   "seed": 20260809
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **FTS** is empty — no indexed text content found.
+- **Vector** is all zeros — no meaningful embedding/features were produced.
+- **SQL** records `verifier_exit: 4` — an abnormal non-zero, non-standard exit code from the verifier.
+- The evidence record exists (so evidence collection itself functioned enough to log the run), but the verifier terminated with code 4 and produced no usable output artifacts (empty FTS, zero vector).
+
+The abnormal `verifier_exit: 4` is the direct, proximate cause: the verifier itself crashed or errored out, producing no harvestable signal downstream. The empty FTS and zero vector are downstream consequences of the verifier failing to complete, not independent failures in their own layers.
+
+Locus: verifier

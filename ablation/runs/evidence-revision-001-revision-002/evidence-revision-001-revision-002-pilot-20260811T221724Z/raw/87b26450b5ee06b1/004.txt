@@ -1,0 +1,15 @@
+Looking at the diagnostic state:
+
+1. **Build succeeded** — all compilation artifacts produced, no code errors
+2. **Test panic**: "stale fixture missing" at `corpus_sr10.rs:3`
+3. **act-07 confirms**: `data/corpus-v998.json` is **missing** from the filesystem
+4. **act-02 confirms**: Environment is healthy — toolchain available, paths writable
+5. **act-04 confirms**: No missing source symbols referenced in the trace
+
+The failure reduces to: a required fixture file (`data/corpus-v998.json`) is absent. The environment is not at fault (toolchain, permissions, working directories all check out). No source symbols are missing. The test compiled and executed successfully — only the fixture data was unavailable.
+
+The unresolved distinction is between `evidence_collection` (pipeline failed to place the fixture) and `verification_plan` (test references an incorrect/stale path). However, with no evidence of an incorrect path in the verifier configuration, and a confirmed missing file where the test expects it, the most supported attribution is that the evidence pipeline failed to collect and provide the fixture.
+
+```json
+{"candidate_loci": ["evidence_collection", "verification_plan"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

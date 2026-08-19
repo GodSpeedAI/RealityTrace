@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "The symbol `from_cli` is confirmed missing from its expected location, and verifier_exit=101 indicates a runtime panic. We need to determine whether the verifier's command/expectation references `from_cli` legitimately (making this an implementation defect for omitting the symbol) or whether the verifier is misconfigured and references a non-existent entry point incorrectly.", "selected_action": "act-03", "expected_information": "The verifier's command, evidence types, and direction rule will reveal whether it invokes or expects `from_cli`, clarifying whether the missing symbol is an implementation gap or a verifier misconfiguration.", "proposed_settlement": null}
+```

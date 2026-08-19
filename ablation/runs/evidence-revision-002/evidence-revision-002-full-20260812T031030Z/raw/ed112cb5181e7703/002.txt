@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Exit code 101 (Rust panic) could originate from a runtime panic in the project's own code (implementation) or from a failure within the verifier harness itself (verifier). All dependency build artifacts show fresh:true, confirming successful compilation of dependencies, but no panic message or stack trace is available to pinpoint the panic source.", "selected_action": "act-04", "expected_information": "Re-running the failing test in isolation will produce the actual stderr/stdout output containing the panic message and full stack trace, directly revealing whether the panic occurs in the verifier code path or in the implementation under test.", "proposed_settlement": null}
+```

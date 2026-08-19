@@ -1,0 +1,7 @@
+Candidates: verifier, implementation, environment, verification_plan
+Excluded: none — no positive evidence distinguishes any locus
+Locus: unknown
+
+The retrieval context provides only minimal metadata: `verifier_exit: 1` (a failure occurred), `stdin_format: pytest-progress`, a zero-valued vector (no signal), an empty FTS block, and a graph with only structural edges. There is no error output, traceback, log content, or assertion detail that would allow discrimination among the candidates. A verifier exit code of 1 is consistent with implementation test failures, a verifier crash, an environment configuration error, or a malformed verification plan. No candidate can be positively supported or excluded with stated evidence.
+
+Locus: unknown

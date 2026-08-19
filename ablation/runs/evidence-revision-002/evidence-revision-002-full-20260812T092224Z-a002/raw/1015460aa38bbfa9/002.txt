@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Does the file src/cep/conformance/anti_collapse.py exist on disk? If absent, cli.py references an unimplemented module (implementation). If present but inaccessible or not on the import path, sources are not correctly projected into the test environment (projection).", "selected_action": "act-02", "expected_information": "Filesystem existence and permission state of src/cep/conformance/anti_collapse.py in the working tree — absence confirms an implementation gap; presence with restrictive permissions or path issues points to projection.", "proposed_settlement": null}
+```

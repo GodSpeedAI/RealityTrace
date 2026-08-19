@@ -1,0 +1,9 @@
+Looking at the evidence for case cep-14:
+
+- **SQL** shows `verifier_exit: 1` with `stdin_format: pytest-progress`, meaning the verifier ran and reported failures.
+- **FTS** is empty and **vector** is all zeros — no meaningful content anomalies that would indicate retrieval/collection corruption.
+- **Graph** shows clean provenance: the case belongs to repo `cep` and recorded evidence links are intact.
+
+The verifier executed normally (exit code 1, not a crash/signal), with pytest as the driver. A clean exit-1 from pytest indicates the code under test failed its checks — the verification machinery ran, evidence was collected and routed, but the artifact itself did not satisfy the tests. No environment, authority, projection, or collection-layer breakdown is evident.
+
+Locus: implementation

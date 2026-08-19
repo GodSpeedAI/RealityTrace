@@ -1,0 +1,14 @@
+Looking at this diagnostic state:
+
+1. **Failure**: `ModuleNotFoundError: No module named 'cep.conformance.anti_collapse'` — a module referenced by `cep/cli.py` cannot be found.
+2. **Candidate loci**: `implementation` (file never authored) vs. `projection` (file exists but not on import path / not packaged).
+3. **Critical gap**: The unresolved distinction is precisely whether the source file exists. No observations were acquired (0/7 payment used), and the prior concrete settlement of `implementation` was rejected as EVIDENCE_INSUFFICIENT.
+4. **Governance**: CONCRETE_REJECTED — the one attempted settlement was already turned back.
+
+Without act-04 (inspect whether source symbols are present at expected locations) or act-02 having been run, there is no evidence to distinguish between implementation defect and projection defect. The `ModuleNotFoundError` alone is equally consistent with both scenarios.
+
+The evidence is insufficient to attribute to exactly one locus with confidence.
+
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Does cep/conformance/anti_collapse.py physically exist in the repo (pointing to projection/packaging) or was it never authored (pointing to implementation defect)?", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

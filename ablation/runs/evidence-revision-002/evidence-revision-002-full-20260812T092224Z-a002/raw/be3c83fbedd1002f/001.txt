@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether the test file tests/test_inventory.py was never created by the implementation, or whether the verification plan references a path that does not correspond to any actual file in the project", "selected_action": "act-05", "expected_information": "Whether tests/test_inventory.py (or a similarly named test file) exists anywhere in the working tree, which would distinguish a missing implementation artifact from an incorrect verification plan path reference", "proposed_settlement": null}
+```

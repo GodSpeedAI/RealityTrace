@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verification plan itself references a stale target name ('integration_tests') that no longer exists, or whether a projection step incorrectly renamed the target from 'integration_tests' to 'integration_tests_moved' in the working tree.", "selected_action": "act-06", "expected_information": "Whether the test target 'integration_tests' referenced by the verification command exists (or existed) in the working tree, versus being renamed to 'integration_tests_moved' by a projection step — this distinguishes a verification_plan reference error from a projection rename artifact.", "proposed_settlement": null}
+```

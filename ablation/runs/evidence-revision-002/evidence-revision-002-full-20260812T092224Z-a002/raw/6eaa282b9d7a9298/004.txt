@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the verifier panicked due to its own misconfigured command/direction rule, or because the verification plan references the missing fixture tests/fixtures/example-v999.py", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

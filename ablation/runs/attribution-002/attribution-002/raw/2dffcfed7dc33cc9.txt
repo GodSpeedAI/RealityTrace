@@ -1,0 +1,9 @@
+Looking at this case, the key evidence is:
+
+- `verifier_exit: 101` — In the Rust ecosystem, exit code 101 is the standard panic exit code. The build artifacts in the FTS context confirm this is a Rust toolchain environment.
+- The FTS context shows only normal dependency compilation artifacts with no compilation errors; all crates compiled successfully (`"fresh": true`).
+- The evidence record itself is well-formed and was collected successfully.
+
+The verifier itself crashed/panicked during execution, rather than detecting a flaw in the implementation or encountering an environment problem. The build succeeded; the verification tool failed internally.
+
+Locus: verifier

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "The module cep.conformance.anti_collapse is confirmed missing from the working tree (act-07), but no observation has checked whether the file exists in the canonical source repository. If it exists in canonical source but was omitted from the projected working tree, the locus is projection; if it was never created or is incorrectly named/referenced by cep/cli.py line 22, the locus is implementation.",
+ "selected_action": "act-01",
+ "expected_information": "Whether cep/conformance/anti_collapse.py exists as a source artifact in the canonical repository tree or projection manifest, which would distinguish a projection omission from an implementation-level missing module.",
+ "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Is the non-writable .corpus-tmpfix directory a misconfiguration of the execution environment (permissions set incorrectly on the host), or did the evidence collection / test harness fail to properly provision the temporary directory before running the test?", "selected_action": "act-04", "expected_information": "Confirm the ownership and permission bits on /home/sprime01/projects/cep/.corpus-tmpfix to determine whether the directory was created with wrong permissions (environment) versus not being created/provisioned by the harness (evidence_collection).", "proposed_settlement": null}
+```

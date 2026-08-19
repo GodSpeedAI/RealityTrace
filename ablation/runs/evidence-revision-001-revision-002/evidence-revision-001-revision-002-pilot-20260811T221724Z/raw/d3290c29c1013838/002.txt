@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["declared_model", "projection"],
+  "unresolved_distinction": "Whether the invalid TOML array syntax (`patterns = [` without proper closure) exists in the authored registry/model file itself, indicating an error in the declared model, or whether it was introduced by a projection step that generates the registry artifact from a correct source.",
+  "selected_action": "act-03",
+  "expected_information": "Whether the registry file referenced during parsing exists as an authored fixture/data file and whether it contains the malformed TOML array directly. If the authored file already contains `patterns = [` without closure, the failure is in declared_model; if the source is well-formed but the generated artifact is not, the failure is in projection.",
+  "proposed_settlement": null
+}
+```

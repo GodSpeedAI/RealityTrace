@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Whether the trailing '# stale' content after valid JSON in the fixture file was committed as part of the test's fixture data (implementation defect) or was appended during evidence collection/serialization (evidence_collection artifact).", "selected_action": "act-04", "expected_information": "Whether the fixture file in the working tree contains the trailing '# stale' content as committed, or whether it differs from what evidence collection produced, clarifying if the corruption originated in the repository or during collection.", "proposed_settlement": null}
+```

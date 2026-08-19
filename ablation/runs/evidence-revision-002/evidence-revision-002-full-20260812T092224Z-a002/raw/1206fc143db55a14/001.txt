@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "The FTS stream shows all dependency crates compiling successfully (fresh: true) but no error message is visible. Did the main crate (ast-grep-mcp-rs) fail to compile or a test panic at runtime (implementation), or was the verifier's command/target specification incorrect causing a non-zero exit without producing a meaningful compilation artifact (verification_plan or verifier configuration)?",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's configured command, declared test target path, and evidence-type declarations will reveal whether the exit code 101 resulted from a correctly specified but failing test versus a misconfigured or missing test invocation.",
+ "proposed_settlement": null}
+```

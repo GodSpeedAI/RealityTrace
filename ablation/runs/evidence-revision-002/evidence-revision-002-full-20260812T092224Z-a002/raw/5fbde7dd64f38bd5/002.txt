@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "Is the PermissionError due to the tests/fixtures directory having mode 0 (completely locked down) as an environmental misconfiguration, or is the test code itself wrong for assuming the directory is accessible without proper error handling?", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

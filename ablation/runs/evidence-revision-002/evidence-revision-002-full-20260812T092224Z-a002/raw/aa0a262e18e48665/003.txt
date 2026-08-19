@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether exit code 101 (Rust panic) originates from a runtime logic error in the implementation when processing the test input, or from a misconfigured verifier that invokes the wrong command or passes malformed input.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

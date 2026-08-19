@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Is the malformed fixture file (extra `\\n\\n# stale\\n` after valid JSON) a defect in the test/fixture implementation itself, or was it corrupted by an evidence-collection or projection process that generated it?", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

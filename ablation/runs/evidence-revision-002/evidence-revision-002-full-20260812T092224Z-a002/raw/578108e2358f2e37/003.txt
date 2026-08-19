@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the unreadable fixture file (tests/fixtures/example.py, mode 0) is an environment permissions defect on a correctly-referenced fixture, or whether the verification plan itself misconfigures fixture paths/references causing the verifier to fail", "selected_action": "act-02", "expected_information": "Whether the fixture file is referenced by the verification command and whether its content (if accessible) matches expectations, distinguishing an environment permissions issue from a verification plan fixture-reference error", "proposed_settlement": null}
+```

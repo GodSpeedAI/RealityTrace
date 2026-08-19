@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation", "environment"], "unresolved_distinction": "Whether exit code 101 stems from a compilation error in the project source (implementation), a runtime panic during test execution (also implementation), or an incorrect/misconfigured verifier command or test target (verification_plan). The FTS evidence only shows dependency artifacts building successfully; no error message or actual verifier command output is visible.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's configured command, evidence types, and direction rule, revealing whether the verification plan references a valid test target and whether the command itself could plausibly produce exit code 101 independent of source-code defects.",
+ "proposed_settlement": null}
+```

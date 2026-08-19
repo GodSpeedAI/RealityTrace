@@ -1,0 +1,15 @@
+Looking at the evidence:
+
+1. **act-05** (re-run test in isolation): Result was `compile_error` — "compilation failed — no test could run"
+2. **act-07** (symbol inspection): `format_matches_as_text` was NOT FOUND at expected locations
+3. **act-06** (verifier config): Verifier is standard `cargo-test` with normal exit-code mapping
+4. **act-02** (test target resolution): All referenced test targets resolve correctly
+5. **act-01** (fixtures): Fixtures exist and match expectations
+
+The FTS data shows all dependency artifacts as "fresh," meaning dependencies compiled fine. But when the actual test binary is built (act-05), compilation fails because the implementation is missing the required symbol `format_matches_as_text` (act-07). The verifier itself (cargo-test) is correctly configured — it's the implementation source code that is incomplete.
+
+This conclusively points to the **implementation** locus: the source code lacks a required function, causing a compilation failure when the test binary is built, which propagates as a nonzero (101) exit code from the verifier.
+
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

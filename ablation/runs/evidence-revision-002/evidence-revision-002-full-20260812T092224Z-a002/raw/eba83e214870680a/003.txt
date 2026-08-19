@@ -1,0 +1,17 @@
+Looking at this diagnostic state, I need to analyze what we know and make a final determination.
+
+**Key evidence:**
+1. **act-07**: The verifier sets `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` — a deliberately nonexistent path
+2. **act-04**: The test **passes** in isolation under default environment (exit 0)
+3. **verifier_exit: 101** — Rust panic, only under the verifier's environment injection
+4. All filesystem checks pass (act-01, act-06, act-08), no missing symbols (act-03)
+5. Previous "verifier" settlement was rejected for EVIDENCE_INSUFFICIENT
+
+**Critical distinction:** The `nonexistent-corpus-config.toml` name suggests intentional testing of the implementation's robustness against a missing config. A well-engineered MCP server should gracefully handle a missing/invalid config file (return error, use defaults), not panic. The exit code 101 (panic) indicates the implementation has an unhandled `.unwrap()`/`.expect()` or similar panic when the config file is absent. The isolated test passing confirms the implementation works when config exists — but it fails to gracefully handle the missing-config scenario the verifier exercises.
+
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "Whether the verifier intentionally exercises the implementation's handling of a missing config file (pointing to implementation locus) or erroneously injects a bogus config path that no implementation could be expected to handle (pointing to verifier locus). The name 'nonexistent-corpus-config.toml' suggests deliberate robustness testing, and a panic (exit 101) rather than graceful error indicates the implementation lacks proper error handling for missing config.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

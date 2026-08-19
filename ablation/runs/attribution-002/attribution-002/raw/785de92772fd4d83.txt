@@ -1,0 +1,16 @@
+Candidates: environment, verifier, verification_plan, implementation, evidence_collection
+
+Excluded: implementation (exit127-pre-run), evidence_collection (captured), verifier (shell-not-found-not-logic), verification_plan (no-plan-content-visible)
+
+**Reasoning:**
+
+The sole diagnostic signal is `verifier_exit: 127`. In POSIX shells, exit code 127 means **"command not found"** — the shell could not locate or execute the verifier binary at the invoked path. This is fundamentally an environment-level failure: the verifier command was not available on `PATH`, was not installed in the container/runtime, or had missing interpreter/dependencies.
+
+- **implementation** is excluded because exit 127 occurs before any implementation is exercised — the implementation-under-test never ran.
+- **evidence_collection** is excluded because the failure was successfully recorded (exit code, artifact ID, graph edges all present).
+- **verifier** (as logic) is excluded because 127 is not a verifier-internal error (that would be non-zero codes from within the binary); the binary was never found/executed.
+- **verification_plan** cannot be confirmed or excluded — no plan content is visible in the retrieval context (FTS is empty, vector is all zeros). By the evidence-available rule, silence alone does not exclude, but there is no positive evidence for it either.
+
+The positive evidence (exit 127 = command not found) directly supports **environment**.
+
+Locus: environment

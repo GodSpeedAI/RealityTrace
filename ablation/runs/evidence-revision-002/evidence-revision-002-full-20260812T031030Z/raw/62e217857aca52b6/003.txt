@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "Whether the missing symbol crate::format::format_matches_as_text is expected by the project's own code (implementation gap) or only by an incorrectly configured verifier command/target. Since this is the final round, settling on the most parsimonious explanation.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

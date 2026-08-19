@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether pytest is missing because the runtime environment was never provisioned with it (environment), or because the verification plan incorrectly specified pytest without ensuring its availability as a prerequisite (verification_plan).", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

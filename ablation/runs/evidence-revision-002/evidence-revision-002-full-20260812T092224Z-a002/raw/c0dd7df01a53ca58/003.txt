@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the mode-0 permissions on the fixture file are an artifact of the environment's filesystem state or were caused by the verification plan's provisioning step assigning restrictive permissions.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

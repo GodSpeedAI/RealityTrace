@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "Whether the .corpus-tmpfix directory was created with wrong permissions by the evidence-collection harness or the environment itself lacks write access",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

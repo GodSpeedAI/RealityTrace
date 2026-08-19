@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **FTS**: Empty — no text content was indexed
+- **Vector**: All zeros — no meaningful features extracted
+- **SQL**: `verifier_exit: 1` — the verifier ran but failed
+- **Graph**: An evidence artifact exists (`01KZJ2EXBAYVC75154SZH15569`) but it appears to carry no usable content
+
+The evidence artifact was registered (graph edge exists, SQL row present), but the actual evidence is hollow: no full-text content and a zero vector. The verifier exited with code 1 because it had no substantive evidence to work with. The root cause is that the evidence was not properly collected or captured — the artifact exists as a pointer but is empty.
+
+Locus: evidence_collection

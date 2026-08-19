@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier"], "unresolved_distinction": "Whether exit code 101 originates from a panic in the test binary at runtime (implementation) or from the verifier itself failing during test invocation (verifier). All dependencies compiled successfully with fresh=true, confirming the failure is post-compilation, but without panic output we cannot definitively confirm which Rust process panicked.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

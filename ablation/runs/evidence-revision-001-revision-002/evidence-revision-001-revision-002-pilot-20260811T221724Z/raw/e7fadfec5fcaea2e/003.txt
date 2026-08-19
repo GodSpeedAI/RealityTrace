@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether `iter_reality_gap_case_files` is a hand-coded function that was never written in cep.inventory (implementation defect) or a symbol that a projection/code-generation step from the semantic model should have emitted into cep.inventory but failed to (projection defect).", "selected_action": "act-06", "expected_information": "Whether the declared semantic model (.sea) defines or references `iter_reality_gap_case_files` as a projected artifact — if the model expects projection to emit it, the locus is projection; if it is absent from the model entirely, the locus is implementation.", "proposed_settlement": null}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "verifier", "verification_plan"], "unresolved_distinction": "The fixture file tests/fixtures/example.py exists but has mode 0 (completely unreadable), which could be the direct cause of the verifier failure (exit 101). However, we have not yet confirmed whether the verifier or verification plan actually references this fixture, or whether the mode-0 permission is the proximate cause versus a verifier misconfiguration.",
+ "selected_action": "act-01",
+ "expected_information": "Whether the verifier's command, evidence types, and direction rule reference tests/fixtures/example.py or similar fixture paths, confirming that the unreadable file (mode 0) is in the verification's read path and thus the root cause is an environment/permission issue rather than a verifier or plan misconfiguration.",
+ "proposed_settlement": null}
+```

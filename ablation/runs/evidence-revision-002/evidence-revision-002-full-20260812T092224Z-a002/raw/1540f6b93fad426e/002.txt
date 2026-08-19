@@ -1,0 +1,15 @@
+Looking at the evidence, I need to synthesize what we know:
+
+1. **Verifier** is `cargo-test`, exit code 101 (nonzero → contradicts)
+2. **act-06** (re-run in isolation): compilation failed — no test could run
+3. **act-07** found `src/lib.rs` has mode `0` (completely unreadable, `readable: false`)
+4. All build artifacts were cached (`fresh: true`), meaning the original build succeeded before permissions were broken
+
+The critical link: when act-06 re-ran the test, cargo needed to recompile but `src/lib.rs` is unreadable (mode 0). This causes a compilation failure — which is exactly what act-06 observed. The source file being unreadable is a filesystem permission problem, not a code defect.
+
+```json
+{"candidate_loci": ["environment", "implementation", "verifier"], "unresolved_distinction": "Whether the compilation failure in act-06 is caused by the unreadable src/lib.rs (mode 0, environment) versus a genuine code error in the source (implementation). The file being unreadable prevents distinguishing these.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "environment"}
+```

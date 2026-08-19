@@ -1,0 +1,3 @@
+Candidates: verifier (verifier_exit=2), evidence_collection (empty FTS, zero vector, only artifact reference), implementation (would need failing test/assertion detail), environment (would need env/dependency error detail), verification_plan (would need plan mismatch detail)
+Excluded: none-insufficient
+Locus: unknown

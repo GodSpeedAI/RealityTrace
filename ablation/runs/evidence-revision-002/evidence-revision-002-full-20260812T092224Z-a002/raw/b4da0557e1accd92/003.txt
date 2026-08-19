@@ -1,0 +1,15 @@
+Looking at the evidence, I need to synthesize what we know:
+
+1. **act-04**: The test passes in isolation (exit 0) — the project compiles and runs correctly under normal conditions.
+2. **act-02/act-07**: The verifier runs `cargo test --offline --message-format json corpus_scenario` with `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` prefixed.
+3. Exit 101 is a Rust panic exit code — all dependency crates compiled successfully (fresh), so this is a runtime panic, not a compilation error.
+4. The previous `verification_plan` settlement was rejected as EVIDENCE_INSUFFICIENT.
+
+The critical chain: the test passes in isolation but fails under the verifier because the implementation panics (exit 101) when `AST_GREP_CONFIG` points to a non-existent file. The implementation should handle this configuration gracefully (return an error) rather than panicking. The verification environment exposed an unhandled edge case in the project's own code.
+
+```json
+{"candidate_loci": ["verification_plan", "implementation", "environment"], "unresolved_distinction": "Whether exit 101 is caused by the verification plan's deliberate use of AST_GREP_CONFIG=/nonexistent-corpus-config.toml (a misconfigured test environment) or by the implementation failing to handle a missing config file gracefully, panicking instead of returning a structured error.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

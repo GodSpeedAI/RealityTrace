@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "evidence_collection"], "unresolved_distinction": "Whether the stale fixture at tests/fixtures/example.py causes the test to assert against outdated expectations (verification_plan), or whether genuine code behavior is incorrect (implementation) — the isolated re-run confirms failure but does not isolate the root cause.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

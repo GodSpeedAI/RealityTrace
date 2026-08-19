@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the test incorrectly references a fixture that was never supposed to exist (verification_plan), or whether a projection step was expected to generate the fixture but could not because no .sea model exists (projection). act-05 confirms the fixture is genuinely absent (ruling out evidence_collection), and act-06 confirms no .sea model exists, but no acquired observation definitively determines whether the test expectation itself is erroneous or a projection step was supposed to run.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

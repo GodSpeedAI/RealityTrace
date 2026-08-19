@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "evidence_collection"], "unresolved_distinction": "The verifier exits 101 and the symbol format_matches_as_text is entirely absent from the codebase. The question is whether this absence constitutes a genuine implementation defect (the project should have defined it) or whether the verifier is misconfigured to reference a symbol it should not, and additionally whether evidence_collection simply failed to capture the real compiler error.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier", "verification_plan"], "unresolved_distinction": "The fixture file tests/fixtures/example.py has mode 0 (completely unreadable), which is the strongest proximate cause for the verifier's exit 101. The remaining question is whether this permission is an environment misconfiguration or whether the verifier/plan erroneously references a fixture it should not.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

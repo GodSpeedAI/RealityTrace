@@ -1,0 +1,12 @@
+Looking at the evidence:
+
+- **act-07**: Re-running the test in isolation produced a **compile_error** — "compilation failed — no test could run"
+- **act-08**: The symbols `format_matches_as_text` were **not found** at their expected locations
+- **act-04/05**: The verifier (cargo-test) is correctly configured; toolchain and directories are available
+- **act-02/03**: All files are readable; fixtures exist and match expectations
+
+The failure is a compilation error in the project's own source code — symbols referenced by the implementation are absent. This is not an environment, verifier, or fixture issue.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": null, "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

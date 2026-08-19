@@ -1,0 +1,19 @@
+Looking at this diagnostic state, I need to analyze the evidence carefully.
+
+**Key findings:**
+1. Verifier exit code is 101 (Rust panic), running `cargo test corpus_scenario` with `AST_GREP_CONFIG=/nonexistent-corpus-config.toml`
+2. The isolated re-run of `test_observed_failure` **passed** (exit 0) — under default environment without the env var
+3. The verifier deliberately sets `AST_GREP_CONFIG` to a **nonexistent** path
+4. All test targets resolve (act-03); toolchain is available (act-05)
+
+**Analysis:**
+The verifier's scenario (`ag-9`) intentionally sets `AST_GREP_CONFIG=/nonexistent-corpus-config.toml`. The config path name itself ("nonexistent") signals this is a deliberate test of error handling. The implementation panics (exit 101) when encountering a missing config file instead of handling it gracefully. The test passes in isolation without this env var, confirming the crash is triggered by the nonexistent config path interaction with the implementation's code path.
+
+The previous rejection of `implementation` was for EVIDENCE_INSUFFICIENT, but the accumulated evidence across rounds now forms a coherent chain: the env var is intentional → the implementation should handle missing config → it doesn't → it panics → exit 101.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether AST_GREP_CONFIG pointing to a nonexistent path is an intentional scenario testing implementation error-handling (implementation fault) versus a plan misconfiguration pointing to the wrong path (verification_plan fault).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

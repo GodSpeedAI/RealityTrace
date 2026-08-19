@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["declared_model", "projection"],
+  "unresolved_distinction": "Whether the invalid TOML array (`patterns = [` without proper closure) exists in the authored registry/model declaration itself (declared_model) or was introduced by a projection step that generated the registry artifact (projection).",
+  "selected_action": "act-02",
+  "expected_information": "Validation of the declared semantic model (.sea) against its schema and registry configuration will reveal whether the TOML malformation is present in the source model declaration or only in a generated artifact, settling the locus.",
+  "proposed_settlement": null
+}
+```

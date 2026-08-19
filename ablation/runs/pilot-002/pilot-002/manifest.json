@@ -1,0 +1,110 @@
+{
+  "pilot_id": "pilot-002",
+  "namespace": "pilot-002",
+  "freeze_statement": "contract frozen before first live call under the corrected 32K budget enforcement; pilot-001 was superseded at pre-flight (budget not yet enforced)",
+  "model_identity_tag": "f30937b14820fe883a69c79d0d6458edbe3d9d1c8f06e1e8836a809c81efc797",
+  "model": {
+    "model_id": "glm-5.2",
+    "provider": "cline-pass",
+    "endpoint": "https://api.cline.bot/api/v1/chat/completions",
+    "provider_qualified_id": "cline-pass/glm-5.2",
+    "temperature": 0.0,
+    "reasoning_params": {
+      "thinking": "none",
+      "seed": "per-unit"
+    },
+    "system_prompt": "You are a failure-diagnosis evaluator. Given the retrieval context for one case, attribute the observed failure to exactly one failure locus from this vocabulary: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown. Reply with a single line: Locus: <locus>.",
+    "task_prompt_scaffold": "Diagnose the recorded failure for case {case_id}.\nBelow is the retrieval context for this case (capability: {arm}).\n--- retrieval context ---\n{context}\n--- end retrieval context ---\n\nAttribute the failure to exactly one failure locus from this vocabulary: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown.\nReply with a single line: Locus: <locus>.",
+    "tool_permissions": [
+      "bash-ro",
+      "list",
+      "read"
+    ],
+    "sandbox_permissions": {
+      "path": "scrubbed minimal PATH (bundle scrub_env)",
+      "home": "bundle-local HOME/TMPDIR",
+      "network": "model API only; no host file access by model"
+    },
+    "context_budget_tokens": 32000,
+    "retrieval_limits": {
+      "top_k": 10,
+      "graph_hops": 2
+    }
+  },
+  "arms": {
+    "names": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "definitions": {
+      "A": [
+        "fts",
+        "sql"
+      ],
+      "B": [
+        "fts",
+        "sql",
+        "vector"
+      ],
+      "C": [
+        "fts",
+        "graph",
+        "sql"
+      ],
+      "D": [
+        "fts",
+        "graph",
+        "sql",
+        "vector"
+      ]
+    },
+    "repetitions": 3
+  },
+  "scoring": {
+    "scorer_version": "m2-scorer-1",
+    "locus_vocabulary": [
+      "verifier",
+      "verification_plan",
+      "projection",
+      "implementation",
+      "environment",
+      "authority",
+      "evidence_collection",
+      "declared_model",
+      "unknown"
+    ],
+    "unknown_semantics": "unknown is a correct answer on an ambiguous case; a concrete unsupported answer on an unknown case is incorrect (unsupported_concrete); the eight publicly-named ambiguous case IDs are the only unknown cases.",
+    "semantic_model_change_fp_definition": "semantic_model_change_fp = predicted=='declared_model' AND true_locus!='declared_model' (a false claim that the semantic model changed when the sealed truth says it did not)."
+  },
+  "randomization": "RunMatrix.expand: per-(case,repetition) seeded arm shuffle, then global seeded order; units identified by sha256(experiment|case|arm|rep|config_hash); reproducible from the recorded seed.",
+  "pilot_selection": {
+    "algorithm": "blind-coverage-v1",
+    "seed": 20260717,
+    "published_unknown_ids": [
+      "ag-15",
+      "cep-15",
+      "df-13",
+      "df-14",
+      "df-15",
+      "sr-13",
+      "sr-14",
+      "sr-15"
+    ],
+    "selected_cases": [
+      "ag-01",
+      "cep-01",
+      "df-01",
+      "sr-10",
+      "sr-13"
+    ]
+  },
+  "hashes": {
+    "corpus_cases": "7612b9881bb807ab208fc02b73982052a451cf436b31e39889a2274a0d794520",
+    "sealed_key_manifest": "10f677535412ef52b3150ca3c28865aec560da970ac2ff27c73b50f40b5c8e17",
+    "sealed_keys": "10f677535412ef52b3150ca3c28865aec560da970ac2ff27c73b50f40b5c8e17",
+    "sxr_git_head": "1bf8067559be37ee7bd8529562421e246f39adc7"
+  },
+  "contract_hash": "caec868c1af3b04e87446dc33118002cda3886c8961dda5e5c6c9d0e35877d3f"
+}

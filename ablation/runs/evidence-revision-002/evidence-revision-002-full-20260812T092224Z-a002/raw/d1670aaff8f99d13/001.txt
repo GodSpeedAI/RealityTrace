@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "projection"], "unresolved_distinction": "The command references a test target `integration_tests` that does not exist (it has been renamed to `integration_tests_moved`). The key question is whether the stale target name originates from the verifier's own command configuration, from the verification_plan's declared test invocation, or from a projection that generated the wrong target identifier.", "selected_action": "act-07", "expected_information": "Whether the verifier's command string directly names `integration_tests` as the test target, which would implicate verifier or verification_plan, versus the name being derived from a projection step.", "proposed_settlement": null}
+```

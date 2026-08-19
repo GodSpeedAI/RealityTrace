@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "The verifier exited with code 101 (Rust panic exit code) while all dependency artifacts compiled successfully. We need to determine whether the panic originates from the project's own code during test execution (implementation), from the verifier's own configuration or execution logic (verifier), or from a non-existent or misconfigured test target (verification_plan). The current evidence shows no compiler errors for dependencies and no visible compilation of the main crate or test binary.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's command, evidence types, and direction rule will reveal what test command is being invoked, whether the test target is correctly specified, and whether the verification configuration itself could produce exit code 101. This distinguishes a verifier-config problem from an implementation bug or a missing test target.",
+ "proposed_settlement": null}
+```

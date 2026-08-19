@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether the Rust/Cargo toolchain is genuinely absent from the execution environment, or whether the verifier failed to correctly configure the PATH or invoke the toolchain that is actually installed.", "selected_action": "act-06", "expected_information": "Whether cargo and the required working directories are present and accessible; this distinguishes a true environment gap from a verifier misconfiguration.", "proposed_settlement": null}
+```

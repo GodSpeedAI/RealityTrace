@@ -1,0 +1,1 @@
+{"completion_tokens": 500, "cost": 0.0, "generation_id": "20260810103235c3bbf9597f834cd4", "latency_ms": 10544.7, "method": "C-loop", "prompt_tokens": 677, "provider_route": "zai-coding-plan", "reasoning_tokens": 494, "resolved_model": "glm-5.2", "retries": 0, "total_tokens": 1177}

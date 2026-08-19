@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "The unreadable src/lib.rs (mode 0) is a strong environment abnormality, but the previous 'environment' settlement was rejected as evidence-insufficient; we need to confirm whether the verifier's command actually compiles or reads src/lib.rs, which would causally link the permission denial to the exit-101 failure.",
+ "selected_action": "act-02",
+ "expected_information": "The verifier's exact command, evidence types, and direction rule—specifically whether it invokes a cargo build/test that would require reading src/lib.rs, establishing the causal chain from the mode-0 permission denial to the observed panic exit code.",
+ "proposed_settlement": null}
+```

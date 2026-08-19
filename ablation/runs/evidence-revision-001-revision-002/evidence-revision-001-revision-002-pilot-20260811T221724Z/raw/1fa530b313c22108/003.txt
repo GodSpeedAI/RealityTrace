@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["declared_model", "verifier"], "unresolved_distinction": "Whether the registry TOML at line 10 is genuinely malformed (e.g., the `patterns` array is not properly closed) constituting a declared_model defect, or whether the TOML content is valid but the verifier's parser rejects it due to a bug, pointing to verifier.", "selected_action": "act-08", "expected_information": "Validation of the declared semantic model and its registry configuration will reveal whether the registry TOML content is syntactically well-formed or genuinely malformed, directly distinguishing between a declared_model defect and a verifier parser bug.", "proposed_settlement": null}
+```

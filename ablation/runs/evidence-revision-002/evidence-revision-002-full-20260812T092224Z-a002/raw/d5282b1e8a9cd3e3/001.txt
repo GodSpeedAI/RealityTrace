@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier", "verification_plan"], "unresolved_distinction": "Whether the Rust toolchain (cargo) was expected to be provisioned in the execution environment but is missing (environment), or whether the verifier/verification-plan incorrectly references cargo when a different tool or path should have been specified.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Whether exit code 101 (Rust panic) originates from a bug in the implementation under test, a misconfigured verifier command, or an environment issue (e.g., missing test binary or runtime dependency) — all build artifacts compiled successfully with fresh=true, so the failure occurs after compilation, but we cannot yet tell if it is the test code panicking or the verifier itself failing to locate/execute the test target.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's command line, evidence types, and direction rule will reveal whether the verifier is correctly configured to invoke the test target for scenario ag-9, or whether a misconfiguration (e.g., wrong test path, missing direction rule) is causing the non-zero exit before any implementation logic runs.",
+ "proposed_settlement": null}
+```

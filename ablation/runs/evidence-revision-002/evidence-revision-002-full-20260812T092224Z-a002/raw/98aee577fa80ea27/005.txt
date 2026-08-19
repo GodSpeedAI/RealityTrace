@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "verification_plan"], "unresolved_distinction": "Fixture file contains invalid JSON (trailing '# stale' comment causing Extra data error). Need to confirm whether this is an evidence artifact corruption (evidence_collection) or a verification-plan fixture definition issue (verification_plan).", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

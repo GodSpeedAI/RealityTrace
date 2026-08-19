@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "verification_plan"],
+  "unresolved_distinction": "Whether the '.corpus-tmpfix' directory is created and its permissions governed by the verification plan's setup logic (indicating verification_plan), or whether the environment imposes restrictive filesystem permissions on that path independently of the plan's configuration (indicating environment).",
+  "selected_action": "act-03",
+  "expected_information": "Whether the verifier configuration explicitly sets TMPDIR to '.corpus-tmpfix' and controls creation/permissioning of that directory, which would reveal whether the non-writable temp directory stems from plan setup logic versus an external environment constraint.",
+  "proposed_settlement": null
+}
+```

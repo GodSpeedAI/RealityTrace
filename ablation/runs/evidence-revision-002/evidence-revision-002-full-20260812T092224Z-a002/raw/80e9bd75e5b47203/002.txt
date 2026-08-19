@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is cep.scoring absent because the implementation never created the module (implementation locus), or because a projection step was supposed to generate it but failed to do so (projection locus)?", "selected_action": "act-08", "expected_information": "Whether the cep/scoring/ package (and specifically cep/scoring/common.py with symbols ScoreMetrics, ScoreRecord, recall, status_from_score) exists in the working tree, which would reveal whether the module is truly missing from the source or merely not importable.", "proposed_settlement": null}
+```

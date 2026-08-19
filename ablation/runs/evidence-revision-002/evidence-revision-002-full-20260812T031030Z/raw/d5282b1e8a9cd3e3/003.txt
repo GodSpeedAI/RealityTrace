@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["environment", "verifier", "verification_plan"],
+  "unresolved_distinction": "Whether cargo is genuinely absent from the execution environment (environment locus), or whether the verifier/verification_plan incorrectly invokes cargo—using the wrong command name or PATH—when an alternative command or correct toolchain path should be used.",
+  "selected_action": "act-04",
+  "expected_information": "Direct confirmation of whether the Rust toolchain (cargo/rustc) is installed and accessible in the execution environment, definitively distinguishing an environment deficiency from a verifier or verification_plan misconfiguration.",
+  "proposed_settlement": null
+}
+```

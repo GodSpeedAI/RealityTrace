@@ -1,0 +1,93 @@
+{
+  "experiment_id": "full-001",
+  "namespace": "full-001",
+  "kind": "full-retrieval-ablation",
+  "frozen_from": "clean pilot-003 (same semantic conditions; pilot outputs excluded from final statistics)",
+  "freeze_statement": "contract frozen before first live call; no changes while the experiment runs",
+  "model_identity_tag": "f30937b14820fe883a69c79d0d6458edbe3d9d1c8f06e1e8836a809c81efc797",
+  "model": {
+    "model_id": "glm-5.2",
+    "provider": "cline-pass",
+    "endpoint": "https://api.cline.bot/api/v1/chat/completions",
+    "provider_qualified_id": "cline-pass/glm-5.2",
+    "temperature": 0.0,
+    "reasoning_params": {
+      "thinking": "none",
+      "seed": "per-unit"
+    },
+    "system_prompt": "You are a failure-diagnosis evaluator. Given the retrieval context for one case, attribute the observed failure to exactly one failure locus from this vocabulary: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown. Reply with a single line: Locus: <locus>.",
+    "task_prompt_scaffold": "Diagnose the recorded failure for case {case_id}.\nBelow is the retrieval context for this case (capability: {arm}).\n--- retrieval context ---\n{context}\n--- end retrieval context ---\n\nAttribute the failure to exactly one failure locus from this vocabulary: verifier, verification_plan, projection, implementation, environment, authority, evidence_collection, declared_model, unknown.\nReply with a single line: Locus: <locus>.",
+    "tool_permissions": [
+      "bash-ro",
+      "list",
+      "read"
+    ],
+    "context_budget_tokens": 32000,
+    "retrieval_limits": {
+      "top_k": 10,
+      "graph_hops": 2
+    }
+  },
+  "context_budget_contract": {
+    "interpretation": "MAX TOTAL model input tokens = 32,000",
+    "packer_version": "pack-v1",
+    "safety_margin_fraction": 0.12
+  },
+  "arms": {
+    "names": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "definitions": {
+      "A": [
+        "fts",
+        "sql"
+      ],
+      "B": [
+        "fts",
+        "sql",
+        "vector"
+      ],
+      "C": [
+        "fts",
+        "graph",
+        "sql"
+      ],
+      "D": [
+        "fts",
+        "graph",
+        "sql",
+        "vector"
+      ]
+    },
+    "repetitions": 3
+  },
+  "scoring": {
+    "scorer_version": "m2-scorer-1",
+    "locus_vocabulary": [
+      "verifier",
+      "verification_plan",
+      "projection",
+      "implementation",
+      "environment",
+      "authority",
+      "evidence_collection",
+      "declared_model",
+      "unknown"
+    ],
+    "unknown_semantics": "unknown is a correct answer on an ambiguous case; a concrete unsupported answer on an unknown case is incorrect (unsupported_concrete); the eight publicly-named ambiguous case IDs are the only unknown cases.",
+    "semantic_model_change_fp_definition": "semantic_model_change_fp = predicted=='declared_model' AND true_locus!='declared_model'."
+  },
+  "randomization": "RunMatrix.expand: per-(case,repetition) seeded arm shuffle, then global seeded order; units sha256(experiment|case|arm|rep|config_hash); reproducible from the recorded seed.",
+  "selection_rule": "\u00a723.1: maximize settlement/diagnostic success while minimizing unjustified semantic-model-change pressure; an arm that raises the model-change FP rate is rejected regardless of accuracy.",
+  "full_seed": 20260809,
+  "matrix_hash": "6ccc6cbd0d248ae50f6dae108d708b56218aff3b0310977c6b09fe1c576b6b3a",
+  "hashes": {
+    "corpus_cases": "7612b9881bb807ab208fc02b73982052a451cf436b31e39889a2274a0d794520",
+    "sealed_key_manifest": "10f677535412ef52b3150ca3c28865aec560da970ac2ff27c73b50f40b5c8e17",
+    "sxr_git_head": "f741a1c906929d2de1e0a907ed881dc32890f858"
+  },
+  "contract_hash": "b3f5f1a63e04497ded5f72b1ca1561ef4311ee91061552f870229d9791da7780"
+}

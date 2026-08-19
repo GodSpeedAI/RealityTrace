@@ -1,0 +1,21 @@
+Looking at this diagnostic state, I need to reason through the evidence carefully.
+
+**Key findings so far:**
+- `verifier_exit: 101` — a Rust panic exit code
+- FTS evidence shows only dependency build artifacts (all `fresh: true`); no main-crate compilation or error output captured
+- act-06 found `format_matches_as_text` and `crate::format::format_matches_as_text` are **completely missing** from the codebase
+- Environment (act-02) and fixtures (act-03) are fine
+
+**Candidate loci analysis:**
+1. **implementation** — The missing `format_matches_as_text` function could cause a runtime panic when invoked
+2. **verifier** — The verifier may be misconfigured to test for symbols that shouldn't exist, or its execution itself panicked
+3. **evidence_collection** — The pipeline captured only cached dependency artifacts and missed the actual error/panic output
+
+The critical unresolved question is whether the verifier is *correctly* configured to test for `format_matches_as_text` (making this an implementation gap) or *incorrectly* configured (making this a verifier problem). Act-07 directly inspects the verifier's command, evidence types, and declared direction rule.
+
+```json
+{"candidate_loci": ["implementation", "verifier", "evidence_collection"], "unresolved_distinction": "The verifier exits with code 101 (panic) and format_matches_as_text is absent from the codebase, but we don't know whether the verifier is correctly configured to invoke that symbol (making it an implementation defect) or whether the verifier itself is misconfigured and panicking on its own logic. The FTS evidence only captured cached dependency artifacts, not the actual failure output.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's declared command, expected evidence types, and direction rule will reveal whether it is configured to test format_matches_as_text (supporting implementation locus) or whether its configuration is itself erroneous (supporting verifier locus).",
+ "proposed_settlement": null}
+```

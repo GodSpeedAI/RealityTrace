@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation"], "unresolved_distinction": "The file tests/test_inventory.py definitively does not exist (act-05) and the environment is properly configured (act-07). The remaining question is whether the verification plan incorrectly references a test path that was never part of the repository, or whether the implementation was responsible for producing this test file and failed to do so. Given that test files are conventionally part of the verification infrastructure rather than implementation artifacts, the evidence favors verification_plan.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

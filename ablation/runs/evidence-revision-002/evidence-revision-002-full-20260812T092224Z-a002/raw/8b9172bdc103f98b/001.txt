@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier", "evidence_collection"], "unresolved_distinction": "Is the PermissionError caused by incorrect filesystem permissions on the fixture file within the test execution environment (environment), or did the verifier/evidence-collection pipeline set up the workspace or lock the file in a way that prevents read access (verifier/evidence_collection)?", "selected_action": "act-02", "expected_information": "The actual filesystem permissions on 'tests/fixtures/sample_settlement_recorded.json' and whether the test process has read access, distinguishing an environment-level permissions problem from a verifier setup issue.", "proposed_settlement": null}
+```

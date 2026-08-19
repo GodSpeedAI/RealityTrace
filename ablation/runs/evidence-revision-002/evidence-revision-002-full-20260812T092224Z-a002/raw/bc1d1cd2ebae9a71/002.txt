@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verification_plan", "implementation", "projection"], "unresolved_distinction": "Is tests/test_inventory.py a correctly specified target that should have been created by implementation or projection but was not, or does the verification plan reference an incorrect/non-existent path?",
+ "selected_action": "act-04",
+ "expected_information": "The verifier's configured command and declared direction rule will reveal whether the verification plan intentionally references tests/test_inventory.py as a target that implementation/projection should have produced, or whether the path is a misconfiguration in the plan itself.",
+ "proposed_settlement": null}
+```

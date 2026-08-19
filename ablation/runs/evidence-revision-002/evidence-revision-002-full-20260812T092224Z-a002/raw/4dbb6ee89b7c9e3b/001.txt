@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "implementation", "environment"], "unresolved_distinction": "Whether the exit code 101 (typical Rust panic) originates from the verifier's own configuration/execution logic (e.g., wrong command, missing test target, malformed evidence handling) or from a runtime panic in the implementation under test during execution.",
+ "selected_action": "act-06",
+ "expected_information": "The verifier's command, evidence types, and direction rule will reveal whether the verification command is correctly configured and whether exit 101 is expected behavior from the verifier or an unexpected crash, helping distinguish verifier misconfiguration from implementation failure.",
+ "proposed_settlement": null}
+```

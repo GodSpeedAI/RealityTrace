@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether the verifier exit code 101 stems from a compilation or runtime error in the project's own source code (implementation), or from the verification command referencing a non-existent test target or path (verification_plan).", "selected_action": "act-03", "expected_information": "Whether the test target or path referenced by the verification command for scenario ag-9 resolves to an existing file in the working tree, distinguishing a missing-target/plan issue from a genuine code compilation or runtime failure.", "proposed_settlement": null}
+```

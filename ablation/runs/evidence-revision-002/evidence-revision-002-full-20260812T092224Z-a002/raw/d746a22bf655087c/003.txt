@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection", "projection"], "unresolved_distinction": "Whether the trailing '\\n\\n# stale\\n' annotation appended after valid JSON in the fixture was committed as an inherent fixture defect (implementation) or was written by an evidence-collection or projection process that marked the file stale post-creation — act-06 independently classified the file as stale, and the in-file '# stale' marker strongly resembles a process annotation rather than developer-authored fixture content.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

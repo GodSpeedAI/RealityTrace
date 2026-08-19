@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "environment"], "unresolved_distinction": "Was tests/test_inventory.py supposed to be created by the implementation but was never written, or does the verification plan reference an incorrect/non-existent path?",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

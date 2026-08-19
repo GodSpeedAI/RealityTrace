@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 stems from a genuine compilation or runtime failure in the project's own source code (implementation), or from a misconfigured verifier command/plan that cannot properly invoke or assess the build (verifier/verification_plan). All dependency crates compiled successfully, but the project's own crate artifact is absent from the build output, and the actual error message may have been omitted by the context budget.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

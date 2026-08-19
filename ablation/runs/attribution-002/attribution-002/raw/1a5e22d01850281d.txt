@@ -1,0 +1,3 @@
+Candidates: verifier, verification_plan, projection, implementation, environment, evidence_collection
+Excluded: (none — no positive excluding evidence available)
+Locus: unknown

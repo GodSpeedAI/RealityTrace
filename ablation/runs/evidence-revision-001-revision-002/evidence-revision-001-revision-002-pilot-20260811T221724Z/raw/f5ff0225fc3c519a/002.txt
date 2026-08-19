@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether `iter_reality_gap_case_files` is absent from cep.inventory because the implementation never defined it (or renamed it) versus because the projection/model failed to emit it into generated source code. Round 1 settlement on 'implementation' was rejected as insufficient; we need direct evidence of the symbol's presence or absence in the actual source tree.", "selected_action": "act-02", "expected_information": "Confirmation of whether `iter_reality_gap_case_files` is defined anywhere in src/cep/inventory.py or elsewhere in the source tree, and whether validation.py's import statement references the correct symbol name.", "proposed_settlement": null}
+```

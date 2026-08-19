@@ -1,0 +1,12 @@
+Candidates: verifier, implementation, environment, evidence_collection
+
+**Excluded:**
+- **environment**: all Cargo artifacts show `fresh:true` and compiled without error; no toolchain/path/permission failures in the FTS log.
+- **implementation**: no compiler errors or runtime panics from the target crate appear in the artifact stream; all dependency and build-script executions completed normally.
+- **evidence_collection**: the evidence record (`01KZH8DSDKNSC9V7GP8YF49YJ6`) was successfully stored and retrieved with all fields populated.
+- **verification_plan**: no evidence of a malformed or missing plan; the scenario and stdin_format are both recorded and non-empty.
+
+**Supporting evidence for `verifier`:** `verifier_exit: 101` is the canonical Rust panic exit code (`SIGABRT`/default panic handler). The build environment was healthy (all artifacts fresh, no failures), so the non-zero exit originated from the verifier process itself crashing—e.g., an `unwrap()`/`expect()` on an unexpected condition within verifier logic—rather than from a downstream build or implementation failure.
+
+Excluded: environment(fresh), implementation(none), evidence_collection(present), verification_plan(present)
+Locus: verifier

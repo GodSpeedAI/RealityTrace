@@ -1,0 +1,16 @@
+Looking at this diagnostic state, I need to assess the evidence for each candidate locus.
+
+Key findings:
+1. **Exit code 101** — Rust panic or compilation error
+2. **All dependencies compiled fresh** — narrows to the project crate or its invocation
+3. **act-07 found `tests/fixtures/example.py` is stale** — the fixture exists but its content doesn't match what's expected; this is the most concrete diagnostic signal available
+4. No error message/stderr to pinpoint a specific compilation or runtime failure in the implementation source
+5. No missing symbols, no missing test targets
+
+The stale fixture is the strongest concrete evidence. A fixture file that exists but doesn't contain expected content is an environment/data-setup problem — the test infrastructure is running against incorrect or outdated test data, causing the verification to fail (likely a runtime panic when processing the stale input). This points away from `implementation` (no source-level defect identified) and away from `verifier` (the verifier command successfully resolved to existing targets).
+
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": null,
+  "selected_action": null, "expected_information": null,
+  "proposed_settlement": "environment"}
+```

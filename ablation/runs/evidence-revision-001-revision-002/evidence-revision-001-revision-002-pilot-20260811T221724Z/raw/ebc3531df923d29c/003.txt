@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "verification_plan"], "unresolved_distinction": "The fixture data/corpus-v998.json is confirmed absent and the test panics with 'stale fixture missing'. The unresolved question is whether this fixture was supposed to be collected/provided but was never gathered (evidence_collection), or whether the test/verification references an incorrect fixture path that was never part of the evidence pipeline (verification_plan).", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

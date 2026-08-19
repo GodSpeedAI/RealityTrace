@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether the environment simply lacks the cargo toolchain (environment), or the verifier is misconfigured to invoke cargo when a different toolchain path was expected (verifier). However, the evidence already strongly indicates a missing toolchain rather than a misconfigured invocation.", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "verification_plan"], "unresolved_distinction": "Whether the trailing '# stale' annotation appended to the fixture JSON was introduced as corruption during evidence collection/storage, or whether the fixture was authored with invalid content as part of the verification plan's fixture definition.", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

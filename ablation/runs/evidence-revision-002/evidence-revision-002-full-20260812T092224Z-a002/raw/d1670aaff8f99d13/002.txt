@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "projection"], "unresolved_distinction": "The verifier command line contains the stale target 'integration_tests', but we cannot yet determine whether this target name was declared verbatim in the verification_plan, computed by a projection, or hardcoded in the verifier's own configuration.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

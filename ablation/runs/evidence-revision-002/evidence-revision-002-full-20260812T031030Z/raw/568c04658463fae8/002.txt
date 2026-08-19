@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Whether the compilation failure stems from a missing symbol in the project source (implementation) versus a verifier misconfiguration, though prior observations strongly favor implementation.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

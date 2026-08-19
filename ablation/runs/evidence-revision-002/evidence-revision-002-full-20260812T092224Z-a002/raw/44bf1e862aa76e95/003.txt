@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "verifier"], "unresolved_distinction": "All infrastructure probes (toolchain, permissions, fixtures, test-target resolution, verifier configuration) passed cleanly, and the isolated re-run (act-04) confirmed the test fails with exit code 101 (Rust panic). The only remaining question is whether the panic originates from a genuine defect in the project's own source code versus some unobserved environmental edge-case, but with all verification infrastructure validated, the evidence converges on implementation.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,15 @@
+Looking at this failure:
+- Verifier exit code 127 means "command not found" in bash
+- The error is explicitly `cargo: command not found`
+- This is a Rust project (repo "ag", stdin format "car-go-json") where `cargo` is the expected build tool
+- The toolchain is simply not available on the system PATH
+
+The most plausible loci are:
+1. **environment** — the Rust toolchain (cargo) is not installed or not on PATH
+2. **verifier** — the verifier configuration might reference an incorrect command or path instead of using a properly located cargo binary
+
+The key distinction is whether cargo is genuinely absent from the environment, or whether the verifier is misconfigured in how it invokes the toolchain. However, exit code 127 with "command not found" is a very strong environmental signal. Action act-08 would confirm toolchain availability, but the evidence is already conclusive.
+
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is cargo genuinely missing from the environment (PATH/toolchain not installed), or is the verifier configured to invoke cargo via an incorrect command or path?", "selected_action": null, "expected_information": null, "proposed_settlement": "environment"}
+```

@@ -1,0 +1,14 @@
+Looking at this diagnostic state, I need to assess whether the evidence definitively supports one of the two candidate loci: `verification_plan` or `projection`.
+
+**Key evidence:**
+- Error: test target `integration_tests` doesn't exist; available targets are `integration_tests_moved` and `unit_tests`
+- File `tests/integration_tests.rs` does not exist (act-04)
+- No variable assignments prefixed to command; toolchain available; paths readable (acts 02, 05)
+- Previous concrete settlement of `verification_plan` was **rejected** for EVIDENCE_INSUFFICIENT in round 1
+- No new distinguishing evidence was acquired in rounds 2 or 3
+
+**Assessment:** The `"_moved"` suffix on `integration_tests_moved` hints at a rename during projection, but this is circumstantial. Critically, act-03 (inspect verifier configuration) and act-08 (verify fixture/data files) were available but never executed, so I cannot confirm whether the verification plan hardcodes the stale name or derives it from Cargo.toml state altered by the projection. The previous concrete claim was already rejected for insufficient evidence, and no additional observations have been gathered to resolve the distinction. The evidence remains genuinely ambiguous between the two loci.
+
+```json
+{"candidate_loci": ["verification_plan", "projection"], "unresolved_distinction": "Whether the verification plan hardcodes stale target name 'integration_tests' (verification_plan) versus the projection having renamed the target to 'integration_tests_moved' without updating references (projection) — act-03 was never executed to inspect the verifier configuration.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

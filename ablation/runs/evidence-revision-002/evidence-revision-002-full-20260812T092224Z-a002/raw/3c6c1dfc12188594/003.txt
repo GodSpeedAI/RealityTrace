@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "The .corpus-tmpfix directory (set as TMPDIR by the evidence-collection harness) is not writable, but it remains unclear whether the harness created/assigned it without proper permission initialization (evidence_collection) or the underlying filesystem denies write access regardless of harness behavior (environment). The isolated re-run passing under default conditions supports evidence_collection but does not definitively rule out an environment permissions policy specific to that path.", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

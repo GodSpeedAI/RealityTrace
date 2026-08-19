@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "The error 'No module named pytest' could indicate either a missing environment dependency or a verification plan that incorrectly mandates pytest without provisioning it. The prior 'environment' settlement was rejected as EVIDENCE_INSUFFICIENT, and no qualifying evidence has been acquired to disambiguate.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

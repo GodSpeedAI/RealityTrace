@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["evidence_collection", "implementation"], "unresolved_distinction": "Whether the trailing '# stale' comment appended after the valid JSON object in the fixture file was introduced by the evidence/harness collection process corrupting the artifact, or whether the repo's committed fixture file genuinely contains this invalid suffix as an implementation defect.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

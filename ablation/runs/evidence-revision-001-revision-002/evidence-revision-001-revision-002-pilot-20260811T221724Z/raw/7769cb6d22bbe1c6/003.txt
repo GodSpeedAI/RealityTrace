@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Is `cargo` genuinely absent from the verification environment's PATH (toolchain provisioning failure), or is the verifier misconfigured to invoke `cargo` when the project uses a different build system?", "selected_action": "act-07", "expected_information": "Whether the required Rust/cargo toolchain is provisioned and accessible in the verification environment's designated working directory, which would confirm or deny a toolchain provisioning failure versus a verifier misconfiguration.", "proposed_settlement": null}
+```

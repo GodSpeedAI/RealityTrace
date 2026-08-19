@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan", "environment"], "unresolved_distinction": "The verifier exited 101 (Rust panic or compile failure) with all dependency artifacts building successfully, and the symbol `from_cli` was not found at its expected location. We need to determine whether the verifier ran the correct command against the correct target (verification_plan), the project's own code is missing or broken (implementation), or there is a toolchain/runtime mismatch (environment). Inspecting the verifier's actual command and configuration is the most direct way to distinguish these.",
+ "selected_action": "act-03",
+ "expected_information": "The verifier's configured command, evidence types, and direction rule will reveal whether it invoked the correct target (e.g., cargo test, cargo build on the right path) and whether `from_cli` is actually referenced by the test harness — clarifying if this is a verification_plan misconfiguration or a genuine implementation defect.",
+ "proposed_settlement": null}
+```

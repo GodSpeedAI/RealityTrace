@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan", "verifier"], "unresolved_distinction": "Whether cargo was expected to be provisioned in the environment (environment) or whether the verifier/verification-plan erroneously references cargo (verifier/verification_plan)", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

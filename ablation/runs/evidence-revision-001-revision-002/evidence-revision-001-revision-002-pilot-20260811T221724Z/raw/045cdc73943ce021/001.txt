@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "evidence_collection"], "unresolved_distinction": "The panic message 'stale fixture missing' at corpus_sr10.rs:3 could indicate either that the verifier/test harness references a fixture it should manage itself (verifier), or that a required fixture was not properly collected or persisted as evidence input for the test (evidence_collection).", "selected_action": "act-01", "expected_information": "Whether the expected fixture file exists on disk and what path the test is checking for, distinguishing between a missing fixture the verifier should own versus one evidence_collection should have provisioned.", "proposed_settlement": null}
+```

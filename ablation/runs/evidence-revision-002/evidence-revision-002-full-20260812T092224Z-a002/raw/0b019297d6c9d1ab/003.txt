@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "evidence_collection"], "unresolved_distinction": "Whether the mode-0 permission on the existing fixture was a pre-existing filesystem state (environment) or was introduced when the fixture was improperly created/configured during evidence setup (evidence_collection).", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

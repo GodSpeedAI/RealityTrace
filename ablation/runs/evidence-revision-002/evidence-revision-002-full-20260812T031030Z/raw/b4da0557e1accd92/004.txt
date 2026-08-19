@@ -1,0 +1,18 @@
+Looking at this diagnostic state, I need to assess whether the evidence supports a concrete locus despite both prior settlement attempts being rejected.
+
+**Key findings:**
+- Verifier exit 101 (panic/compilation error)
+- Test passes in isolation without `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` (act-04)
+- Verifier injects `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` (act-02, act-07)
+- All filesystem, toolchain, and fixture checks passed
+
+**Critical ambiguity:**
+The test fails only when the verifier prepends `AST_GREP_CONFIG=/nonexistent-corpus-config.toml`. This could mean:
+1. **Implementation** fails to handle a missing config file gracefully (panics with exit 101)
+2. **Verifier** misconfigures the environment by injecting a bogus path
+
+Both `implementation` (round 2) and `verifier` (round 3) settlements were rejected for EVIDENCE_INSUFFICIENT. The actual panic/error output — which would definitively distinguish whether the implementation lacks error handling vs. the verifier injects an invalid env var — was never obtained and cannot now be acquired. Without the error text confirming the failure mechanism, no remaining evidence can break the tie.
+
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "Whether AST_GREP_CONFIG=/nonexistent-corpus-config.toml is an intentional scenario parameter testing implementation robustness (implicating implementation) or an erroneous verifier environment injection (implicating verifier); actual panic output was never captured", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

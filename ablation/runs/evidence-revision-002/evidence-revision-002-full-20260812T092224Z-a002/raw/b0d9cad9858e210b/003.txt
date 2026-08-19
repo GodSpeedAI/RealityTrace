@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether iter_reality_gap_case_files was never written by hand in inventory.py (implementation defect) or was expected to be emitted by a projection/codegen step that failed to produce it (projection defect). Inspecting the actual contents of inventory.py would reveal whether generation markers, stubs, or scaffolding exist.",
+ "selected_action": "act-01",
+ "expected_information": "Contents of cep/inventory.py showing whether iter_reality_gap_case_files is absent entirely, partially scaffolded, marked with generation annotations, or present under a different name — directly distinguishing a never-written function from a failed projection emission.",
+ "proposed_settlement": null}
+```

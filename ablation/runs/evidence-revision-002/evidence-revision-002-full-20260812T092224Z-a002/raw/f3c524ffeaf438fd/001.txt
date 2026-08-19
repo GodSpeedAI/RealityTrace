@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Whether the exit code 101 originates from a runtime panic or compilation error in the project code (implementation) versus a misconfigured verifier command or missing environment prerequisites (verifier/environment). The build artifacts show all dependencies compiled successfully with fresh:true, but no test-execution output or actual error message is present.", "selected_action": "act-01", "expected_information": "The actual stderr/stdout from the failing test run, revealing whether the failure is a Rust panic (implementation), a compilation error in the main crate, or a verifier-level configuration error.", "proposed_settlement": null}
+```

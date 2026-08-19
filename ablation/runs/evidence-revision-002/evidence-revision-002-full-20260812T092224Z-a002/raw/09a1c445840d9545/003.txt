@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["projection", "verification_plan"], "unresolved_distinction": "The file tests/test_import.py does not exist, but we cannot determine whether the projection step was supposed to create it (projection failure) or whether the verification plan references a test file that was never part of the expected output (verification_plan failure). All available evidence-acquisition actions have been exhausted without resolving this distinction.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "unknown"}
+```

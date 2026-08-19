@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Whether the trailing `\\n\\n# stale\\n` after valid JSON in `tests/fixtures/sample_settlement_recorded.json` was committed as a defect in the fixture itself (implementation), or was appended by an evidence-collection or projection process that annotated the file post-creation.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

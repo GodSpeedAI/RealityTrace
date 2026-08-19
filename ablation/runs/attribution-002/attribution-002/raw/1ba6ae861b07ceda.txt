@@ -1,0 +1,33 @@
+# Diagnostic Loop — Case ag-01
+
+## 1. Candidate Enumeration
+
+**Candidate A: implementation**
+- Exit code 101 is Rust's default panic exit code. The project under test (ast-grep-mcp-rs) is a Rust binary. A panic in the implementation during execution would produce exactly this exit code.
+- Discriminating evidence needed: a panic message or backtrace pointing into project code.
+
+**Candidate B: verifier**
+- The verifier exited with 101. If the verifier itself is a Rust program, it could have panicked during execution (e.g., failed to parse output, unwrap on None, index out of bounds).
+- Discriminating evidence needed: a panic message originating from verifier code rather than the subject project.
+
+**Candidate C: environment**
+- Build-environment issues (missing toolchain, broken registry cache, etc.) could cause failures.
+- Discriminating evidence: build artifacts all marked `fresh: true`; all dependencies compiled successfully → environment is healthy.
+
+**Candidate D: evidence_collection**
+- The only evidence captured is cargo-build JSON and a single SQL row with an exit code — no stderr/stdout/panic message from the verifier run itself.
+- Discriminating evidence needed: evidence that the collection mechanism dropped critical output.
+
+## 2 & 3. Exclusion by Evidence
+
+- **environment → excluded**: All build artifacts are `fresh: true`; the full dependency tree (proc-macro2, serde, tokio, etc.) compiled successfully. No toolchain or registry errors present.
+- **evidence_collection → excluded (weakly)**: While the evidence is thin, the exit code *was* captured, and the build JSON is complete. The collection mechanism functioned; it simply may not be the source of the *failure*.
+- **verifier vs. implementation**: Exit 101 is a Rust panic code. Both the verifier and the implementation are Rust programs that could panic. No panic message, backtrace, or stderr was captured to discriminate between them. The build succeeded, so the implementation binary exists and was presumably invoked by the verifier. However, I cannot rule out the verifier itself panicking (e.g., on malformed `cargo-json` input) without the panic source.
+
+## 4. Settlement
+
+The evidence does not contain a panic message, backtrace, or any runtime output from the verification phase. Both the verifier and the implementation are plausible sources of the exit-101 panic, and I cannot exclude either with stated evidence.
+
+Candidates: implementation, verifier, environment, evidence_collection
+Excluded: environment (build-succeeded), evidence_collection (exit-code-captured)
+Locus: unknown

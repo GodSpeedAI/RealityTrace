@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "environment", "evidence_collection"], "unresolved_distinction": "Whether the test code incorrectly asserts the existence of a fixture file (inventory-version-v999.json) that was never meant to exist in the repository (implementation defect), or whether the fixture was expected to be present in the working tree but was not deployed or provisioned (environment or evidence_collection issue).",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

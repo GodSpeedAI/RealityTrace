@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verifier"], "unresolved_distinction": "Whether pytest is legitimately required by the project's test setup but missing from the runtime (environment), or whether the verifier is misconfigured by invoking pytest when the project's actual test runner or entry point differs (verifier). The prior 'environment' settlement was rejected as insufficient; confirming the verifier's intended command would settle this.", "selected_action": "act-05", "expected_information": "The verifier's configured command, evidence types, and direction rule will reveal whether invoking pytest is the correct, intended behavior for this project—confirming environment if so, or verifier if the command is misconfigured.", "proposed_settlement": null}
+```

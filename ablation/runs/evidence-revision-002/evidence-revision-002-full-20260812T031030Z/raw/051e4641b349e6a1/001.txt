@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale 'unit_tests' target name is embedded in the verifier's own command configuration or is specified by the verification plan's test-selection recipe.", "selected_action": "act-07", "expected_information": "The verifier configuration will reveal where the reference to 'unit_tests' originates—either in the verifier's hardcoded command or in the verification plan—determining which artifact is stale relative to the renamed 'unit_tests_moved' target.", "proposed_settlement": null}
+```

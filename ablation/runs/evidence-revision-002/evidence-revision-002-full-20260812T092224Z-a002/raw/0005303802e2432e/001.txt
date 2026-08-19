@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verification_plan", "verifier", "implementation"], "unresolved_distinction": "The test target `integration_tests` was renamed to `integration_tests_moved`; the key question is whether the stale name originates from the verification plan's declared command, the verifier's built-in configuration, or whether the implementation introduced an unexpected rename.", "selected_action": "act-02", "expected_information": "Inspecting the verifier's configuration will reveal whether the test target name `integration_tests` is specified in the verifier's command template, helping distinguish whether the verifier itself or the verification plan is responsible for the stale target reference.", "proposed_settlement": null}
+```

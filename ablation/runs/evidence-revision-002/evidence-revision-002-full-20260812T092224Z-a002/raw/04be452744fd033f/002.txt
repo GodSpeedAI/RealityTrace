@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether the test panics (exit 101) due to an implementation bug in the code path under test, or because the verification plan references a stale fixture (tests/fixtures/example.py found out of date) whose content mismatch causes the implementation to panic rather than fail gracefully.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

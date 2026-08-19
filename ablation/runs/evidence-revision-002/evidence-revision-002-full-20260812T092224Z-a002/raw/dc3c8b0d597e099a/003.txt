@@ -1,0 +1,11 @@
+Looking at this diagnostic state:
+
+1. **Candidate loci**: `implementation`, `verification_plan`, `environment`
+2. **Key evidence**: Exit code 101 (Rust panic code), all dependency artifacts compiled fresh and successfully, no actual error message is visible in the FTS output, no project-source crate artifact is seen.
+3. **Round 3/3 constraint**: Must settle — no more actions can be selected.
+
+The FTS data shows all dependencies (proc-macro2, serde, tokio, etc.) compiled successfully with `"fresh": true`. Exit code 101 in Rust is the standard panic exit code, pointing to either a compilation error or runtime panic in the project's own implementation. No evidence of verification plan misconfiguration or environment failure is present — dependencies resolved and built without issue.
+
+```json
+{"candidate_loci": ["implementation", "verification_plan", "environment"], "unresolved_distinction": "Whether exit code 101 originates from a compilation error or runtime panic in the project source (implementation) versus a misconfigured verifier command/target (verification_plan); the FTS evidence only shows successful dependency builds with no error message visible.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

@@ -1,0 +1,5 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether the missing symbol format_matches_as_text indicates the implementation failed to provide a required function (causing exit 101 compilation failure), or whether the verification plan references a symbol outside the implementation scope.",
+ "selected_action": null, "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

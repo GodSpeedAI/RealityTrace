@@ -1,0 +1,7 @@
+Looking at the evidence, the verifier tried to run a test target named `unit_tests`, but it doesn't exist — the available targets are `integration_tests` and `unit_tests_moved`. This strongly suggests a configuration mismatch where the verifier references an outdated/renamed test target.
+
+The key question is whether the incorrect target name originates from the verifier's own configuration or from a verification plan that feeds the target name to the verifier. I'll inspect the verifier configuration to resolve this.
+
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Does the verifier's own configuration hardcode the stale target name `unit_tests`, or does it receive the target name from an external verification plan that specifies the wrong target?", "selected_action": "act-08", "expected_information": "Whether the verifier's command template explicitly references `unit_tests` as the test target, confirming the verifier locus, or whether the target name is parameterized from a verification plan, redirecting blame there.", "proposed_settlement": null}
+```

@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the verifier's own configuration hardcodes the stale target name `unit_tests`, or whether the verifier receives the target name from an external verification plan that specifies the wrong target.", "selected_action": null, "expected_information": null, "proposed_settlement": "verification_plan"}
+```

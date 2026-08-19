@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["projection", "environment", "evidence_collection"], "unresolved_distinction": "Whether the PermissionError on 'tests/fixtures' stems from the projection step materializing the directory with incorrect permissions, from the evidence-collection sandbox restricting access, or from the runtime environment's filesystem permissions.", "selected_action": null, "expected_information": null, "proposed_settlement": "projection"}
+```

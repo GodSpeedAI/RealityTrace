@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Whether cep.scoring is a source package that should exist in the implementation tree but was never created, or whether it is an artifact that should be produced by a projection/generation step from the declared semantic model that either wasn't configured or didn't run.", "selected_action": "act-05", "expected_information": "Whether the declared semantic model (.sea) and registry define a projection mapping that should generate the cep.scoring package; if such a mapping exists, the locus shifts to projection; if absent, cep.scoring is an implementation gap.", "proposed_settlement": null}
+```

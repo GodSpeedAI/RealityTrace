@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["declared_model", "projection"], "unresolved_distinction": "Whether the registry TOML file contains a malformed array as originally authored (declared_model) or was corrupted/truncated during a projection or generation step (projection).", "selected_action": "act-03", "expected_information": "Content of the registry TOML fixture file around line 10 to determine whether the array syntax is malformed as authored or appears truncated/corrupted, distinguishing a declared-model defect from a projection artifact.", "proposed_settlement": null}
+```

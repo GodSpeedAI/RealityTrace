@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan", "implementation"], "unresolved_distinction": "The verifier exited 101 (Rust panic). We need to determine whether the verifier's configuration (command, evidence types, direction rule) is misconfigured causing the crash, or whether the configuration is correct and the implementation binary panics at runtime when invoked.", "selected_action": "act-03", "expected_information": "The verifier's command line, expected evidence types, and declared direction rule, which will reveal whether the verification is misconfigured (e.g., wrong target path, malformed command) or correctly set up—narrowing the failure to either verifier/verification_plan or implementation.", "proposed_settlement": null}
+```

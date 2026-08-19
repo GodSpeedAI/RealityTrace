@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["evidence_collection", "environment"],
+  "unresolved_distinction": "The test expects a fixture file tests/fixtures/inventory-version-v999.json that is absent. The key question is whether the fixture should have been staged by the evidence-collection process (making evidence_collection the locus) or whether it is a standing artifact in the working tree/environment that is simply missing from this checkout (making environment the locus).",
+  "selected_action": "act-05",
+  "expected_information": "Whether tests/fixtures/inventory-version-v999.json exists anywhere in the repo tree or was expected to be generated/staged, and whether other fixtures in that directory are present—distinguishing an evidence-collection staging gap from a general environment/checkout deficiency.",
+  "proposed_settlement": null
+}
+```

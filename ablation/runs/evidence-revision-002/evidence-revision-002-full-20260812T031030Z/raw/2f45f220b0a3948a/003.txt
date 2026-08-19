@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Does the stale `unit_tests` target name originate from the verifier's hardcoded command template, or from the verification plan that supplies the test-target parameter? The act-08 observation shows the resolved command line containing `--test unit_tests` but does not reveal whether that value was injected by the plan or baked into the verifier's own configuration.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "verification_plan"}
+```

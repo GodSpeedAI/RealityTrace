@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "The isolated re-run confirms a genuine test failure (exit 101 in unit_tests), but the actual error/panic message from the test was not captured, leaving ambiguity about whether the code has a real defect versus a test-harness or plan-level issue. However, the verifier configuration (act-04) is well-formed and the environment/files (act-01, act-05, act-06) are all valid, strongly pointing away from verifier and environment loci.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}
+```

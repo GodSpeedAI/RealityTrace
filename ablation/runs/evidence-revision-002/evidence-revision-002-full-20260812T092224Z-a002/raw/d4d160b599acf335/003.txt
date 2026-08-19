@@ -1,0 +1,5 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is iter_reality_gap_case_files missing from cep.inventory because a developer never authored it (implementation gap), or because a code-generation/projection step was supposed to emit it into that module and failed to do so?",
+ "selected_action": "act-02", "expected_information": "Whether iter_reality_gap_case_files is present anywhere in cep.inventory or elsewhere in the codebase, and what symbols the module actually exports — revealing whether this is a hand-written code gap vs. a missing generated artifact.",
+ "proposed_settlement": null}
+```

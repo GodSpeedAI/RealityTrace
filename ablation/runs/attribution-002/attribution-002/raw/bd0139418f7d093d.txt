@@ -1,0 +1,7 @@
+Looking at the evidence:
+
+- **verifier_exit: 101** — This is the canonical Rust panic exit code, indicating the verifier process itself crashed/panicked during execution.
+- The all-zero vector and empty FTS suggest the verifier failed before producing meaningful output.
+- The stdin_format "car-go-json" may have contributed, but the direct cause of the recorded failure is the verifier crashing.
+
+Locus: verifier

@@ -1,0 +1,3 @@
+Candidates: implementation, verifier, verification_plan, evidence_collection
+Excluded: none
+Locus: unknown

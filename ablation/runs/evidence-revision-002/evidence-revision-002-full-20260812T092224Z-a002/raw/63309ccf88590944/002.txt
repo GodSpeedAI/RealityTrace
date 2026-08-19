@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "verification_plan"], "unresolved_distinction": "Whether the fixture file's mode-0 permissions were corrupted by the runtime environment (e.g., an external process stripped read access) versus a verification-plan deficiency that fails to provision or restore fixture file permissions before test execution.", "selected_action": "act-04", "expected_information": "Whether the verifier's configuration declares any fixture-provisioning or permission-setup step. If such a step exists and is absent or incorrect, the plan is at fault; if no such step exists and the environment simply has wrong file modes, the locus is environment.", "proposed_settlement": null}
+```

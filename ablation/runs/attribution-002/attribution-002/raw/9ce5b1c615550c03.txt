@@ -1,0 +1,10 @@
+Looking at this case:
+
+- **verifier_exit: 1** — the verifier ran and reported failure.
+- **FTS: empty** — no text content was indexed.
+- **vector: all zeros** — no semantic content was captured at all.
+- **stdin_format: "df-validate"** — a validation scenario.
+
+The artifact node exists in the graph, and the verifier executed and exited non-zero. But the evidence payload is entirely empty (zero vector, no FTS content), meaning the artifact that was recorded and fed to the verifier contained no meaningful content for it to work with. The verifier failed because it received degenerate, empty evidence.
+
+Locus: evidence_collection

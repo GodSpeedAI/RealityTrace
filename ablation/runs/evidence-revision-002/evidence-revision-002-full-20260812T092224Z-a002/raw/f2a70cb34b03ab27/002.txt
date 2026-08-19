@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["evidence_collection", "implementation"], "unresolved_distinction": "The fixture file contains trailing non-JSON content ('\\n\\n# stale\\n') after valid JSON, confirming it is 'out of date' per act-07. The unresolved question is whether the fixture was corrupted during evidence collection (pointing to evidence_collection) or whether the test implementation should handle this annotated/stale format but fails to (pointing to implementation). Need to verify the test source symbols are intact and correctly implemented to rule out implementation.",
+ "selected_action": "act-04",
+ "expected_information": "Whether the source symbols in the failure trace (json.load, test_observed_failure, the fixture path reference) are present at expected locations and whether the implementation itself appears structurally correct — if so, the locus shifts decisively to evidence_collection since the fixture data is the corrupted element.",
+ "proposed_settlement": null}
+```

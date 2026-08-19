@@ -1,0 +1,9 @@
+```json
+{
+  "candidate_loci": ["verification_plan", "verifier"],
+  "unresolved_distinction": "Whether the stale test-target name `unit_tests` originates from the verification plan's declared target specification or from the verifier's own command configuration.",
+  "selected_action": null,
+  "expected_information": null,
+  "proposed_settlement": "verification_plan"
+}
+```

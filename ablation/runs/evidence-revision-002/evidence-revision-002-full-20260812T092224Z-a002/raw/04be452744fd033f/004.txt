@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether the exit-101 panic is caused by the implementation failing to handle a stale fixture gracefully, or by the verification_plan not updating the fixture (tests/fixtures/example.py, found out of date) before invoking the test — the evidence does not distinguish these.", "selected_action": null, "expected_information": null, "proposed_settlement": "unknown"}
+```

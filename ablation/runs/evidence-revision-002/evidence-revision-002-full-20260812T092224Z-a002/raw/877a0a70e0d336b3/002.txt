@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Is cep.scoring a hand-written module that was never created (implementation gap), or a module that a declared model should have generated via projection but the projection step did not emit it?", "selected_action": "act-01", "expected_information": "Whether the declared semantic model (.sea) defines scoring components (ScoreMetrics, ScoreRecord, recall, status_from_score) that a projection is responsible for materializing into cep.scoring — if so, the locus is projection; if no such model declaration exists, the gap is in the implementation.", "proposed_settlement": null}
+```

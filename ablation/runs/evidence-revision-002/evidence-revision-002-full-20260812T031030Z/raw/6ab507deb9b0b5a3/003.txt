@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["verifier", "verification_plan"], "unresolved_distinction": "Whether the stale test target name `unit_tests` is hardcoded in the verifier's own command/configuration or is supplied externally by the verification plan that directs which tests to run.", "selected_action": "act-05", "expected_information": "The verifier's command string and direction rule will reveal whether `unit_tests` is baked into the verifier itself or whether the verifier receives the target name from the verification plan, definitively settling the locus attribution.", "proposed_settlement": null}
+```

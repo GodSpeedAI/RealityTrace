@@ -1,0 +1,16 @@
+Looking at the evidence acquired in round 1, the key findings are:
+
+1. **act-01**: The fixture file `data/corpus-v998.json` was inspected and **NOT FOUND**.
+2. **act-04**: The test re-run in isolation also failed with the same panic ("stale fixture missing").
+3. **act-06**: The toolchain and working directories are available and writable.
+4. **act-07**: The test target file itself resolves correctly.
+5. **act-08**: The declared semantic model validates against its schema.
+
+The test compiles and runs but panics because a required data fixture (`data/corpus-v998.json`) is absent from the working tree. The environment is otherwise healthy (toolchain present, paths accessible, directories writable). The test source and target resolve correctly, ruling out `verification_plan` issues with path resolution. The missing fixture represents a failure to provision/stage the evidence data needed for the scenario.
+
+```json
+{"candidate_loci": ["evidence_collection", "environment", "verification_plan"], "unresolved_distinction": "The fixture data/corpus-v998.json is confirmed absent (act-01); the remaining question is whether this is an evidence_collection failure (fixture never staged) versus an environment failure (fixture exists elsewhere but wasn't placed correctly), but the toolchain and directories are healthy, pointing to evidence_collection.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "evidence_collection"}
+```

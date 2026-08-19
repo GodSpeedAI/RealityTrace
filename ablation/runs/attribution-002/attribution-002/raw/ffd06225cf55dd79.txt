@@ -1,0 +1,10 @@
+Looking at the provenance for case ag-05:
+
+1. **SQL** records `verifier_exit: 101` (a crash/panic) and `stdin_format: "car-go-json"` — a corrupted form of what should likely be `"cargo-json"`.
+2. **FTS** is empty `[fts]` — no searchable text was indexed.
+3. **Vector** is all zeros — no semantic content was embedded.
+4. The evidence artifact and graph links exist, so the case structure is intact.
+
+The corruption of `stdin_format` from `cargo-json` to `car-go-json` indicates the case's serialized/projected metadata was malformed at the projection layer. This bad projected value propagated downstream: the verifier received an unparseable format descriptor, couldn't process stdin correctly, and panicked (exit 101). The empty FTS and zero vector are downstream consequences of the same malformed projection — no content could be extracted because the format mapping was wrong.
+
+Locus: projection

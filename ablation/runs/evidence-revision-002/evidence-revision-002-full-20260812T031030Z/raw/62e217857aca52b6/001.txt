@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether exit code 101 arises from a source-level compilation or test failure in the project code (implementation) versus a misconfigured or malformed verification command/target (verifier or verification_plan). All dependency artifacts show 'fresh': true, so the failure likely originates in the final crate compilation, test execution, or the verifier setup itself.",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal whether the verification target is correctly specified and whether the exit code 101 is expected from the verifier's own logic or from an underlying build/test invocation.",
+ "proposed_settlement": null}
+```

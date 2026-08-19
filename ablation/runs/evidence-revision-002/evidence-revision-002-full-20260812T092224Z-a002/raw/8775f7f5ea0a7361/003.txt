@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "evidence_collection"], "unresolved_distinction": "Whether the trailing '# stale' marker after valid JSON was originally committed in the fixture file (implementation defect) or was appended by an evidence-collection or artifact-management process that corrupted a previously valid JSON fixture.", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

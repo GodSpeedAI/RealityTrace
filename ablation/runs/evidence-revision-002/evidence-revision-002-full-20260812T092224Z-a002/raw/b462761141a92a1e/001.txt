@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["environment", "implementation"], "unresolved_distinction": "Whether the PermissionError on tests/fixtures is caused by incorrect filesystem permissions in the test environment (environment) versus the test or implementation code incorrectly attempting to access a restricted or improperly configured path (implementation).", "selected_action": "act-01", "expected_information": "The actual permission bits and ownership on tests/fixtures and its parent directories, which will reveal whether the environment has misconfigured permissions or whether the test is accessing a path whose restrictions are expected by design.", "proposed_settlement": null}
+```

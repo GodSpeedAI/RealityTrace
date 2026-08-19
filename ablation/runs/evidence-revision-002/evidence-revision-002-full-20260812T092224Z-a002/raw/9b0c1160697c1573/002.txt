@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "environment"], "unresolved_distinction": "Is the fixture 'tests/fixtures/inventory-version-v999.json' missing because the evidence/test-data collection process failed to stage it, or because the working environment (checkout, working directory) is incomplete?", "selected_action": null, "expected_information": null, "proposed_settlement": "evidence_collection"}
+```

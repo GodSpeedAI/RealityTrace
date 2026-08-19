@@ -1,0 +1,3 @@
+Candidates: verifier (needs verifier stderr/stack trace showing verifier-internal fault), implementation (needs captured model output/stdout showing wrong or malformed output), environment (needs runner/sandbox/env fault evidence), evidence_collection (needs evidence missing/empty despite expected)
+Excluded: evidence_collection (recorded)
+Locus: unknown

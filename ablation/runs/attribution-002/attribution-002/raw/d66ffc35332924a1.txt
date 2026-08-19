@@ -1,0 +1,9 @@
+Looking at the evidence for case cep-04:
+
+- **SQL record** shows `verifier_exit: 4` with `stdin_format: "pytest-progress"`.
+- In pytest's exit-code convention, exit code **4** specifically indicates a **command-line usage error** — the verification tool was invoked with incorrect arguments or flags.
+- The all-zero vector and empty FTS results are downstream consequences of the verifier failing to produce meaningful output.
+
+The root cause is the verifier itself failing at invocation (usage error), not the implementation under test, the evidence collection pipeline, or the environment.
+
+Locus: verifier

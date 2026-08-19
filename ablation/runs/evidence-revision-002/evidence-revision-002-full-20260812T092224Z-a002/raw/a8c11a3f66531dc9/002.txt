@@ -1,0 +1,6 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Whether the verifier exit 101 stems from missing implementation symbols (compile error in the project code), a misconfigured verifier command, or a broken environment. The isolated re-run (act-04) returned compile_error and act-03 confirmed the expected symbols are absent, strongly implicating implementation, but the exact compiler error message has not been captured.",
+ "selected_action": null,
+ "expected_information": null,
+ "proposed_settlement": "implementation"}
+```

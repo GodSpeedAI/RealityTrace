@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "projection"], "unresolved_distinction": "Does the source file cep/conformance/anti_collapse.py simply not exist as a source artifact (implementation defect — cli.py imports a module that was never created or was deleted), or is the module supposed to be generated, copied, or mapped by a build or packaging step that the verifier configuration expects (projection defect)?", "selected_action": "act-05", "expected_information": "Whether the verifier's configuration includes any build, packaging, or module-generation step that should produce or make importable cep.conformance.anti_collapse — which would indicate a projection defect rather than missing source.", "proposed_settlement": null}
+```

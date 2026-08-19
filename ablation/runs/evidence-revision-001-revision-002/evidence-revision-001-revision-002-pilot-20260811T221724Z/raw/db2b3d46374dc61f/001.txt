@@ -1,0 +1,7 @@
+Looking at the evidence, the error is clear: a verification command is trying to run a test target named `unit_tests`, but that target has been renamed to `unit_tests_moved`. The key question is whether this is a stale verifier configuration referencing the old name, or an implementation that improperly renamed the expected target.
+
+Let me select act-02 to inspect the verifier's configuration and determine where the `unit_tests` reference originates.
+
+```json
+{"candidate_loci": ["verifier", "implementation"], "unresolved_distinction": "Whether the verifier's command hardcodes a stale test target name (`unit_tests`) that was intentionally renamed to `unit_tests_moved`, or the implementation incorrectly renamed the target away from the expected name the verifier is configured to use.", "selected_action": "act-02", "expected_information": "The verifier's configured command and test target reference will reveal whether it specifies `unit_tests`, and whether that reference is the verifier's own or inherited from a verification plan.", "proposed_settlement": null}
+```

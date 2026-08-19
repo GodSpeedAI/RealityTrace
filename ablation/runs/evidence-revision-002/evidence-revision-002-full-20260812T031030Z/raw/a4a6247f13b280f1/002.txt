@@ -1,0 +1,10 @@
+Looking at this case, I need to synthesize what we've learned across rounds.
+
+**Key evidence:**
+- All infrastructure checks pass: paths resolve (act-03), permissions are fine (act-01), fixtures exist and match (act-08), toolchain available (act-05), no schema issues (act-02), no missing symbols (act-06).
+- The isolated re-run of the specific failing test **passed** (act-04, exit 0).
+- The verifier (act-07) sets `AST_GREP_CONFIG=/nonexistent-corpus-config.toml` as a prefixed environment variable and runs `corpus_scenario`, which exits 101 (Rust panic).
+
+**Analysis:** The implementation runs correctly in isolation without the `AST_GREP_CONFIG` override. The only differentiator in the verifier run is the `AST_GREP_CONFIG` pointing to a deliberately nonexistent path. The exit code 101 (panic) indicates the implementation unwinds instead of gracefully handling a missing/unreadable config file. Since all verifier configuration, plan, and environment elements are structurally sound, the failure locus is the implementation's lack of graceful error handling for a missing config.
+
+{"candidate_loci": ["implementation", "verification_plan"], "unresolved_distinction": "Whether AST_GREP_CONFIG pointing to a nonexistent path is an intentional verification-plan scenario (meaning the implementation should handle it gracefully) versus a plan misconfiguration pointing to the wrong path.", "selected_action": null, "expected_information": null, "proposed_settlement": "implementation"}

@@ -1,0 +1,13 @@
+Looking at the evidence:
+- Build succeeded (all artifacts fresh), but verifier exited 101 (Rust panic)
+- Symbol `format_matches_as_text` was NOT found at expected locations
+- Fixtures and files exist and are accessible
+
+The missing symbol could mean the verification plan references something the implementation doesn't provide, or the verifier is misconfigured. Inspecting the verifier's configuration would clarify whether the verifier is trying to invoke the correct command/target.
+
+```json
+{"candidate_loci": ["verifier", "implementation", "verification_plan"], "unresolved_distinction": "The symbol format_matches_as_text was not found at its expected location, but it is unclear whether this is because the verification plan or verifier references a non-existent/wrong target (verifier or verification_plan fault), or because the implementation genuinely fails to provide a required function and panics at runtime (implementation fault).",
+ "selected_action": "act-07",
+ "expected_information": "The verifier's command line, evidence types, and direction rule will reveal whether it references the correct test target and symbol names, or whether its configuration itself is wrong.",
+ "proposed_settlement": null}
+```

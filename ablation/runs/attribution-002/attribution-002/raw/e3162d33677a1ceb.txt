@@ -1,0 +1,10 @@
+Looking at the evidence for case df-03:
+
+- **FTS**: Empty — no searchable text content indexed.
+- **Graph**: Evidence node exists as a reference (`df-03 --recorded_evidence--> artifact`), but no content.
+- **SQL**: Metadata is present (case_id, evidence_id, scenario), but `verifier_exit: 101` indicates failure.
+- **Vector**: All 64 dimensions are zero — no meaningful content was embedded.
+
+The evidence was registered (a reference/ID exists in the graph and SQL), but the actual content was never captured: no text for FTS, no signal for the vector embedding. The verifier failed (exit 101) because it had no substantive evidence to work with. The root cause is that evidence was referenced but not actually collected or populated.
+
+Locus: evidence_collection

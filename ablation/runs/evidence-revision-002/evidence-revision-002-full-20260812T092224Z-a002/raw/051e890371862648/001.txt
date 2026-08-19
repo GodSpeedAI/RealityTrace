@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "verification_plan"], "unresolved_distinction": "Whether the exit code 101 originates from a panic in the implementation under test, from the verifier command being misconfigured, or from the verification plan referencing an incorrect target or path.", "selected_action": "act-07", "expected_information": "The verifier's exact command line, declared evidence types, and direction rule to determine whether the verification correctly targets the project and whether the command itself could produce exit 101 independent of an implementation bug.", "proposed_settlement": null}
+```

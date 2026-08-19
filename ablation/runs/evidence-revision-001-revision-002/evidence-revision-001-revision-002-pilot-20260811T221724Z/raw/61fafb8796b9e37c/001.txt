@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["declared_model", "verifier"], "unresolved_distinction": "Whether the registry TOML file itself contains malformed content (declared_model) or the verifier's parser is incorrectly rejecting valid TOML (verifier).", "selected_action": null, "expected_information": null, "proposed_settlement": "declared_model"}
+```

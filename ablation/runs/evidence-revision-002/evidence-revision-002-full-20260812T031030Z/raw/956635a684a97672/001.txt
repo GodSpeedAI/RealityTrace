@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Whether exit code 101 originates from a compilation or runtime error in the project source code (implementation), a misconfigured or broken verifier command (verifier), or a toolchain/environment deficiency (environment).", "selected_action": "act-02", "expected_information": "Whether the test target or path referenced by the verification command exists in the working tree, which would rule in or out verification_plan as the failure locus.", "proposed_settlement": null}
+```

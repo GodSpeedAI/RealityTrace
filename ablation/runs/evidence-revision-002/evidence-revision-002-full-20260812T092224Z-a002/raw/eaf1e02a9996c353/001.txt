@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["implementation", "verifier", "environment"], "unresolved_distinction": "Whether verifier_exit 101 originates from a compilation or test failure in the project's own source code (implementation), a panic or misconfiguration in the verification harness itself (verifier), or an environmental problem such as a missing toolchain or unwritable target directory (environment).", "selected_action": "act-03", "expected_information": "The verifier's command line, declared evidence types, and direction rule will reveal whether the harness is correctly configured and whether exit 101 is expected for certain failure classes, helping distinguish verifier misconfiguration from genuine implementation failures.", "proposed_settlement": null}
+```

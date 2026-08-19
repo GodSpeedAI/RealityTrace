@@ -1,0 +1,3 @@
+```json
+{"candidate_loci": ["evidence_collection", "verification_plan", "environment"], "unresolved_distinction": "The test panics with 'stale fixture missing' — is the fixture file genuinely absent from the working environment (environment/evidence_collection failure), or does the verification plan or test logic incorrectly reference a fixture that was never intended to exist (verification_plan failure)?", "selected_action": "act-01", "expected_information": "Whether the referenced fixture file exists on disk and contains expected content, directly confirming or ruling out the 'stale fixture missing' error as a missing-data problem vs. a misconfigured reference.", "proposed_settlement": null}
+```

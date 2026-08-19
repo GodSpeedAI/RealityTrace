@@ -1,0 +1,7 @@
+Candidates: verifier, implementation, environment
+- verifier: supported if verifier_exit=2 reflected a verifier usage/internal error; discriminating evidence would be verifier stderr/logs showing verifier fault.
+- implementation: supported if exit 2 came from failing test execution; discriminating evidence would be captured pytest tracebacks/failures.
+- environment: supported if pytest could not run due to missing dependency/runtime mismatch; discriminating evidence would be environment setup errors.
+
+Excluded: verifier=ambiguous, implementation=unobserved, environment=unobserved
+Locus: unknown
