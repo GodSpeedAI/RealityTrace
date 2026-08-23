@@ -1,0 +1,35 @@
+{
+	"version": 5,
+	"commitHash": "9bb599db58e172c3578fb4d1531d3cfb102cf314",
+	"commitMessage": "feat: add initial configuration and logging files for Jolli Memory integration",
+	"commitAuthor": "Sam Prime",
+	"commitDate": "2026-08-23T14:17:20.000Z",
+	"branch": "main",
+	"generatedAt": "2026-08-23T14:17:32.041Z",
+	"commitType": "commit",
+	"commitSource": "cli",
+	"transcriptEntries": 5,
+	"conversationTurns": 3,
+	"llm": {
+		"model": "unknown",
+		"inputTokens": 0,
+		"outputTokens": 0,
+		"apiLatencyMs": 0,
+		"stopReason": "error"
+	},
+	"stats": {
+		"filesChanged": 10,
+		"insertions": 596,
+		"deletions": 0
+	},
+	"topics": [],
+	"diffStats": {
+		"filesChanged": 10,
+		"insertions": 596,
+		"deletions": 0
+	},
+	"summaryError": "llm-failed",
+	"transcripts": [
+		"df88e1a6-dede-4be1-a22d-8267939a39db"
+	]
+}

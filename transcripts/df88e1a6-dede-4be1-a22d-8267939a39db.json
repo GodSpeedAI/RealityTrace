@@ -1,0 +1,72 @@
+{
+	"sessions": [
+		{
+			"sessionId": "ses_fd10cb636ffe0x4KfnJdk8PuUF",
+			"source": "opencode",
+			"transcriptPath": "/home/sprime01/.local/share/opencode/opencode.db#ses_fd10cb636ffe0x4KfnJdk8PuUF",
+			"entries": [
+				{
+					"role": "human",
+					"content": "read .agents/CURRENT_STATUS.md then continue the ablation experiments until completion\n\nlevergae sub-agent workflows for work that can run in parralel",
+					"timestamp": "2026-08-23T14:08:11.989Z"
+				},
+				{
+					"role": "assistant",
+					"content": "I'll first get the repo state, then dispatch parallel sub-agents to map out exactly what the remaining work involves before running anything.\n\nClean tree at `d8078b0`. Now dispatching two explore sub-agents in parallel — one on the exec005 CLI/runtime mechanics, one on the evidence artifacts and what \"completion\" requires.",
+					"timestamp": "2026-08-23T14:09:20.413Z"
+				},
+				{
+					"role": "human",
+					"content": "continue",
+					"timestamp": "2026-08-23T14:17:25.791Z"
+				}
+			],
+			"toolUse": [
+				{
+					"name": "read",
+					"kind": "builtin",
+					"calls": 1
+				},
+				{
+					"name": "ctx_search",
+					"kind": "builtin",
+					"calls": 1
+				},
+				{
+					"name": "bash",
+					"kind": "builtin",
+					"calls": 1
+				},
+				{
+					"name": "task",
+					"kind": "builtin",
+					"calls": 1
+				}
+			]
+		},
+		{
+			"sessionId": "ses_fd10ab726ffeg9NOKeRK3Jd48Z",
+			"source": "opencode",
+			"transcriptPath": "/home/sprime01/.local/share/opencode/opencode.db#ses_fd10ab726ffeg9NOKeRK3Jd48Z",
+			"entries": [
+				{
+					"role": "human",
+					"content": "Research-only task (do NOT modify any files, do NOT run any live/model/provider commands). Thoroughness: very thorough.\n\nRepo: /home/sprime01/projects/sxr\n\nExplore ablation/ directory tree (artifacts, evidence, runs), docs/, and .agents/ files.\n\nAnswer precisely, with paths and short excerpts only:\n\n1. List the eight frozen `evidence-revision-002-exec005-*` artifact files: full paths, filenames, and their status fields (FROZEN_NOT_AUTHORIZED etc.). Which file holds the matrix/shard-plan hashes?\n2. Are there existing example qualification / provenance-audit JSON files from exec004 (or fixtures in tests) I can use as format templates? Full paths.\n3. Are there existing run directories from exec004 (completed or aborted)? Where do runs get written (naming convention)? Do NOT inspect contents deeply beyond structure/naming; just map the layout.\n4. What defines COMPLETION of the exec005 experiment? Look for docs/plan/matrix describing: 16 shards, unit counts (430 coordinates?), success criteria, expected final report artifacts. Cite the doc files.\n5. Any README/AGENTS/protocol docs in ablation/ describing operational rules: commit requirements before authorize-full, review process, who signs off, safety rules about live calls, cost limits?\n6. Check .agents/ for other status/plan files besides CURRENT_STATUS.md.\n7. Look at git history messages around exec003/exec004 transitions (git log --oneline --all | grep-ish) to see the documented sequence used previously when running the real experiment (e.g., commits named like \"authorize\", \"run\", \"aggregate\"). Just list relevant commit subjects.\n\nReturn a compact structured summary with paths. No large dumps.",
+					"timestamp": "2026-08-23T14:10:22.222Z"
+				},
+				{
+					"role": "assistant",
+					"content": "Initial map is in. Now I need details on the eight exec005 artifacts' status fields, docs content, protocol docs, and the exec004 runs layout.\n\nCore artifact data is emerging. Now I need the precise per-file statuses, shard counts, docs listings, protocol docs, and CURRENT_STATUS.md contents.\n\nNearly complete. Retrieving the few remaining small sections directly plus final gap-fills (shard_sizes sum, provider/runtime-config contents, provenance-audit/authority files, test fixtures, contract success criteria).\n\nFinal gap-fill: schema constants, completion/settlement fields in the contract, and the successor freeze report structure.\n\nResearch complete. All findings below are read-only observations from the repo at `/home/sprime01/projects/sxr`.\n\n---\n\n## 1. The eight frozen `evidence-revision-002-exec005-*` artifacts\n\nAll in `ablation/analysis/post-audit-v2/` (all mtime Aug 12 19:30):\n\n| # | File (`ablation/analysis/post-audit-v2/…`) | Status / key field |\n|---|---|---|\n| 1 | `evidence-revision-002-exec005-equivalence.json` | `status: OFFLINE_TEST_GATE_REQUIRED`; requires `coordinates: 430`, `concurrency [1,4]` |\n| 2 | `evidence-revision-002-exec005-executable-contract.json` | **`FROZEN_NOT_AUTHORIZED`**, `execution_authorized:false`, `full_execution_authorized:false`; fingerprint `ee58587fca10…`; carries full `exec004_lineage` hashes |\n| 3 | `evidence-revision-002-exec005-full-matrix.json` | `matrix_sha256: 41c4b7d81b9d…`, `coordinates` list of **430** |\n| 4 | `evidence-revision-002-exec005-provider-contract.json` | (no status key) opencode route, endpoint `http://127.0.0.1:4096`, model `deepseek-v4-flash-free`, all-tools-false |\n| 5 | `evidence-revision-002-exec005-qualification.json` | **`NOT_RUN`** |\n| 6 | `evidence-revision-002-exec005-runner-implementation.json` | `sha256: 5fdf289e5e17…` |\n| 7 | `evidence-revision-002-exec005-runtime-config.json` | agent `er002-transport`, deny-all permission/tool map |\n| 8 | `evidence-revision-002-exec005-shard-plan.json` | `shard_count: 16`, sizes `[27×14, 26×2]` = 430 |\n\n**Matrix/shard-plan hashes:** `evidence-revision-002-exec005-shard-plan.json` holds both `matrix_sha256` (`41c4b7d8…`) and `shard_plan_sha256` (`fc9583bc372c…`). Both are restated in `.agents/CURRENT_STATUS.md` (\"Frozen identities\") and bound into the executable-contract's fingerprint.\n\n## 2. Format templates for qualification / provenance-audit JSON\n\n- Real exec004 artifact (placeholder, `status: NOT_RUN`): `ablation/analysis/post-audit-v2/evidence-revision-002-exec004-qualification.json` — schema `evidence-revision-002-exec004-qualification-v1`; fields: `calls: 0, calls_per_worker: 5, required_workers: 4`. (exec003 twin exists alongside.)\n- Best synthetic templates: `_evidence()` fixture in `ablation/eval/tests/test_v2_evidence_revision_002_exec005.py` (lines ~25–37) builds complete `qualification.json` + `provenance-audit.json` pairs using constants at lines 249–251 of `ablation/eval/v2/evidence_revision_002_exec005.py`: `QUALIFICATION_SCHEMA = \"evidence-revision-002-exec005-qualification-v1\"`, `PROVENANCE_SCHEMA = \"evidence-revision-002-exec005-provenance-audit-v1\"`.\n- No persisted real exec004 provenance-audit or `*authority*.json` exists anywhere on disk (only its hash, `provenance_audit_sha256: 9b3520b6676b…`, recorded inside the exec005 executable-contract lineage).\n\n## 3. Run directories & naming convention\n\nRoot: `ablation/runs/<group>/<group>-<phase>-<YYYYMMDDTHHMMSSZ>[-a<attempt>]>/`\n\nexec004-era (under `ablation/runs/evidence-revision-002/`) — both aborted attempts referenced by `excluded_attempts` in the executable contract:\n- `evidence-revision-002-full-20260812T031030Z/` (attempt 001)\n- `evidence-revision-002-full-20260812T092224Z-a002/` (attempt 002)\n\nPrior-generation run dir shape (`ablation/runs/evidence-revision-001-revision-002/evidence-revision-001-revision-002-pilot-20260811T221724Z/`): `run.json`, `checkpoint.json`, `execution-summary.json`, `call-commits.jsonl`, `result-commits.jsonl`, `calls/<16-hex-id>/`, `raw/`, `results/`.\n\nOlder groups (same tree): `acq-pilot`, `acq-full/diagnostic-acquisition-001` (with `manifest.json`, `matrix.json`, `manifest.jsonl`, `raw/`, `scored/`, `acq_analysis.json`, `acq_report.json`), `attribution-001/-002`, `full-001`, `gov-pilot`, `gov-full`, `pilot-002`, `pilot-003`.\n\n## 4. What defines COMPLETION of exec005\n\nNote: **`docs/` is empty** — no files. The governing definitions are:\n\n- `ablation/analysis/post-audit-v2/evidence-revision-002-successor-freeze-report.md` — \"FULL matrix … Planned units: **430**\"; \"Analysis contract: canonical analysis verifies the exact **430-result set**, rejects orphan/duplicate result or raw-call ledgers, verifies runner/design/executable/matrix bindings …\"; §Governed FULL transition completeness: \"**completion requires a durable result commit and checkpoint state**\" for every entry of the non-injectable loop.\n- `.agents/CURRENT_STATUS.md` — \"16-shard/4-worker, raw-before-score, ambiguity, and outcome-blind replacement behavior\"; verification: 19 passed targeted + 472 passed suite; preflight PASS but `full_execution_authorized=false`.\n- Scientific contract `ablation/analysis/post-audit-v2/evidence-revision-002-contract.json` — `full_plan.repetitions: 2` (so 430 = 215 coords × 2 reps, owner-directed); `primary_endpoint`: \"the unit's FINAL diagnostic claim names the true locus\"; `stop_condition`: owner §12 power-adjudication clause; `secondary_endpoints.revision_rate = EVALUATED_DERIVED_TYPED`, `matched_evidence_use = NOT_EVALUATED_UNDER_THIS_EXPERIMENT`.\n- Shard math: 16 shards × ~27 units, frozen concurrency target 4 (`settlement.frozen_concurrency_target: 4` in the executable contract).\n\n## 5. Operational-rules docs in ablation/\n\nNo README/AGENTS/protocol markdown in `ablation/` (only three analysis reports: `pilot-adjudication-revision-002.md`, `full-readiness-secondary-endpoint-audit-revision-002.md`, `evidence-revision-002-successor-freeze-report.md`; plus a small `RELEASE.gate` marker and shell drivers `run_governed_full.sh`, `run_parallel.sh`). The operational rules actually live in:\n\n- `.agents/CURRENT_STATUS.md` → \"Next authorization transition (not run)\": after **commit/review**, a fresh synthetic exec005 qualification + matching provenance audit must pass; authority is minted only via `authorize-full --owner-authorized --qualification <fresh> --provenance-audit <fresh> --candidate-commit <reviewed-40-hex-commit> --output <authority.json>`; \"FULL remains blocked absent that transition.\" \"Safety boundary\": zero live model/provider/qualification calls occurred; aborted run dirs untouched.\n- Enforced in code/tests: candidate commit must be the checked-out HEAD (`test_stale_valid_candidate_commit_cannot_mint_authority`); release requires `runner_implementation_sha256` + `reviewed_runner_commit` (`.agents/reports/14-evidence-revision-runner-implementation-binding.md`); `test_qualification_bench_needs_explicit_intent_and_never_runs_here`.\n- Sign-off: owner only (`--owner-authorized`; historical commit `86f77ad authorize(owner): release …`). No explicit dollar cost-cap document found; cost is implicitly bounded by frozen unit counts (430×2), qualification size (4 workers × 5 calls), and performed-call counters.\n\n## 6. `.agents/` contents besides CURRENT_STATUS.md\n\n- `.agents/CURRENT_STATUS.md` (only status file; no `plans/` or `recovery/` dirs exist)\n- `.agents/reports/`: `10-evidence-revision-runner-map.md`, `11-evidence-revision-runner-readiness.{md,json}`, `12-evidence-revision-validity-closure.{md,json}`, `13-evidence-revision-live-runner-repair.{md,json}`, `14-evidence-revision-runner-implementation-binding.{md,json}`, `15-evidence-revision-pilot-adjudication.json`\n- `.agents/skills/jolli*/SKILL.md` (tooling skills, unrelated)\n\n## 7. Git history around exec transitions (`git log --oneline --all`)\n\nExec003→005 chain: `d5083fa` exec003 parallel DeepSeek executor → `54467bd` exec004 OpenCode runtime transport → `24d459f` exec005 FULL authority gate → `fa1951f` test: bind ER002 exec005 authority fixtures to HEAD.\n\nEarlier documented live-run sequence (freeze → authorize → run → aggregate):\n- `5182a61` freeze: evidence-revision-001 scientific contract (NOT STARTED) / `17b4ef4` freeze: record owner state FROZEN_NOT_STARTED, execution not authorized\n- `86f77ad` authorize(owner): release frozen evidence revision pilot only\n- `a6f87d3` frozen orchestrator; `cf6b6ce` deterministic raw-bound resume state; `0ee6400` prove execution invariants; `60f599b` two-phase authorized pilot execution\n- Pilot-era pattern: `1bf8067` M3 pilot manifest, blind selection, live run driver, preflight → `4bbaa89` acceptance gate + scoring/report (live 60-unit run) → `6f3a8e0` aggregate evidence + acceptance gate results → `d013e4f` full 720-run analysis + integrity gate\n\nSo the established per-transition rhythm is: freeze artifacts → commit → review → `authorize(owner)`/`authorize-full` commit → run-shards (raw+checkpoint durable commits) → aggregate/integrity-gate report commit.",
+					"timestamp": "2026-08-23T14:12:09.419Z"
+				}
+			],
+			"toolUse": [
+				{
+					"name": "ctx_batch_execute",
+					"kind": "builtin",
+					"calls": 6
+				}
+			]
+		}
+	]
+}
