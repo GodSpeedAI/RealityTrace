@@ -1,0 +1,35 @@
+[2026-08-23T14:07:26.759Z] INFO  [Installer] [trace=ba2594655a0cfb957ef715af33130915] Installing Jolli Memory hooks
+[2026-08-23T14:07:26.788Z] INFO  [DispatchScripts] [trace=ba2594655a0cfb957ef715af33130915] Wrote resolve-dist-path, run-hook, and run-cli scripts to /home/sprime01/.jolli/jollimemory
+[2026-08-23T14:07:26.794Z] INFO  [DistPathWriter] [trace=ba2594655a0cfb957ef715af33130915] Wrote dist-paths/cli (version=0.99.11, distDir=/home/sprime01/.cache/nub/pm/store/@jolli.ai+cli@0.99.11_zod@4.4.3_-da09ec1fbb3fa1b7/node_modules/@jolli.ai/cli/dist)
+[2026-08-23T14:07:26.935Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 2) to /home/sprime01/projects/sxr/.agents/skills/jolli-recall/SKILL.md
+[2026-08-23T14:07:26.947Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 2) to /home/sprime01/projects/sxr/.agents/skills/jolli-search/SKILL.md
+[2026-08-23T14:07:26.960Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 5) to /home/sprime01/projects/sxr/.agents/skills/jolli-local-run/SKILL.md
+[2026-08-23T14:07:26.996Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 4) to /home/sprime01/projects/sxr/.agents/skills/jolli-remote-run/SKILL.md
+[2026-08-23T14:07:27.027Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 6) to /home/sprime01/projects/sxr/.agents/skills/jolli/SKILL.md
+[2026-08-23T14:07:27.057Z] INFO  [GitExclude] [trace=ba2594655a0cfb957ef715af33130915] Updated /home/sprime01/projects/sxr/.git/info/exclude with 7 Jolli skill exclude paths
+[2026-08-23T14:07:27.063Z] INFO  [McpRegistration] [trace=ba2594655a0cfb957ef715af33130915] Registered MCP server in /home/sprime01/projects/sxr/.mcp.json
+[2026-08-23T14:07:27.134Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 2) to /home/sprime01/projects/sxr-exec006-recovery/.agents/skills/jolli-recall/SKILL.md
+[2026-08-23T14:07:27.139Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 2) to /home/sprime01/projects/sxr-exec006-recovery/.agents/skills/jolli-search/SKILL.md
+[2026-08-23T14:07:27.150Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 5) to /home/sprime01/projects/sxr-exec006-recovery/.agents/skills/jolli-local-run/SKILL.md
+[2026-08-23T14:07:27.163Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 4) to /home/sprime01/projects/sxr-exec006-recovery/.agents/skills/jolli-remote-run/SKILL.md
+[2026-08-23T14:07:27.167Z] INFO  [SkillInstaller] [trace=ba2594655a0cfb957ef715af33130915] Wrote SKILL.md (revision 6) to /home/sprime01/projects/sxr-exec006-recovery/.agents/skills/jolli/SKILL.md
+[2026-08-23T14:07:27.199Z] INFO  [McpRegistration] [trace=ba2594655a0cfb957ef715af33130915] Registered MCP server in /home/sprime01/projects/sxr-exec006-recovery/.mcp.json
+[2026-08-23T14:07:27.215Z] INFO  [JsonMcpWriter] [trace=ba2594655a0cfb957ef715af33130915] Registered MCP server in /home/sprime01/.gemini/settings.json
+[2026-08-23T14:07:27.235Z] INFO  [CodexTomlWriter] [trace=ba2594655a0cfb957ef715af33130915] Codex MCP server already registered in /home/sprime01/.codex/config.toml — no write needed
+[2026-08-23T14:07:27.247Z] INFO  [JsonMcpWriter] [trace=ba2594655a0cfb957ef715af33130915] Registered MCP server in /home/sprime01/.config/opencode/opencode.json
+[2026-08-23T14:07:27.253Z] INFO  [JsonMcpWriter] [trace=ba2594655a0cfb957ef715af33130915] Registered MCP server in /home/sprime01/.config/devin/config.json
+[2026-08-23T14:07:27.262Z] INFO  [JsonMcpWriter] [trace=ba2594655a0cfb957ef715af33130915] Registered MCP server in /home/sprime01/.gemini/config/mcp_config.json
+[2026-08-23T14:07:27.274Z] INFO  [JsonMcpWriter] [trace=ba2594655a0cfb957ef715af33130915] Registered MCP server in /home/sprime01/.kimi-code/mcp.json
+[2026-08-23T14:07:27.280Z] INFO  [GitHookInstaller] [trace=ba2594655a0cfb957ef715af33130915] Git post-commit hook installed
+[2026-08-23T14:07:27.294Z] INFO  [GitHookInstaller] [trace=ba2594655a0cfb957ef715af33130915] Git post-rewrite hook installed
+[2026-08-23T14:07:27.300Z] INFO  [GitHookInstaller] [trace=ba2594655a0cfb957ef715af33130915] Git prepare-commit-msg hook installed
+[2026-08-23T14:07:27.303Z] INFO  [GitHookInstaller] [trace=ba2594655a0cfb957ef715af33130915] Git post-merge hook installed
+[2026-08-23T14:07:27.311Z] INFO  [GitHookInstaller] [trace=ba2594655a0cfb957ef715af33130915] Git pre-push hook installed
+[2026-08-23T14:07:27.318Z] INFO  [GeminiHookInstaller] [trace=ba2594655a0cfb957ef715af33130915] Gemini AfterAgent hook installed
+[2026-08-23T14:07:27.324Z] INFO  [GeminiHookInstaller] [trace=ba2594655a0cfb957ef715af33130915] Gemini AfterAgent hook installed
+[2026-08-23T14:07:27.368Z] INFO  [SessionTracker] [trace=ba2594655a0cfb957ef715af33130915] Config saved to /home/sprime01/.jolli/jollimemory
+[2026-08-23T14:07:27.368Z] INFO  [Installer] [trace=ba2594655a0cfb957ef715af33130915] Cline detected — enabled Cline session discovery
+[2026-08-23T14:07:27.407Z] INFO  [StorageFactory] [trace=ba2594655a0cfb957ef715af33130915] StorageFactory.create: route=uncutover, projectPath=/home/sprime01/projects/sxr
+[2026-08-23T14:07:27.476Z] INFO  [SchemaV5Migration] [trace=ba2594655a0cfb957ef715af33130915] Storage backend not initialized yet — skipping schema v5 migration (no data to migrate)
+[2026-08-23T14:07:27.476Z] INFO  [Installer] [trace=ba2594655a0cfb957ef715af33130915] Schema v5 migration: alreadyDone=false fresh=true migrated=0 skipped=0
+[2026-08-23T14:07:27.559Z] INFO  [Installer] [trace=ba2594655a0cfb957ef715af33130915] Installation complete
