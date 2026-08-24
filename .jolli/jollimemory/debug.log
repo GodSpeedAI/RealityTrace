@@ -33,3 +33,58 @@
 [2026-08-23T14:07:27.476Z] INFO  [SchemaV5Migration] [trace=ba2594655a0cfb957ef715af33130915] Storage backend not initialized yet — skipping schema v5 migration (no data to migrate)
 [2026-08-23T14:07:27.476Z] INFO  [Installer] [trace=ba2594655a0cfb957ef715af33130915] Schema v5 migration: alreadyDone=false fresh=true migrated=0 skipped=0
 [2026-08-23T14:07:27.559Z] INFO  [Installer] [trace=ba2594655a0cfb957ef715af33130915] Installation complete
+[2026-08-23T14:17:23.381Z] INFO  [PrepareMsgHook] === Prepare-commit-msg hook started (source: message) ===
+[2026-08-23T14:17:23.570Z] INFO  [PrepareMsgHook] === Prepare-commit-msg hook finished ===
+[2026-08-23T14:17:27.541Z] INFO  [PostCommitHook] [trace=59c44e9a6fe47f129b939f09df6dc67c] Detected operation: commit
+[2026-08-23T14:17:27.560Z] INFO  [PostCommitHook] [trace=59c44e9a6fe47f129b939f09df6dc67c] Enqueued: type=commit hash=9bb599db
+[2026-08-23T14:17:27.560Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Launching background worker
+[2026-08-23T14:17:27.571Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Background worker spawned (PID: 1045911)
+[2026-08-23T14:17:28.545Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] === Queue worker started === node=24.19.0 kind=cli source=cli pkgVer=0.99.11 cliVer=0.99.11 dist=/home/sprime01/.cache/nub/pm/store/@jolli.ai+cli@0.99.11_zod@4.4.3_-da09ec1fbb3fa1b7/node_modules/@jolli.ai/cli/dist
+[2026-08-23T14:17:28.628Z] INFO  [StorageFactory] [trace=59c44e9a6fe47f129b939f09df6dc67c] StorageFactory.create: route=uncutover, projectPath=/home/sprime01/projects/sxr
+[2026-08-23T14:17:28.794Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Processing queue entry: type=commit hash=9bb599db
+[2026-08-23T14:17:28.851Z] INFO  [GitOps] [trace=59c44e9a6fe47f129b939f09df6dc67c] Commit 9bb599db: feat: add initial configuration and logging files for Jolli 
+[2026-08-23T14:17:28.851Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Commit: 9bb599db - feat: add initial configuration and logging files for Jolli Memory integration (28ms)
+[2026-08-23T14:17:29.687Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Discovered 2 OpenCode session(s)
+[2026-08-23T14:17:29.785Z] INFO  [OpenCodeTranscriptReader] [trace=59c44e9a6fe47f129b939f09df6dc67c] Read OpenCode session ses_fd10: 9 new messages, 3 entries extracted (index 0→9)
+[2026-08-23T14:17:29.785Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Transcript source: session=ses_fd10cb636ffe0x4KfnJdk8PuUF, lines=0→9, entries=3
+[2026-08-23T14:17:29.807Z] INFO  [OpenCodeTranscriptReader] [trace=59c44e9a6fe47f129b939f09df6dc67c] Read OpenCode session ses_fd10: 8 new messages, 2 entries extracted (index 0→8)
+[2026-08-23T14:17:29.808Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Transcript source: session=ses_fd10ab726ffeg9NOKeRK3Jd48Z, lines=0→8, entries=2
+[2026-08-23T14:17:29.872Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Git diff: 10 files changed, +596 -0 (62ms)
+[2026-08-23T14:17:30.025Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Prompt blocks: plans=0 notes=0 references=0 (+0 track-only archived, not prompted) (AI soft-excluded 0)
+[2026-08-23T14:17:30.026Z] INFO  [Summarizer] [trace=59c44e9a6fe47f129b939f09df6dc67c] Generating summary for commit 9bb599db
+[2026-08-23T14:17:30.026Z] INFO  [Summarizer] [trace=59c44e9a6fe47f129b939f09df6dc67c] Context: transcript=5, files=10, lines=596+0
+[2026-08-23T14:17:30.027Z] WARN  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] First API attempt failed: No LLM provider available. Set an Anthropic API key (ANTHROPIC_API_KEY) or configure a Jolli Space API key (jolliApiKey).. Retrying in 2000ms...
+[2026-08-23T14:17:32.031Z] INFO  [Summarizer] [trace=59c44e9a6fe47f129b939f09df6dc67c] Generating summary for commit 9bb599db
+[2026-08-23T14:17:32.031Z] INFO  [Summarizer] [trace=59c44e9a6fe47f129b939f09df6dc67c] Context: transcript=5, files=10, lines=596+0
+[2026-08-23T14:17:32.032Z] ERROR [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] API call failed after retry: No LLM provider available. Set an Anthropic API key (ANTHROPIC_API_KEY) or configure a Jolli Space API key (jolliApiKey).
+[2026-08-23T14:17:32.032Z] WARN  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Saving summary with empty topics + llm-failed marker for commit 9bb599db
+[2026-08-23T14:17:32.032Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] API summary generated (2.0s)
+[2026-08-23T14:17:32.033Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Plan registry scan: found 0 uncommitted slug(s) on main: []
+[2026-08-23T14:17:32.033Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Plan association: detected 0 slug(s) from transcripts: []
+[2026-08-23T14:17:32.033Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Note registry scan: found 0 uncommitted note(s) on main: []
+[2026-08-23T14:17:32.034Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Note association: detected 0 note(s): []
+[2026-08-23T14:17:32.034Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Reference association: detected 0 ref(s) for branch main
+[2026-08-23T14:17:32.041Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Summary built for 9bb599db: recap=no, topics=0, plans=absent, notes=absent, references=absent
+[2026-08-23T14:17:32.143Z] INFO  [GitOps] [trace=59c44e9a6fe47f129b939f09df6dc67c] Creating orphan branch 'jollimemory/summaries/v3' using plumbing commands
+[2026-08-23T14:17:32.215Z] INFO  [GitOps] [trace=59c44e9a6fe47f129b939f09df6dc67c] Orphan branch 'jollimemory/summaries/v3' created successfully
+[2026-08-23T14:17:32.298Z] INFO  [GitOps] [trace=59c44e9a6fe47f129b939f09df6dc67c] Updated branch 'jollimemory/summaries/v3': 4 written, 0 deleted (via fast-import)
+[2026-08-23T14:17:32.314Z] INFO  [MetadataManager] [trace=59c44e9a6fe47f129b939f09df6dc67c] Branch mapping created: main → main
+[2026-08-23T14:17:32.608Z] INFO  [MetadataManager] [trace=59c44e9a6fe47f129b939f09df6dc67c] Manifest updated: main/feat-add-initial-configuration-and-logging-files-f-9bb599db.md (commit)
+[2026-08-23T14:17:32.608Z] INFO  [FolderStorage] [trace=59c44e9a6fe47f129b939f09df6dc67c] Markdown generated: main/feat-add-initial-configuration-and-logging-files-f-9bb599db.md
+[2026-08-23T14:17:32.609Z] INFO  [FolderStorage] [trace=59c44e9a6fe47f129b939f09df6dc67c] Wrote 4 files, deleted 0 (Add summary for 9bb599db: feat: add initial configuration and logging files )
+[2026-08-23T14:17:32.610Z] INFO  [SummaryStore] [trace=59c44e9a6fe47f129b939f09df6dc67c] Summary stored successfully for commit 9bb599db
+[2026-08-23T14:17:32.629Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Summary stored successfully for commit 9bb599db (588ms, 0 plans, 0 notes, 0 references)
+[2026-08-23T14:17:32.629Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] === Pipeline completed in 3.8s ===
+[2026-08-23T14:17:32.629Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] === Summary content (0 topics) ===
+[2026-08-23T14:17:32.643Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Processed 1 queue entries
+[2026-08-23T14:17:32.656Z] INFO  [SessionTracker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Enqueued queue operation: type=ingest tag=ingest file=1787494652652-00000001-05d0de24-ingest.json
+[2026-08-23T14:17:32.675Z] INFO  [PushExecutor] [trace=59c44e9a6fe47f129b939f09df6dc67c] Post-queue push trigger: scheduling drain for 1 newly generated summar(ies)
+[2026-08-23T14:17:32.777Z] INFO  [GitOps] [trace=59c44e9a6fe47f129b939f09df6dc67c] Commit 9bb599db: feat: add initial configuration and logging files for Jolli 
+[2026-08-23T14:17:33.041Z] INFO  [StorageFactory] [trace=59c44e9a6fe47f129b939f09df6dc67c] StorageFactory.create: route=uncutover, projectPath=/home/sprime01/projects/sxr
+[2026-08-23T14:17:33.273Z] INFO  [Backup] [trace=59c44e9a6fe47f129b939f09df6dc67c] snapshot created: /home/sprime01/jolli_back/memory-20260823T141733Z-f742889f.db
+[2026-08-23T14:17:33.323Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] === Queue worker finished ===
+[2026-08-23T14:17:33.335Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] Processing queue entry: type=ingest triggeredBy=post-commit
+[2026-08-23T14:17:33.357Z] INFO  [QueueWorker] [trace=59c44e9a6fe47f129b939f09df6dc67c] No API key configured — skipping ingest (post-commit)
+[2026-08-23T14:17:33.910Z] INFO  [SotImport] [trace=59c44e9a6fe47f129b939f09df6dc67c] orphan import for https://github.com/godspeedai/realitytrace: %o
+[2026-08-23T14:17:34.144Z] INFO  [CutoverEngine] [trace=59c44e9a6fe47f129b939f09df6dc67c] cutover committed for https://github.com/godspeedai/realitytrace at version 1
+[2026-08-23T14:17:34.157Z] INFO  [AutoCutover] [trace=59c44e9a6fe47f129b939f09df6dc67c] auto-cutover: /home/sprime01/projects/sxr is now served from SQLite
