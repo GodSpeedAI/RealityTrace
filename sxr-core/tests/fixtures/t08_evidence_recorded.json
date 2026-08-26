@@ -1,0 +1,58 @@
+{
+  "affordance_id": "aff-blue-green-001",
+  "domain_model_sha256": "4cd7ff010a0ac3e4bc9b59b2e5aef6669512d352b0f798c984eaf76cecb4f210",
+  "evidence_recorded": {
+    "event_id": "0000000b-0000-4000-8000-00000000c002",
+    "event_type": "EvidenceRecorded",
+    "idempotency_key": "3fe6f3c35f63cfd36a8e76ce8607d83a48852e03d4d1fd3c25bf5a7caea26d85",
+    "occurred_at": "2026-08-25T13:05:00+00:00",
+    "payload": {
+      "affordance_id": "aff-blue-green-001",
+      "difference": {
+        "expected_sha256": "060c46641253a4d5c362c76c03d5e86a395c4bae93a7d33c22421b9e525f7389",
+        "observed_sha256": "1287b82a14d9d1ffa85443d1904971c36c040b28e2a2f143047364ad8d64519f",
+        "verdict": "divergent"
+      },
+      "domain_model_hash": "4cd7ff010a0ac3e4bc9b59b2e5aef6669512d352b0f798c984eaf76cecb4f210",
+      "domain_model_ref": {
+        "model_hash": "4cd7ff010a0ac3e4bc9b59b2e5aef6669512d352b0f798c984eaf76cecb4f210",
+        "namespace": "agentic_capability_loop"
+      },
+      "expected_outcome": {
+        "affordance": "convergence-e2e-gate",
+        "declared_result": "all frozen contract tests exit zero"
+      },
+      "namespace": "agentic_capability_loop",
+      "observed_outcome": [
+        {
+          "effect": "health check green",
+          "probe": "lb/ready"
+        },
+        {
+          "effect": "zero-downtime observed",
+          "window_ms": 0
+        }
+      ],
+      "operational_settlement_ref": "sha256:c28a594d14e0e2f7d10d6e1d8d29357149d9b19db7292b0b344da894729246ed",
+      "proof_result_ref": "sha256:070ef1783b0841d84fbfd86334ffc90a9feaf1f64c6cbccffd917de35b69583d",
+      "work_request_id": "wr-gsf-001"
+    },
+    "provenance": {
+      "chain": [
+        "domain_model_hash:4cd7ff010a0ac3e4bc9b59b2e5aef6669512d352b0f798c984eaf76cecb4f210",
+        "caused_by:d77960c1-0658-4d40-b121-cb94c65c2cb6",
+        "caused_by:0000000a-0000-4000-8000-00000000c001"
+      ],
+      "origin": "realitytrace"
+    },
+    "schema_version": "v1",
+    "source_agent": "realitytrace"
+  },
+  "expected_settlement_event_id": "d77960c1-0658-4d40-b121-cb94c65c2cb6",
+  "known_parent_ids": [
+    "d77960c1-0658-4d40-b121-cb94c65c2cb6",
+    "0000000a-0000-4000-8000-00000000c001"
+  ],
+  "proof_event_id": "0000000a-0000-4000-8000-00000000c001",
+  "work_request_id": "wr-gsf-001"
+}

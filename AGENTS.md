@@ -20,7 +20,7 @@ Use `.agents/` for agent-operational state that should not become permanent prod
 
 Prefer:
 
-- `.agents/CURRENT_STATUS.md` for the current implementation/recovery state and immediate next actions.
+- `.agents/current_status.yml` for the current implementation/recovery state and immediate next actions.
 - `.agents/plans/` for implementation and recovery plans.
 - `.agents/reports/` for generated analysis, verification, audit, and settlement reports.
 - `.agents/prompts/` for substantial task-specific agent instructions.

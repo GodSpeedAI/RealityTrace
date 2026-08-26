@@ -88,3 +88,57 @@
 [2026-08-23T14:17:33.910Z] INFO  [SotImport] [trace=59c44e9a6fe47f129b939f09df6dc67c] orphan import for https://github.com/godspeedai/realitytrace: %o
 [2026-08-23T14:17:34.144Z] INFO  [CutoverEngine] [trace=59c44e9a6fe47f129b939f09df6dc67c] cutover committed for https://github.com/godspeedai/realitytrace at version 1
 [2026-08-23T14:17:34.157Z] INFO  [AutoCutover] [trace=59c44e9a6fe47f129b939f09df6dc67c] auto-cutover: /home/sprime01/projects/sxr is now served from SQLite
+[2026-08-24T22:44:24.464Z] INFO  [PrepareMsgHook] === Prepare-commit-msg hook started (source: message) ===
+[2026-08-24T22:44:24.634Z] INFO  [PrepareMsgHook] === Prepare-commit-msg hook finished ===
+[2026-08-24T22:44:25.869Z] INFO  [PostCommitHook] [trace=25cca8d902c5d602189285a441249b81] Detected operation: commit
+[2026-08-24T22:44:25.876Z] INFO  [PostCommitHook] [trace=25cca8d902c5d602189285a441249b81] Enqueued: type=commit hash=560eaf94
+[2026-08-24T22:44:25.876Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Launching background worker
+[2026-08-24T22:44:25.878Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Background worker spawned (PID: 2735549)
+[2026-08-24T22:44:26.392Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] === Queue worker started === node=24.19.0 kind=cli source=cli pkgVer=0.99.11 cliVer=0.99.11 dist=/home/sprime01/.cache/nub/pm/store/@jolli.ai+cli@0.99.11_zod@4.4.3_-da09ec1fbb3fa1b7/node_modules/@jolli.ai/cli/dist
+[2026-08-24T22:44:26.414Z] INFO  [StorageFactory] [trace=25cca8d902c5d602189285a441249b81] StorageFactory.create: route=cutover, projectPath=/home/sprime01/projects/sxr
+[2026-08-24T22:44:26.487Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Processing queue entry: type=commit hash=560eaf94
+[2026-08-24T22:44:26.512Z] INFO  [GitOps] [trace=25cca8d902c5d602189285a441249b81] Commit 560eaf94: Add orchestrator and worker scripts for evidence-revision-00
+[2026-08-24T22:44:26.512Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Commit: 560eaf94 - Add orchestrator and worker scripts for evidence-revision-002 exec-005 (9ms)
+[2026-08-24T22:44:26.995Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Discovered 5 OpenCode session(s)
+[2026-08-24T22:44:27.221Z] INFO  [OpenCodeTranscriptReader] [trace=25cca8d902c5d602189285a441249b81] Read OpenCode session ses_fd10: 87 new messages, 24 entries extracted (index 9→96)
+[2026-08-24T22:44:27.222Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Transcript source: session=ses_fd10cb636ffe0x4KfnJdk8PuUF, lines=9→96, entries=24
+[2026-08-24T22:44:27.280Z] INFO  [OpenCodeTranscriptReader] [trace=25cca8d902c5d602189285a441249b81] Read OpenCode session ses_fd10: 0 new messages, 0 entries extracted (index 8→8)
+[2026-08-24T22:44:27.291Z] INFO  [OpenCodeTranscriptReader] [trace=25cca8d902c5d602189285a441249b81] Read OpenCode session ses_fd10: 3 new messages, 1 entries extracted (index 0→3)
+[2026-08-24T22:44:27.292Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Transcript source: session=ses_fd10380cfffed9yJeMBoATWEo7, lines=0→3, entries=1
+[2026-08-24T22:44:27.314Z] INFO  [OpenCodeTranscriptReader] [trace=25cca8d902c5d602189285a441249b81] Read OpenCode session ses_fd0e: 19 new messages, 1 entries extracted (index 0→19)
+[2026-08-24T22:44:27.314Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Transcript source: session=ses_fd0e1d2b5ffeqXnkKg5D1PP2aG, lines=0→19, entries=1
+[2026-08-24T22:44:27.331Z] INFO  [OpenCodeTranscriptReader] [trace=25cca8d902c5d602189285a441249b81] Read OpenCode session ses_fd0e: 9 new messages, 2 entries extracted (index 0→9)
+[2026-08-24T22:44:27.331Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Transcript source: session=ses_fd0e172a8ffeKWie0e7uhmApEW, lines=0→9, entries=2
+[2026-08-24T22:44:27.371Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Git diff: 14 files changed, +1259 -3 (38ms)
+[2026-08-24T22:44:27.439Z] WARN  [GitOps] [trace=25cca8d902c5d602189285a441249b81] Diff exceeds 60000-char budget (88628 chars) — prepending --stat file list and truncating body
+[2026-08-24T22:44:27.465Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Prompt blocks: plans=0 notes=0 references=0 (+0 track-only archived, not prompted) (AI soft-excluded 0)
+[2026-08-24T22:44:27.466Z] INFO  [Summarizer] [trace=25cca8d902c5d602189285a441249b81] Generating summary for commit 560eaf94
+[2026-08-24T22:44:27.466Z] INFO  [Summarizer] [trace=25cca8d902c5d602189285a441249b81] Context: transcript=28, files=14, lines=1259+3
+[2026-08-24T22:44:27.467Z] WARN  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] First API attempt failed: No LLM provider available. Set an Anthropic API key (ANTHROPIC_API_KEY) or configure a Jolli Space API key (jolliApiKey).. Retrying in 2000ms...
+[2026-08-24T22:44:29.468Z] INFO  [Summarizer] [trace=25cca8d902c5d602189285a441249b81] Generating summary for commit 560eaf94
+[2026-08-24T22:44:29.468Z] INFO  [Summarizer] [trace=25cca8d902c5d602189285a441249b81] Context: transcript=28, files=14, lines=1259+3
+[2026-08-24T22:44:29.468Z] ERROR [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] API call failed after retry: No LLM provider available. Set an Anthropic API key (ANTHROPIC_API_KEY) or configure a Jolli Space API key (jolliApiKey).
+[2026-08-24T22:44:29.468Z] WARN  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Saving summary with empty topics + llm-failed marker for commit 560eaf94
+[2026-08-24T22:44:29.468Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] API summary generated (2.0s)
+[2026-08-24T22:44:29.469Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Plan registry scan: found 0 uncommitted slug(s) on main: []
+[2026-08-24T22:44:29.469Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Plan association: detected 0 slug(s) from transcripts: []
+[2026-08-24T22:44:29.470Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Note registry scan: found 0 uncommitted note(s) on main: []
+[2026-08-24T22:44:29.470Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Note association: detected 0 note(s): []
+[2026-08-24T22:44:29.471Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Reference association: detected 0 ref(s) for branch main
+[2026-08-24T22:44:29.479Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Summary built for 560eaf94: recap=no, topics=0, plans=absent, notes=absent, references=absent
+[2026-08-24T22:44:29.615Z] INFO  [MetadataManager] [trace=25cca8d902c5d602189285a441249b81] Manifest updated: main/add-orchestrator-and-worker-scripts-for-evidence-r-560eaf94.md (commit)
+[2026-08-24T22:44:29.615Z] INFO  [FolderStorage] [trace=25cca8d902c5d602189285a441249b81] Markdown generated: main/add-orchestrator-and-worker-scripts-for-evidence-r-560eaf94.md
+[2026-08-24T22:44:29.619Z] INFO  [FolderStorage] [trace=25cca8d902c5d602189285a441249b81] Wrote 4 files, deleted 0 (Add summary for 560eaf94: Add orchestrator and worker scripts for evidence-r)
+[2026-08-24T22:44:29.620Z] INFO  [SummaryStore] [trace=25cca8d902c5d602189285a441249b81] Summary stored successfully for commit 560eaf94
+[2026-08-24T22:44:29.656Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Summary stored successfully for commit 560eaf94 (177ms, 0 plans, 0 notes, 0 references)
+[2026-08-24T22:44:29.656Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] === Pipeline completed in 3.2s ===
+[2026-08-24T22:44:29.656Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] === Summary content (0 topics) ===
+[2026-08-24T22:44:29.661Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Processed 1 queue entries
+[2026-08-24T22:44:29.673Z] INFO  [SessionTracker] [trace=25cca8d902c5d602189285a441249b81] Enqueued queue operation: type=ingest tag=ingest file=1787611469672-00000001-aa9ba42f-ingest.json
+[2026-08-24T22:44:29.675Z] INFO  [PushExecutor] [trace=25cca8d902c5d602189285a441249b81] Post-queue push trigger: scheduling drain for 1 newly generated summar(ies)
+[2026-08-24T22:44:29.715Z] INFO  [GitOps] [trace=25cca8d902c5d602189285a441249b81] Commit 560eaf94: Add orchestrator and worker scripts for evidence-revision-00
+[2026-08-24T22:44:30.007Z] INFO  [StorageFactory] [trace=25cca8d902c5d602189285a441249b81] StorageFactory.create: route=cutover, projectPath=/home/sprime01/projects/sxr
+[2026-08-24T22:44:30.145Z] INFO  [Backup] [trace=25cca8d902c5d602189285a441249b81] snapshot created: /home/sprime01/jolli_back/memory-20260824T224430Z-f742889f.db
+[2026-08-24T22:44:30.182Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] === Queue worker finished ===
+[2026-08-24T22:44:30.184Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Processing queue entry: type=ingest triggeredBy=post-commit
+[2026-08-24T22:44:30.216Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] No API key configured — skipping ingest (post-commit)

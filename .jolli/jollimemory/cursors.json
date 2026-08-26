@@ -3,13 +3,28 @@
 	"cursors": {
 		"/home/sprime01/.local/share/opencode/opencode.db#ses_fd10cb636ffe0x4KfnJdk8PuUF": {
 			"transcriptPath": "/home/sprime01/.local/share/opencode/opencode.db#ses_fd10cb636ffe0x4KfnJdk8PuUF",
-			"lineNumber": 9,
-			"updatedAt": "2026-08-23T14:17:29.785Z"
+			"lineNumber": 96,
+			"updatedAt": "2026-08-24T22:44:27.221Z"
 		},
 		"/home/sprime01/.local/share/opencode/opencode.db#ses_fd10ab726ffeg9NOKeRK3Jd48Z": {
 			"transcriptPath": "/home/sprime01/.local/share/opencode/opencode.db#ses_fd10ab726ffeg9NOKeRK3Jd48Z",
 			"lineNumber": 8,
-			"updatedAt": "2026-08-23T14:17:29.807Z"
+			"updatedAt": "2026-08-24T22:44:27.280Z"
+		},
+		"/home/sprime01/.local/share/opencode/opencode.db#ses_fd10380cfffed9yJeMBoATWEo7": {
+			"transcriptPath": "/home/sprime01/.local/share/opencode/opencode.db#ses_fd10380cfffed9yJeMBoATWEo7",
+			"lineNumber": 3,
+			"updatedAt": "2026-08-24T22:44:27.291Z"
+		},
+		"/home/sprime01/.local/share/opencode/opencode.db#ses_fd0e1d2b5ffeqXnkKg5D1PP2aG": {
+			"transcriptPath": "/home/sprime01/.local/share/opencode/opencode.db#ses_fd0e1d2b5ffeqXnkKg5D1PP2aG",
+			"lineNumber": 19,
+			"updatedAt": "2026-08-24T22:44:27.314Z"
+		},
+		"/home/sprime01/.local/share/opencode/opencode.db#ses_fd0e172a8ffeKWie0e7uhmApEW": {
+			"transcriptPath": "/home/sprime01/.local/share/opencode/opencode.db#ses_fd0e172a8ffeKWie0e7uhmApEW",
+			"lineNumber": 9,
+			"updatedAt": "2026-08-24T22:44:27.331Z"
 		}
 	}
 }

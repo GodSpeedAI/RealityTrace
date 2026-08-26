@@ -1,0 +1,673 @@
+# =============================================================================
+# AGENT-FACING DEVELOPMENT PLAN TEMPLATE
+# =============================================================================
+#
+# PURPOSE
+# -------
+# Use this file to PROJECT an approved/frozen normative specification into an
+# executable development settlement graph.
+#
+# This artifact answers:
+#   - In what dependency order should the specification be implemented?
+#   - Which task settles which normative requirement(s)?
+#   - What does each task CHANGE, PROVE, and explicitly NOT prove?
+#   - What evidence, falsification, and confirmation close each task?
+#   - Which tasks can execute in parallel?
+#   - What happens when evidence contradicts the implementation or representation?
+#
+# THIS IS NOT THE SPECIFICATION
+# -----------------------------
+# The source spec says WHAT MUST BE TRUE.
+# This plan says HOW CLAIMS BECOME SETTLED.
+#
+# Do not silently change normative requirements here.
+# If the plan discovers that the specification is wrong/ambiguous, block the
+# affected work and revise the specification explicitly.
+#
+# RECOMMENDED ARTIFACT CHAIN
+# --------------------------
+#   <system>.spec.yaml
+#       ↓
+#   <system>.plan.yaml
+#       ↓
+#   preregistrations / implementation
+#       ↓
+#   evidence
+#       ↓
+#   confirmation / correction
+#
+# Keep mutable execution state in a separate current-status.yaml. Do not mutate
+# this plan merely to record which agent is currently running a task.
+#
+# AUTHORING RULES FOR AGENTS
+# --------------------------
+# 1. Read and validate the source specification before authoring this plan.
+# 2. Replace every {{PLACEHOLDER}}.
+# 3. Delete OPTIONAL examples/blocks that do not apply.
+# 4. Every REQUIRED normative spec requirement MUST map to at least one task.
+# 5. Do not create tasks that settle no requirement unless they are explicit
+#    baseline/prerequisite/handoff tasks; explain why they exist.
+# 6. Dependencies represent TRUE PREREQUISITES, not narrative chronology.
+# 7. A task is a settlement unit, not merely a work package.
+# 8. Every task MUST say:
+#      - changes
+#      - proves
+#      - does_not_prove
+#      - steps
+#      - gate
+#      - teeth/falsification
+#      - redesign trigger
+#      - evidence location
+# 9. P2/P3 work SHOULD use preregistration when false closure is costly.
+# 10. P3 work MUST use fresh independent/adversarial confirmation.
+# 11. Preserve failed evidence and correction history.
+# 12. Do not weaken an acceptance condition just because implementation fails it.
+# 13. Prefer the smallest coherent task that leaves the repository green.
+# 14. Make cold-agent context explicit where rediscovery is costly.
+#
+# PROOF LEVELS
+# ------------
+# P0 = mechanical/deterministic
+# P1 = normal behavioral change + teeth
+# P2 = invariant-sensitive; explicit/preregistered claim + adversarial evidence
+# P3 = settlement-critical; frozen preregistration + fresh independent confirmation
+#
+# REQUIREMENT TRACEABILITY
+# ------------------------
+# `settles` contains stable requirement IDs from the source spec.
+# The final traceability check MUST report zero unmapped REQUIRED requirements.
+#
+# Do NOT renumber source requirement IDs in this plan.
+# =============================================================================
+
+schema: agent.development_plan
+schema_version: "1.0"
+
+metadata:
+  id: "{{PLAN_ID}}"
+  title: "{{PLAN_TITLE}}"
+  status: "{{draft|ready|in_progress|blocked|settled|superseded}}"
+  version: "{{SEMVER}}"
+  created: "{{YYYY-MM-DD}}"
+
+  purpose: >-
+    {{ONE_OR_TWO_SENTENCES_DESCRIBING_WHAT_THIS_PLAN_PROJECTS_AND_WHAT
+    SETTLED_END_STATE_IT_IS_DESIGNED_TO_REACH}}
+
+# -----------------------------------------------------------------------------
+# SOURCE AUTHORITY
+# -----------------------------------------------------------------------------
+source:
+  spec:
+    # The plan should be bound to a concrete spec revision/hash once execution begins.
+    intended_repository_path: "{{PATH_TO_SPEC_YAML}}"
+    artifact_name: "{{SPEC_FILENAME}}"
+    spec_id: "{{SPEC_METADATA_ID}}"
+    spec_version: "{{SPEC_VERSION}}"
+    sha256: "{{FROZEN_SPEC_SHA256}}"
+    authority: normative
+
+  # OPTIONAL: execution briefs contain hot context but do not override the spec.
+  implementation_brief:
+    intended_repository_path: "{{PATH_TO_IMPLEMENTATION_BRIEF}}"
+    authority: non_normative_execution_context
+    conflict_rule: >-
+      The normative specification governs. Any conflict MUST be surfaced as a
+      blocked decision rather than silently resolved by the implementing agent.
+
+  # OPTIONAL: include additional evidence/review sources where useful.
+  supporting_sources:
+    - path: "{{SUPPORTING_SOURCE_1}}"
+      role: "{{WHAT_IT_INFORMS_BUT_DOES_NOT_NORMATIVELY_OVERRIDE}}"
+
+# -----------------------------------------------------------------------------
+# TARGET SETTLEMENT
+# -----------------------------------------------------------------------------
+target_settlement: >-
+  {{ONE_PARAGRAPH_DESCRIBING_THE_OBSERVABLE_SYSTEM_STATE_THAT_WILL_EXIST_WHEN
+  THIS_PLAN_IS_SETTLED. DESCRIBE CAPABILITY/BEHAVIOR, NOT TASK ACTIVITY.}}
+
+# -----------------------------------------------------------------------------
+# OPERATING CONTRACT
+# -----------------------------------------------------------------------------
+operating_contract:
+  core_principle: >-
+    {{ONE_CODEBASE_SPECIFIC_RULE_THAT_PREVENTS_LOCALLY_PLAUSIBLE_BUT_GLOBALLY
+    WRONG_IMPLEMENTATION}}
+
+  rules:
+    - "Execute tasks by dependency, not by narrative order."
+    - "Independent tasks MAY run in parallel only after all declared dependencies are settled."
+    - "Every task MUST leave the repository in a coherent state with all applicable global gates green."
+    - "A task is not complete because code exists, a process starts once, the builder reports success, or a happy-path test passes."
+    - "A passing gate proves only what that gate actually observes."
+    - "High-risk P3 work requires fresh independent/adversarial confirmation."
+    - "Do not generalize from one observation unless the normative requirement is itself general."
+    - "Do not silently widen domain, schema, API, config, service, or authority surfaces when an existing representation can preserve the required distinction."
+    - "Runtime/machine/provider-specific facts belong in the project's established config/secret hierarchy rather than scattered hardcoding."
+    - "Preserve failed evidence and correction history."
+    - "{{PROJECT_SPECIFIC_EXECUTION_RULE_1}}"
+    - "{{PROJECT_SPECIFIC_EXECUTION_RULE_2}}"
+
+  # Use these labels when recording material discoveries.
+  claim_states:
+    - OBSERVED
+    - INFERRED
+    - DECIDED
+    - ASSUMED
+    - UNKNOWN
+
+  correction_protocol:
+    - "Preserve the failed evidence."
+    - "Classify the failure: implementation, oracle/test, representation, missing prerequisite, environmental confound, or source-spec ambiguity."
+    - "Determine whether the governing requirement/invariant remains valid."
+    - "Correct the smallest falsified layer."
+    - "Rerun the original teeth/falsification check."
+    - "Rerun the original confirmation path."
+    - "Append the correction round; do not erase the failed round."
+    - "Do not weaken acceptance merely because the implementation repeatedly fails it."
+
+  scope_control: >-
+    A newly discovered issue enters the current plan only when it blocks a
+    normative requirement or is itself required by the source specification.
+    Valuable but independent discoveries become future debt/plans. Attractive
+    architecture with no requirement is rejected from current scope.
+
+# -----------------------------------------------------------------------------
+# PLAN-STATE AND EVIDENCE ARTIFACTS
+# -----------------------------------------------------------------------------
+artifacts:
+  # Mutable execution truth belongs here, separate from the immutable plan.
+  current_status: "{{PATH_TO_CURRENT_STATUS_YAML}}"
+
+  # Append material discoveries/decisions that alter execution shape.
+  decision_log: "{{PATH_TO_DECISION_LOG}}"
+
+  evidence_root: "{{EVIDENCE_ROOT}}"
+  reports_root: "{{REPORTS_ROOT}}"
+  preregistration_root: "{{PREREGISTRATION_ROOT}}"
+
+  status_rule: >-
+    Mutable current status is an operational projection and MUST NOT become a
+    source of desired-state or normative authority.
+
+# -----------------------------------------------------------------------------
+# VERIFICATION MODEL
+# -----------------------------------------------------------------------------
+verification:
+  # Task 0 (or project bootstrap) should bind these stable aliases to the
+  # repository's real commands rather than duplicating test logic.
+  global_gates:
+    - id: "{{GATE_ID_BUILD_OR_CHECK}}"
+      command: "{{COPY_PASTEABLE_GLOBAL_GATE_COMMAND_1}}"
+
+    - id: "{{GATE_ID_TEST}}"
+      command: "{{COPY_PASTEABLE_GLOBAL_GATE_COMMAND_2}}"
+
+    - id: "{{GATE_ID_LINT}}"
+      command: "{{COPY_PASTEABLE_GLOBAL_GATE_COMMAND_3}}"
+
+    - id: "{{GATE_ID_CONFIG_OR_OTHER}}"
+      command: "{{COPY_PASTEABLE_GLOBAL_GATE_COMMAND_4}}"
+
+  gate_binding_rule: >-
+    {{HOW_THE_PLAN_SHOULD_REUSE_EXISTING_PROJECT_GATES_WITHOUT_CREATING_DUPLICATE
+    TEST_LOGIC_OR_COMPETING_COMMAND_SURFACES}}
+
+  proof_levels:
+    P0: >-
+      Mechanical/deterministic change. Requires a narrow direct gate plus
+      applicable global gates.
+
+    P1: >-
+      Normal behavioral work. Requires positive behavior, a meaningful
+      teeth/falsification check, and applicable global gates.
+
+    P2: >-
+      Invariant-sensitive work. Requires an explicit or preregistered claim,
+      meaningful adversarial/negative evidence, an evidence artifact, applicable
+      global gates, and review of a plausible alternate failure path.
+
+    P3: >-
+      Settlement-critical work. Requires frozen preregistration, builder evidence,
+      explicit adversarial attacks, fresh independent confirmation, and
+      correction/re-confirmation after any failed confirmation.
+
+# -----------------------------------------------------------------------------
+# DEPENDENCY GRAPH
+# -----------------------------------------------------------------------------
+# IMPORTANT:
+# `edges` use [PREREQUISITE, DEPENDENT].
+# Do not add edges merely to make tasks look sequential.
+dependency_graph:
+  edges:
+    - ["T00", "T01"]
+    - ["T01", "T02"]
+    - ["T01", "T03"]
+    - ["T02", "T04"]
+    # {{ADD_REAL_DEPENDENCY_EDGES}}
+
+  critical_path:
+    - "T00"
+    - "T01"
+    - "{{TASK_ON_CRITICAL_PATH}}"
+    - "{{FINAL_TASK_ID}}"
+
+  # OPTIONAL: name meaningful parallel tracks.
+  parallel_tracks:
+    - name: "{{PARALLEL_TRACK_1_NAME}}"
+      after: "{{PREREQUISITE_TASK_ID}}"
+      tasks:
+        - "{{TASK_ID_A}}"
+        - "{{TASK_ID_B}}"
+
+  # OPTIONAL: useful human/agent semantic view of the DAG.
+  settlement_sequence:
+    - "{{SETTLEMENT_STAGE_1}}"
+    - "{{SETTLEMENT_STAGE_2}}"
+    - "{{SETTLEMENT_STAGE_3}}"
+    - "{{FINAL_CONFIRMATION_STAGE}}"
+
+# -----------------------------------------------------------------------------
+# INITIAL EXECUTION STATE
+# -----------------------------------------------------------------------------
+# This is only the initial projection. Runtime/current progress belongs in the
+# separate current-status artifact.
+initial_state:
+  current_task: "T00"
+  last_settled_task: null
+
+  ready:
+    - "T00"
+
+  blocked:
+    T01:
+      - "T00"
+    T02:
+      - "T01"
+    # {{LIST_EACH_INITIALLY_BLOCKED_TASK_AND_UNSETTLED_DEPENDENCIES}}
+
+# =============================================================================
+# TASK CONTRACTS
+# =============================================================================
+#
+# Duplicate the task object below once per task.
+#
+# TASK DESIGN RULE
+# ----------------
+# A task is a settlement unit:
+#   requirement(s) -> change -> evidence -> falsification -> confirmation
+#
+# `changes`          = what state/capability this task alters.
+# `proves`           = exact claim the task is designed to settle.
+# `does_not_prove`   = nearby claims still open after it passes.
+# `settles`          = stable source spec requirement IDs.
+# `confirms`         = OPTIONAL high-risk requirement IDs independently
+#                      re-confirmed by this task (often final conformance).
+#
+# Tasks that only discover/baseline may have settles: [] if they are explicit
+# prerequisites and explain why.
+# =============================================================================
+
+tasks:
+
+  T00:
+    title: "{{BASELINE_OR_FIRST_TASK_TITLE}}"
+
+    # Only root tasks begin ready.
+    initial_status: ready
+
+    depends_on: []
+
+    proof_level: P1
+    confirmation: builder
+
+    # Empty is valid only for explicit baseline/prerequisite tasks.
+    settles: []
+
+    changes: >-
+      {{WHAT_OBSERVABLE_PROJECT_OR_SYSTEM_STATE_THIS_TASK_CHANGES}}
+
+    proves: >-
+      {{EXACT_CLAIM_THIS_TASK_SETTLES}}
+
+    does_not_prove: >-
+      {{NEARBY_CLAIM_OR_SYSTEM_PROPERTY_THAT_REMAINS_UNSETTLED}}
+
+    # OPTIONAL but strongly recommended where rediscovery is expensive.
+    hot_context:
+      - "{{PATH_OR_SEARCH_QUERY_OR_SYMBOL_TO_READ_FIRST}}"
+      - "{{PATH:LINE_OR_EXISTING_TEST_OR_REPORT}}"
+      - "{{KNOWN_FACT_NOT_TO_REDERIVE}}"
+
+    # OPTIONAL for P0/P1; usually required for P2/P3 when false closure is costly.
+    # preregistration:
+    #   required: true
+    #   artifact: "{{PATH_TO_TASK_PREREG_YAML}}"
+    #   claim: "{{FROZEN_CLAIM}}"
+    #   falsifier: "{{OBSERVATION_THAT_WOULD_DISPROVE_THE_CLAIM}}"
+    #   known_confounds:
+    #     - "{{CONFOUND_1}}"
+    #   confirmation_condition: "{{WHAT_COUNTS_AS_CONFIRMATION}}"
+
+    steps:
+      - "{{SMALLEST_COHERENT_IMPLEMENTATION_OR_DISCOVERY_STEP_1}}"
+      - "{{STEP_2_WITH_FILE_OR_COMPONENT_OWNER_WHERE_KNOWN}}"
+      - "{{STEP_3}}"
+      - "{{DOC_OR_STATUS_UPDATE_ONLY_AFTER_PROOF_IF_APPLICABLE}}"
+
+    gate:
+      - "{{NARROW_COPY_PASTEABLE_GATE_COMMAND_1}}"
+      - "{{NARROW_COPY_PASTEABLE_GATE_COMMAND_2_IF_NEEDED}}"
+
+    teeth:
+      - attack: "{{DELIBERATE_BREAK_FOR_THE_DEFECT_THIS_TASK_CLAIMS_TO_PREVENT}}"
+        expected: "{{WHAT_MUST_FAIL_REJECT_OR_REMAIN_TRUE}}"
+
+      - attack: "{{SECOND_HIGH_VALUE_NEGATIVE_CASE_OR_REMOVE}}"
+        expected: "{{EXPECTED_RESULT}}"
+
+    redesign_trigger: >-
+      {{DISCOVERY_THAT_INVALIDATES_THIS_TASKS_REPRESENTATION_OR_MECHANISM_AND
+      REQUIRES_STOPPING_RATHER_THAN_PATCHING_AROUND_IT}}
+
+    evidence: "{{TASK_EVIDENCE_DIRECTORY_OR_ARTIFACT}}"
+
+    done_when:
+      - "The narrow gate exits 0."
+      - "The declared teeth/falsification checks behave as specified."
+      - "All applicable global gates remain green."
+      - "{{TASK_SPECIFIC_SETTLEMENT_CONDITION}}"
+
+  # ---------------------------------------------------------------------------
+  # EXAMPLE P2 TASK SHAPE — COPY/RENAME, THEN DELETE THIS COMMENT.
+  # ---------------------------------------------------------------------------
+  T01:
+    title: "{{INVARIANT_SENSITIVE_TASK_TITLE}}"
+    initial_status: blocked
+    depends_on: ["T00"]
+
+    proof_level: P2
+    confirmation: "{{peer|builder_with_teeth|independent_if_needed}}"
+
+    settles:
+      - "{{REQ-GROUP-001}}"
+      - "{{REQ-GROUP-002}}"
+
+    changes: >-
+      {{WHAT_THIS_TASK_CHANGES}}
+
+    proves: >-
+      {{EXACT_INVARIANT_OR_BEHAVIORAL_CLAIM}}
+
+    does_not_prove: >-
+      {{WHAT_REMAINS_OPEN}}
+
+    preregistration:
+      required: true
+      artifact: "{{PREREGISTRATION_ROOT}}/{{PLAN_ID}}-T01.prereg.yaml"
+      claim: >-
+        {{FROZEN_CLAIM_BEFORE_IMPLEMENTATION}}
+      falsifier: >-
+        {{OBSERVATION_THAT_WOULD_INVALIDATE_THE_CLAIM}}
+      known_confounds:
+        - "{{CONFOUND_1}}"
+      confirmation_condition: >-
+        {{WHAT_EVIDENCE_REVIEW_OR_RESULT_SETTLES_THE_TASK}}
+
+    hot_context:
+      - "{{HIGH_LEVERAGE_FILE_OR_SYMBOL_1}}"
+      - "{{TEST_OR_ORACLE_THAT_PINS_CURRENT_BEHAVIOR}}"
+
+    steps:
+      - "{{STEP_1}}"
+      - "{{STEP_2}}"
+      - "{{STEP_3}}"
+
+    gate:
+      - "{{TASK_SPECIFIC_GATE}}"
+
+    teeth:
+      - attack: "{{STRONGEST_PLAUSIBLE_WRONG_IMPLEMENTATION_OR_FORGED_CASE}}"
+        expected: "{{REJECT_FAIL_OR_PRESERVE_INVARIANT}}"
+
+    redesign_trigger: >-
+      {{WHAT_DISCOVERY_MEANS_THIS_DESIGN_SHAPE_IS_WRONG}}
+
+    evidence: "{{EVIDENCE_ROOT}}/T01/"
+
+    done_when:
+      - "{{OBSERVABLE_POSITIVE_CONDITION}}"
+      - "{{NEGATIVE_TEETH_CONDITION}}"
+      - "{{REVIEW_OR_CONFIRMATION_CONDITION}}"
+      - "All applicable global gates remain green."
+
+  # ---------------------------------------------------------------------------
+  # EXAMPLE P3 TASK SHAPE — COPY/RENAME, THEN DELETE THIS COMMENT.
+  # ---------------------------------------------------------------------------
+  T02:
+    title: "{{SETTLEMENT_CRITICAL_TASK_TITLE}}"
+    initial_status: blocked
+    depends_on: ["T01"]
+
+    proof_level: P3
+    confirmation: independent_adversarial
+
+    settles:
+      - "{{REQ-HIGH-RISK-001}}"
+      - "{{REQ-HIGH-RISK-002}}"
+
+    changes: >-
+      {{WHAT_THIS_TASK_CHANGES}}
+
+    proves: >-
+      {{HIGH_RISK_CLAIM_TO_SETTLE}}
+
+    does_not_prove: >-
+      {{RELATED_BUT_STILL_OPEN_CLAIM}}
+
+    preregistration:
+      required: true
+      artifact: "{{PREREGISTRATION_ROOT}}/{{PLAN_ID}}-T02.prereg.yaml"
+
+      claims:
+        - "{{CLAIM_1}}"
+        - "{{CLAIM_2}}"
+
+      falsifiers:
+        - "{{FALSIFIER_1}}"
+        - "{{FALSIFIER_2}}"
+
+      known_confounds:
+        - "{{CONFOUND_1}}"
+
+      confirmation_condition: >-
+        Fresh independent verifier returns {{CONFIRMATION_VERDICT}} with no
+        {{CRITICAL_FAILURE_CLASS}}.
+
+    hot_context:
+      - "{{SOURCE_REQUIREMENT_REFERENCE}}"
+      - "{{RELEVANT_IMPLEMENTATION_OWNER}}"
+      - "{{EXISTING_ORACLE_OR_FAILURE_EVIDENCE}}"
+
+    steps:
+      - "{{STEP_1}}"
+      - "{{STEP_2}}"
+      - "{{STEP_3}}"
+
+    gate:
+      - "{{TASK_SPECIFIC_GATE}}"
+
+    teeth:
+      - attack: "{{ADVERSARIAL_ATTACK_1}}"
+        expected: "{{EXPECTED_SAFE_RESULT}}"
+
+      - attack: "{{ADVERSARIAL_ATTACK_2}}"
+        expected: "{{EXPECTED_SAFE_RESULT}}"
+
+    independent_confirmation:
+      verifier_receives:
+        - "source requirement(s)"
+        - "governing invariant/claim"
+        - "relevant implementation"
+        - "evidence"
+        - "exact confirmation question"
+
+      verifier_should_not_receive:
+        - "{{INFORMATION_TO_WITHHOLD_IF_BLINDNESS_MATTERS_OR_REMOVE}}"
+
+      required_verdict: "{{CONFIRM_OR_OTHER_EXPLICIT_VERDICT}}"
+
+    redesign_trigger: >-
+      {{OBSERVATION_THAT_MEANS_THE_UNDERLYING_REPRESENTATION_NOT_JUST_CODE_IS_WRONG}}
+
+    evidence: "{{EVIDENCE_ROOT}}/T02/"
+
+    done_when:
+      - "{{POSITIVE_SETTLEMENT_CONDITION}}"
+      - "{{ADVERSARIAL_CONDITION}}"
+      - "{{INDEPENDENT_CONFIRMATION_CONDITION}}"
+      - "All applicable global gates remain green."
+
+  # {{ADD_REMAINING_TASKS}}
+
+# -----------------------------------------------------------------------------
+# FINAL ACCEPTANCE
+# -----------------------------------------------------------------------------
+# Group by system concern so a reviewer can read this without scanning every task.
+final_acceptance:
+
+  "{{CONCERN_GROUP_1}}":
+    - "{{WHOLE_PLAN_ACCEPTANCE_CONDITION_1}}"
+    - "{{WHOLE_PLAN_ACCEPTANCE_CONDITION_2}}"
+
+  "{{CONCERN_GROUP_2}}":
+    - "{{WHOLE_PLAN_ACCEPTANCE_CONDITION_3}}"
+    - "{{WHOLE_PLAN_ACCEPTANCE_CONDITION_4}}"
+
+  evidence_and_confirmation:
+    - "Every REQUIRED normative spec requirement maps to at least one settled task/evidence record."
+    - "Every P3 task has the required fresh independent confirmation."
+    - "Failed/correction evidence has not been erased."
+    - "Documentation/status claims do not exceed observed proof."
+    - "All global gates exit 0."
+    - "{{FINAL_PROJECT_SPECIFIC_CONFIRMATION_CONDITION}}"
+
+# -----------------------------------------------------------------------------
+# GUARDRAILS
+# -----------------------------------------------------------------------------
+# Pull these from the source spec and durable project invariants.
+guardrails:
+  - "{{DO_NOT_INTRODUCE_OR_EXPAND_SURFACE_1}}"
+  - "{{PROJECT_ARCHITECTURAL_INVARIANT_1}}"
+  - "{{CONFIGURATION_OR_AUTHORITY_RULE}}"
+  - "{{FAILURE_VISIBILITY_RULE}}"
+  - "{{ROLLBACK_OR_STATEFUL_CHANGE_RULE}}"
+  - "{{SCOPE_BOUNDARY_OR_NON_GOAL}}"
+
+# -----------------------------------------------------------------------------
+# HANDOFF CONTRACT
+# -----------------------------------------------------------------------------
+handoff_contract:
+  must_report:
+    - "settled capabilities/requirements"
+    - "explicitly unsettled or deferred items"
+    - "current operational system state"
+    - "requirement-to-evidence index"
+    - "known limitations"
+    - "rollback/recovery instructions where relevant"
+    - "important decisions/discoveries that changed the execution model"
+    - "exact next executable action or 'none — plan settled'"
+
+  settled_next_action_rule: >-
+    The next executable action MUST be set to `none — plan settled` only after
+    the final required conformance/confirmation task succeeds.
+
+# -----------------------------------------------------------------------------
+# TRACEABILITY
+# -----------------------------------------------------------------------------
+# AGENT AUTHORING REQUIREMENT:
+# Populate this section by parsing the source spec, not by hand-guessing.
+#
+# Recommended authoring algorithm:
+#   1. collect every normative source requirement ID;
+#   2. collect every task.settles ID;
+#   3. compute requirement_to_tasks;
+#   4. fail plan generation if any REQUIRED ID is unmapped;
+#   5. fail plan generation if the plan references an unknown requirement ID.
+#
+# `spec_requirement_count` and `mapped_requirement_count` MUST agree before the
+# plan is execution-ready.
+traceability:
+  spec_requirement_count: "{{COMPUTED_INTEGER}}"
+  mapped_requirement_count: "{{COMPUTED_INTEGER}}"
+
+  unmapped_requirements: []
+  unknown_plan_requirement_ids: []
+
+  requirement_to_tasks:
+    "{{REQ-GROUP-001}}":
+      - "T01"
+    "{{REQ-HIGH-RISK-001}}":
+      - "T02"
+    # {{GENERATE_COMPLETE_REQUIREMENT_TO_TASK_MAP}}
+
+  coverage_rule: >-
+    Every REQUIRED normative requirement in the source specification MUST map to
+    at least one settlement task. High-risk requirements additionally require the
+    confirmation mode defined by the specification and this plan.
+
+# =============================================================================
+# PLAN AUTHORING / VALIDATION CHECKLIST
+# =============================================================================
+#
+# Before declaring a generated plan `ready`, verify:
+#
+# SOURCE / AUTHORITY
+# [ ] Source spec path, ID, version, and SHA-256 are bound.
+# [ ] Implementation brief is explicitly non-normative.
+# [ ] No task silently rewrites a normative spec requirement.
+#
+# COVERAGE
+# [ ] Every REQUIRED spec requirement maps to >=1 task.
+# [ ] No task references a nonexistent requirement ID.
+# [ ] Baseline/prerequisite tasks with settles: [] explain why they are needed.
+#
+# DAG
+# [ ] Dependencies are real prerequisites, not chronology.
+# [ ] Independent tasks are not unnecessarily serialized.
+# [ ] Critical path is identified.
+# [ ] There are no dependency cycles.
+# [ ] initial_state.blocked matches the dependency graph.
+#
+# TASK QUALITY
+# [ ] Every task has changes/proves/does_not_prove.
+# [ ] Every task has a narrow gate.
+# [ ] Every P1+ task has a meaningful teeth/falsification check.
+# [ ] P2/P3 tasks have explicit claims and evidence locations.
+# [ ] Every P3 task has frozen preregistration and fresh independent confirmation.
+# [ ] Every task has a redesign trigger.
+# [ ] Hot context is included where rediscovery is expensive.
+#
+# EVIDENCE / CORRECTION
+# [ ] Evidence paths are deterministic and task-scoped.
+# [ ] Failed evidence will be preserved.
+# [ ] Correction protocol cannot silently weaken acceptance criteria.
+#
+# CONFIGURATION / REPRESENTATION
+# [ ] Machine/provider/runtime facts are not hardcoded unnecessarily.
+# [ ] The plan reuses existing abstractions rather than creating parallel systems.
+# [ ] Attractive architecture without a source requirement is excluded.
+#
+# OPERABILITY
+# [ ] current-status path is separate from plan authority.
+# [ ] decision log is identified.
+# [ ] A cold agent can calculate which tasks are ready from YAML alone.
+# [ ] A cold agent can execute a task without needing prior chat context.
+#
+# FINAL SETTLEMENT
+# [ ] Final acceptance checks whole-system properties, not just task completion.
+# [ ] High-risk claims receive fresh final confirmation where required.
+# [ ] Handoff records settled/unsettled/evidence/rollback/next action.
+#
+# =============================================================================
