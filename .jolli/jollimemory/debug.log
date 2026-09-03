@@ -142,3 +142,48 @@
 [2026-08-24T22:44:30.182Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] === Queue worker finished ===
 [2026-08-24T22:44:30.184Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] Processing queue entry: type=ingest triggeredBy=post-commit
 [2026-08-24T22:44:30.216Z] INFO  [QueueWorker] [trace=25cca8d902c5d602189285a441249b81] No API key configured — skipping ingest (post-commit)
+[2026-08-26T21:27:00.759Z] INFO  [PrepareMsgHook] === Prepare-commit-msg hook started (source: message) ===
+[2026-08-26T21:27:00.785Z] INFO  [PrepareMsgHook] === Prepare-commit-msg hook finished ===
+[2026-08-26T21:27:01.175Z] INFO  [PostCommitHook] [trace=bf1489f0e3510601c0b09812ab09c050] Detected operation: commit
+[2026-08-26T21:27:01.180Z] INFO  [PostCommitHook] [trace=bf1489f0e3510601c0b09812ab09c050] Enqueued: type=commit hash=3db0e3a6
+[2026-08-26T21:27:01.180Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Launching background worker
+[2026-08-26T21:27:01.181Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Background worker spawned (PID: 991758)
+[2026-08-26T21:27:01.449Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] === Queue worker started === node=24.19.0 kind=cli source=cli pkgVer=0.99.11 cliVer=0.99.11 dist=/home/sprime01/.cache/nub/pm/store/@jolli.ai+cli@0.99.11_zod@4.4.3_-da09ec1fbb3fa1b7/node_modules/@jolli.ai/cli/dist
+[2026-08-26T21:27:01.466Z] INFO  [StorageFactory] [trace=bf1489f0e3510601c0b09812ab09c050] StorageFactory.create: route=cutover, projectPath=/home/sprime01/projects/sxr
+[2026-08-26T21:27:01.569Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Processing queue entry: type=commit hash=3db0e3a6
+[2026-08-26T21:27:01.594Z] INFO  [GitOps] [trace=bf1489f0e3510601c0b09812ab09c050] Commit 3db0e3a6: Add tests for EvidenceRecorded emission and related fixtures
+[2026-08-26T21:27:01.594Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Commit: 3db0e3a6 - Add tests for EvidenceRecorded emission and related fixtures (19ms)
+[2026-08-26T21:27:01.618Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Discovered 1 OpenCode session(s)
+[2026-08-26T21:27:01.804Z] INFO  [OpenCodeTranscriptReader] [trace=bf1489f0e3510601c0b09812ab09c050] Read OpenCode session ses_fd10: 0 new messages, 0 entries extracted (index 96→96)
+[2026-08-26T21:27:01.847Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Git diff: 15 files changed, +3374 -11 (42ms)
+[2026-08-26T21:27:01.878Z] WARN  [GitOps] [trace=bf1489f0e3510601c0b09812ab09c050] Diff exceeds 60000-char budget (147115 chars) — prepending --stat file list and truncating body
+[2026-08-26T21:27:01.902Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Prompt blocks: plans=0 notes=0 references=0 (+0 track-only archived, not prompted) (AI soft-excluded 0)
+[2026-08-26T21:27:01.902Z] INFO  [Summarizer] [trace=bf1489f0e3510601c0b09812ab09c050] Generating summary for commit 3db0e3a6
+[2026-08-26T21:27:01.902Z] INFO  [Summarizer] [trace=bf1489f0e3510601c0b09812ab09c050] Context: transcript=0, files=15, lines=3374+11
+[2026-08-26T21:27:01.903Z] WARN  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] First API attempt failed: No LLM provider available. Set an Anthropic API key (ANTHROPIC_API_KEY) or configure a Jolli Space API key (jolliApiKey).. Retrying in 2000ms...
+[2026-08-26T21:27:03.904Z] INFO  [Summarizer] [trace=bf1489f0e3510601c0b09812ab09c050] Generating summary for commit 3db0e3a6
+[2026-08-26T21:27:03.904Z] INFO  [Summarizer] [trace=bf1489f0e3510601c0b09812ab09c050] Context: transcript=0, files=15, lines=3374+11
+[2026-08-26T21:27:03.904Z] ERROR [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] API call failed after retry: No LLM provider available. Set an Anthropic API key (ANTHROPIC_API_KEY) or configure a Jolli Space API key (jolliApiKey).
+[2026-08-26T21:27:03.905Z] WARN  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Saving summary with empty topics + llm-failed marker for commit 3db0e3a6
+[2026-08-26T21:27:03.905Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] API summary generated (2.0s)
+[2026-08-26T21:27:03.905Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Plan registry scan: found 0 uncommitted slug(s) on main: []
+[2026-08-26T21:27:03.906Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Plan association: detected 0 slug(s) from transcripts: []
+[2026-08-26T21:27:03.906Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Note registry scan: found 0 uncommitted note(s) on main: []
+[2026-08-26T21:27:03.906Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Note association: detected 0 note(s): []
+[2026-08-26T21:27:03.907Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Reference association: detected 0 ref(s) for branch main
+[2026-08-26T21:27:03.909Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Summary built for 3db0e3a6: recap=no, topics=0, plans=absent, notes=absent, references=absent
+[2026-08-26T21:27:03.956Z] INFO  [MetadataManager] [trace=bf1489f0e3510601c0b09812ab09c050] Manifest updated: main/add-tests-for-evidencerecorded-emission-and-relate-3db0e3a6.md (commit)
+[2026-08-26T21:27:03.956Z] INFO  [FolderStorage] [trace=bf1489f0e3510601c0b09812ab09c050] Markdown generated: main/add-tests-for-evidencerecorded-emission-and-relate-3db0e3a6.md
+[2026-08-26T21:27:03.957Z] INFO  [FolderStorage] [trace=bf1489f0e3510601c0b09812ab09c050] Wrote 3 files, deleted 0 (Add summary for 3db0e3a6: Add tests for EvidenceRecorded emission and relate)
+[2026-08-26T21:27:03.957Z] INFO  [SummaryStore] [trace=bf1489f0e3510601c0b09812ab09c050] Summary stored successfully for commit 3db0e3a6
+[2026-08-26T21:27:03.961Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Summary stored successfully for commit 3db0e3a6 (53ms, 0 plans, 0 notes, 0 references)
+[2026-08-26T21:27:03.962Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] === Pipeline completed in 2.4s ===
+[2026-08-26T21:27:03.962Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] === Summary content (0 topics) ===
+[2026-08-26T21:27:03.965Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Processed 1 queue entries
+[2026-08-26T21:27:03.969Z] INFO  [SessionTracker] [trace=bf1489f0e3510601c0b09812ab09c050] Enqueued queue operation: type=ingest tag=ingest file=1787779623968-00000001-4b9d08ee-ingest.json
+[2026-08-26T21:27:03.971Z] INFO  [PushExecutor] [trace=bf1489f0e3510601c0b09812ab09c050] Post-queue push trigger: scheduling drain for 1 newly generated summar(ies)
+[2026-08-26T21:27:03.991Z] INFO  [GitOps] [trace=bf1489f0e3510601c0b09812ab09c050] Commit 3db0e3a6: Add tests for EvidenceRecorded emission and related fixtures
+[2026-08-26T21:27:04.056Z] INFO  [StorageFactory] [trace=bf1489f0e3510601c0b09812ab09c050] StorageFactory.create: route=cutover, projectPath=/home/sprime01/projects/sxr
+[2026-08-26T21:27:04.095Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] === Queue worker finished ===
+[2026-08-26T21:27:04.098Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Processing queue entry: type=ingest triggeredBy=post-commit
+[2026-08-26T21:27:04.106Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] No API key configured — skipping ingest (post-commit)
