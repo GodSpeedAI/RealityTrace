@@ -211,6 +211,8 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
             semantic_closure_hash,
             resolution_inputs,
             declarations,
+            diagnostics: resolved_diags,
+            model_validation_status,
             ..
         } => {
             let sid = sxr_core::envelope::snapshot_id(
@@ -223,8 +225,8 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
                 Some(content_hash.clone()),
                 Some(semantic_closure_hash.clone()),
                 sid,
-                "valid",
-                json!([]),
+                model_validation_status.as_str(),
+                json!(resolved_diags),
                 None,
                 declarations.clone(),
                 resolution_inputs.clone(),
@@ -258,8 +260,18 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
     // §5.4: the DomainForge envelope is stored producer-preserved (its
     // id/created_at/scope/provenance untouched); the ledger row's subject_refs
     // carry the sxr-minted snapshot identity.
-    let payload = serde_json::from_str::<Value>(semantic.envelope_json())
+    let mut payload = serde_json::from_str::<Value>(semantic.envelope_json())
         .with_context(|| "parse producer envelope")?;
+    if let Some(ext) = payload.get_mut("extensions").and_then(|e| e.get_mut("domainforge")) {
+        ext["semantics_version"] = json!("v2-independent-validity");
+    } else {
+        payload["extensions"] = json!({
+            "domainforge": {
+                "semantics_version": "v2-independent-validity",
+                "model_validation_status": model_status,
+            }
+        });
+    }
     let subject_refs = vec![
         format!("snapshot:{snapshot_id}"),
         format!("repo:{repo_id}"),
@@ -284,6 +296,8 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
 
     let mut out = vec![
         ("snapshot_id", json!(snapshot_id)),
+        ("model_validation_status", json!(model_status)),
+        ("semantics_version", json!("v2-independent-validity")),
         ("declaration_count", json!(declarations.len())),
         (
             "resolution_inputs",
@@ -293,16 +307,17 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
         ("durability", json!("committed")),
         ("ledger_position", ledger_position_json(&pos)),
     ];
-    if model_status == "valid" {
-        out.push(("semantic_closure_hash", json!(semantic_hash)));
-        out.push(("content_hash", json!(content_hash)));
-    } else {
-        out.push(("model_validation_status", json!("invalid")));
+    if let Some(sh) = semantic_hash {
+        out.push(("semantic_closure_hash", json!(sh)));
+    }
+    if let Some(ch) = content_hash {
+        out.push(("content_hash", json!(ch)));
+    }
+    if model_status == "invalid" {
         out.push(("diagnostics", diagnostics));
-        out.push((
-            "representation_omission",
-            omission_opt.unwrap_or(Value::Null),
-        ));
+        if let Some(om) = omission_opt {
+            out.push(("representation_omission", om));
+        }
     }
     Ok(output::output(out))
 }
@@ -1214,15 +1229,19 @@ pub fn settlement_register(
     let supports = evidence_directions.iter().any(|d| d == "supports");
     let contradicts = evidence_directions.iter().any(|d| d == "contradicts");
 
-    // §14.4/AC-SETTLEMENT-002: if snapshot is validation-failed, only negative
-    // settlement is permitted.
-    let snapshot_status = snapshot_model_status(ctx, &meta.repo_id, &meta.snapshot_id)?;
-    let requested: &str = if supports { "settled" } else { "unsettled" };
-    if snapshot_status.as_deref() == Some("invalid")
-        && requested == "settled"
-        && !question_is_invalidity(question_id)
-    {
-        bail!("AC-SETTLEMENT-002: invalid declared model cannot support positive acceptance");
+    // §14.4/AC-SETTLEMENT-002: if snapshot is validation-failed or semantics are v1-legacy,
+    // positive settlement is rejected.
+    let snapshot_info = snapshot_model_status(ctx, &meta.repo_id, &meta.snapshot_id)?;
+    if let Some((model_status, semantics_version)) = &snapshot_info {
+        if supports && !question_is_invalidity(question_id) {
+            sxr_core::threshold::authorize_settlement(
+                model_status,
+                semantics_version,
+                &sxr_core::threshold::ThresholdKind::AllEvidenceSupports,
+                sxr_core::types::SettlementStatus::Settled,
+            )
+            .map_err(|e| anyhow!("{e}"))?;
+        }
     }
 
     let settlement_status = if supports { "settled" } else { "unsettled" };
@@ -1412,7 +1431,11 @@ fn threshold_position(
         .ok_or_else(|| anyhow!("threshold {} not found", threshold_id))
 }
 
-fn snapshot_model_status(ctx: &Ctx, repo_id: &str, snapshot_id: &str) -> Result<Option<String>> {
+fn snapshot_model_status(
+    ctx: &Ctx,
+    repo_id: &str,
+    snapshot_id: &str,
+) -> Result<Option<(String, String)>> {
     let rows = ledger_io::read_all(ctx, repo_id)?;
     for r in &rows {
         if r.record_kind == "semantic.snapshot"
@@ -1422,13 +1445,32 @@ fn snapshot_model_status(ctx: &Ctx, repo_id: &str, snapshot_id: &str) -> Result<
         {
             let payload: Value =
                 serde_json::from_str(&r.payload).context("parse snapshot payload")?;
-            let has_hashes = payload
-                .get("representations")
-                .and_then(Value::as_array)
-                .and_then(|a| a.first())
-                .map(|rep| rep.get("semantic_hash").is_some() || rep.get("content_hash").is_some())
-                .unwrap_or(false);
-            return Ok(Some(if has_hashes { "valid" } else { "invalid" }.into()));
+            let df_ext = payload.get("extensions").and_then(|e| e.get("domainforge"));
+            let status = df_ext
+                .and_then(|d| d.get("model_validation_status"))
+                .and_then(Value::as_str)
+                .or_else(|| {
+                    payload
+                        .get("representations")
+                        .and_then(Value::as_array)
+                        .and_then(|a| a.first())
+                        .and_then(|rep| rep.get("validation_status"))
+                        .and_then(Value::as_str)
+                })
+                .unwrap_or_else(|| {
+                    let has_hashes = payload
+                        .get("representations")
+                        .and_then(Value::as_array)
+                        .and_then(|a| a.first())
+                        .map(|rep| rep.get("semantic_hash").is_some() || rep.get("content_hash").is_some())
+                        .unwrap_or(false);
+                    if has_hashes { "valid" } else { "invalid" }
+                });
+            let semantics_version = df_ext
+                .and_then(|d| d.get("semantics_version"))
+                .and_then(Value::as_str)
+                .unwrap_or("v1-legacy");
+            return Ok(Some((status.to_string(), semantics_version.to_string())));
         }
     }
     Ok(None)

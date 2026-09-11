@@ -64,10 +64,21 @@ invariants_verified:
   - AC-IDENTITY-001 (ULID minting decoupled from Git)
   - AC-IDENTITY-002 (Multi-tenant partition isolation)
   - AC-LEDGER-001 (Dense SHA-256 hash chaining)
-  - AC-SETTLEMENT-002 (Refusal of positive settlement on invalid models)
+  - AC-SETTLEMENT-002 (Refusal of positive settlement on invalid models and legacy v1-legacy snapshots)
   - AC-GRAPH-001 (Observed graph admission requires explicit qualifying evidence)
   - AC-DIAG-001 (Asymmetric friction against premature model blame)
   - AC-DAEMON-001 (Direct vs daemon record parity)
   - AC-REPLAY-002 (Rebuild determinism over projections)
+  - AC-DF-001 (Bounded subprocess execution: 16 MiB buffer cap, 30s timeout)
+  - AC-DF-002 (Subprocess composition verified against live domainforge binary)
 
-next_action: Complete documentation walkthrough artifact and notify user
+remediation_status:
+  date: "2026-09-08"
+  outcome: "Unified DomainForge / SXR / SEA-Forge / CEP interface remediation complete and verified"
+  test_evidence:
+    - "sxr-core snapshot_and_threshold_tests (8 passed)"
+    - "sxr-df fixture_tests (17 passed)"
+    - "sxr-df real_binary_tests::real_binary_composition_and_settlement_authorization (1 passed against live binary)"
+    - "sxr-cli test suite (35 passed)"
+
+next_action: None (Interface remediation and documentation complete)

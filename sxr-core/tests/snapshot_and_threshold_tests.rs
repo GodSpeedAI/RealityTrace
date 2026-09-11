@@ -36,6 +36,7 @@ fn snapshot_id_never_mixes_shapes() {
 #[test]
 fn snapshot_row_closed_sum_accepts_exactly_two_shapes() {
     assert!(validate_snapshot_row_shape(Some("a"), Some("b"), None, "valid").is_ok());
+    assert!(validate_snapshot_row_shape(Some("a"), Some("b"), None, "invalid").is_ok());
     assert!(validate_snapshot_row_shape(None, None, Some("c"), "invalid").is_ok());
     // mixed
     assert!(validate_snapshot_row_shape(Some("a"), None, Some("c"), "invalid").is_err());
@@ -44,7 +45,7 @@ fn snapshot_row_closed_sum_accepts_exactly_two_shapes() {
     // partial resolved
     assert!(validate_snapshot_row_shape(Some("a"), None, None, "valid").is_err());
     // status mismatch
-    assert!(validate_snapshot_row_shape(Some("a"), Some("b"), None, "invalid").is_err());
+    assert!(validate_snapshot_row_shape(Some("a"), Some("b"), None, "unknown").is_err());
     assert!(validate_snapshot_row_shape(None, None, Some("c"), "valid").is_err());
 }
 
@@ -97,15 +98,40 @@ fn invalid_model_cannot_settle_positively() {
     ];
     for kind in kinds {
         assert!(
-            authorize_settlement("invalid", &kind, SettlementStatus::Settled).is_err(),
+            authorize_settlement("invalid", "v2-independent-validity", &kind, SettlementStatus::Settled).is_err(),
             "{kind:?}"
         );
         assert!(
-            authorize_settlement("invalid", &kind, SettlementStatus::PartiallySettled).is_err()
+            authorize_settlement("invalid", "v2-independent-validity", &kind, SettlementStatus::PartiallySettled).is_err()
         );
-        assert!(authorize_settlement("invalid", &kind, SettlementStatus::Failed).is_ok());
-        assert!(authorize_settlement("invalid", &kind, SettlementStatus::Blocked).is_ok());
-        assert!(authorize_settlement("valid", &kind, SettlementStatus::Settled).is_ok());
+        assert!(authorize_settlement("invalid", "v2-independent-validity", &kind, SettlementStatus::Failed).is_ok());
+        assert!(authorize_settlement("invalid", "v2-independent-validity", &kind, SettlementStatus::Blocked).is_ok());
+        assert!(authorize_settlement("valid", "v2-independent-validity", &kind, SettlementStatus::Settled).is_ok());
+    }
+}
+
+#[test]
+fn v1_legacy_model_with_valid_status_fails_authorize_settlement() {
+    let kinds = [
+        ThresholdKind::AllEvidenceSupports,
+        ThresholdKind::AnyEvidenceContradicts,
+        ThresholdKind::RequiresEvidence,
+    ];
+    for kind in kinds {
+        // v1-legacy positive settlement must fail even when model_validation_status is "valid"
+        let res = authorize_settlement("valid", "v1-legacy", &kind, SettlementStatus::Settled);
+        assert!(res.is_err(), "{kind:?} must reject v1-legacy positive settlement");
+        assert_eq!(
+            res.unwrap_err(),
+            "positive acceptance rejected: legacy snapshot semantics are untrusted (AC-SETTLEMENT-002)"
+        );
+
+        let res_part = authorize_settlement("valid", "v1-legacy", &kind, SettlementStatus::PartiallySettled);
+        assert!(res_part.is_err(), "{kind:?} must reject v1-legacy partially settled");
+
+        // Non-positive settlement for v1-legacy is permitted
+        assert!(authorize_settlement("valid", "v1-legacy", &kind, SettlementStatus::Failed).is_ok());
+        assert!(authorize_settlement("valid", "v1-legacy", &kind, SettlementStatus::Blocked).is_ok());
     }
 }
 

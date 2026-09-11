@@ -133,6 +133,7 @@ pub enum SemanticContext {
         resolution_inputs: ResolutionInputs,
         declarations: Vec<DeclKey>,
         diagnostics: Vec<Diagnostic>,
+        model_validation_status: String,
     },
     ValidationFailed {
         cep_envelope_json: String,
@@ -170,9 +171,12 @@ impl SemanticContext {
         }
     }
 
-    pub fn model_validation_status(&self) -> &'static str {
+    pub fn model_validation_status(&self) -> &str {
         match self {
-            SemanticContext::Resolved { .. } => "valid",
+            SemanticContext::Resolved {
+                model_validation_status,
+                ..
+            } => model_validation_status.as_str(),
             SemanticContext::ValidationFailed { .. } => "invalid",
         }
     }
@@ -187,6 +191,7 @@ pub struct SnapshotRow {
     pub content_hash: Option<String>,
     pub invalid_declared_checkpoint_hash: Option<String>,
     pub model_validation_status: String,
+    pub semantics_version: String,
     pub representation_omission_json: Option<String>,
     pub source_set_hash: String,
     pub entry_logical_path: String,

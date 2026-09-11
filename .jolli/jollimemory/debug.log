@@ -187,3 +187,48 @@
 [2026-08-26T21:27:04.095Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] === Queue worker finished ===
 [2026-08-26T21:27:04.098Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] Processing queue entry: type=ingest triggeredBy=post-commit
 [2026-08-26T21:27:04.106Z] INFO  [QueueWorker] [trace=bf1489f0e3510601c0b09812ab09c050] No API key configured — skipping ingest (post-commit)
+[2026-09-03T00:47:34.624Z] INFO  [PrepareMsgHook] === Prepare-commit-msg hook started (source: message) ===
+[2026-09-03T00:47:34.762Z] INFO  [PrepareMsgHook] === Prepare-commit-msg hook finished ===
+[2026-09-03T00:47:36.352Z] INFO  [PostCommitHook] [trace=fc10733458c8a8470fc7243ea1566b78] Detected operation: commit
+[2026-09-03T00:47:36.395Z] INFO  [PostCommitHook] [trace=fc10733458c8a8470fc7243ea1566b78] Enqueued: type=commit hash=c588968e
+[2026-09-03T00:47:36.395Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Launching background worker
+[2026-09-03T00:47:36.427Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Background worker spawned (PID: 3240557)
+[2026-09-03T00:47:37.375Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] === Queue worker started === node=24.19.0 kind=cli source=cli pkgVer=0.99.11 cliVer=0.99.11 dist=/home/sprime01/.cache/nub/pm/store/@jolli.ai+cli@0.99.11_zod@4.4.3_-da09ec1fbb3fa1b7/node_modules/@jolli.ai/cli/dist
+[2026-09-03T00:47:37.405Z] INFO  [StorageFactory] [trace=fc10733458c8a8470fc7243ea1566b78] StorageFactory.create: route=cutover, projectPath=/home/sprime01/projects/sxr
+[2026-09-03T00:47:37.508Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Processing queue entry: type=commit hash=c588968e
+[2026-09-03T00:47:37.547Z] INFO  [GitOps] [trace=fc10733458c8a8470fc7243ea1566b78] Commit c588968e: Add comprehensive documentation map and source traceability 
+[2026-09-03T00:47:37.547Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Commit: c588968e - Add comprehensive documentation map and source traceability matrix for SXR (13ms)
+[2026-09-03T00:47:37.692Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] No active sessions found — will infer topics from diff if available
+[2026-09-03T00:47:37.826Z] WARN  [GitOps] [trace=fc10733458c8a8470fc7243ea1566b78] Diff exceeds 150000-char budget (285504 chars) — prepending --stat file list and truncating body
+[2026-09-03T00:47:37.852Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Git diff: 48 files changed, +4972 -8 (157ms)
+[2026-09-03T00:47:37.957Z] WARN  [GitOps] [trace=fc10733458c8a8470fc7243ea1566b78] Diff exceeds 60000-char budget (285504 chars) — prepending --stat file list and truncating body
+[2026-09-03T00:47:37.993Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Prompt blocks: plans=0 notes=0 references=0 (+0 track-only archived, not prompted) (AI soft-excluded 0)
+[2026-09-03T00:47:37.999Z] INFO  [Summarizer] [trace=fc10733458c8a8470fc7243ea1566b78] Generating summary for commit c588968e
+[2026-09-03T00:47:37.999Z] INFO  [Summarizer] [trace=fc10733458c8a8470fc7243ea1566b78] Context: transcript=0, files=48, lines=4972+8
+[2026-09-03T00:47:38.000Z] WARN  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] First API attempt failed: No LLM provider available. Set an Anthropic API key (ANTHROPIC_API_KEY) or configure a Jolli Space API key (jolliApiKey).. Retrying in 2000ms...
+[2026-09-03T00:47:40.002Z] INFO  [Summarizer] [trace=fc10733458c8a8470fc7243ea1566b78] Generating summary for commit c588968e
+[2026-09-03T00:47:40.002Z] INFO  [Summarizer] [trace=fc10733458c8a8470fc7243ea1566b78] Context: transcript=0, files=48, lines=4972+8
+[2026-09-03T00:47:40.003Z] ERROR [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] API call failed after retry: No LLM provider available. Set an Anthropic API key (ANTHROPIC_API_KEY) or configure a Jolli Space API key (jolliApiKey).
+[2026-09-03T00:47:40.003Z] WARN  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Saving summary with empty topics + llm-failed marker for commit c588968e
+[2026-09-03T00:47:40.003Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] API summary generated (2.0s)
+[2026-09-03T00:47:40.004Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Plan registry scan: found 0 uncommitted slug(s) on main: []
+[2026-09-03T00:47:40.005Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Plan association: detected 0 slug(s) from transcripts: []
+[2026-09-03T00:47:40.005Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Note registry scan: found 0 uncommitted note(s) on main: []
+[2026-09-03T00:47:40.005Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Note association: detected 0 note(s): []
+[2026-09-03T00:47:40.009Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Reference association: detected 0 ref(s) for branch main
+[2026-09-03T00:47:40.013Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Summary built for c588968e: recap=no, topics=0, plans=absent, notes=absent, references=absent
+[2026-09-03T00:47:40.365Z] INFO  [MetadataManager] [trace=fc10733458c8a8470fc7243ea1566b78] Manifest updated: main/add-comprehensive-documentation-map-and-source-tra-c588968e.md (commit)
+[2026-09-03T00:47:40.365Z] INFO  [FolderStorage] [trace=fc10733458c8a8470fc7243ea1566b78] Markdown generated: main/add-comprehensive-documentation-map-and-source-tra-c588968e.md
+[2026-09-03T00:47:40.377Z] INFO  [FolderStorage] [trace=fc10733458c8a8470fc7243ea1566b78] Wrote 3 files, deleted 0 (Add summary for c588968e: Add comprehensive documentation map and source tra)
+[2026-09-03T00:47:40.377Z] INFO  [SummaryStore] [trace=fc10733458c8a8470fc7243ea1566b78] Summary stored successfully for commit c588968e
+[2026-09-03T00:47:40.380Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Summary stored successfully for commit c588968e (367ms, 0 plans, 0 notes, 0 references)
+[2026-09-03T00:47:40.380Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] === Pipeline completed in 2.8s ===
+[2026-09-03T00:47:40.380Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] === Summary content (0 topics) ===
+[2026-09-03T00:47:40.386Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Processed 1 queue entries
+[2026-09-03T00:47:40.396Z] INFO  [SessionTracker] [trace=fc10733458c8a8470fc7243ea1566b78] Enqueued queue operation: type=ingest tag=ingest file=1788396460391-00000001-79cfcd09-ingest.json
+[2026-09-03T00:47:40.399Z] INFO  [PushExecutor] [trace=fc10733458c8a8470fc7243ea1566b78] Post-queue push trigger: scheduling drain for 1 newly generated summar(ies)
+[2026-09-03T00:47:40.499Z] INFO  [GitOps] [trace=fc10733458c8a8470fc7243ea1566b78] Commit c588968e: Add comprehensive documentation map and source traceability 
+[2026-09-03T00:47:40.813Z] INFO  [StorageFactory] [trace=fc10733458c8a8470fc7243ea1566b78] StorageFactory.create: route=cutover, projectPath=/home/sprime01/projects/sxr
+[2026-09-03T00:47:41.057Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] === Queue worker finished ===
+[2026-09-03T00:47:41.074Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] Processing queue entry: type=ingest triggeredBy=post-commit
+[2026-09-03T00:47:41.109Z] INFO  [QueueWorker] [trace=fc10733458c8a8470fc7243ea1566b78] No API key configured — skipping ingest (post-commit)

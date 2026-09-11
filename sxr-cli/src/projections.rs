@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS sxr_snapshot (
     content_hash TEXT,
     invalid_declared_checkpoint_hash TEXT,
     model_validation_status TEXT NOT NULL,
+    semantics_version TEXT NOT NULL DEFAULT 'v1-legacy',
     representation_omission_json TEXT,
     source_set_hash TEXT NOT NULL,
     entry_logical_path TEXT NOT NULL,
@@ -430,6 +431,9 @@ fn apply_snapshot_cas(
             }
         }
     };
+    let semantics_version = df_ext
+        .and_then(|d| string_field(d, "semantics_version"))
+        .unwrap_or_else(|| "v1-legacy".to_string());
     let omission_json = payload
         .get("omissions")
         .map(serde_json::to_string)
@@ -443,11 +447,11 @@ fn apply_snapshot_cas(
         .unwrap_or_default();
     let resolution_inputs = payload.get("scope").cloned().unwrap_or(Value::Null);
     conn.execute(
-        "INSERT OR REPLACE INTO sxr_snapshot(snapshot_id, repo_id, semantic_closure_hash, content_hash, invalid_declared_checkpoint_hash, model_validation_status, representation_omission_json, source_set_hash, entry_logical_path, registry_content_hash, resolution_inputs_json, drift_class, first_seen_ledger_id, first_seen_append_ordinal)
-         VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14)",
+        "INSERT OR REPLACE INTO sxr_snapshot(snapshot_id, repo_id, semantic_closure_hash, content_hash, invalid_declared_checkpoint_hash, model_validation_status, semantics_version, representation_omission_json, source_set_hash, entry_logical_path, registry_content_hash, resolution_inputs_json, drift_class, first_seen_ledger_id, first_seen_append_ordinal)
+         VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15)",
         params![
             snapshot_id, repo_id, semantic_closure_hash, content_hash, invalid_checkpoint,
-            model_status, omission_json, source_set_hash, entry, None::<String>,
+            model_status, semantics_version, omission_json, source_set_hash, entry, None::<String>,
             serde_json::to_string(&resolution_inputs)?, None::<String>, row.ledger_id, row.append_ordinal
         ],
     )?;
@@ -1675,7 +1679,23 @@ pub fn status(ctx: &crate::state::Ctx, repo_id: &str) -> Result<Value> {
 /// Open the repo's ledger DB (projection tables live there).
 pub fn open(ctx: &crate::state::Ctx, repo_id: &str) -> Result<Connection> {
     let dir = ctx.ensure_repo_dir(repo_id)?;
-    rusqlite::Connection::open(dir.join("ledger.db")).context("open ledger db")
+    let conn = rusqlite::Connection::open(dir.join("ledger.db")).context("open ledger db")?;
+    if let Err(e) = conn.execute(
+        "ALTER TABLE sxr_snapshot ADD COLUMN semantics_version TEXT NOT NULL DEFAULT 'v1-legacy'",
+        [],
+    ) {
+        let msg = e.to_string();
+        // Both are expected, benign outcomes: the column was already added by
+        // a prior open() (idempotent migration), or the table doesn't exist
+        // yet because rebuild() hasn't run on this repo — it creates the
+        // column directly via PROJECTION_DDL. Anything else (disk full,
+        // locked db, corruption) must not be swallowed.
+        let benign = msg.contains("duplicate column name") || msg.contains("no such table");
+        if !benign {
+            return Err(e).context("migrate sxr_snapshot.semantics_version");
+        }
+    }
+    Ok(conn)
 }
 
 /// The latest snapshot_id for a repo that produced a valid `G_declared`

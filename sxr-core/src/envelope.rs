@@ -301,8 +301,8 @@ pub fn validate_snapshot_row_shape(
         (true, false) => {
             if semantic_closure_hash.is_none() || content_hash.is_none() {
                 Err("resolved sxr_snapshot row must carry both semantic and content hashes".into())
-            } else if model_validation_status != "valid" {
-                Err("resolved sxr_snapshot row must have model_validation_status 'valid'".into())
+            } else if model_validation_status != "valid" && model_validation_status != "invalid" {
+                Err("resolved sxr_snapshot row must have model_validation_status 'valid' or 'invalid'".into())
             } else {
                 Ok(())
             }

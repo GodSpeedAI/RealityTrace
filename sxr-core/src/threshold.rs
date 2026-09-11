@@ -107,17 +107,23 @@ pub enum SettlementAuthorization {
 /// are always lawful for the invalidity question (§14.4).
 pub fn authorize_settlement(
     model_validation_status: &str,
+    semantics_version: &str,
     _threshold: &ThresholdKind,
     requested: SettlementStatus,
 ) -> Result<SettlementAuthorization, String> {
-    if model_validation_status == "invalid" {
-        match requested {
-            SettlementStatus::Settled | SettlementStatus::PartiallySettled => Err(
-                "positive acceptance requires valid declared semantics (AC-SETTLEMENT-002)".into(),
-            ),
-            _ => Ok(SettlementAuthorization::Allowed),
+    if requested == SettlementStatus::Settled || requested == SettlementStatus::PartiallySettled {
+        if semantics_version == "v1-legacy" {
+            return Err(
+                "positive acceptance rejected: legacy snapshot semantics are untrusted (AC-SETTLEMENT-002)".into(),
+            );
         }
-    } else if model_validation_status == "valid" {
+        if model_validation_status == "invalid" {
+            return Err(
+                "positive acceptance requires valid declared semantics (AC-SETTLEMENT-002)".into(),
+            );
+        }
+    }
+    if model_validation_status == "valid" || model_validation_status == "invalid" {
         Ok(SettlementAuthorization::Allowed)
     } else {
         Err(format!(

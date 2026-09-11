@@ -26,12 +26,12 @@ sequenceDiagram
     User->>CLI: sxr snapshot create --repo <id> --json
     CLI->>State: require_enrollment & require_semantic
     CLI->>DFAdapt: CliDomainForgeAdapter::resolve(req)
-    DFAdapt->>DFBin: domainforge envelope --emit cep <entry.sea>
-    DFBin-->>DFAdapt: Raw CEP Envelope JSON
+    DFAdapt->>DFBin: domainforge envelope --emit both --scope <scope> <entry.sea>
+    DFBin-->>DFAdapt: Raw Envelope + Representation JSON
     DFAdapt->>DFAdapt: Classify by envelope shape
-    alt Model Valid
-        DFAdapt-->>CLI: SemanticContext::Resolved { representation_json, closure_hash, ... }
-    else Model Validation Failed
+    alt D Available (Valid or Semantically Invalid with Diagnostics)
+        DFAdapt-->>CLI: SemanticContext::Resolved { representation_json, closure_hash, model_validation_status, ... }
+    else Representation Unavailable (Syntax/Import Failure)
         DFAdapt-->>CLI: SemanticContext::ValidationFailed { invalid_declared_checkpoint_hash, omission, ... }
     end
     CLI->>LedgerIO: open_repo_ledger(ctx, repo_id)
@@ -39,7 +39,7 @@ sequenceDiagram
     LedgerIO->>Ledger: Ledger::append
     Ledger-->>CLI: LedgerPosition { ledger_id, append_ordinal }
     CLI->>Proj: apply_row_with_cas (populates sxr_snapshot & sxr_decl_*)
-    CLI-->>User: JSON { snapshot_id, semantic_closure_hash, model_validation_status }
+    CLI-->>User: JSON { snapshot_id, semantic_closure_hash, model_validation_status, semantics_version }
 ```
 
 ---
@@ -55,23 +55,25 @@ sequenceDiagram
 3. **DomainForge Execution**:
    - Calls [`sxr_df::adapter::CliDomainForgeAdapter::resolve`](file:///home/sprime01/projects/sxr/sxr-df/src/adapter.rs).
    - Resolves binary path from `SXR_DOMAINFORGE_BIN` or `PATH`.
-   - Spawns `domainforge envelope --emit cep ...`.
+   - Spawns `domainforge envelope --emit both --scope <scope> ...` under 16 MiB reader bounds and 30-second execution timeout.
 4. **Envelope Classification**:
    - Parses stdout into JSON.
-   - If `validation_status == "validated"` and `representations` array exists:
+   - If representation $D$ is present:
      - Extracts representation $D$, computes SHA-256 `content_hash` and `semantic_closure_hash`.
      - Extracts declarations into `Vec<DeclKey>`.
+     - Extracts `model_validation_status` (`"valid"` or `"invalid"`) and diagnostics.
      - Returns `SemanticContext::Resolved`.
-   - If `conformance_status == "non_conformant"` and `omissions` exists:
-     - Extracts `OmissionRecord`.
+   - If representation $D$ is absent and `omissions` contains `representation_unavailable`:
+     - Extracts `OmissionRecord` and compiler diagnostics.
      - Computes `invalid_declared_checkpoint_hash` from the resolution inputs.
      - Returns `SemanticContext::ValidationFailed`.
 5. **Ledger Commit**:
    - Builds `RecordKind::SemanticSnapshot` envelope using [`sxr_cli::envelopes::build`](file:///home/sprime01/projects/sxr/sxr-cli/src/envelopes.rs).
    - Appends to `ledger.db` under the writer lock.
 6. **Projection Update**:
-   - [`sxr_cli::projections::apply_row_with_cas`](file:///home/sprime01/projects/sxr/sxr-cli/src/projections.rs) upserts `sxr_snapshot`.
+   - [`sxr_cli::projections::apply_row_with_cas`](file:///home/sprime01/projects/sxr/sxr-cli/src/projections.rs) upserts `sxr_snapshot`, stamping `semantics_version = "v2-independent-validity"`.
    - For valid models, populates $G_{declared}$ tables (`sxr_decl_node`, `sxr_decl_edge`).
+   - For invalid models, preserves diagnostic records and model status without admitting unverified declarations into $G_{declared}$.
 
 ---
 

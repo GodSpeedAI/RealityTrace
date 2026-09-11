@@ -74,9 +74,11 @@ For entry $n$:
 3. Computes `entry_hash = sha256_hex(canonical_json(&header).as_bytes())`.
 
 ### Settlement Authorization (AC-SETTLEMENT-002)
-In `authorize_settlement`:
-- If `model_validation_status == "invalid"`, requesting `Settled` or `PartiallySettled` returns an error: *"positive acceptance requires valid declared semantics (AC-SETTLEMENT-002)"*.
-- Negative outcomes (`Failed`, `Blocked`) remain permitted for invalidity questions.
+In `authorize_settlement(model_validation_status, semantics_version, threshold, requested)`:
+- **Legacy Semantics Rejection**: If `semantics_version == "v1-legacy"`, requesting positive settlement (`Settled` or `PartiallySettled`) fails closed with: *"positive acceptance rejected: legacy snapshot semantics are untrusted (AC-SETTLEMENT-002)"*. Legacy snapshots carry ambiguous or unvalidated semantics and must be re-snapshotted under independent validity before they can be settled positively.
+- **Invalid Model Rejection**: If `model_validation_status == "invalid"`, requesting `Settled` or `PartiallySettled` returns an error: *"positive acceptance requires valid declared semantics (AC-SETTLEMENT-002)"*.
+- **Negative & Inconclusive Outcomes**: Negative outcomes (`Failed`, `Blocked`, `Unsettled`) remain permitted for invalid models and legacy snapshots to record falsification and divergence evidence.
+- **Closed-Sum Invariant**: Resolved snapshot rows carrying representation document $D$ can carry either `"valid"` OR `"invalid"` status; the existence of $D$ is decoupled from model semantic validity.
 
 ---
 

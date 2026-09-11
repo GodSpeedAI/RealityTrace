@@ -11,10 +11,11 @@ To extract declarative semantics from `.sea` models using DomainForge, ensuring 
 
 ## 2. Responsibilities
 - Implement `SemanticSourcePort` via `CliDomainForgeAdapter` (`adapter.rs`).
-- Execute the `domainforge` binary with appropriate CLI flags (`envelope --emit cep`).
+- Execute the `domainforge` binary with appropriate CLI flags (`envelope --emit both`, `--scope`, optional `--registry`).
+- Guard child process execution with strict bounds: 16 MiB maximum stdout and stderr reader limits, and a 30-second timeout with forceful process termination.
 - Classify DomainForge output **strictly by envelope shape**, never by shell exit code.
-- Extract representations ($D$), content hashes, and semantic closure hashes when construction succeeds.
-- Extract typed `OmissionRecord` items and diagnostic lists when construction fails.
+- Extract representations ($D$), content hashes, and semantic closure hashes when construction succeeds, carrying the producer's real `model_validation_status` (`"valid"` or `"invalid"`).
+- Extract typed `OmissionRecord` items and diagnostic lists when construction fails (e.g. invalid syntax).
 - Materialize large representation documents into Content-Addressable Storage (`cas://sha256:<hex>`).
 
 ---
@@ -43,23 +44,30 @@ flowchart LR
 
 | Symbol | Location | Description |
 | :--- | :--- | :--- |
-| `struct CliDomainForgeAdapter` | [`src/adapter.rs`](file:///home/sprime01/projects/sxr/sxr-df/src/adapter.rs) | Adapter invoking the external DomainForge binary via subprocess. |
+| `struct CliDomainForgeAdapter` | [`src/adapter.rs`](file:///home/sprime01/projects/sxr/sxr-df/src/adapter.rs) | Adapter invoking the external DomainForge binary via subprocess with bounded I/O and timeouts. |
 | `struct SemanticContextRequest` | [`src/adapter.rs`](file:///home/sprime01/projects/sxr/sxr-df/src/adapter.rs) | Input request specifying `semantic_root`, `entry_logical_path`, registry, and packs. |
 | `struct AdapterCapabilities` | [`src/adapter.rs`](file:///home/sprime01/projects/sxr/sxr-df/src/adapter.rs) | Describes adapter capabilities (`producer`, `cep_envelope_mode`, etc.). |
-| `enum SemanticError` | [`src/error.rs`](file:///home/sprime01/projects/sxr/sxr-df/src/error.rs) | Typed errors (binary missing, malformed JSON, schema violation). |
+| `enum SemanticError` | [`src/error.rs`](file:///home/sprime01/projects/sxr/sxr-df/src/error.rs) | Typed errors (binary missing, malformed JSON, schema violation, process timeout). |
 
 ---
 
 ## 6. Internal Operation
 
+### Bounded Subprocess Execution
+To protect SXR from hung processes or out-of-memory denial-of-service, `CliDomainForgeAdapter` enforces:
+1. **Bounded I/O**: Reads stdout and stderr through dedicated worker threads capped with `.take(16 * 1024 * 1024)` (16 MiB).
+2. **Timeout & Process Reclaim**: Polls the spawned child process up to 30 seconds. If exceeded, forcefully terminates the child via `kill()` and reaps the exit status.
+3. **Registry Forwarding**: Forwards `request.registry_path` via `--registry` if configured.
+
 ### Classification by Envelope Shape
 DomainForge may exit with code 1 for multiple different reasons (syntax error, type failure, missing import). Instead of relying on exit codes, `CliDomainForgeAdapter` inspects the emitted CEP envelope:
 1. **Resolved (`SemanticContext::Resolved`)**:
-   - `validation_status == "validated"` and `representations` section is present.
-   - SXR extracts `representation_json`, computes `content_hash` and `semantic_closure_hash`, and extracts declaration keys (`DeclKey`).
+   - The representation document $D$ is present (either inline in `representations` or materialized via CAS).
+   - Extracts `representation_json`, computes `content_hash` and `semantic_closure_hash`, and extracts declaration keys (`DeclKey`).
+   - Extracts the producer's real `model_validation_status` (`"valid"` or `"invalid"`) from `extensions.domainforge.model_validation_status` and `representations[0].validation_status`. Models with semantic violations still resolve with their declarations and diagnostics preserved.
 2. **Validation Failed (`SemanticContext::ValidationFailed`)**:
-   - `conformance_status == "non_conformant"`, no representations section, and an explicit omission record is carried.
-   - SXR binds the checkpoint hash to the exact failed inputs digest. **It never synthesizes placeholder hashes.**
+   - Representations section is absent, but envelope is conformant to CEP-0008 schema carrying an explicit omission record (`omission_type: "representation_unavailable"`).
+   - SXR extracts the omission record and diagnostics, and binds the checkpoint hash to the exact failed inputs digest. **It never synthesizes placeholder hashes.**
 3. **Malformed Output**:
    - If the emitted envelope violates schema or does not conform to either shape, the adapter fails closed with `SemanticError::MalformedEnvelope`.
 

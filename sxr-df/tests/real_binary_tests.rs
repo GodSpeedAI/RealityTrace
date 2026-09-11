@@ -8,7 +8,8 @@
 
 use serde_json::json;
 use std::path::{Path, PathBuf};
-use sxr_core::types::SemanticContext;
+use sxr_core::threshold::{authorize_settlement, SettlementAuthorization, ThresholdKind};
+use sxr_core::types::{SemanticContext, SettlementStatus};
 use sxr_df::adapter::{CliDomainForgeAdapter, SemanticContextRequest};
 
 fn request(semantic_root: &Path, cas_root: Option<&Path>) -> SemanticContextRequest {
@@ -48,6 +49,7 @@ fn real_domainforge_resolves_the_dogfood_entry() {
     assert!(semantic_closure_hash.starts_with("sha256:"));
     assert!(!declarations.is_empty());
     assert!(!diagnostics.is_empty());
+    assert_eq!(ctx.model_validation_status(), "invalid");
 }
 
 /// A representation larger than 64 KiB: with the default inline threshold the
@@ -109,4 +111,60 @@ fn real_domainforge_materializes_large_cas_carried_representation() {
         "carriage must not change D"
     );
     let _ = entry;
+}
+
+#[test]
+#[ignore = "requires SXR_TEST_DOMAINFORGE_BIN pointing at a domainforge binary"]
+fn real_binary_composition_and_settlement_authorization() {
+    let binary = std::env::var("SXR_TEST_DOMAINFORGE_BIN").expect("SXR_TEST_DOMAINFORGE_BIN set");
+    let root = std::env::var("SXR_TEST_DOMAINFORGE_ROOT")
+        .expect("SXR_TEST_DOMAINFORGE_ROOT set (domainforge worktree)");
+    let adapter = CliDomainForgeAdapter::new(PathBuf::from(&binary));
+
+    // 1. Valid model fixture -> Resolved with status "valid"
+    let mut req_valid = request(Path::new(&root), None);
+    req_valid.entry_logical_path = "domainforge-core/tests/fixtures/envelope/valid-basic.sea".into();
+    let ctx_valid = adapter.resolve(&req_valid).expect("valid basic resolves");
+    assert_eq!(ctx_valid.model_validation_status(), "valid");
+    let auth_valid = authorize_settlement(
+        ctx_valid.model_validation_status(),
+        "v2-independent-validity",
+        &ThresholdKind::AllEvidenceSupports,
+        SettlementStatus::Settled,
+    );
+    assert_eq!(auth_valid, Ok(SettlementAuthorization::Allowed));
+
+    // 2. Legacy snapshot semantics rejection
+    let auth_legacy = authorize_settlement(
+        ctx_valid.model_validation_status(),
+        "v1-legacy",
+        &ThresholdKind::AllEvidenceSupports,
+        SettlementStatus::Settled,
+    );
+    assert!(auth_legacy.is_err());
+    assert!(auth_legacy
+        .unwrap_err()
+        .contains("legacy snapshot semantics are untrusted"));
+
+    // 3. Invalid syntax fixture -> ValidationFailed (representation unavailable omission)
+    let mut req_syntax = request(Path::new(&root), None);
+    req_syntax.entry_logical_path = "domainforge-core/tests/fixtures/envelope/invalid-syntax.sea".into();
+    let ctx_syntax = adapter.resolve(&req_syntax).expect("invalid syntax resolves as failed");
+    assert_eq!(ctx_syntax.model_validation_status(), "invalid");
+    assert!(matches!(ctx_syntax, SemanticContext::ValidationFailed { .. }));
+
+    // 4. Invalid model with D (dogfood entry) -> Resolved with status "invalid"
+    let req_dogfood = request(Path::new(&root), None);
+    let ctx_dogfood = adapter.resolve(&req_dogfood).expect("dogfood entry resolves");
+    assert_eq!(ctx_dogfood.model_validation_status(), "invalid");
+    let auth_dogfood = authorize_settlement(
+        ctx_dogfood.model_validation_status(),
+        "v2-independent-validity",
+        &ThresholdKind::AllEvidenceSupports,
+        SettlementStatus::Settled,
+    );
+    assert!(auth_dogfood.is_err());
+    assert!(auth_dogfood
+        .unwrap_err()
+        .contains("positive acceptance requires valid declared semantics"));
 }

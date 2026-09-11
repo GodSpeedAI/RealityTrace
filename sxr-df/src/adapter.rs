@@ -111,27 +111,70 @@ impl CliDomainForgeAdapter {
             argv.push("--default-namespace".into());
             argv.push(ns.clone());
         }
+        if let Some(reg) = &request.registry_path {
+            argv.push("--registry".into());
+            argv.push(reg.to_string_lossy().to_string());
+        }
         argv.push("--scope".into());
         argv.push(canonical_json(&request.cep_scope));
         argv.push(request.entry_logical_path.clone());
 
-        let output = Command::new(&self.binary)
+        let mut child = Command::new(&self.binary)
             .current_dir(&request.semantic_root)
             .args(&argv)
-            .output()
+            .stdout(std::process::Stdio::piped())
+            .stderr(std::process::Stdio::piped())
+            .spawn()
             .map_err(|e| SemanticError::BinaryUnavailable(e.to_string()))?;
 
-        let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
-        let code = output.status.code();
+        let mut stdout_reader = child.stdout.take().expect("piped stdout");
+        let mut stderr_reader = child.stderr.take().expect("piped stderr");
+
+        let h_out = std::thread::spawn(move || {
+            use std::io::Read;
+            let mut buf = Vec::new();
+            let _ = (&mut stdout_reader).take(16 * 1024 * 1024).read_to_end(&mut buf);
+            buf
+        });
+        let h_err = std::thread::spawn(move || {
+            use std::io::Read;
+            let mut buf = Vec::new();
+            let _ = (&mut stderr_reader).take(16 * 1024 * 1024).read_to_end(&mut buf);
+            buf
+        });
+
+        let start = std::time::Instant::now();
+        let timeout = std::time::Duration::from_secs(30);
+        let status = loop {
+            match child.try_wait().map_err(|e| SemanticError::BinaryUnavailable(e.to_string()))? {
+                Some(status) => break status,
+                None => {
+                    if start.elapsed() > timeout {
+                        let _ = child.kill();
+                        return Err(SemanticError::UnexpectedExit {
+                            code: None,
+                            stderr: "domainforge process timed out after 30 seconds".into(),
+                        });
+                    }
+                    std::thread::sleep(std::time::Duration::from_millis(10));
+                }
+            }
+        };
+
+        let stdout_buf = h_out.join().unwrap_or_default();
+        let stderr_buf = h_err.join().unwrap_or_default();
+
+        let stderr = String::from_utf8_lossy(&stderr_buf).trim().to_string();
+        let code = status.code();
         if !matches!(code, Some(0) | Some(1)) {
             return Err(SemanticError::UnexpectedExit { code, stderr });
         }
-        if output.stdout.is_empty() {
+        if stdout_buf.is_empty() {
             return Err(SemanticError::MalformedOutput(format!(
                 "empty stdout (exit {code:?}): {stderr}"
             )));
         }
-        self.parse_both(&output.stdout, request.cas_root.as_deref())
+        self.parse_both(&stdout_buf, request.cas_root.as_deref())
     }
 
     /// Parse the `--emit both` output: `{"representation": D, "cep_envelope":
@@ -194,15 +237,16 @@ impl CliDomainForgeAdapter {
             && envelope.get("representations").is_some()
         {
             self.extract_resolved(envelope, representation, cas_root)
-        } else if envelope.get("conformance_status").and_then(Value::as_str)
-            == Some("non_conformant")
+        } else if envelope.get("representations").is_none()
+            && (envelope.get("conformance_status").and_then(Value::as_str) == Some("non_conformant")
+                || envelope.get("conformance_status").and_then(Value::as_str) == Some("conformant")
+                || envelope.get("omissions").is_some())
         {
             self.extract_validation_failed(envelope)
         } else {
             Err(SemanticError::MalformedOutput(
                 "envelope matches neither the resolved shape (validation_status \
-                 + representations) nor the failure shape (conformance_status)"
-                    .into(),
+                 + representations) nor the failure shape (omissions)".into(),
             ))
         }
     }
@@ -243,6 +287,19 @@ impl CliDomainForgeAdapter {
         let declarations = declarations_from(rep)?;
         let diagnostics = diagnostics_from(envelope)?;
 
+        let model_validation_status = if envelope
+            .get("extensions")
+            .and_then(|ext| ext.get("domainforge"))
+            .and_then(|df| df.get("model_validation_status"))
+            .and_then(Value::as_str)
+            == Some("invalid")
+            || rep.get("validation_status").and_then(Value::as_str) == Some("invalid")
+        {
+            "invalid".to_string()
+        } else {
+            "valid".to_string()
+        };
+
         Ok(SemanticContext::Resolved {
             cep_envelope_json: serde_json::to_string(envelope)
                 .expect("validated envelope serializes"),
@@ -252,6 +309,7 @@ impl CliDomainForgeAdapter {
             resolution_inputs,
             declarations,
             diagnostics,
+            model_validation_status,
         })
     }
 

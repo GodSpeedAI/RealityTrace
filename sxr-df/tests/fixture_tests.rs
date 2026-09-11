@@ -131,7 +131,7 @@ fn invalid_model_with_d_maps_to_resolved_with_diagnostics() {
     assert_eq!(diagnostics.len(), 1);
     assert_eq!(diagnostics[0].rule, "logistics_flow");
     assert_eq!(declarations.len(), 5);
-    assert_eq!(ctx.model_validation_status(), "valid");
+    assert_eq!(ctx.model_validation_status(), "invalid");
 }
 
 #[test]

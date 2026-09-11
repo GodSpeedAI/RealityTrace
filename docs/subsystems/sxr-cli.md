@@ -69,6 +69,11 @@ For any command modifying repository state (e.g. `sxr run begin`):
 6. Invokes `projections::apply_row_with_cas()` to incrementally update projection tables.
 7. Drops the writer lock and prints machine-readable JSON to stdout.
 
+### Semantic Snapshot & Settlement Guards (AC-SETTLEMENT-002)
+- **Snapshot Creation**: `sxr snapshot create` compiles the model via `sxr-df`, extracts `model_validation_status`, writes `semantics_version = "v2-independent-validity"` into `sxr_snapshot`, and preserves the real diagnostic list.
+- **Settlement Registration**: `sxr settlement register` reads both `model_validation_status` and `semantics_version` for the source snapshot and calls `authorize_settlement`. Positive acceptance (`Settled` / `PartiallySettled`) fails closed (Exit 3) if `semantics_version == "v1-legacy"` (legacy untrusted snapshots) or if `model_validation_status == "invalid"`.
+- **Projection Schema Migration**: `sxr_snapshot` includes `semantics_version TEXT NOT NULL DEFAULT 'v1-legacy'`. Migrations in `projections::open` run `ALTER TABLE sxr_snapshot ADD COLUMN semantics_version TEXT NOT NULL DEFAULT 'v1-legacy'` idempotently on existing databases.
+
 ### Diagnostic Loop Coordination (Slice 5)
 When verifier contradictions are diagnosed:
 1. `sxr residual compute`: Analyzes snapshot deltas and computes `residual.computed` records with `attribution_status = "undiagnosed"`.
