@@ -1,6 +1,6 @@
 [package]
 name = "realitytrace"
-version = "0.1.0"
+version = "0.2.0"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -14,11 +14,11 @@ name = "realitytrace"
 path = "src/main.rs"
 
 [dependencies]
-sxr-core = { version = "0.1.0", path = "../sxr-core" }
-sxr-ledger = { version = "0.1.0", path = "../sxr-ledger" }
-sxr-git = { version = "0.1.0", path = "../sxr-git" }
-sxr-df = { version = "0.1.0", path = "../sxr-df" }
-sxr-verify = { version = "0.1.0", path = "../sxr-verify" }
+sxr-core = { version = "0.2.0", path = "../sxr-core" }
+sxr-ledger = { version = "0.2.0", path = "../sxr-ledger" }
+sxr-git = { version = "0.2.0", path = "../sxr-git" }
+sxr-df = { version = "0.2.0", path = "../sxr-df" }
+sxr-verify = { version = "0.2.0", path = "../sxr-verify" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
