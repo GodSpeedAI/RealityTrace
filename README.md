@@ -1,99 +1,391 @@
 # RealityTrace
 
-**RealityTrace**: Cryptographic observation, evidence, and settlement runtime.
+**RealityTrace binds what was expected to what actually happened.**
 
-RealityTrace is an append-only, cryptographic audit and settlement runtime designed for software engineering verification and autonomous developer agent telemetry. It records what actually happened during software development and testing, verifies event streams against strict semantic envelope contracts, maintains tamper-evident hash-chained ledgers, and deterministically evaluates whether verification obligations have been settled.
+AI systems are good at producing explanations after the fact.
+
+That is a problem.
+
+Once an outcome is visible, an agent can construct a plausible account of why it happened. What that account cannot recover is what the system actually expected *before* reality answered.
+
+RealityTrace preserves that boundary.
+
+```text
+expectation
+    │
+    │  frozen before observation
+    ▼
+action / event
+    │
+    ▼
+observation
+    │
+    ▼
+comparison
+    │
+    ├── match
+    ├── discrepancy
+    └── unresolved
+    │
+    ▼
+evidence + provenance
+```
+
+Its job is narrow: **preserve expectation, observation, difference, evidence, and provenance well enough that another system can make an honest judgment from them.**
 
 ---
 
-## What Problem It Solves
+## Why RealityTrace Exists
 
-Modern agentic engineering tools and automated CI pipelines suffer from severe **epistemological collapse**:
-- **Tests treated as truth**: When a test passes, an agent assumes the feature works; when a flaky test fails, the agent assumes the code is wrong.
-- **Silent history loss**: Test retries overwrite prior failures, destroying evidence of flakiness or environmental corruption.
-- **Premature model blame**: When automated verification fails, developer agents typically assume their code or architecture model is broken and hallucinate refactorings, even when the real defect is an unconfigured test environment, network timeout, or faulty test harness.
-- **Unearned settlement**: Verification is declared "successful" simply because a process exited with code `0`, without proving that the observations satisfied pre-registered acceptance criteria.
+Consider an agent asked to change a software system. Before acting, the expectation is:
 
-RealityTrace provides an immutable, verifiable substrate that enforces **anti-collapse boundaries**:
-- Raw execution output is preserved as an **Observation**, not proof.
-- Observations are transformed into **Evidence** only through explicit, pre-declared derivation rules.
-- **Settlement** requires evaluating strictly earlier evidence against a pre-registered **Threshold**.
-- A 9-locus **Diagnostic Attribution Loop** prevents agents from modifying code or domain models until infrastructure, verifier, and environmental failure loci have been systematically excluded with evidence.
+```text
+- reject expired credentials
+- preserve valid sessions
+- leave unrelated authorization behavior unchanged
+- pass the existing regression suite
+```
+
+The agent acts. Tests pass. Is the expectation confirmed?
+
+Not necessarily. Valid sessions might now expire early. An unrelated authorization path might have changed. The tests might never have exercised the relevant condition.
+
+Without a preserved expectation and an independently captured observation, the system is left with:
+
+```text
+"Implemented successfully."
+```
+
+RealityTrace instead preserves the comparison:
+
+```text
+EXPECTED                               OBSERVED
+──────────────────────────────────────────────────────────────────
+expired credentials rejected           expired credentials rejected
+valid sessions preserved               valid sessions expire after refresh
+unrelated authorization unchanged      authorization unchanged in observed scope
+regression suite passes                regression suite passes
+
+DIFFERENCE
+└── valid-session behavior diverged
+
+EVIDENCE
+└── test results, execution trace, observed state, artifact references
+```
+
+The failure bought information.
+
+---
+
+## Core Principle
+
+> **You can only measure error against something that existed before the outcome was known.**
+
+If the expected result is reconstructed after observing the result, the comparison is contaminated.
+
+```text
+t0                     t1                     t2
+
+EXPECTATION ──────────► ACTION ─────────────► OBSERVATION
+    │                                             │
+    └──────────── immutable for this act ─────────┘
+                         │
+                         ▼
+                     COMPARISON
+```
+
+Expectations can be revised. Revision creates a new expectation. It does not rewrite evidence produced under the old one.
+
+```text
+expectation v1
+    │
+    ├── governs act 1
+    └── evidence remains attached to v1
+
+expectation v2
+    │
+    └── governs a later act
+```
+
+---
+
+## The Trace Object
+
+A trace is a relationship, not a log entry:
+
+```text
+expected representation
+          ↕
+observed representation
+          │
+          ▼
+structured difference
+          +
+       evidence
+          +
+      provenance
+```
+
+A useful expectation captures:
+
+- what should change
+- what should remain unchanged
+- what should appear or not appear
+- what evidence should exist
+- what would contradict the expectation
+
+The observation records what the available observation machinery actually registered. Comparison makes discrepancy explicit.
+
+### Evidence and Provenance
+
+| Concept | What it is |
+|---------|-----------|
+| Claim | Agent assertion ("all tests pass") |
+| Evidence | Test runner output |
+| Provenance | What produced that output, against which artifact, when |
+
+A trace should answer: who or what produced this observation, against which expectation and artifact, was the expectation already frozen, has the evidence changed since capture.
+
+### Trace Schema
+
+```yaml
+trace:
+  id: trace-001
+
+  expectation:
+    version: 1
+    frozen_at: ...
+    subject: ...
+    expected:
+      ...
+    invariants:
+      ...
+    contradiction_conditions:
+      ...
+
+  observation:
+    captured_at: ...
+    observer: ...
+    subject: ...
+    observed:
+      ...
+
+  comparison:
+    status: mismatch
+    differences:
+      - ...
+    unresolved:
+      - ...
+
+  evidence:
+    - kind: ...
+      source: ...
+      digest: ...
+      captured_at: ...
+
+  provenance:
+    expectation_source: ...
+    observation_source: ...
+    artifact_identity: ...
+    environment: ...
+```
+
+---
+
+## Comparison States
+
+| State | Meaning |
+|-------|---------|
+| `match` | Observation satisfies the expectation |
+| `mismatch` | Observation contradicts the expectation |
+| `undefined` | Available evidence cannot establish the comparison |
+
+`undefined` is not success.
+
+```text
+expected:    no unauthorized bypass exists
+observed:    scanner found no bypass
+comparison:  undefined unless the search scope is sufficient
+```
+
+```text
+expected:    latency remains below threshold
+observed:    telemetry unavailable
+comparison:  undefined
+```
+
+Turning unavailable evidence into success destroys the value of the trace.
+
+---
+
+## Structured Differences
+
+Collapsing to `FAIL` destroys information. These three are not equivalent:
+
+| Attempt | Expected | Observed | Actual situation |
+|---------|----------|----------|-----------------|
+| A | output = 42 | output = 41 | Wrong result |
+| B | output = 42 | process terminated | Execution failure |
+| C | output = 42 | observer unavailable | Missing evidence |
+
+RealityTrace preserves the structure. Diagnosis can happen downstream.
+
+---
+
+## Negative Expectations
+
+Expectations should also capture what is expected **not** to change:
+
+```text
+expected change:      retry logic becomes idempotent
+expected invariants:  public API remains compatible
+                      persistence format unchanged
+expected irrelevance: request ordering does not affect correctness
+```
+
+If request ordering later changes the result, the system has learned something stronger than "the test failed." A distinction previously believed irrelevant became consequential. That can justify a representational change.
+
+---
+
+## Workflow
+
+1. **Establish the expectation.** Before the consequential observation is available, define what the bounded act is expected to produce. An expectation that cannot be wrong cannot generate useful error.
+
+2. **Freeze the evaluation boundary.** The executor cannot rewrite the criterion after seeing the result.
+
+3. **Act.** RealityTrace does not own execution. The action may be performed by a human, AI agent, Gauntlet, CI pipeline, or any governed system.
+
+4. **Observe.** Capture consequence through the strongest affordable mechanism. A partial observer produces partial evidence, not a full claim.
+
+5. **Compare.** Bind observed to expected. Produce explicit differences, not only a scalar result.
+
+6. **Preserve the trace.** Evidence should remain inspectable: expectation → attempt → observation → comparison → evidence → provenance.
+
+7. **Hand evidence downstream.** RealityTrace stops before making claims the trace cannot support. Consumers may reach different conclusions from the same trace. That is acceptable.
+
+---
+
+## Position in the GodSpeed Stack
+
+```text
+                    .sea
+                     │
+                     ▼
+                DomainForge       domain meaning
+                     │
+                     ▼
+               Context Kernel     context
+                     │
+                     ▼
+                SEA-Forge         authority
+                     │
+                     ▼
+                 Gauntlet         execution
+                     │
+                     ▼
+              ┌──────────────┐
+              │ RealityTrace │    evidence + discrepancy
+              └──────┬───────┘
+                     │
+                     ▼
+             settlement / diagnosis
+                     │
+                     ▼
+              GodSpeed-Agent      developmental update
+```
+
+Authority (SEA-Forge) and observation (RealityTrace) are separate. Execution (Gauntlet) and evidence binding (RealityTrace) are separate.
+
+---
+
+## What RealityTrace Is Not
+
+- **Not an agent framework.** It does not orchestrate work it observes.
+- **Not an authorization system.** Permission belongs at the governance boundary.
+- **Not a reward function.** Translating evidence into reward is a separate representational decision.
+- **Not a capability registry.** A successful trace is evidence. Durable capability requires repeated settlement under relevant variation.
+- **Not a logging system.** Logs record events. RealityTrace binds a pre-observation expectation to a post-observation record and preserves the discrepancy as evidence.
+
+---
+
+## Design Principles
+
+- **Expectation precedes observation.** Otherwise error becomes retrospective storytelling.
+- **Observation is represented, not equated with reality.** Every observer has limits.
+- **Undefined is not success.** Missing evidence remains missing.
+- **Preserve differences before interpreting them.** Diagnosis happens downstream.
+- **Evidence keeps its provenance.** An assertion without lineage is not evidence.
+- **Revision does not rewrite history.** New expectations govern new acts.
+- **One success does not establish capability.**
 
 ---
 
 ## Installation
 
-### From crates.io
-
-Install the RealityTrace CLI:
-
 ```bash
 cargo install realitytrace
 ```
 
-### From Source
+Verify installation and environment status:
 
 ```bash
-git clone https://github.com/GodSpeedAI/RealityTrace.git
-cd RealityTrace
-cargo build --release
+realitytrace --version
+realitytrace doctor
 ```
-
-The resulting binary will be located at `target/release/realitytrace`.
 
 ---
 
-## CLI Usage
+## Quick Start
+
+The minimal RealityTrace loop:
+
+```text
+1. establish expectation
+2. freeze expectation
+3. perform or reference work
+4. capture observation
+5. compare
+6. inspect discrepancy and provenance
+```
 
 ```bash
-# Enroll a repository in RealityTrace
+# 1. Enroll a repository in RealityTrace (mints ULID repo identity)
 realitytrace repo enroll
 
-# Inspect repository identity and status
+# 2. Inspect repository identity and status
 realitytrace repo status
 
-# Build a verification plan
+# 3. Build a verification plan binding expectation and threshold
 realitytrace plan build --repo <REPO_ID> --question <QUESTION_REF> --threshold <THRESHOLD_REF>
 
-# Execute a plan with verification telemetry
+# 4. Execute plan steps and capture verifier observations
 realitytrace verify run --plan <PLAN_JSON>
 
-# Verify cryptographic hash chain integrity of the ledger
+# 5. Verify cryptographic hash chain integrity of the ledger
 realitytrace ledger verify --repo <REPO_ID>
 
-# Export projections and anti-collapse corpus
+# 6. Export projections and anti-collapse evidence corpus
 realitytrace projections export --repo <REPO_ID> --canonical-json
 ```
 
----
-
-## Architecture & Subsystems
-
-The workspace consists of focused Rust crates:
-
-- **`realitytrace`** (`sxr-cli`): The command-line interface, daemon, and lifecycle commands.
-- **`sxr-core`**: Core domain types, canonical JSON serialization, cryptographic hash-chain algebra, and CEP-0008 semantic envelope validation. Zero I/O.
-- **`sxr-ledger`**: SQLite dense hash-chained append-only storage, commit queue, and durability management.
-- **`sxr-git`**: Git worktree discovery, lineage verification, and ULID repository identity.
-- **`sxr-df`**: Semantic model extraction adapter (DomainForge integration).
-- **`sxr-verify`**: Process sandbox execution, environment isolation, and test runner telemetry parsers.
-
-*(Note: `sxr` was the internal development codename for the engine; public releases and user-facing tooling are branded as **RealityTrace**).*
+A complete trace contains: Expectation, Observation, Comparison, Evidence, Provenance. If any cannot be reconstructed, the trace is incomplete.
 
 ---
 
-## Documentation
+## Status
 
-Comprehensive architecture, tutorials, and specifications are in the [`docs/`](./docs) directory:
-- [System Overview & Orientation](./docs/index.md)
-- [Conceptual Mental Model](./docs/mental-model.md)
-- [Architecture Specification](./architecture.md)
-- [Documentation Map](./documentation-map.md)
-- [Source & Symbol Traceability Matrix](./source-map.md)
+RealityTrace is part of the GodSpeed AI architecture. Stable contract:
+
+```text
+EXPECTED ↕ OBSERVED → DIFFERENCE + EVIDENCE + PROVENANCE
+```
 
 ---
 
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE).
+
+---
+
+*Developed as part of [GodSpeed AI](https://godspeed.ai).*
