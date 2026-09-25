@@ -148,7 +148,7 @@ A trace should answer: who or what produced this observation, against which expe
 
 ### Conceptual Trace Schema
 
-> RealityTrace models traces canonically as append-only records wrapped in [CEP-0008](https://cep.dev) semantic envelopes (including `questions`, `thresholds`, `observations`, `claims`, `evidence`, `residuals`, and `settlements`). Conceptually, every trace binds:
+> RealityTrace models traces canonically as append-only records wrapped in [CEP-0008](https://github.com/GodSpeedAI/canonical-evaluation-protocol/blob/main/spec/CEP-0008-semantic-envelope.md) semantic envelopes (including `questions`, `thresholds`, `observations`, `claims`, `evidence`, `residuals`, and `settlements`). Conceptually, every trace binds:
 
 ```yaml
 trace:
