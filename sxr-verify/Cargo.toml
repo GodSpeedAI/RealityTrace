@@ -4,7 +4,10 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
-description = "VerifierPort: process runner and the cargo-test descriptor with declared qualification rules."
+authors.workspace = true
+repository.workspace = true
+readme = "../README.md"
+description = "RealityTrace VerifierPort: process runner and the cargo-test descriptor with declared qualification rules."
 
 [dependencies]
 serde.workspace = true

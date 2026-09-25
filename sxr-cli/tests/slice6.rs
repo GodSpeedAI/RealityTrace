@@ -15,21 +15,56 @@
 //! - A second daemon on the same socket is rejected; the socket path honors
 //!   `SXR_DAEMON_SOCKET`.
 
+use realitytrace as sxr_cli;
 use serde_json::{Value, json};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Output, Stdio};
 
 fn bin() -> PathBuf {
-    PathBuf::from(env!("CARGO_BIN_EXE_sxr"))
+    PathBuf::from(env!("CARGO_BIN_EXE_realitytrace"))
+}
+
+fn ensure_domainforge_bin(data: &Path) -> PathBuf {
+    if let Ok(df) = std::env::var("REALITYTRACE_DOMAINFORGE_BIN")
+        && Path::new(&df).is_file()
+    {
+        return PathBuf::from(df);
+    }
+    if let Ok(df) = std::env::var("SXR_DOMAINFORGE_BIN")
+        && Path::new(&df).is_file()
+    {
+        return PathBuf::from(df);
+    }
+    let script_path = data.join("mock-domainforge.sh");
+    if !script_path.exists() {
+        let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../sxr-df/tests/fixtures/env-valid-basic.json");
+        let script = format!(
+            "#!/bin/sh\ncat \"{}\"\nexit 0\n",
+            fixture_path.canonicalize().unwrap().display()
+        );
+        std::fs::write(&script_path, script).unwrap();
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            let mut perms = std::fs::metadata(&script_path).unwrap().permissions();
+            perms.set_mode(0o755);
+            std::fs::set_permissions(&script_path, perms).unwrap();
+        }
+    }
+    script_path
 }
 
 /// Run sxr with an isolated XDG root (and optional socket env).
 fn run(args: &[&str], data: &Path, state: &Path, socket: Option<&str>) -> Output {
     let mut cmd = Command::new(bin());
+    let df_bin = ensure_domainforge_bin(data);
     cmd.args(args)
         .env("XDG_DATA_HOME", data)
-        .env("XDG_STATE_HOME", state);
+        .env("XDG_STATE_HOME", state)
+        .env("REALITYTRACE_DOMAINFORGE_BIN", &df_bin)
+        .env("SXR_DOMAINFORGE_BIN", &df_bin);
     if let Some(s) = socket {
         cmd.env("SXR_DAEMON_SOCKET", s);
     }
@@ -51,11 +86,14 @@ const OK_STREAM: &[u8] = b"running 1 test\ntest result: ok. 1 passed; 0 failed; 
 
 /// Spawn the daemon against an isolated root; caller must kill it.
 fn spawn_daemon(data: &Path, state: &Path, socket: &str, drain_delay_ms: u64) -> Child {
+    let df_bin = ensure_domainforge_bin(data);
     Command::new(bin())
         .args(["daemon", "--drain-delay-ms", &drain_delay_ms.to_string()])
         .env("XDG_DATA_HOME", data)
         .env("XDG_STATE_HOME", state)
         .env("SXR_DAEMON_SOCKET", socket)
+        .env("REALITYTRACE_DOMAINFORGE_BIN", &df_bin)
+        .env("SXR_DOMAINFORGE_BIN", &df_bin)
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .spawn()

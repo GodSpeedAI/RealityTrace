@@ -8,3 +8,9 @@
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# local agent and memory caches
+.jolli/
+.serena/
+.zvec-grep/
+

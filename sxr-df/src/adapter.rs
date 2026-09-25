@@ -133,20 +133,27 @@ impl CliDomainForgeAdapter {
         let h_out = std::thread::spawn(move || {
             use std::io::Read;
             let mut buf = Vec::new();
-            let _ = (&mut stdout_reader).take(16 * 1024 * 1024).read_to_end(&mut buf);
+            let _ = (&mut stdout_reader)
+                .take(16 * 1024 * 1024)
+                .read_to_end(&mut buf);
             buf
         });
         let h_err = std::thread::spawn(move || {
             use std::io::Read;
             let mut buf = Vec::new();
-            let _ = (&mut stderr_reader).take(16 * 1024 * 1024).read_to_end(&mut buf);
+            let _ = (&mut stderr_reader)
+                .take(16 * 1024 * 1024)
+                .read_to_end(&mut buf);
             buf
         });
 
         let start = std::time::Instant::now();
         let timeout = std::time::Duration::from_secs(30);
         let status = loop {
-            match child.try_wait().map_err(|e| SemanticError::BinaryUnavailable(e.to_string()))? {
+            match child
+                .try_wait()
+                .map_err(|e| SemanticError::BinaryUnavailable(e.to_string()))?
+            {
                 Some(status) => break status,
                 None => {
                     if start.elapsed() > timeout {
@@ -238,7 +245,8 @@ impl CliDomainForgeAdapter {
         {
             self.extract_resolved(envelope, representation, cas_root)
         } else if envelope.get("representations").is_none()
-            && (envelope.get("conformance_status").and_then(Value::as_str) == Some("non_conformant")
+            && (envelope.get("conformance_status").and_then(Value::as_str)
+                == Some("non_conformant")
                 || envelope.get("conformance_status").and_then(Value::as_str) == Some("conformant")
                 || envelope.get("omissions").is_some())
         {
@@ -246,7 +254,8 @@ impl CliDomainForgeAdapter {
         } else {
             Err(SemanticError::MalformedOutput(
                 "envelope matches neither the resolved shape (validation_status \
-                 + representations) nor the failure shape (omissions)".into(),
+                 + representations) nor the failure shape (omissions)"
+                    .into(),
             ))
         }
     }

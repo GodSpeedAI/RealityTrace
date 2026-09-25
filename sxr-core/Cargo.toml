@@ -4,7 +4,10 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
-description = "sxr domain types, canonical JSON, CEP envelope construction and validation, record-kind registry, threshold evaluation. No I/O."
+authors.workspace = true
+repository.workspace = true
+readme = "../README.md"
+description = "RealityTrace domain types, canonical JSON, CEP envelope construction and validation, record-kind registry, threshold evaluation. No I/O."
 
 [dependencies]
 serde.workspace = true

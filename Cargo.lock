@@ -1044,6 +1044,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "realitytrace"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "hex",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "sha2",
+ "sxr-core",
+ "sxr-df",
+ "sxr-git",
+ "sxr-ledger",
+ "sxr-verify",
+ "tempfile",
+ "thiserror",
+ "ulid",
+]
+
+[[package]]
 name = "redox_syscall"
 version = "0.5.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1265,28 +1287,6 @@ name = "strsim"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
-
-[[package]]
-name = "sxr-cli"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "clap",
- "hex",
- "rusqlite",
- "serde",
- "serde_json",
- "sha2",
- "sxr-core",
- "sxr-df",
- "sxr-git",
- "sxr-ledger",
- "sxr-verify",
- "tempfile",
- "thiserror",
- "ulid",
-]
 
 [[package]]
 name = "sxr-core"

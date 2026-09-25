@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    ".": {
+      "release-type": "rust",
+      "package-name": "realitytrace",
+      "changelog-path": "CHANGELOG.md",
+      "changelog-types": [
+        { "type": "feat", "section": "Features" },
+        { "type": "fix", "section": "Bug Fixes" },
+        { "type": "perf", "section": "Performance" },
+        { "type": "refactor", "section": "Refactoring", "hidden": false },
+        { "type": "revert", "section": "Reverts" },
+        { "type": "docs", "section": "Documentation", "hidden": true },
+        { "type": "test", "section": "Tests", "hidden": true },
+        { "type": "build", "section": "Build", "hidden": true },
+        { "type": "ci", "section": "CI", "hidden": true },
+        { "type": "chore", "section": "Miscellaneous", "hidden": true }
+      ],
+      "version-file": "Cargo.toml",
+      "tag-separator": "",
+      "include-component-in-tag": false,
+      "pull-request-title-pattern": "chore: release RealityTrace ${version}",
+      "skip-github-release": false,
+      "draft": false,
+      "prerelease": false
+    }
+  }
+}

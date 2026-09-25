@@ -1,8 +1,8 @@
-# SXR Architecture Specification
+# RealityTrace Architecture Specification
 
 ## 1. System Identity and Purpose
 
-**SXR (Semantic Exhaust Runtime)** is the cryptographic observation-evidence-settlement engine for **RealityTrace** (`GodSpeedAI/RealityTrace`).
+**RealityTrace** (engine codename **SXR** — Semantic Exhaust Runtime) is the cryptographic observation-evidence-settlement engine developed at `GodSpeedAI/RealityTrace`.
 
 ### Core Purpose
 In contemporary agentic software engineering and verification pipelines, systems frequently fall into **epistemic collapse traps**:

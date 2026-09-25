@@ -4,10 +4,13 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
-description = "SQLite adapter: generation-local hash chains, history manifest, outbox, writer lock, CAS/ARS."
+authors.workspace = true
+repository.workspace = true
+readme = "../README.md"
+description = "RealityTrace SQLite adapter: generation-local hash chains, history manifest, outbox, writer lock, CAS/ARS."
 
 [dependencies]
-sxr-core = { path = "../sxr-core" }
+sxr-core.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true

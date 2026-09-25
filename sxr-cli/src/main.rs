@@ -18,9 +18,13 @@ mod state;
 
 use state::Ctx;
 
-/// sxr — the DomainForge Semantic Exhaust Runtime CLI.
+/// RealityTrace — the Semantic Exhaust Runtime CLI.
 #[derive(Parser)]
-#[command(name = "sxr", version, about)]
+#[command(
+    name = "realitytrace",
+    version,
+    about = "RealityTrace — the Semantic Exhaust Runtime CLI"
+)]
 struct Cli {
     /// Emit machine-readable JSON on stdout (always on for slice 1).
     #[arg(long, global = true, action = clap::ArgAction::SetTrue)]
@@ -492,11 +496,21 @@ struct ContextCmd {
 }
 
 fn main() {
+    let prog = std::env::args()
+        .next()
+        .as_ref()
+        .and_then(|s| {
+            std::path::Path::new(s)
+                .file_name()?
+                .to_str()
+                .map(String::from)
+        })
+        .unwrap_or_else(|| "realitytrace".to_string());
     let cli = Cli::parse();
     let ctx = match Ctx::new() {
         Ok(c) => c,
         Err(e) => {
-            eprintln!("sxr: {e:#}");
+            eprintln!("{prog}: {e:#}");
             std::process::exit(2);
         }
     };
@@ -511,7 +525,7 @@ fn main() {
             println!("{s}");
         }
         Err(e) => {
-            eprintln!("sxr: {e:#}");
+            eprintln!("{prog}: {e:#}");
             std::process::exit(exit_for_error(&e));
         }
     }

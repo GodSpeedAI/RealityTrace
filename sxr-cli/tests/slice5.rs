@@ -16,9 +16,9 @@
 //!   each explicitly evidence-excluded.
 //! - Rebuild determinism with the four new tables (AC-REPLAY-003 shape).
 
+use realitytrace::projections;
 use rusqlite::Connection;
 use serde_json::{Value, json};
-use sxr_cli::projections;
 use sxr_core::LedgerRow;
 use sxr_core::record_kinds::RecordKind;
 

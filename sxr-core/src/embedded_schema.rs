@@ -12,7 +12,7 @@ use serde_json::Value;
 pub const CEP_SCHEMA_PINNED_COMMIT: &str = "008034e";
 pub const CEP_SCHEMA_SOURCE_SHA256: &str =
     "sha256:4b42bfddf2da553e4ee5860ffa6f7b1374eb0bb13b8ede0d722bc41e9d8b5b17";
-const CEP_SCHEMA_JSON: &str = include_str!("../../schemas/cep-semantic-envelope.schema.json");
+const CEP_SCHEMA_JSON: &str = include_str!("../schemas/cep-semantic-envelope.schema.json");
 
 pub fn schema_json() -> Value {
     serde_json::from_str(CEP_SCHEMA_JSON).expect("embedded CEP schema must be valid JSON")

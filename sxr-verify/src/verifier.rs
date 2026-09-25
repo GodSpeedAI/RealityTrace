@@ -164,7 +164,12 @@ mod tests {
             invocation: Invocation {
                 argv: argv.iter().map(|s| s.to_string()).collect(),
                 cwd,
-                env_allowlist: vec!["PATH".into(), "HOME".into(), "CARGO_HOME".into()],
+                env_allowlist: vec![
+                    "PATH".into(),
+                    "HOME".into(),
+                    "CARGO_HOME".into(),
+                    "RUSTC_WRAPPER".into(),
+                ],
                 timeout_s,
             },
             produces_evidence_type: "test_result".into(),
@@ -332,9 +337,10 @@ fn it_fails() {
         assert_eq!(outcome.exit_code, Some(0));
         assert!(!outcome.crashed);
         let art = dir.path().join("artifacts");
-        let stdout_bytes = std::fs::read(
-            art.join(format!("{}.stdout", outcome.stdout_ref.strip_prefix("sha256:").unwrap())),
-        )
+        let stdout_bytes = std::fs::read(art.join(format!(
+            "{}.stdout",
+            outcome.stdout_ref.strip_prefix("sha256:").unwrap()
+        )))
         .unwrap();
         assert_eq!(stdout_bytes.len(), 1 << 20);
     }

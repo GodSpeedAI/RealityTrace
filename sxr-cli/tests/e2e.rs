@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use std::process::Command;
 
 fn bin() -> PathBuf {
-    PathBuf::from(env!("CARGO_BIN_EXE_sxr"))
+    PathBuf::from(env!("CARGO_BIN_EXE_realitytrace"))
 }
 
 fn run(args: &[&str], xdg_data: &str, xdg_state: &str) -> std::process::Output {

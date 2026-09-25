@@ -7,7 +7,8 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
-pub const SXR_VERSION: &str = "0.1.0";
+pub const REALITYTRACE_VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const SXR_VERSION: &str = REALITYTRACE_VERSION;
 
 fn xdg_env(name: &str, fallback: &str) -> PathBuf {
     std::env::var(name)

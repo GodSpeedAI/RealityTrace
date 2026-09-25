@@ -167,22 +167,35 @@ pub fn semantic_status(ctx: &Ctx, repo_id: &str) -> Result<Value> {
 // ── snapshot ─────────────────────────────────────────────────────────────
 
 fn domainforge_bin() -> Option<PathBuf> {
-    std::env::var("SXR_DOMAINFORGE_BIN")
-        .map(PathBuf::from)
-        .ok()
-        .or_else(|| {
-            let p = PathBuf::from(
-                "/home/sprime01/projects/domainforge-slice0b/target/debug/domainforge",
-            );
-            if p.is_file() { Some(p) } else { None }
-        })
+    if let Ok(var) = std::env::var("REALITYTRACE_DOMAINFORGE_BIN") {
+        let p = PathBuf::from(var);
+        if p.is_file() {
+            return Some(p);
+        }
+    }
+    if let Ok(var) = std::env::var("SXR_DOMAINFORGE_BIN") {
+        let p = PathBuf::from(var);
+        if p.is_file() {
+            return Some(p);
+        }
+    }
+    if let Ok(path_var) = std::env::var("PATH") {
+        for dir in std::env::split_paths(&path_var) {
+            let candidate = dir.join("domainforge");
+            if candidate.is_file() {
+                return Some(candidate);
+            }
+        }
+    }
+    None
 }
 
 pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
     let e = state::require_enrollment(ctx, repo_id)?;
     let cfg = state::require_semantic(ctx, repo_id)?;
-    let bin = domainforge_bin()
-        .ok_or_else(|| anyhow!("SXR_DOMAINFORGE_BIN not set and default binary not found"))?;
+    let bin = domainforge_bin().ok_or_else(|| {
+        anyhow!("DomainForge binary not found: set REALITYTRACE_DOMAINFORGE_BIN or ensure 'domainforge' is on PATH")
+    })?;
     let adapter = sxr_df::CliDomainForgeAdapter::new(bin);
     let req = sxr_df::SemanticContextRequest {
         semantic_root: state::semantic_root_of(&e),
@@ -262,7 +275,10 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
     // carry the sxr-minted snapshot identity.
     let mut payload = serde_json::from_str::<Value>(semantic.envelope_json())
         .with_context(|| "parse producer envelope")?;
-    if let Some(ext) = payload.get_mut("extensions").and_then(|e| e.get_mut("domainforge")) {
+    if let Some(ext) = payload
+        .get_mut("extensions")
+        .and_then(|e| e.get_mut("domainforge"))
+    {
         ext["semantics_version"] = json!("v2-independent-validity");
     } else {
         payload["extensions"] = json!({
@@ -1232,16 +1248,17 @@ pub fn settlement_register(
     // §14.4/AC-SETTLEMENT-002: if snapshot is validation-failed or semantics are v1-legacy,
     // positive settlement is rejected.
     let snapshot_info = snapshot_model_status(ctx, &meta.repo_id, &meta.snapshot_id)?;
-    if let Some((model_status, semantics_version)) = &snapshot_info {
-        if supports && !question_is_invalidity(question_id) {
-            sxr_core::threshold::authorize_settlement(
-                model_status,
-                semantics_version,
-                &sxr_core::threshold::ThresholdKind::AllEvidenceSupports,
-                sxr_core::types::SettlementStatus::Settled,
-            )
-            .map_err(|e| anyhow!("{e}"))?;
-        }
+    if let Some((model_status, semantics_version)) = &snapshot_info
+        && supports
+        && !question_is_invalidity(question_id)
+    {
+        sxr_core::threshold::authorize_settlement(
+            model_status,
+            semantics_version,
+            &sxr_core::threshold::ThresholdKind::AllEvidenceSupports,
+            sxr_core::types::SettlementStatus::Settled,
+        )
+        .map_err(|e| anyhow!("{e}"))?;
     }
 
     let settlement_status = if supports { "settled" } else { "unsettled" };
@@ -1462,7 +1479,9 @@ fn snapshot_model_status(
                         .get("representations")
                         .and_then(Value::as_array)
                         .and_then(|a| a.first())
-                        .map(|rep| rep.get("semantic_hash").is_some() || rep.get("content_hash").is_some())
+                        .map(|rep| {
+                            rep.get("semantic_hash").is_some() || rep.get("content_hash").is_some()
+                        })
                         .unwrap_or(false);
                     if has_hashes { "valid" } else { "invalid" }
                 });
@@ -2130,7 +2149,7 @@ pub fn diagnostic_settle(
         }],
         "questions": [{
             "question_id": diag_question_id,
-            "question_form": format!("why does the declared state disagree with observed reality?"),
+            "question_form": "why does the declared state disagree with observed reality?".to_string(),
             "question_type": "diagnostic",
         }],
         "representations": [{
@@ -2248,7 +2267,7 @@ pub fn diagnostic_propose(
         }],
         "questions": [{
             "question_id": diag_question_id,
-            "question_form": format!("why does the declared state disagree with observed reality?"),
+            "question_form": "why does the declared state disagree with observed reality?".to_string(),
             "question_type": "diagnostic",
         }],
         "representations": [{

@@ -1,0 +1,2284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cep.dev/schemas/cep-semantic-envelope.schema.json",
+  "title": "CEP-0008 Semantic Envelope (canonical full profile)",
+  "description": "Canonical full JSON Schema profile of CEP-0008's Semantic Envelope. Every CEP-0008 \u00a752 minimal-valid field is an explicit top-level property, plus \u00a77.1 lineage_refs. The envelope_kind vocabulary is CEP-0008 \u00a79's closed list. Entity sections follow the SHOULD vocabularies of CEP-0008 \u00a713\u2013\u00a739; extension material belongs in the \u00a739 extensions section. The separately named flat profile (semantic-envelope.schema.json) is a limited compatibility profile and is not this contract. Field names come only from CEP-0008; see semantic-envelope.mapping.md for the \u00a753 fixture map.",
+  "type": "object",
+  "required": [
+    "envelope_id",
+    "cep_version",
+    "envelope_version",
+    "envelope_kind",
+    "created_at",
+    "created_by",
+    "scope",
+    "boundary_record",
+    "completeness_status",
+    "provenance_refs",
+    "omission_status",
+    "lineage_refs"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "validation_status"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "references"
+          ],
+          "properties": {
+            "references": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one references record"
+        },
+        {
+          "required": [
+            "constraints"
+          ],
+          "properties": {
+            "constraints": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one constraints record"
+        },
+        {
+          "required": [
+            "distinctions"
+          ],
+          "properties": {
+            "distinctions": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one distinctions record"
+        },
+        {
+          "required": [
+            "relations"
+          ],
+          "properties": {
+            "relations": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one relations record"
+        },
+        {
+          "required": [
+            "representations"
+          ],
+          "properties": {
+            "representations": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one representations record"
+        },
+        {
+          "required": [
+            "states"
+          ],
+          "properties": {
+            "states": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one states record"
+        },
+        {
+          "required": [
+            "transformations"
+          ],
+          "properties": {
+            "transformations": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one transformations record"
+        },
+        {
+          "required": [
+            "observations"
+          ],
+          "properties": {
+            "observations": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one observations record"
+        },
+        {
+          "required": [
+            "questions"
+          ],
+          "properties": {
+            "questions": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one questions record"
+        },
+        {
+          "required": [
+            "claims"
+          ],
+          "properties": {
+            "claims": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one claims record"
+        },
+        {
+          "required": [
+            "evidence"
+          ],
+          "properties": {
+            "evidence": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one evidence record"
+        },
+        {
+          "required": [
+            "settlements"
+          ],
+          "properties": {
+            "settlements": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one settlements record"
+        },
+        {
+          "required": [
+            "authority"
+          ],
+          "properties": {
+            "authority": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one authority record"
+        },
+        {
+          "required": [
+            "affordances"
+          ],
+          "properties": {
+            "affordances": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one affordances record"
+        },
+        {
+          "required": [
+            "capabilities"
+          ],
+          "properties": {
+            "capabilities": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one capabilities record"
+        },
+        {
+          "required": [
+            "metrics"
+          ],
+          "properties": {
+            "metrics": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one metrics record"
+        },
+        {
+          "required": [
+            "benchmarks"
+          ],
+          "properties": {
+            "benchmarks": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one benchmarks record"
+        },
+        {
+          "required": [
+            "conformance"
+          ],
+          "properties": {
+            "conformance": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one conformance record"
+        }
+      ],
+      "description": "envelope must carry validation_status and at least one CEP entity section"
+    },
+    {
+      "required": [
+        "conformance_status"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "references"
+          ],
+          "properties": {
+            "references": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one references record"
+        },
+        {
+          "required": [
+            "constraints"
+          ],
+          "properties": {
+            "constraints": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one constraints record"
+        },
+        {
+          "required": [
+            "distinctions"
+          ],
+          "properties": {
+            "distinctions": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one distinctions record"
+        },
+        {
+          "required": [
+            "relations"
+          ],
+          "properties": {
+            "relations": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one relations record"
+        },
+        {
+          "required": [
+            "representations"
+          ],
+          "properties": {
+            "representations": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one representations record"
+        },
+        {
+          "required": [
+            "states"
+          ],
+          "properties": {
+            "states": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one states record"
+        },
+        {
+          "required": [
+            "transformations"
+          ],
+          "properties": {
+            "transformations": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one transformations record"
+        },
+        {
+          "required": [
+            "observations"
+          ],
+          "properties": {
+            "observations": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one observations record"
+        },
+        {
+          "required": [
+            "questions"
+          ],
+          "properties": {
+            "questions": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one questions record"
+        },
+        {
+          "required": [
+            "claims"
+          ],
+          "properties": {
+            "claims": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one claims record"
+        },
+        {
+          "required": [
+            "evidence"
+          ],
+          "properties": {
+            "evidence": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one evidence record"
+        },
+        {
+          "required": [
+            "settlements"
+          ],
+          "properties": {
+            "settlements": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one settlements record"
+        },
+        {
+          "required": [
+            "authority"
+          ],
+          "properties": {
+            "authority": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one authority record"
+        },
+        {
+          "required": [
+            "affordances"
+          ],
+          "properties": {
+            "affordances": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one affordances record"
+        },
+        {
+          "required": [
+            "capabilities"
+          ],
+          "properties": {
+            "capabilities": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one capabilities record"
+        },
+        {
+          "required": [
+            "metrics"
+          ],
+          "properties": {
+            "metrics": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one metrics record"
+        },
+        {
+          "required": [
+            "benchmarks"
+          ],
+          "properties": {
+            "benchmarks": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one benchmarks record"
+        },
+        {
+          "required": [
+            "conformance"
+          ],
+          "properties": {
+            "conformance": {
+              "minItems": 1
+            }
+          },
+          "description": "at least one conformance record"
+        }
+      ],
+      "description": "envelope must carry conformance_status and at least one CEP entity section"
+    }
+  ],
+  "properties": {
+    "envelope_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CEP-0008 \u00a77.1. Unique identity of this emission; varies per emission."
+    },
+    "cep_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CEP-0008 \u00a77.1/\u00a712. Version of the CEP specification this envelope conforms to."
+    },
+    "envelope_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CEP-0008 \u00a77.1/\u00a712. Version of the envelope structure."
+    },
+    "envelope_kind": {
+      "type": "string",
+      "enum": [
+        "work_request",
+        "context_bundle",
+        "authority_request",
+        "authority_decision",
+        "execution_trace",
+        "evidence_packet",
+        "settlement_packet",
+        "capability_update",
+        "affordance_update",
+        "benchmark_case",
+        "benchmark_result",
+        "conformance_report",
+        "semantic_snapshot",
+        "semantic_diff",
+        "semantic_trace",
+        "composite",
+        "unknown"
+      ],
+      "description": "CEP-0008 \u00a79. Closed vocabulary; new kinds must be defined by CEP-0008."
+    },
+    "created_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$",
+      "description": "CEP-0008 \u00a77.1. RFC 3339 UTC timestamp; metadata only, never an ordering authority."
+    },
+    "created_by": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CEP-0008 \u00a77.1. The actual producer of the envelope."
+    },
+    "scope": {
+      "type": "object",
+      "description": "CEP-0008 \u00a77.1/\u00a752. Evaluation context. Context-defined; common fields are documented as optional properties."
+    },
+    "boundary_record": {
+      "type": "object",
+      "description": "CEP-0008 \u00a78.1/\u00a752. What is included, excluded, omitted, unknown, and limited.",
+      "properties": {
+        "scope": {
+          "type": "string"
+        },
+        "included_sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excluded_sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "known_omissions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "redactions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "compression_notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "out_of_scope_entities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "classification": {
+          "type": "string"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "completeness_status": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CEP-0008 \u00a710/\u00a752. SHOULD be one of: complete_for_context, partial, minimal, unknown, invalid, out_of_scope. Context-specific values are lawful."
+    },
+    "omission_status": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CEP-0008 \u00a734/\u00a752. Known omissions MUST be marked, never silently absent."
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "description": "CEP-0008 \u00a712/\u00a752/\u00a715. References to provenance records; an envelope without provenance is not settlement-valid."
+    },
+    "validation_status": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CEP-0008 \u00a752. Envelope validation result; subject/model validation is a distinct record field."
+    },
+    "conformance_status": {
+      "type": "string",
+      "enum": [
+        "conformant",
+        "partially_conformant",
+        "non_conformant",
+        "not_evaluable",
+        "unknown"
+      ],
+      "description": "CEP-0008 \u00a738/\u00a752. Conformance result of the envelope against CEP requirements."
+    },
+    "lineage_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "CEP-0008 \u00a77.1. Prior envelope ids for the same subject."
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+:[0-9a-f]{16,128}$",
+      "description": "CEP-0008 \u00a77.2. Stable hash of the represented content."
+    },
+    "semantic_hash": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+:[0-9a-f]{16,128}$",
+      "description": "CEP-0008 \u00a77.2. Stable semantic identity of the represented content."
+    },
+    "signature_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "CEP-0008 \u00a77.2. A signature is never verification of truth."
+    },
+    "supersedes": {
+      "type": "string",
+      "minLength": 1
+    },
+    "superseded_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_envelope_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "child_envelope_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "source_system_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "tenant_or_org_ref": {
+      "type": "string"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "retention_policy": {
+      "type": "string"
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a715.1 Envelope Provenance Records.",
+      "items": {
+        "type": "object",
+        "required": [
+          "provenance_id"
+        ],
+        "properties": {
+          "provenance_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_envelope_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "source_representation_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "source_system_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "producer_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "production_method": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+          },
+          "derived_from": {
+            "type": "string"
+          },
+          "transformation_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "tool_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "model_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "human_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "review_status": {
+            "type": "string"
+          },
+          "verification_status": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "description": "CEP-0008 \u00a716.1 Integrity Record.",
+      "properties": {
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+:[0-9a-f]{16,128}$"
+        },
+        "semantic_hash": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+:[0-9a-f]{16,128}$"
+        },
+        "signature_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "verification_method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_status": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "unverified",
+            "failed",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "tamper_status": {
+          "type": "string",
+          "enum": [
+            "intact",
+            "modified",
+            "tampered",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "checked_at": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+        },
+        "checker_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "references": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a713.1 Reference Records.",
+      "items": {
+        "type": "object",
+        "required": [
+          "ref_id",
+          "availability_status",
+          "integrity_status"
+        ],
+        "properties": {
+          "ref_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ref_type": {
+            "type": "string"
+          },
+          "target_uri_or_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target_hash": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+:[0-9a-f]{16,128}$"
+          },
+          "target_version": {
+            "type": "string"
+          },
+          "access_method": {
+            "type": "string"
+          },
+          "availability_status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "unavailable",
+              "redacted",
+              "permission_denied",
+              "expired",
+              "unknown",
+              "not_applicable"
+            ]
+          },
+          "integrity_status": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a719 Constraints Section.",
+      "items": {
+        "type": "object",
+        "required": [
+          "constraint_id"
+        ],
+        "properties": {
+          "constraint_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "constraint_type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "applies_to": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "confidence": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "distinctions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a720 Distinctions Section.",
+      "items": {
+        "type": "object",
+        "required": [
+          "distinction_id"
+        ],
+        "properties": {
+          "distinction_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "left_term": {
+            "type": "string"
+          },
+          "right_term": {
+            "type": "string"
+          },
+          "basis": {
+            "type": "string"
+          },
+          "distinction_kind": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "relations": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a721 Relations Section.",
+      "items": {
+        "type": "object",
+        "required": [
+          "relation_id"
+        ],
+        "properties": {
+          "relation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relation_type": {
+            "type": "string"
+          },
+          "source_entity_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target_entity_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "temporal_context": {
+            "type": "string"
+          },
+          "authority_context": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "representations": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a722 Representations Section. Carries bounded representations; content is inline via inline_content or by reference via content_ref (CEP-0008 \u00a714.2).",
+      "items": {
+        "type": "object",
+        "required": [
+          "representation_id",
+          "representation_kind",
+          "representation_type"
+        ],
+        "properties": {
+          "representation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation_kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "content_ref": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+://[a-z0-9]+:[0-9a-f]{16,128}$"
+          },
+          "inline_content": {},
+          "content_hash": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+:[0-9a-f]{16,128}$"
+          },
+          "semantic_hash": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+:[0-9a-f]{16,128}$"
+          },
+          "content_availability": {
+            "type": "string",
+            "enum": [
+              "available",
+              "expired",
+              "unavailable"
+            ]
+          },
+          "size_bytes": {
+            "type": "number",
+            "minimum": 0
+          },
+          "media_type": {
+            "type": "string"
+          },
+          "preserved_entities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "preserved_distinctions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "preserved_relations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "omission_record": {
+            "type": "object",
+            "description": "CEP-0008 \u00a734. Known omissions MUST be marked.",
+            "required": [
+              "known_omissions"
+            ],
+            "properties": {
+              "known_omissions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "reason": {
+                "type": "string"
+              },
+              "recoverable_from": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "uncertainty_record": {
+            "type": "object",
+            "description": "CEP-0008 \u00a735. Unknown stays distinct from false, absent, not applicable, redacted, and out of scope."
+          },
+          "provenance_record": {
+            "type": "object",
+            "description": "CEP-0008 \u00a715.1-shaped producer/input provenance."
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "validation_status": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Validation status of the represented content, distinct from envelope validation_status."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "states": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a723 States Section. Declared State and Observed State MUST remain separable.",
+      "items": {
+        "type": "object",
+        "required": [
+          "state_id",
+          "state_type"
+        ],
+        "properties": {
+          "state_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subject_ref": {
+            "type": "string"
+          },
+          "representation_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "scope": {
+            "type": "string"
+          },
+          "time_context": {
+            "type": "string"
+          },
+          "identity_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "identity_uncertainty": {
+            "type": "string"
+          },
+          "relevant_constraints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "relevant_distinctions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "relevant_relations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "provenance_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "omission_record": {
+            "type": "object",
+            "required": [
+              "known_omissions"
+            ],
+            "properties": {
+              "known_omissions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "uncertainty_record": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "transformations": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a724 Transformations Section. Action MUST remain distinct from Transformation.",
+      "items": {
+        "type": "object",
+        "required": [
+          "transformation_id",
+          "transformation_type"
+        ],
+        "properties": {
+          "transformation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "transformation_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_state_ref": {
+            "type": "string"
+          },
+          "target_state_ref": {
+            "type": "string"
+          },
+          "claimed_target_state_ref": {
+            "type": "string"
+          },
+          "observed_target_state_ref": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "time_context": {
+            "type": "string"
+          },
+          "identity_basis": {
+            "type": "string"
+          },
+          "identity_uncertainty": {
+            "type": "string"
+          },
+          "affected_entities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "affected_constraints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "affected_distinctions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "affected_relations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "expected_invariants": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "status": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "provenance_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "settlement_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a725 Observations Section. Observation MUST remain distinct from occurrence and evidence.",
+      "items": {
+        "type": "object",
+        "required": [
+          "observation_id"
+        ],
+        "properties": {
+          "observation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observed_entity_ref": {
+            "type": "string"
+          },
+          "observer_ref": {
+            "type": "string"
+          },
+          "perspective_ref": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+          },
+          "representation_ref": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a726 Questions Section. Question semantics from CEP-0005 MUST be preserved.",
+      "items": {
+        "type": "object",
+        "required": [
+          "question_id",
+          "question_form"
+        ],
+        "properties": {
+          "question_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question_form": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question_type": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "target_entities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "target_states": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "target_transformations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "relevance_rules": {
+            "type": "object"
+          },
+          "expected_answer_shape": {
+            "type": "string"
+          },
+          "evaluation_context": {
+            "type": "string"
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "unknowns": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a727 Claims Section. Claims MUST remain distinct from evidence.",
+      "items": {
+        "type": "object",
+        "required": [
+          "claim_id"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_type": {
+            "type": "string"
+          },
+          "claim_text_or_form": {
+            "type": "string"
+          },
+          "subject_ref": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "question_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a728 Evidence Section. Evidence semantics from CEP-0006 MUST be preserved. Data MUST remain distinct from Evidence.",
+      "items": {
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "evidence_type",
+          "question_ref"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "target_claim_ref"
+            ]
+          },
+          {
+            "required": [
+              "target_entity_ref"
+            ]
+          }
+        ],
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target_claim_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target_entity_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation_ref": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "provenance_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "relevance": {
+            "type": "string"
+          },
+          "reliability": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "supports",
+              "contradicts",
+              "unknown"
+            ]
+          },
+          "confidence_impact": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "settlements": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a729 Settlements Section. Settlement semantics from CEP-0007 MUST be preserved. Completion MUST remain distinct from Settlement.",
+      "items": {
+        "type": "object",
+        "required": [
+          "settlement_id",
+          "settlement_status",
+          "transformation_ref",
+          "question_ref"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "threshold_ref"
+            ]
+          },
+          {
+            "required": [
+              "threshold_basis"
+            ]
+          }
+        ],
+        "properties": {
+          "settlement_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "settlement_status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "transformation_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "threshold_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "threshold_basis": {
+            "type": "string"
+          },
+          "observed_consequence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "missing_consequence_record": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "confidence_status": {
+            "type": "string"
+          },
+          "unresolved_contradictions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "missing_evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "state_update_recommendation": {
+            "type": "string"
+          },
+          "time_context": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "provenance_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "debt_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "authority": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a730 Authority Section. Authority MUST remain distinct from capability; possibility MUST remain distinct from permissibility.",
+      "items": {
+        "type": "object",
+        "required": [
+          "authority_id"
+        ],
+        "properties": {
+          "authority_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authority_type": {
+            "type": "string"
+          },
+          "subject_actor_ref": {
+            "type": "string"
+          },
+          "permitted_transformations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "prohibited_transformations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "escalation_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "scope": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "effective_time": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "allow",
+              "deny",
+              "escalate",
+              "unknown"
+            ]
+          },
+          "decision_time": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+          },
+          "decision_confidence": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "affordances": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a731 Affordances Section. Affordance MUST remain distinct from possibility.",
+      "items": {
+        "type": "object",
+        "required": [
+          "affordance_id"
+        ],
+        "properties": {
+          "affordance_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "current_state_ref": {
+            "type": "string"
+          },
+          "transformation_ref": {
+            "type": "string"
+          },
+          "actor_ref": {
+            "type": "string"
+          },
+          "reachability_status": {
+            "type": "string"
+          },
+          "payment_burden": {
+            "type": "string"
+          },
+          "authority_status": {
+            "type": "string"
+          },
+          "execution_requirements": {
+            "type": "object"
+          },
+          "settlement_requirements": {
+            "type": "object"
+          },
+          "evidence_requirements": {
+            "type": "object"
+          },
+          "confidence": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a732 Capabilities Section.",
+      "items": {
+        "type": "object",
+        "required": [
+          "capability_id"
+        ],
+        "properties": {
+          "capability_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "capability_name": {
+            "type": "string"
+          },
+          "settlement_history_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "variation_context": {
+            "type": "string"
+          },
+          "payment_burden_before": {
+            "type": "string"
+          },
+          "payment_burden_after": {
+            "type": "string"
+          },
+          "affordance_delta_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "confidence": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a733.1 Metric Records.",
+      "items": {
+        "type": "object",
+        "required": [
+          "metric_id"
+        ],
+        "properties": {
+          "metric_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "metric_name": {
+            "type": "string"
+          },
+          "question_ref": {
+            "type": "string"
+          },
+          "target_entities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "scoring_rule": {
+            "type": "string"
+          },
+          "invariants": {
+            "type": "object"
+          },
+          "failure_conditions": {
+            "type": "object"
+          },
+          "confidence_handling": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "benchmarks": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a733.2 Benchmark Records. A Benchmark without a primary Question is not CEP-valid.",
+      "items": {
+        "type": "object",
+        "required": [
+          "benchmark_id",
+          "question_ref"
+        ],
+        "properties": {
+          "benchmark_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "benchmark_name": {
+            "type": "string"
+          },
+          "question_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "case_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "metric_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "answer_key_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "evidence_requirements": {
+            "type": "object"
+          },
+          "conformance_requirements": {
+            "type": "object"
+          },
+          "result_schema_ref": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "omissions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a734 Omissions Section. Absence MUST NOT be interpreted as falsehood unless explicitly justified.",
+      "items": {
+        "type": "object",
+        "required": [
+          "omission_id"
+        ],
+        "properties": {
+          "omission_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "omission_type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "known_or_suspected": {
+            "type": "string"
+          },
+          "impact": {
+            "type": "string"
+          },
+          "affected_entities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "confidence": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "uncertainty": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a735 Uncertainty Section. Unknown MUST remain distinct from false, absent, not applicable, redacted, and out of scope.",
+      "items": {
+        "type": "object",
+        "required": [
+          "uncertainty_id"
+        ],
+        "properties": {
+          "uncertainty_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uncertainty_type": {
+            "type": "string"
+          },
+          "affected_entities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "confidence_basis": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "resolution_requirements": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a736 Contradictions Section. Known contradictions MUST NOT be hidden.",
+      "items": {
+        "type": "object",
+        "required": [
+          "contradiction_id"
+        ],
+        "properties": {
+          "contradiction_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entity_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "relation_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "resolution_status": {
+            "type": "string"
+          },
+          "impact": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "debt": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a737 Debt Section. Settlement with debt MUST NOT be treated as clean full settlement.",
+      "items": {
+        "type": "object",
+        "required": [
+          "debt_id"
+        ],
+        "properties": {
+          "debt_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "debt_type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "created_by_transformation_ref": {
+            "type": "string"
+          },
+          "settlement_ref": {
+            "type": "string"
+          },
+          "blocking_status": {
+            "type": "string"
+          },
+          "owner_ref": {
+            "type": "string"
+          },
+          "due_condition": {
+            "type": "string"
+          },
+          "risk_if_unresolved": {
+            "type": "string"
+          },
+          "evidence_requirements": {
+            "type": "object"
+          },
+          "repair_transformation_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "conformance": {
+      "type": "array",
+      "minItems": 1,
+      "description": "CEP-0008 \u00a738 Conformance Section.",
+      "items": {
+        "type": "object",
+        "required": [
+          "conformance_id"
+        ],
+        "properties": {
+          "conformance_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evaluated_entity_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "applicable_spec_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "profile_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "passed_requirements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "failed_requirements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "conformance_status": {
+            "type": "string",
+            "enum": [
+              "conformant",
+              "partially_conformant",
+              "non_conformant",
+              "not_evaluable",
+              "unknown"
+            ]
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "validator_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "validated_at": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "description": "CEP-0008 \u00a739. Extensions allow domain-specific information without corrupting the CEP core and MUST NOT overwrite core CEP semantics."
+    }
+  },
+  "additionalProperties": false
+}

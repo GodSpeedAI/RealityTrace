@@ -1,6 +1,6 @@
-# SXR Source Map & Traceability Matrix
+# RealityTrace Source Map & Traceability Matrix
 
-This document maps all high-level concepts, capabilities, schemas, and operational invariants to their concrete implementation locations across the `sxr` codebase.
+This document maps all high-level concepts, capabilities, schemas, and operational invariants to their concrete implementation locations across the RealityTrace (`sxr`) codebase.
 
 ---
 

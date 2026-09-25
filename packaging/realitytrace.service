@@ -1,0 +1,14 @@
+[Unit]
+Description=RealityTrace optional daemon (commit queue service, spec section 16)
+Documentation=https://github.com/GodSpeedAI/RealityTrace
+
+[Service]
+Type=notify
+ExecStart=%h/.local/bin/realitytrace daemon --socket %t/realitytrace.sock
+Restart=on-failure
+RestartSec=2
+# %t is $XDG_RUNTIME_DIR; sockets must be world-writable so any enrolled
+# repo's verifier can submit (socket mode is handled by the daemon itself).
+
+[Install]
+WantedBy=default.target

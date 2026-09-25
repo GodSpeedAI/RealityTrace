@@ -1,21 +1,24 @@
 [package]
-name = "sxr-cli"
+name = "realitytrace"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
-description = "The sxr binary: manual lifecycle commands, --json output, durability reporting."
+authors.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "The RealityTrace CLI: lifecycle commands, JSON output, and durability reporting."
 
 [[bin]]
-name = "sxr"
+name = "realitytrace"
 path = "src/main.rs"
 
 [dependencies]
-sxr-core = { path = "../sxr-core" }
-sxr-ledger = { path = "../sxr-ledger" }
-sxr-git = { path = "../sxr-git" }
-sxr-df = { path = "../sxr-df" }
-sxr-verify = { path = "../sxr-verify" }
+sxr-core.workspace = true
+sxr-ledger.workspace = true
+sxr-git.workspace = true
+sxr-df.workspace = true
+sxr-verify.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
