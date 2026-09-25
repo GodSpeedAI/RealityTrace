@@ -371,6 +371,10 @@ realitytrace plan create --run <RUN_ID> --verifier cargo-test --target concept:a
 realitytrace verify run --run <RUN_ID>
 # or pipe test runner telemetry directly:
 # cargo test --message-format=json | realitytrace ingest --run <RUN_ID> --verifier cargo-test --stdin-format cargo-test-json
+# attach caller correlation ids (a JSON object stored as the record's CEP `extensions`;
+# read back with `realitytrace ledger export --repo <REPO_ID>`; `domainforge` is reserved):
+# ... | realitytrace ingest --run <RUN_ID> --verifier cargo-test --stdin-format cargo-test-json \
+#       --extensions '{"myapp":{"correlation_id":"c-1"}}'
 
 # 6. Derive structured evidence from observation
 realitytrace evidence create --run <RUN_ID> --observation <OBSERVATION_ID> --derive

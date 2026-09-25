@@ -21,6 +21,8 @@ pub enum EnvelopeError {
     UnknownEntitySection(String),
     #[error("entity section {0:?} must be an array")]
     SectionNotArray(String),
+    #[error("the extensions section must be a JSON object (CEP-0008 §39)")]
+    ExtensionsNotObject,
     #[error("boundary_record key {0:?} is not in the closed boundary vocabulary")]
     UnknownBoundaryKey(String),
     #[error("envelope failed CEP schema validation: {0:?}")]
@@ -44,7 +46,7 @@ pub enum EnvelopeError {
 }
 
 /// Entity section keys of the CEP-0008 §9 vocabulary (array-valued envelope
-/// sections). Enforced so the builder cannot drift from the published schema.
+/// sections, except the object-valued `extensions`, §39). Enforced so the builder cannot drift from the published schema.
 pub const ENTITY_SECTIONS: &[&str] = &[
     "references",
     "relations",
@@ -139,7 +141,12 @@ pub fn build_envelope(parts: &EnvelopeParts) -> Result<Value, EnvelopeError> {
         if !ENTITY_SECTIONS.contains(&key.as_str()) {
             return Err(EnvelopeError::UnknownEntitySection(key.clone()));
         }
-        if !sections_obj[key].is_array() {
+        // CEP-0008 §39: `extensions` is the one object-valued section.
+        if key == "extensions" {
+            if !sections_obj[key].is_object() {
+                return Err(EnvelopeError::ExtensionsNotObject);
+            }
+        } else if !sections_obj[key].is_array() {
             return Err(EnvelopeError::SectionNotArray(key.clone()));
         }
     }
