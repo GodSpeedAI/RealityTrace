@@ -10,7 +10,7 @@ readme = "../README.md"
 description = "RealityTrace SQLite adapter: generation-local hash chains, history manifest, outbox, writer lock, CAS/ARS."
 
 [dependencies]
-sxr-core.workspace = true
+sxr-core = { version = "0.1.0", path = "../sxr-core" }
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true

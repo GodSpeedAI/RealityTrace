@@ -10,7 +10,7 @@ readme = "../README.md"
 description = "RealityTrace CliDomainForgeAdapter: SemanticSourcePort over the domainforge envelope CLI."
 
 [dependencies]
-sxr-core.workspace = true
+sxr-core = { version = "0.1.0", path = "../sxr-core" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
