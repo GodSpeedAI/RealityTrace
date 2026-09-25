@@ -146,7 +146,9 @@ The observation records what the available observation machinery actually regist
 
 A trace should answer: who or what produced this observation, against which expectation and artifact, was the expectation already frozen, has the evidence changed since capture.
 
-### Trace Schema
+### Conceptual Trace Schema
+
+> RealityTrace models traces canonically as append-only records wrapped in [CEP-0008](https://cep.dev) semantic envelopes (including `questions`, `thresholds`, `observations`, `claims`, `evidence`, `residuals`, and `settlements`). Conceptually, every trace binds:
 
 ```yaml
 trace:
@@ -194,13 +196,15 @@ trace:
 
 ## Comparison States
 
-| State | Meaning |
-|-------|---------|
-| `match` | Observation satisfies the expectation |
-| `mismatch` | Observation contradicts the expectation |
-| `undefined` | Available evidence cannot establish the comparison |
+| State | Meaning | RealityTrace Residual Kind |
+|-------|---------|-----------------------------|
+| `match` | Observation satisfies the expectation | `observed_consistent` |
+| `mismatch` | Observation contradicts the expectation | `declared_contradicted`, `contradictory` |
+| `undefined` | Available evidence cannot establish the comparison | `declared_unobserved` |
 
-`undefined` is not success.
+`undefined` is not success. Missing evidence remains missing until an observer provides verified telemetry.
+
+In addition, observations with no prior declared expectation are surfaced as `observed_undeclared`, and settlements with unresolved obligations are tracked as `settled_with_debt`.
 
 ```text
 expected:    no unauthorized bypass exists
@@ -340,32 +344,46 @@ realitytrace doctor
 The minimal RealityTrace loop:
 
 ```text
-1. establish expectation
-2. freeze expectation
-3. perform or reference work
-4. capture observation
-5. compare
-6. inspect discrepancy and provenance
+1. establish expectation (question) and threshold
+2. freeze evaluation boundary
+3. execute verification plan or ingest telemetry
+4. capture observation and derive structured evidence
+5. compare and classify residual discrepancies (delta)
+6. verify cryptographic ledger integrity and export projections
 ```
 
 ```bash
-# 1. Enroll a repository in RealityTrace (mints ULID repo identity)
-realitytrace repo enroll
+# 1. Enroll a repository (mints ULID repo and checkout identity)
+realitytrace repo enroll .
 
-# 2. Inspect repository identity and status
-realitytrace repo status
+# 2. Inspect enrolled repositories
+realitytrace repo list
 
-# 3. Build a verification plan binding expectation and threshold
-realitytrace plan build --repo <REPO_ID> --question <QUESTION_REF> --threshold <THRESHOLD_REF>
+# 3. Declare what is expected (Question) and acceptance criteria (Threshold)
+realitytrace question declare --repo <REPO_ID> --file question.json
+realitytrace threshold declare --repo <REPO_ID> --question <QUESTION_ID> --file threshold.json
 
-# 4. Execute plan steps and capture verifier observations
-realitytrace verify run --plan <PLAN_JSON>
+# 4. Begin a verification run and create an execution plan
+realitytrace run begin --repo <REPO_ID> --snapshot <SNAPSHOT_HASH> --question <QUESTION_ID> --threshold <THRESHOLD_ID>
+realitytrace plan create --run <RUN_ID> --verifier cargo-test --target concept:auth
 
-# 5. Verify cryptographic hash chain integrity of the ledger
+# 5. Execute verification or ingest observation stream
+realitytrace verify run --run <RUN_ID>
+# or pipe test runner telemetry directly:
+# cargo test --message-format=json | realitytrace ingest --run <RUN_ID> --verifier cargo-test --stdin-format cargo-test-json
+
+# 6. Derive structured evidence from observation
+realitytrace evidence create --run <RUN_ID> --observation <OBSERVATION_ID> --derive
+
+# 7. Compare declared vs observed to inspect discrepancy residuals
+realitytrace delta --repo <REPO_ID> --question <QUESTION_ID> --snapshot <SNAPSHOT_HASH>
+
+# 8. Cryptographically verify hash-chain integrity of the append-only ledger
 realitytrace ledger verify --repo <REPO_ID>
 
-# 6. Export projections and anti-collapse evidence corpus
+# 9. Export canonical projections and anti-collapse evidence corpus
 realitytrace projections export --repo <REPO_ID> --canonical-json
+realitytrace projections export-anti-collapse-corpus --repo <REPO_ID> --question <QUESTION_ID> --snapshot <SNAPSHOT_HASH>
 ```
 
 A complete trace contains: Expectation, Observation, Comparison, Evidence, Provenance. If any cannot be reconstructed, the trace is incomplete.

@@ -14,17 +14,19 @@ cargo install realitytrace
 
 ```bash
 # Enroll a repository
-realitytrace repo enroll
+realitytrace repo enroll .
 
-# Inspect repository status
-realitytrace repo status
+# Inspect enrolled repositories
+realitytrace repo list
 
-# Build and execute a verification plan
-realitytrace plan build --repo <REPO_ID> --question <QUESTION_REF> --threshold <THRESHOLD_REF>
-realitytrace verify run --plan <PLAN_JSON>
+# Execute a verification run or ingest telemetry
+realitytrace verify run --run <RUN_ID>
 
-# Verify ledger integrity
+# Verify cryptographic ledger integrity
 realitytrace ledger verify --repo <REPO_ID>
+
+# Export projections
+realitytrace projections export --repo <REPO_ID> --canonical-json
 ```
 
 ## Architecture
@@ -39,5 +41,5 @@ RealityTrace is composed of modular Rust crates:
 
 ## License
 
-Licensed under the [Apache License, Version 2.0](../LICENSE-APACHE).
+Licensed under the [Apache License, Version 2.0](../LICENSE).
 
