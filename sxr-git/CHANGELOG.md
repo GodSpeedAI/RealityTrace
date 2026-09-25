@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.1](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-git-v0.2.0...sxr-git-v0.2.1) (2026-09-25)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * sxr-core bumped from 0.2.0 to 0.3.0
+
 ## [0.2.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-git-v0.1.0...sxr-git-v0.2.0) (2026-09-25)
 
 
