@@ -23,10 +23,13 @@ jobs:
   release-please:
     name: Release Please
     runs-on: ubuntu-latest
+    # No root (".") component is configured, so the unprefixed
+    # `release_created`/`tag_name` outputs are never set; use the any-release
+    # flag and the CLI crate's path-prefixed outputs instead.
     outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
-      version: ${{ steps.release.outputs.version }}
+      release_created: ${{ steps.release.outputs.releases_created }}
+      tag_name: ${{ steps.release.outputs['sxr-cli--tag_name'] }}
+      version: ${{ steps.release.outputs['sxr-cli--version'] }}
     steps:
       - name: Run release-please
         id: release

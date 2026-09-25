@@ -2596,8 +2596,9 @@ fn ingest_request_meta(
     stdin_format: &str,
     stdin_sha256: &str,
     observation_id: &str,
+    extensions: Option<&Value>,
 ) -> Value {
-    json!({
+    let mut meta = json!({
         "request_kind": "sxr.ingest/v1",
         "repo_id": repo_id,
         "run_id": run_id,
@@ -2606,7 +2607,31 @@ fn ingest_request_meta(
         "idempotency_key": ingest_idempotency_key(run_id, verifier),
         "stdin_sha256": stdin_sha256,
         "observation_id": observation_id,
-    })
+    });
+    if let Some(ext) = extensions {
+        meta["extensions"] = ext.clone();
+    }
+    meta
+}
+
+/// Validate caller-supplied `--extensions` (CEP-0008 §39): a JSON object that
+/// does not claim the sxr-owned `domainforge` namespace.
+pub fn validate_ingest_extensions(ext: &Value) -> Result<()> {
+    let obj = ext
+        .as_object()
+        .ok_or_else(|| anyhow!("--extensions must be a JSON object"))?;
+    if obj.contains_key("domainforge") {
+        bail!("--extensions must not use the reserved \"domainforge\" key");
+    }
+    Ok(())
+}
+
+/// Parse and validate the raw `--extensions` argument.
+pub fn parse_ingest_extensions(raw: &str) -> Result<Value> {
+    let ext: Value =
+        serde_json::from_str(raw).map_err(|e| anyhow!("--extensions is not valid JSON: {e}"))?;
+    validate_ingest_extensions(&ext)?;
+    Ok(ext)
 }
 
 /// A built observation envelope ready to commit or to queue, plus the
@@ -2632,6 +2657,7 @@ pub fn build_ingest_envelope(
     verifier: &str,
     bytes: &[u8],
     observation_id: Option<&str>,
+    extensions: Option<&Value>,
 ) -> Result<IngestEnvelope> {
     let meta = repo_for_run(ctx, run_id)?;
     let e = state::require_enrollment(ctx, repo_id)?;
@@ -2657,7 +2683,7 @@ pub fn build_ingest_envelope(
     std::fs::write(artifacts_dir.join(format!("{hex_stdout}.stdout")), bytes)
         .context("persist ingested stream")?;
     let parsed = sxr_verify::parse_cargo_json(bytes);
-    let sections = observation_sections(
+    let mut sections = observation_sections(
         &observation_id,
         run_id,
         None,
@@ -2666,6 +2692,10 @@ pub fn build_ingest_envelope(
         None,
         &parsed,
     );
+    if let Some(ext) = extensions {
+        validate_ingest_extensions(ext)?;
+        sections["extensions"] = ext.clone();
+    }
     let subject_refs = vec![
         format!("observation:{observation_id}"),
         format!("run:{run_id}"),
@@ -2735,8 +2765,10 @@ pub fn ingest(
     stdin_format: &str,
     spool: bool,
     async_mode: bool,
+    extensions: Option<&str>,
 ) -> Result<(Value, i32)> {
     let meta = repo_for_run(ctx, run_id)?;
+    let extensions = extensions.map(parse_ingest_extensions).transpose()?;
     let mut buf = Vec::new();
     std::io::Read::read_to_end(&mut std::io::stdin(), &mut buf).context("read stdin")?;
     let stdin_sha256 = format!("sha256:{}", hex::encode(sha2::Sha256::digest(&buf)));
@@ -2754,6 +2786,7 @@ pub fn ingest(
             stdin_format,
             &stdin_sha256,
             &obs_id,
+            extensions.as_ref(),
         );
         let key = ingest_idempotency_key(run_id, verifier);
         let dir = ctx.spool_dir(&meta.repo_id);
@@ -2777,8 +2810,14 @@ pub fn ingest(
     }
 
     if async_mode
-        && let Some((duration, resp)) =
-            submit_to_daemon(ctx, &meta.repo_id, run_id, verifier, &buf)?
+        && let Some((duration, resp)) = submit_to_daemon(
+            ctx,
+            &meta.repo_id,
+            run_id,
+            verifier,
+            &buf,
+            extensions.as_ref(),
+        )?
     {
         let v = output::output(vec![
             ("run_id", json!(run_id)),
@@ -2794,7 +2833,15 @@ pub fn ingest(
     // F-15: daemon unavailable (or --async not requested) — direct CLI writer
     // lock, zero semantic difference.
 
-    let built = build_ingest_envelope(ctx, &meta.repo_id, run_id, verifier, &buf, None)?;
+    let built = build_ingest_envelope(
+        ctx,
+        &meta.repo_id,
+        run_id,
+        verifier,
+        &buf,
+        None,
+        extensions.as_ref(),
+    )?;
     let (already, pos) = commit_ingest_envelope(ctx, &meta.repo_id, &built)?;
     Ok((
         output::output(vec![
@@ -2823,6 +2870,7 @@ fn submit_to_daemon(
     run_id: &str,
     verifier: &str,
     bytes: &[u8],
+    extensions: Option<&Value>,
 ) -> Result<Option<(String, Value)>> {
     use std::io::{BufRead, Write};
     use std::os::unix::net::UnixStream;
@@ -2833,7 +2881,7 @@ fn submit_to_daemon(
     };
     // Build the same envelope the direct path would commit (§16.3 parity:
     // the queue holds the validated request, never a differently-built one).
-    let built = build_ingest_envelope(ctx, repo_id, run_id, verifier, bytes, None)?;
+    let built = build_ingest_envelope(ctx, repo_id, run_id, verifier, bytes, None, extensions)?;
     let request = crate::daemon::record_request(repo_id, &built);
     stream.write_all(serde_json::to_string(&request)?.as_bytes())?;
     stream.write_all(b"\n")?;
@@ -2897,6 +2945,7 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
         // Pre-minted at spool time (§F-19b): drain reproduces the envelope
         // the spooler would have built when the request was written.
         let obs_id = meta.get("observation_id").and_then(Value::as_str);
+        let extensions = meta.get("extensions");
         let expected_sha = meta
             .get("stdin_sha256")
             .and_then(Value::as_str)
@@ -2923,7 +2972,9 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
                     let _ = crate::durability::spool_remove(entry);
                     continue;
                 }
-                match build_ingest_envelope(ctx, repo_id, run_id, verifier, &bytes, obs_id) {
+                match build_ingest_envelope(
+                    ctx, repo_id, run_id, verifier, &bytes, obs_id, extensions,
+                ) {
                     Ok(built) => {
                         if !key.is_empty() && built.idempotency_key != key {
                             rejected.push(format!(

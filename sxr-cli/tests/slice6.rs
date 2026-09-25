@@ -548,3 +548,169 @@ fn second_daemon_on_same_socket_is_rejected() {
     assert!(err.contains("already serving"), "explains: {err}");
     kill_hard(&mut first);
 }
+
+/// Caller-supplied CEP §39 extensions for `sxr ingest --extensions`.
+fn caller_extensions() -> Value {
+    json!({"cognate": {"eventId": "evt-1", "observationId": "obs-c-1",
+                       "correlationId": "corr-1", "causationId": "cause-1"}})
+}
+
+/// Ingest `OK_STREAM` with extra flags; returns (exit code, stdout json or Null).
+fn ingest_with(
+    data: &Path,
+    state: &Path,
+    socket: Option<&str>,
+    run_id: &str,
+    extra: &[&str],
+) -> (Option<i32>, Value, String) {
+    let mut cmd = Command::new(bin());
+    cmd.args([
+        "ingest",
+        "--run",
+        run_id,
+        "--verifier",
+        "cargo-test",
+        "--stdin-format",
+        "cargo-json",
+    ])
+    .args(extra)
+    .env("XDG_DATA_HOME", data)
+    .env("XDG_STATE_HOME", state)
+    .stdin(Stdio::piped())
+    .stdout(Stdio::piped())
+    .stderr(Stdio::piped());
+    if let Some(s) = socket {
+        cmd.env("SXR_DAEMON_SOCKET", s);
+    }
+    let mut child = cmd.spawn().expect("spawn ingest");
+    child.stdin.as_mut().unwrap().write_all(OK_STREAM).unwrap();
+    let out = child.wait_with_output().expect("wait ingest");
+    let v = serde_json::from_slice(&out.stdout).unwrap_or(Value::Null);
+    (
+        out.status.code(),
+        v,
+        String::from_utf8_lossy(&out.stderr).into_owned(),
+    )
+}
+
+/// The committed `observation.recorded` rows, read back through `ledger export`.
+fn observation_rows(data: &Path, state: &Path, rid: &str) -> Vec<Value> {
+    let rows = stdout_json(&run(
+        &["ledger", "export", "--repo", rid],
+        data,
+        state,
+        None,
+    ));
+    rows.as_array()
+        .unwrap()
+        .iter()
+        .filter(|r| r["record_kind"] == "observation.recorded")
+        .cloned()
+        .collect()
+}
+
+/// Caller extensions survive a direct commit and read back unchanged; a
+/// duplicate delivery is reported `already_committed` at the same ledger
+/// position and never appends a second record.
+#[test]
+fn ingest_extensions_round_trip_and_duplicate_delivery() {
+    let root = tempfile::tempdir().unwrap();
+    let (data, state) = (root.path().join("data"), root.path().join("state"));
+    std::fs::create_dir_all(&data).unwrap();
+    std::fs::create_dir_all(&state).unwrap();
+    let (rid, run_id) = full_fixture(&data, &state);
+    let ext = caller_extensions().to_string();
+
+    let (code, first, err) = ingest_with(&data, &state, None, &run_id, &["--extensions", &ext]);
+    assert_eq!(code, Some(0), "ingest: {err}");
+    assert_eq!(first["already_committed"], false);
+    let (code, dup, err) = ingest_with(&data, &state, None, &run_id, &["--extensions", &ext]);
+    assert_eq!(code, Some(0), "duplicate ingest: {err}");
+    assert_eq!(dup["already_committed"], true);
+    assert_eq!(dup["ledger_position"], first["ledger_position"]);
+
+    let rows = observation_rows(&data, &state, &rid);
+    assert_eq!(rows.len(), 1, "duplicate delivery appends nothing");
+    assert_eq!(rows[0]["payload"]["extensions"], caller_extensions());
+    assert_eq!(
+        rows[0]["append_ordinal"],
+        first["ledger_position"]["append_ordinal"]
+    );
+}
+
+/// Extensions must be a JSON object and must not claim the sxr-owned
+/// `domainforge` namespace; a rejected request commits nothing.
+#[test]
+fn ingest_extensions_rejects_invalid_input() {
+    let root = tempfile::tempdir().unwrap();
+    let (data, state) = (root.path().join("data"), root.path().join("state"));
+    std::fs::create_dir_all(&data).unwrap();
+    std::fs::create_dir_all(&state).unwrap();
+    let (rid, run_id) = full_fixture(&data, &state);
+    for bad in ["not json", "[1,2]", "\"s\"", r#"{"domainforge":{"x":1}}"#] {
+        let (code, _, err) = ingest_with(&data, &state, None, &run_id, &["--extensions", bad]);
+        assert_ne!(code, Some(0), "{bad} must be rejected");
+        assert!(err.contains("extensions"), "error names the flag: {err}");
+    }
+    assert!(observation_rows(&data, &state, &rid).is_empty());
+}
+
+/// Record parity (§11.1a): a spooled request carries its extensions, and
+/// drain commits the same record the direct path would have.
+#[test]
+fn ingest_extensions_survive_spool_drain() {
+    let root = tempfile::tempdir().unwrap();
+    let (data, state) = (root.path().join("data"), root.path().join("state"));
+    std::fs::create_dir_all(&data).unwrap();
+    std::fs::create_dir_all(&state).unwrap();
+    let (rid, run_id) = full_fixture(&data, &state);
+    let ext = caller_extensions().to_string();
+    let (code, v, err) = ingest_with(
+        &data,
+        &state,
+        None,
+        &run_id,
+        &["--spool", "--extensions", &ext],
+    );
+    assert_eq!(code, Some(75), "spool exits 75: {err}");
+    assert_eq!(v["durability"], "spooled");
+    let drained = run(&["spool", "drain", "--repo", &rid], &data, &state, None);
+    assert!(
+        drained.status.success(),
+        "drain: {}",
+        String::from_utf8_lossy(&drained.stderr)
+    );
+    let rows = observation_rows(&data, &state, &rid);
+    assert_eq!(rows.len(), 1);
+    assert_eq!(rows[0]["payload"]["extensions"], caller_extensions());
+}
+
+/// Record parity (§16.2): the daemon commits the envelope the CLI built,
+/// extensions included.
+#[test]
+fn ingest_extensions_survive_daemon_queue() {
+    let root = tempfile::tempdir().unwrap();
+    let (data, state) = (root.path().join("data"), root.path().join("state"));
+    let socket = root.path().join("sxr.sock").to_str().unwrap().to_string();
+    std::fs::create_dir_all(&data).unwrap();
+    std::fs::create_dir_all(&state).unwrap();
+    let (rid, run_id) = full_fixture(&data, &state);
+    let mut daemon = spawn_daemon(&data, &state, &socket, 60000);
+    wait_for_socket(&socket);
+    let ext = caller_extensions().to_string();
+    let (code, v, err) = ingest_with(
+        &data,
+        &state,
+        Some(&socket),
+        &run_id,
+        &["--async-mode", "--extensions", &ext],
+    );
+    assert_eq!(code, Some(0), "async ingest: {err}");
+    assert_eq!(v["daemon"], true);
+    kill_hard(&mut daemon);
+    let r = stdout_json(&run(&["queue", "recover"], &data, &state, None));
+    assert_eq!(r["recovered"], 1);
+    let rows = observation_rows(&data, &state, &rid);
+    assert_eq!(rows.len(), 1);
+    assert_eq!(rows[0]["payload"]["extensions"], caller_extensions());
+}

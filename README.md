@@ -148,7 +148,7 @@ A trace should answer: who or what produced this observation, against which expe
 
 ### Conceptual Trace Schema
 
-> RealityTrace models traces canonically as append-only records wrapped in [CEP-0008](https://cep.dev) semantic envelopes (including `questions`, `thresholds`, `observations`, `claims`, `evidence`, `residuals`, and `settlements`). Conceptually, every trace binds:
+> RealityTrace models traces canonically as append-only records wrapped in [CEP-0008](https://github.com/GodSpeedAI/canonical-evaluation-protocol/blob/main/spec/CEP-0008-semantic-envelope.md) semantic envelopes (including `questions`, `thresholds`, `observations`, `claims`, `evidence`, `residuals`, and `settlements`). Conceptually, every trace binds:
 
 ```yaml
 trace:
@@ -371,6 +371,10 @@ realitytrace plan create --run <RUN_ID> --verifier cargo-test --target concept:a
 realitytrace verify run --run <RUN_ID>
 # or pipe test runner telemetry directly:
 # cargo test --message-format=json | realitytrace ingest --run <RUN_ID> --verifier cargo-test --stdin-format cargo-test-json
+# attach caller correlation ids (a JSON object stored as the record's CEP `extensions`;
+# read back with `realitytrace ledger export --repo <REPO_ID>`; `domainforge` is reserved):
+# ... | realitytrace ingest --run <RUN_ID> --verifier cargo-test --stdin-format cargo-test-json \
+#       --extensions '{"myapp":{"correlation_id":"c-1"}}'
 
 # 6. Derive structured evidence from observation
 realitytrace evidence create --run <RUN_ID> --observation <OBSERVATION_ID> --derive

@@ -330,6 +330,19 @@ fn envelope_without_entity_sections_is_rejected() {
 }
 
 #[test]
+fn extensions_section_is_an_object_per_schema() {
+    let mut parts = parts(RecordKind::RepoEnrolled);
+    parts.entity_sections["extensions"] = json!({"caller": {"id": "c-1"}});
+    let envelope = build_envelope(&parts).expect("object extensions validate");
+    assert_eq!(envelope["extensions"], json!({"caller": {"id": "c-1"}}));
+    parts.entity_sections["extensions"] = json!([{"caller": 1}]);
+    assert!(matches!(
+        build_envelope(&parts),
+        Err(sxr_core::envelope::EnvelopeError::ExtensionsNotObject)
+    ));
+}
+
+#[test]
 fn unknown_boundary_key_is_rejected() {
     let mut parts = parts(RecordKind::RepoEnrolled);
     parts.boundary_record = json!({"made_up_key": true});

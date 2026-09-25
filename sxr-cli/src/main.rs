@@ -363,6 +363,11 @@ struct IngestCmd {
     /// back to a direct commit when the daemon is unavailable (F-15).
     #[arg(long)]
     async_mode: bool,
+    /// Caller-owned CEP §39 extensions: a JSON object stored verbatim as the
+    /// record's `extensions` section (e.g. `{"cognate":{"eventId":"…"}}`).
+    /// Not part of the idempotency key; the `domainforge` key is reserved.
+    #[arg(long)]
+    extensions: Option<String>,
 }
 
 #[derive(Subcommand)]
@@ -705,6 +710,7 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 &c.stdin_format,
                 c.spool,
                 c.async_mode,
+                c.extensions.as_deref(),
             )?;
             return Ok(Dispatch::JsonExit(v, code));
         }
