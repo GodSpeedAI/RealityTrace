@@ -26,13 +26,17 @@ RATE_LIMIT_MAX_WAITS=${RATE_LIMIT_MAX_WAITS:-3}
 rate_limit_wait_seconds() {
   local output="$1"
   local hint epoch now seconds
+  # Anchor to the shape crates.io emits ("Fri, 25 Sep 2026 13:24:28 GMT") so
+  # trailing prose cannot be captured. Anything unexpected yields an empty hint
+  # and the bounded fallback below.
   hint=$(printf '%s' "$output" |
-    grep -oE 'try again after [^.]*GMT' |
+    grep -oE 'try again after [A-Za-z]{3}, [0-9]{1,2} [A-Za-z]{3} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT' |
     head -n 1 |
-    sed -e 's/^try again after //' -e 's/[[:space:]]*$//' || true)
+    sed -e 's/^try again after //' || true)
   epoch=""
   if [[ -n "$hint" ]]; then
-    epoch=$(date -u -d "$hint" +%s 2>/dev/null || true)
+    # LC_ALL=C: the string is English regardless of the runner's locale.
+    epoch=$(LC_ALL=C date -u -d "$hint" +%s 2>/dev/null || true)
   fi
   if [[ -z "$epoch" ]]; then
     printf '%s' "$RATE_LIMIT_FALLBACK_SECONDS"

@@ -87,11 +87,14 @@ echo "==> Wait computation"
 check "a retry instant in the past clamps to the 1s floor" "1" \
   "$(rate_limit_wait_seconds "$OBSERVED")"
 
-future=$(date -u -d '+120 seconds' '+%a, %d %b %Y %H:%M:%S GMT')
+# Format under LC_ALL=C: %a/%b are locale-dependent, and a non-C locale (as seen
+# on some CI runners) renders dotted abbreviations like "jeu., 01 oct 2026" that
+# crates.io never emits. Epoch arithmetic avoids relying on relative parsing.
+future=$(LC_ALL=C date -u -d "@$(($(date -u +%s) + 120))" '+%a, %d %b %Y %H:%M:%S GMT')
 check_between "a retry instant 120s out is honoured plus margin" 125 145 \
   "$(rate_limit_wait_seconds "... (status 429 Too Many Requests) ... Please try again after $future GMT and see https://crates.io/docs/rate-limits")"
 
-far=$(date -u -d '+3600 seconds' '+%a, %d %b %Y %H:%M:%S GMT')
+far=$(LC_ALL=C date -u -d "@$(($(date -u +%s) + 3600))" '+%a, %d %b %Y %H:%M:%S GMT')
 check "a retry instant past the cap clamps to RATE_LIMIT_MAX_WAIT_SECONDS" \
   "$RATE_LIMIT_MAX_WAIT_SECONDS" "$(rate_limit_wait_seconds "... try again after $far GMT ...")"
 
@@ -100,6 +103,13 @@ check "a 429 without a retry instant falls back to RATE_LIMIT_FALLBACK_SECONDS" 
 
 check "an unparseable retry instant falls back instead of hanging" \
   "$RATE_LIMIT_FALLBACK_SECONDS" "$(rate_limit_wait_seconds '... try again after not-a-date GMT ...')"
+
+check "a locale-shaped dotted retry instant fails closed to the fallback" \
+  "$RATE_LIMIT_FALLBACK_SECONDS" "$(rate_limit_wait_seconds '... try again after jeu., 01 oct 2026 01:01:07 GMT ...')"
+
+if command -v locale >/dev/null 2>&1; then
+  echo "==> Ambient locale: $(locale 2>/dev/null | head -n 1)"
+fi
 
 echo
 if ((failures == 0)); then
