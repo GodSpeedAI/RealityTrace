@@ -60,7 +60,7 @@ fi
 sed -n "1,${end}p" "$PUBLISH_SCRIPT" >"$extracted"
 # shellcheck disable=SC1090
 source "$extracted"
-for fn in rate_limit_wait_seconds is_rate_limited; do
+for fn in rate_limit_hint rate_limit_wait_seconds is_rate_limited; do
   if ! declare -F "$fn" >/dev/null; then
     echo "FAIL: $fn is not defined before publish_crate(); extraction is stale"
     exit 1
@@ -87,16 +87,36 @@ echo "==> Wait computation"
 check "a retry instant in the past clamps to the 1s floor" "1" \
   "$(rate_limit_wait_seconds "$OBSERVED")"
 
-# Format under LC_ALL=C: %a/%b are locale-dependent, and a non-C locale (as seen
-# on some CI runners) renders dotted abbreviations like "jeu., 01 oct 2026" that
-# crates.io never emits. Epoch arithmetic avoids relying on relative parsing.
+# Extraction is pure string work, so these checks are independent of whichever
+# `date` implementation the host provides.
+echo "==> Retry instant extraction"
+check "the advertised instant is extracted from the real 429 text" \
+  "Fri, 25 Sep 2026 13:24:28 GMT" "$(rate_limit_hint "$OBSERVED")"
+check "a duplicated GMT token yields exactly one instant" \
+  "Thu, 01 Oct 2026 01:03:45 GMT" \
+  "$(rate_limit_hint "... try again after Thu, 01 Oct 2026 01:03:45 GMT GMT and see https://crates.io/docs/rate-limits")"
+check "a 429 without an instant yields an empty hint" \
+  "" "$(rate_limit_hint '... (status 429 Too Many Requests) ...')"
+check "a locale-shaped dotted instant yields an empty hint" \
+  "" "$(rate_limit_hint '... try again after jeu., 01 oct 2026 01:01:07 GMT ...')"
+
+# Format under LC_ALL=C: %a/%b are locale-dependent, so this removes a class of
+# environment variance. Epoch arithmetic avoids relying on relative parsing.
+# $future/$far already end with " GMT", matching what crates.io emits.
 future=$(LC_ALL=C date -u -d "@$(($(date -u +%s) + 120))" '+%a, %d %b %Y %H:%M:%S GMT')
 check_between "a retry instant 120s out is honoured plus margin" 125 145 \
-  "$(rate_limit_wait_seconds "... (status 429 Too Many Requests) ... Please try again after $future GMT and see https://crates.io/docs/rate-limits")"
+  "$(rate_limit_wait_seconds "... (status 429 Too Many Requests) ... Please try again after $future and see https://crates.io/docs/rate-limits for more details.")"
 
 far=$(LC_ALL=C date -u -d "@$(($(date -u +%s) + 3600))" '+%a, %d %b %Y %H:%M:%S GMT')
 check "a retry instant past the cap clamps to RATE_LIMIT_MAX_WAIT_SECONDS" \
-  "$RATE_LIMIT_MAX_WAIT_SECONDS" "$(rate_limit_wait_seconds "... try again after $far GMT ...")"
+  "$RATE_LIMIT_MAX_WAIT_SECONDS" "$(rate_limit_wait_seconds "... try again after $far ...")"
+
+# Regression for the CI failure: a second GMT token after the retry instant made
+# the original `try again after [^.]*GMT` pattern capture both tokens, and the
+# resulting hint was rejected by the runner's `date`, silently degrading to the
+# fallback. The extraction check above pins this deterministically.
+check_between "a duplicated GMT token does not swallow the advertised wait" 125 145 \
+  "$(rate_limit_wait_seconds "... try again after $future GMT and see https://crates.io/docs/rate-limits")"
 
 check "a 429 without a retry instant falls back to RATE_LIMIT_FALLBACK_SECONDS" \
   "$RATE_LIMIT_FALLBACK_SECONDS" "$(rate_limit_wait_seconds '... (status 429 Too Many Requests) ...')"

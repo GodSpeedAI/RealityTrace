@@ -23,16 +23,22 @@ RATE_LIMIT_MAX_WAITS=${RATE_LIMIT_MAX_WAITS:-3}
 # Seconds to wait before retrying a rate-limited publish, derived from the
 # retry instant advertised by crates.io; clamped so that a missing or malformed
 # hint cannot stall the job, and bounded by RATE_LIMIT_MAX_WAIT_SECONDS.
+# The retry instant crates.io advertises, anchored to the shape it emits
+# ("Fri, 25 Sep 2026 13:24:28 GMT"). Empty when it is absent or unexpected.
+# Anchoring matters: a greedy "everything up to GMT" pattern captures a second
+# GMT token when the text contains one, and the resulting hint is then rejected
+# by `date`, silently degrading the wait to the fallback.
+rate_limit_hint() {
+  printf '%s' "$1" |
+    grep -oE 'try again after [A-Za-z]{3}, [0-9]{1,2} [A-Za-z]{3} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT' |
+    head -n 1 |
+    sed -e 's/^try again after //' || true
+}
+
 rate_limit_wait_seconds() {
   local output="$1"
   local hint epoch now seconds
-  # Anchor to the shape crates.io emits ("Fri, 25 Sep 2026 13:24:28 GMT") so
-  # trailing prose cannot be captured. Anything unexpected yields an empty hint
-  # and the bounded fallback below.
-  hint=$(printf '%s' "$output" |
-    grep -oE 'try again after [A-Za-z]{3}, [0-9]{1,2} [A-Za-z]{3} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT' |
-    head -n 1 |
-    sed -e 's/^try again after //' || true)
+  hint=$(rate_limit_hint "$output")
   epoch=""
   if [[ -n "$hint" ]]; then
     # LC_ALL=C: the string is English regardless of the runner's locale.
