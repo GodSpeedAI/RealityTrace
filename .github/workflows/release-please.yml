@@ -44,7 +44,9 @@ jobs:
     needs: [release-please]
     if: needs.release-please.outputs.release_created == 'true' || inputs.publish_now == true
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Up to RATE_LIMIT_MAX_WAITS (3) crates.io rate-limit waits of at most
+    # RATE_LIMIT_MAX_WAIT_SECONDS (660s) each, plus packaging and verification.
+    timeout-minutes: 45
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
