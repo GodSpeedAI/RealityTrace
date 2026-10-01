@@ -20,9 +20,6 @@ RATE_LIMIT_FALLBACK_SECONDS=600
 RATE_LIMIT_MAX_WAIT_SECONDS=660
 RATE_LIMIT_MAX_WAITS=${RATE_LIMIT_MAX_WAITS:-3}
 
-# Seconds to wait before retrying a rate-limited publish, derived from the
-# retry instant advertised by crates.io; clamped so that a missing or malformed
-# hint cannot stall the job, and bounded by RATE_LIMIT_MAX_WAIT_SECONDS.
 # The retry instant crates.io advertises, anchored to the shape it emits
 # ("Fri, 25 Sep 2026 13:24:28 GMT"). Empty when it is absent or unexpected.
 # Anchoring matters: a greedy "everything up to GMT" pattern captures a second
@@ -35,6 +32,9 @@ rate_limit_hint() {
     sed -e 's/^try again after //' || true
 }
 
+# Seconds to wait before retrying a rate-limited publish, derived from the
+# retry instant advertised by crates.io; clamped so that a missing or malformed
+# hint cannot stall the job, and bounded by RATE_LIMIT_MAX_WAIT_SECONDS.
 rate_limit_wait_seconds() {
   local output="$1"
   local hint epoch now seconds
