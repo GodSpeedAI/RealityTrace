@@ -36,6 +36,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
+      - name: Check release scripts
+        run: |
+          bash -n scripts/publish-crates.sh
+          scripts/tests/rate-limit-wait.test.sh
+
       - name: Check code formatting
         run: cargo fmt --all --check
 

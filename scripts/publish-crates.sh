@@ -49,6 +49,11 @@ rate_limit_wait_seconds() {
   printf '%s' "$seconds"
 }
 
+# True when cargo's output is a crates.io rate-limit rejection.
+is_rate_limited() {
+  printf '%s' "$1" | grep -qiE 'status 429|too many [a-z ]+crates'
+}
+
 CRATES_IN_ORDER=(
   "sxr-core"
   "sxr-git"
@@ -91,7 +96,7 @@ publish_crate() {
       attempt=$((attempt + 1))
       continue
     fi
-    if printf '%s' "$out" | grep -qiE 'status 429|too many [a-z ]+crates'; then
+    if is_rate_limited "$out"; then
       rate_limit_waits=$((rate_limit_waits + 1))
       if ((rate_limit_waits > RATE_LIMIT_MAX_WAITS)); then
         echo "::error::$crate is still rate-limited from crates.io after $RATE_LIMIT_MAX_WAITS waits"
