@@ -12,7 +12,7 @@ This document specifies all environment variables recognized by SXR and details 
 | **`XDG_STATE_HOME`** | `~/.local/state` | Base path for state and transient custody. SXR stores commit queues and spools under `$XDG_STATE_HOME/sxr`. |
 | **`XDG_RUNTIME_DIR`** | `/tmp` (or system runtime) | Base path for user runtime files. The daemon binds its socket at `$XDG_RUNTIME_DIR/sxr.sock`. |
 | **`SXR_DAEMON_SOCKET`** | `$XDG_RUNTIME_DIR/sxr.sock` | Explicit override for the UNIX domain socket path used by `sxr daemon` and client connections. |
-| **`SXR_DOMAINFORGE_BIN`** | `domainforge` (on `PATH`) | Absolute path to the DomainForge compiler binary for semantic model compilation. `snapshot create` fails closed unless it reports the pinned release (`sxr_df::PINNED_DOMAINFORGE_VERSION`, currently 0.18.2). |
+| **`SXR_DOMAINFORGE_BIN`** | `domainforge` (on `PATH`) | Absolute path to the DomainForge compiler binary for semantic model compilation. `snapshot create` fails closed unless it reports the pinned release (`sxr_df::PINNED_DOMAINFORGE_VERSION`, currently 0.19.0). |
 | **`SXR_BIN`** | Resolved via `command -v sxr` | Absolute path to the `sxr` executable (used in test and proof scripts). |
 | **`SXR_TEST_ID_STREAM`** | Unset (random ULIDs minted) | Path to a text file containing pre-generated IDs for deterministic test replay (AC-DAEMON-001). |
 | **`SXR_TEST_FIXED_CLOCK`** | Unset (system wall clock used) | Fixed RFC 3339 timestamp string for deterministic test replay. |

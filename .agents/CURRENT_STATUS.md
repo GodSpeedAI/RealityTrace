@@ -37,3 +37,8 @@ Exec004 code/artifacts and pre-existing aborted run directories were not modifie
 - Changed: `CliDomainForgeAdapter::with_required_version` probes `domainforge --version` and fails closed (`SemanticError::UnsupportedVersion`) before `envelope` runs; `snapshot create` opts in with `sxr_df::PINNED_DOMAINFORGE_VERSION = "0.18.2"`; the CLI test mock answers `--version`.
 - Verified: `cargo test --workspace` 0 failures; `cargo clippy --workspace --all-targets -D warnings` clean; `sxr-df` real-binary tests (3) pass against 0.18.2 with `SXR_TEST_DOMAINFORGE_BIN`, `SXR_TEST_DOMAINFORGE_ROOT`, `SXR_TEST_LARGE_SEA_DIR` set.
 - Next: bump `PINNED_DOMAINFORGE_VERSION` with each DomainForge convergence.
+
+## DomainForge 0.19.0 bump (2026-10-04)
+- DomainForge 0.19.0 is published (crates.io, PyPI, npm). `sxr_df::PINNED_DOMAINFORGE_VERSION` is now `0.19.0`; installed CLI upgraded to 0.19.0.
+- Verified: `cargo test --workspace` 0 failures; the 3 `sxr-df` real-binary tests pass against the 0.19.0 binary (env: `SXR_TEST_DOMAINFORGE_BIN`, `SXR_TEST_DOMAINFORGE_ROOT`, `SXR_TEST_LARGE_SEA_DIR`).
+- Note: 0.19.0 adds opt-in `--world-name` to `domainforge envelope`; sxr does not use it yet (Stage 8 evidence path).
