@@ -174,3 +174,60 @@ fn missing_binary_is_reported() {
     let err = adapter.resolve(&request(dir.path())).unwrap_err();
     assert!(err.to_string().contains("unavailable"), "got {err}");
 }
+
+fn versioned_binary(dir: &std::path::Path, reported: &str) -> (PathBuf, PathBuf) {
+    let ran_envelope = dir.join("envelope-ran");
+    let body = format!(
+        r#"#!/bin/sh
+if [ "$1" = "--version" ]; then echo "domainforge {reported}"; exit 0; fi
+touch "{}"
+cat "{}"
+exit 0
+"#,
+        ran_envelope.display(),
+        PathBuf::from(FIXTURES)
+            .join("tests/fixtures/env-valid-basic.json")
+            .display(),
+    );
+    (scripted_binary(dir, &body), ran_envelope)
+}
+
+#[test]
+fn required_version_mismatch_fails_closed_before_envelope_runs() {
+    let dir = tempdir().unwrap();
+    let (binary, ran_envelope) = versioned_binary(dir.path(), "0.18.1");
+    let adapter = CliDomainForgeAdapter::new(binary).with_required_version("0.18.2");
+    let err = adapter.resolve(&request(dir.path())).unwrap_err();
+    match err {
+        sxr_df::SemanticError::UnsupportedVersion { expected, found } => {
+            assert_eq!(expected, "0.18.2");
+            assert_eq!(found, "0.18.1");
+        }
+        other => panic!("expected UnsupportedVersion, got {other:?}"),
+    }
+    assert!(
+        !ran_envelope.exists(),
+        "envelope must not run on a version mismatch"
+    );
+}
+
+#[test]
+fn required_version_match_resolves() {
+    let dir = tempdir().unwrap();
+    let (binary, ran_envelope) = versioned_binary(dir.path(), "0.18.2");
+    let adapter = CliDomainForgeAdapter::new(binary).with_required_version("0.18.2");
+    adapter.resolve(&request(dir.path())).unwrap();
+    assert!(ran_envelope.exists());
+}
+
+#[test]
+fn unparseable_version_output_fails_closed() {
+    let dir = tempdir().unwrap();
+    let body = "#!/bin/sh\necho 'who knows'\nexit 0\n";
+    let binary = scripted_binary(dir.path(), body);
+    let adapter = CliDomainForgeAdapter::new(binary).with_required_version("0.18.2");
+    assert!(matches!(
+        adapter.resolve(&request(dir.path())).unwrap_err(),
+        sxr_df::SemanticError::UnsupportedVersion { .. }
+    ));
+}

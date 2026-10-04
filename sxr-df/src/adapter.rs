@@ -64,6 +64,7 @@ pub struct SemanticContextRequest {
 /// The normal adapter: one configured `domainforge` binary path.
 pub struct CliDomainForgeAdapter {
     binary: PathBuf,
+    required_version: Option<String>,
     validator: EnvelopeSchemaValidator,
 }
 
@@ -79,7 +80,40 @@ impl CliDomainForgeAdapter {
     pub fn new(binary: impl Into<PathBuf>) -> Self {
         Self {
             binary: binary.into(),
+            required_version: None,
             validator: EnvelopeSchemaValidator::new(),
+        }
+    }
+
+    /// Fail closed unless the configured binary reports exactly this
+    /// DomainForge version (`domainforge --version`). Unset, no check runs.
+    pub fn with_required_version(mut self, version: impl Into<String>) -> Self {
+        self.required_version = Some(version.into());
+        self
+    }
+
+    fn verify_version(&self) -> Result<(), SemanticError> {
+        let Some(expected) = &self.required_version else {
+            return Ok(());
+        };
+        let found = Command::new(&self.binary)
+            .arg("--version")
+            .output()
+            .map_err(|e| SemanticError::BinaryUnavailable(e.to_string()))
+            .map(|out| {
+                String::from_utf8_lossy(&out.stdout)
+                    .split_whitespace()
+                    .last()
+                    .unwrap_or_default()
+                    .to_string()
+            })?;
+        if &found == expected {
+            Ok(())
+        } else {
+            Err(SemanticError::UnsupportedVersion {
+                expected: expected.clone(),
+                found,
+            })
         }
     }
 
@@ -102,6 +136,7 @@ impl CliDomainForgeAdapter {
         &self,
         request: &SemanticContextRequest,
     ) -> Result<SemanticContext, SemanticError> {
+        self.verify_version()?;
         let mut argv: Vec<String> = vec!["envelope".into(), "--emit".into(), "both".into()];
         for (id, hash) in &request.semantic_packs {
             argv.push("--pack".into());

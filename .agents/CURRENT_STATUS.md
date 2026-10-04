@@ -30,3 +30,10 @@ Then initialize/run a shard only with the sealed evidence paths and that authori
 
 ## Safety boundary
 Exec004 code/artifacts and pre-existing aborted run directories were not modified or inspected. ZERO live model/provider/qualification calls occurred.
+
+## DomainForge 0.18.2 convergence (2026-10-04)
+- Expected: every semantic consumer runs the same DomainForge release; a stale compiler binary must not silently resolve a different world.
+- Observed: installed `domainforge` was 0.18.1 while the release is 0.18.2; `sxr-df` did not check the binary version.
+- Changed: `CliDomainForgeAdapter::with_required_version` probes `domainforge --version` and fails closed (`SemanticError::UnsupportedVersion`) before `envelope` runs; `snapshot create` opts in with `sxr_df::PINNED_DOMAINFORGE_VERSION = "0.18.2"`; the CLI test mock answers `--version`.
+- Verified: `cargo test --workspace` 0 failures; `cargo clippy --workspace --all-targets -D warnings` clean; `sxr-df` real-binary tests (3) pass against 0.18.2 with `SXR_TEST_DOMAINFORGE_BIN`, `SXR_TEST_DOMAINFORGE_ROOT`, `SXR_TEST_LARGE_SEA_DIR` set.
+- Next: bump `PINNED_DOMAINFORGE_VERSION` with each DomainForge convergence.

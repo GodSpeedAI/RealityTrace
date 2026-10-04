@@ -41,7 +41,8 @@ fn ensure_domainforge_bin(data: &Path) -> PathBuf {
         let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../sxr-df/tests/fixtures/env-valid-basic.json");
         let script = format!(
-            "#!/bin/sh\ncat \"{}\"\nexit 0\n",
+            "#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo \"domainforge {}\"; exit 0; fi\ncat \"{}\"\nexit 0\n",
+            sxr_df::PINNED_DOMAINFORGE_VERSION,
             fixture_path.canonicalize().unwrap().display()
         );
         std::fs::write(&script_path, script).unwrap();

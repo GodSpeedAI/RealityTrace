@@ -196,7 +196,8 @@ pub fn snapshot_create(ctx: &Ctx, repo_id: &str) -> Result<Value> {
     let bin = domainforge_bin().ok_or_else(|| {
         anyhow!("DomainForge binary not found: set REALITYTRACE_DOMAINFORGE_BIN or ensure 'domainforge' is on PATH")
     })?;
-    let adapter = sxr_df::CliDomainForgeAdapter::new(bin);
+    let adapter = sxr_df::CliDomainForgeAdapter::new(bin)
+        .with_required_version(sxr_df::PINNED_DOMAINFORGE_VERSION);
     let req = sxr_df::SemanticContextRequest {
         semantic_root: state::semantic_root_of(&e),
         entry_logical_path: cfg.entry_logical_path.clone(),

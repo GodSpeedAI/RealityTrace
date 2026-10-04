@@ -4,6 +4,8 @@
 pub enum SemanticError {
     #[error("domainforge binary unavailable: {0}")]
     BinaryUnavailable(String),
+    #[error("unsupported domainforge version: expected {expected}, found {found}")]
+    UnsupportedVersion { expected: String, found: String },
     #[error("domainforge exited with unexpected code {code:?}: {stderr}")]
     UnexpectedExit { code: Option<i32>, stderr: String },
     #[error("domainforge output is not a CEP envelope: {0}")]
