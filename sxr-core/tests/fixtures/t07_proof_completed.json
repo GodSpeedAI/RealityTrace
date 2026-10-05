@@ -1,11 +1,11 @@
 {
   "domain_model_sha256": "4cd7ff010a0ac3e4bc9b59b2e5aef6669512d352b0f798c984eaf76cecb4f210",
-  "expected_settlement_event_id": "d05893a8-45c1-4391-b4e0-a9f470b63459",
+  "expected_settlement_event_id": "874fcf52-4424-41fa-ad6e-278255b5dbb4",
   "proof_completed": {
-    "event_id": "c52874d0-0fcd-4fdc-b082-a8d833379b81",
+    "event_id": "1f96f84d-1b5d-4e47-b407-af5950a8a3d6",
     "event_type": "ProofCompleted",
-    "idempotency_key": "5d7655a979d3198b1110c82032d8e57e1cecc7a2888a5d22aba13a06f82e31f3",
-    "occurred_at": "2026-08-26T02:14:34+00:00",
+    "idempotency_key": "386b910aae90d46a3087d40746a4b1a6dfea0ffc13b0874a0e5d3abd2644099d",
+    "occurred_at": "2026-10-05T13:39:19+00:00",
     "payload": {
       "artifact_refs": [
         "sha256:6489c3d9d061dbc1f285f0e5af7b03108b7b09503fad479bb1884cbbe96df4e8"
@@ -20,7 +20,7 @@
         "declared_result": "all frozen contract tests exit zero"
       },
       "namespace": "agentic_capability_loop",
-      "operational_settlement_ref": "sha256:9c8d688216d75e4c0d0dc2030b86406e06d0c05f39ade1f8095606250ebace0d",
+      "operational_settlement_ref": "sha256:0fa2daa207268dabe2bd8d75c0af0d95153d6cda7c003a65bc44e71bdce757ce",
       "output_ref": "output://t07/proof-run.json",
       "proof_contract": {
         "command": "just e2e-gate T07",
@@ -33,13 +33,14 @@
       "proof_result_id": "pr-t07-0001",
       "proof_status": "passed",
       "trace_root": "trace://t07/golden-chain-root",
-      "work_request_id": "wr-gsf-001"
+      "work_request_id": "wr-gsf-001",
+      "world_ref": "world:t07@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
     },
     "provenance": {
       "chain": [
         "domain_model_hash:4cd7ff010a0ac3e4bc9b59b2e5aef6669512d352b0f798c984eaf76cecb4f210",
-        "caused_by:d05893a8-45c1-4391-b4e0-a9f470b63459",
-        "caused_by:b4249248-9612-47c8-8ef7-13f8fd2ac813"
+        "caused_by:874fcf52-4424-41fa-ad6e-278255b5dbb4",
+        "caused_by:91efd1f7-30fe-4c26-bda3-05f9d0095b2f"
       ],
       "origin": "swe-seed"
     },
@@ -47,9 +48,9 @@
     "source_agent": "swe-seed"
   },
   "referenced_settlement": {
-    "event_id": "d05893a8-45c1-4391-b4e0-a9f470b63459",
+    "event_id": "874fcf52-4424-41fa-ad6e-278255b5dbb4",
     "event_type": "OperationalSettlement",
-    "idempotency_key": "1a2fff69d19b4cc89c5ac011128d352683ad39f5758c2db33a4e9b4223a36bae",
+    "idempotency_key": "abac70228f5b74de5e86476920536bf8bd48fd26a83decd5d0c936148777cf50",
     "occurred_at": "2026-08-25T12:00:00+00:00",
     "payload": {
       "authority_decision_id": "dec_01T07AUTHORITY000000",
@@ -77,7 +78,8 @@
         }
       ],
       "operational_settlement_status": "accepted",
-      "work_request_id": "wr-gsf-001"
+      "work_request_id": "wr-gsf-001",
+      "world_ref": "world:t07@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
     },
     "provenance": {
       "chain": [

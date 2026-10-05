@@ -19,5 +19,6 @@ pub mod proof_ingest;
 pub mod record_kinds;
 pub mod threshold;
 pub mod types;
+pub mod world_ref;
 
 pub use types::*;

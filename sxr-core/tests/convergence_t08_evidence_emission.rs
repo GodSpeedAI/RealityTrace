@@ -26,6 +26,8 @@ use sxr_core::evidence_emit::{
 use sxr_core::proof_ingest::{Admission, ComparisonInputs, IngestParams, IngestState, ingest};
 
 const ZERO_HASH: &str = "0000000000000000000000000000000000000000000000000000000000000000";
+const WORLD: &str =
+    "world:t07@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 const WORK_REQUEST_ID: &str = "wr-gsf-001";
 const AFFORDANCE_ID: &str = "aff-blue-green-001";
 const PROOF_EVENT_ID: &str = "0000000a-0000-4000-8000-00000000c001";
@@ -47,6 +49,7 @@ fn params<'a>() -> IngestParams<'a> {
     static MODEL: std::sync::OnceLock<String> = std::sync::OnceLock::new();
     IngestParams {
         local_model_sha256: MODEL.get_or_init(model_digest),
+        local_world_ref: WORLD,
         expected_work_request_id: WORK_REQUEST_ID,
         expected_settlement_event_id: SETTLEMENT_EVENT_ID,
     }
@@ -97,6 +100,7 @@ fn proof_envelope(expected_outcome: Value) -> Value {
     let settlement_ref = cited_settlement_ref();
     let payload = json!({
         "domain_model_hash": model_digest(),
+        "world_ref": WORLD,
         "namespace": "agentic_capability_loop",
         "work_request_id": WORK_REQUEST_ID,
         "proof_result_id": "pr-t07-0001",
@@ -153,6 +157,7 @@ fn declared_expectation() -> Value {
 fn emission_for<'a>(model: &'a str) -> EvidenceEmission<'a> {
     EvidenceEmission {
         local_model_sha256: model,
+        local_world_ref: WORLD,
         work_request_id: WORK_REQUEST_ID,
         affordance_id: AFFORDANCE_ID,
         proof_event_id: PROOF_EVENT_ID,
@@ -182,6 +187,7 @@ fn emit_from_real_chain() -> (Value, ComparisonInputs, String) {
     };
     let emission = EvidenceEmission {
         local_model_sha256: &model,
+        local_world_ref: WORLD,
         work_request_id: WORK_REQUEST_ID,
         affordance_id: AFFORDANCE_ID,
         proof_event_id: PROOF_EVENT_ID,
@@ -416,6 +422,7 @@ fn t08_regenerates_the_cross_repo_golden_fixture_for_the_python_gate() {
         .join("tests/fixtures/t08_evidence_recorded.json");
     let body = json!({
         "domain_model_sha256": model_digest(),
+        "world_ref": WORLD,
         "work_request_id": WORK_REQUEST_ID,
         "affordance_id": AFFORDANCE_ID,
         "proof_event_id": PROOF_EVENT_ID,

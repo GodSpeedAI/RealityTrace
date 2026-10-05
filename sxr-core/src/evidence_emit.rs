@@ -37,6 +37,7 @@ use serde_json::{Map, Value, json};
 
 use crate::canonical_json::{canonical_json, sha256_hex};
 use crate::proof_ingest::ComparisonInputs;
+use crate::world_ref::is_world_ref;
 
 /// The event type owned exclusively by `realitytrace` at edge E8.
 pub const EVENT_TYPE: &str = "EvidenceRecorded";
@@ -78,6 +79,10 @@ pub enum EmitRefusal {
     /// A cited reference (or pinned digest) is malformed (empty, whitespace,
     /// scheme-less, or a non-SHA-256 digest).
     InvalidRef { got: String },
+    /// The pinned world is not a well-formed `world_ref`, or the comparison was
+    /// made in a different world than the one being stamped. Evidence is never
+    /// recorded against a world other than the one it was observed in.
+    WorldRef { pinned: String, comparison: String },
     /// A causal-parent id is not a well-formed event id (ENV-I4).
     MalformedParentId { got: String },
     /// The comparison inputs claim the referenced settlement RESOLVED to
@@ -103,6 +108,10 @@ impl std::fmt::Display for EmitRefusal {
                 write!(f, "event field {field} is unusable: {got:?}")
             }
             Self::InvalidRef { got } => write!(f, "malformed reference: {got:?}"),
+            Self::WorldRef { pinned, comparison } => write!(
+                f,
+                "world_ref refused: pinned {pinned:?}, comparison made in {comparison:?} (both must be one well-formed pinned world)"
+            ),
             Self::MalformedParentId { got } => {
                 write!(f, "causal parent id is not a well-formed event id: {got:?}")
             }
@@ -124,6 +133,9 @@ pub struct EvidenceEmission<'a> {
     /// THIS deployment's resolved canonical model digest — the drift anchor
     /// stamped into both `domain_model_hash` and `domain_model_ref`.
     pub local_model_sha256: &'a str,
+    /// THIS deployment's pinned semantic world, stamped into the payload.
+    /// Must equal the world the ingested comparison was made in.
+    pub local_world_ref: &'a str,
     /// The work request of the tracked cycle (must be the SAME id the T07
     /// ingestion bound; composition tests drive both surfaces from one chain).
     pub work_request_id: &'a str,
@@ -236,6 +248,13 @@ pub fn emit_evidence_recorded(
     check_identity_string("work_request_id", emission.work_request_id)?;
     check_identity_string("affordance_id", emission.affordance_id)?;
 
+    if !is_world_ref(emission.local_world_ref) || emission.local_world_ref != comparison.world_ref {
+        return Err(EmitRefusal::WorldRef {
+            pinned: emission.local_world_ref.to_string(),
+            comparison: comparison.world_ref.clone(),
+        });
+    }
+
     // 2. Envelope-level fields and causal parents must be usable.
     if !well_formed_event_id(emission.event_id.trim()) {
         return Err(EmitRefusal::MalformedEventField {
@@ -303,6 +322,10 @@ pub fn emit_evidence_recorded(
     payload.insert(
         "domain_model_hash".into(),
         Value::String(emission.local_model_sha256.trim().to_string()),
+    );
+    payload.insert(
+        "world_ref".into(),
+        Value::String(emission.local_world_ref.to_string()),
     );
     payload.insert("namespace".into(), json!(NAMESPACE));
     payload.insert(
@@ -375,9 +398,12 @@ mod tests {
     use serde_json::json;
 
     const MODEL: &str = "1111111111111111111111111111111111111111111111111111111111111111";
+    const WORLD: &str =
+        "world:demo@sha256:2222222222222222222222222222222222222222222222222222222222222222";
 
     fn comparison() -> ComparisonInputs {
         ComparisonInputs {
+            world_ref: WORLD.into(),
             proof_envelope_sha256: format!("sha256:{}", "a".repeat(64)),
             operational_settlement_ref: format!("sha256:{}", "b".repeat(64)),
             settlement_event_id: "d77960c1-0658-4d40-b121-cb94c65c2cb6".into(),
@@ -390,6 +416,7 @@ mod tests {
     fn emission<'a>() -> EvidenceEmission<'a> {
         EvidenceEmission {
             local_model_sha256: MODEL,
+            local_world_ref: WORLD,
             work_request_id: "wr-t08",
             affordance_id: "aff-t08",
             proof_event_id: "0000000a-0000-4000-8000-000000000001",
@@ -443,6 +470,30 @@ mod tests {
         assert!(matches!(
             emit_evidence_recorded(&comparison(), &e),
             Err(EmitRefusal::MalformedParentId { .. })
+        ));
+    }
+
+    #[test]
+    fn unit_world_ref_is_stamped_and_must_match_the_comparison() {
+        let env = emit_evidence_recorded(&comparison(), &emission()).unwrap();
+        assert_eq!(env["payload"]["world_ref"], json!(WORLD));
+        let other =
+            "world:other@sha256:3333333333333333333333333333333333333333333333333333333333333333";
+        for bad in [other, "world:demo", ""] {
+            let e = EvidenceEmission {
+                local_world_ref: bad,
+                ..emission()
+            };
+            assert!(matches!(
+                emit_evidence_recorded(&comparison(), &e),
+                Err(EmitRefusal::WorldRef { .. })
+            ));
+        }
+        let mut c = comparison();
+        c.world_ref = String::new();
+        assert!(matches!(
+            emit_evidence_recorded(&c, &emission()),
+            Err(EmitRefusal::WorldRef { .. })
         ));
     }
 
