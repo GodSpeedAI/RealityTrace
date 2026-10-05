@@ -25,6 +25,11 @@ use sxr_core::proof_ingest::{
 
 const ZERO_HASH: &str = "0000000000000000000000000000000000000000000000000000000000000000";
 const WORK_REQUEST_ID: &str = "wr-gsf-001";
+/// MUST equal the world the SWE_SEED golden fixture is pinned to.
+const WORLD: &str =
+    "world:t07@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+const OTHER_WORLD: &str =
+    "world:t07@sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc";
 
 /// MUST equal the producing-side digest the SWE_SEED golden fixture records.
 fn model_digest() -> &'static str {
@@ -49,6 +54,7 @@ fn e4_parent_id() -> &'static str {
 fn params<'a>() -> IngestParams<'a> {
     IngestParams {
         local_model_sha256: model_digest(),
+        local_world_ref: WORLD,
         expected_work_request_id: WORK_REQUEST_ID,
         expected_settlement_event_id: settlement_event_id(),
     }
@@ -74,6 +80,7 @@ fn proof_envelope(
 ) -> Value {
     let payload = json!({
         "domain_model_hash": model_hash,
+        "world_ref": WORLD,
         "namespace": "agentic_capability_loop",
         "work_request_id": work_request_id,
         "proof_result_id": "pr-t07-0001",
@@ -200,6 +207,7 @@ fn t07_golden_fixture_from_the_real_swe_seed_emitter_is_ingested() {
     let settlement = &fixture["referenced_settlement"];
     let fx_params = IngestParams {
         local_model_sha256: fixture["domain_model_sha256"].as_str().unwrap(),
+        local_world_ref: WORLD,
         expected_work_request_id: fixture["work_request_id"].as_str().unwrap(),
         expected_settlement_event_id: fixture["expected_settlement_event_id"].as_str().unwrap(),
     };
@@ -757,4 +765,77 @@ fn t07_without_the_delivered_settlement_the_gate_binds_to_locally_known_identity
 
     // And when the settlement IS delivered but cites different bytes than the
     // proof claims, resolution fails closed (already proven by tooth 1c).
+}
+
+// --- CEP-0008 world_ref ---------------------------------------------------------
+
+/// Re-stamp the world on an otherwise valid delivery (idempotency key is
+/// recomputed so only the world differs).
+fn with_world(mut delivery: Value, world: Option<&str>) -> Value {
+    let payload = delivery["payload"].as_object_mut().unwrap();
+    match world {
+        Some(w) => payload.insert("world_ref".into(), json!(w)),
+        None => payload.remove("world_ref"),
+    };
+    let key = producer_idempotency(&delivery["payload"]);
+    delivery["idempotency_key"] = json!(key);
+    delivery
+}
+
+#[test]
+fn world_ref_is_carried_into_the_comparison_inputs() {
+    let (delivery, _) = valid_delivery(1);
+    let mut state = IngestState::new();
+    let Admission::First(c) = ingest(&delivery, None, &params(), &mut state).unwrap() else {
+        panic!("first")
+    };
+    assert_eq!(c.world_ref, WORLD);
+}
+
+#[test]
+fn a_delivery_without_a_pinned_world_is_refused() {
+    let (delivery, _) = valid_delivery(2);
+    for bad in [
+        None,
+        Some("world:t07"),
+        Some("t07"),
+        Some("world:t07@sha256:abc"),
+        Some(""),
+    ] {
+        let mut state = IngestState::new();
+        let r = ingest(
+            &with_world(delivery.clone(), bad),
+            None,
+            &params(),
+            &mut state,
+        );
+        assert!(
+            matches!(
+                r,
+                Err(sxr_core::proof_ingest::Refusal::MalformedWorldRef { .. })
+            ),
+            "{bad:?} -> {r:?}"
+        );
+        assert!(state.is_empty(), "a refused delivery settles nothing");
+    }
+}
+
+#[test]
+fn a_delivery_from_another_world_is_refused_as_drift() {
+    let (delivery, _) = valid_delivery(3);
+    let mut state = IngestState::new();
+    let r = ingest(
+        &with_world(delivery, Some(OTHER_WORLD)),
+        None,
+        &params(),
+        &mut state,
+    );
+    assert!(
+        matches!(
+            r,
+            Err(sxr_core::proof_ingest::Refusal::WorldRefDrift { .. })
+        ),
+        "{r:?}"
+    );
+    assert!(state.is_empty());
 }

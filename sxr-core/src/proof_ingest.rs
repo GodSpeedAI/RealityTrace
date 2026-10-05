@@ -31,6 +31,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::canonical_json::{canonical_json, sha256_canonical};
+use crate::world_ref::is_world_ref;
 
 /// The event type owned exclusively by `swe_seed` at edge E7.
 pub const EVENT_TYPE: &str = "ProofCompleted";
@@ -127,6 +128,13 @@ pub enum Refusal {
     /// cites: digest mismatch, event-id mismatch, correlation mismatch, or a
     /// non-`sea_forge` settlement stamp (falsifier: forged parent reference).
     SettlementBindingMismatch(String),
+    /// The payload carries no `world_ref`, or one that is not a pinned
+    /// `world:<name>@sha256:<digest>` (an alias or label is not a world identity).
+    MalformedWorldRef { got: String },
+    /// The payload names a different semantic-world revision than the one this
+    /// deployment is pinned to. Never reconciled implicitly; a move between
+    /// worlds is a governed `world-transition`.
+    WorldRefDrift { expected: String, got: String },
     /// A NEW envelope re-claims an ALREADY-ingested cycle with divergent
     /// claims. The original comparison inputs stand untouched (ENV-I5;
     /// plan tooth 2). Names every diverged field.
@@ -194,6 +202,16 @@ impl std::fmt::Display for Refusal {
                 f,
                 "referenced settlement does not resolve to what the proof cites: {reason}"
             ),
+            Self::MalformedWorldRef { got } => write!(
+                f,
+                "world_ref must be world:<name>@sha256:<64 lowercase hex>; got {got:?}"
+            ),
+            Self::WorldRefDrift { expected, got } => {
+                write!(
+                    f,
+                    "world_ref drift: pinned {expected}, envelope names {got}"
+                )
+            }
             Self::ClaimMismatch { diverged } => write!(
                 f,
                 "re-submission contradicts the already-recorded cycle claims (first claim stands): diverged fields {:?}",
@@ -212,6 +230,9 @@ impl std::error::Error for Refusal {}
 pub struct IngestParams<'a> {
     /// THIS deployment's resolved canonical model digest (drift anchor).
     pub local_model_sha256: &'a str,
+    /// THIS deployment's pinned semantic world. Checked for syntax and
+    /// equality only; the digest is recomputed by SEA-Forge, not here.
+    pub local_world_ref: &'a str,
     /// The work request RealityTrace tracks for this cycle (ENV-I3).
     pub expected_work_request_id: &'a str,
     /// The settlement event id RealityTrace independently knows (ENV-I4).
@@ -224,6 +245,11 @@ pub struct IngestParams<'a> {
 /// trusting editable copies.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComparisonInputs {
+    /// The semantic world this comparison was made in (verbatim, pinned).
+    /// Defaults to empty on state persisted before world pinning; emission
+    /// refuses an empty or malformed value.
+    #[serde(default)]
+    pub world_ref: String,
     /// Content digest of the ingested ProofCompleted envelope itself.
     pub proof_envelope_sha256: String,
     /// The cited content-addressed settlement reference (verbatim).
@@ -443,6 +469,23 @@ pub fn ingest(
         return Err(Refusal::HashDrift {
             expected: params.local_model_sha256.to_string(),
             got: declared.to_string(),
+        });
+    }
+
+    // 3b. Semantic-world identity: required, pinned form, equal to ours.
+    let world_ref = payload
+        .get("world_ref")
+        .and_then(Value::as_str)
+        .unwrap_or_default();
+    if !is_world_ref(world_ref) {
+        return Err(Refusal::MalformedWorldRef {
+            got: world_ref.to_string(),
+        });
+    }
+    if world_ref != params.local_world_ref {
+        return Err(Refusal::WorldRefDrift {
+            expected: params.local_world_ref.to_string(),
+            got: world_ref.to_string(),
         });
     }
 
@@ -719,6 +762,7 @@ pub fn ingest(
         proof_contract_canonical: canonical_json(&Value::Object(contract.clone())),
         model_hash: declared.to_string(),
         comparison: ComparisonInputs {
+            world_ref: world_ref.to_string(),
             proof_envelope_sha256: proof_digest.clone(),
             operational_settlement_ref: settlement_ref.to_string(),
             settlement_event_id: params.expected_settlement_event_id.to_string(),
@@ -742,6 +786,9 @@ pub fn ingest(
         }
         if prior.proof_contract_canonical != claim.proof_contract_canonical {
             diverged.push("proof_contract");
+        }
+        if prior.comparison.world_ref != claim.comparison.world_ref {
+            diverged.push("world_ref");
         }
         if prior.model_hash != claim.model_hash {
             diverged.push("domain_model_ref");

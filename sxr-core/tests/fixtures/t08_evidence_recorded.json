@@ -4,7 +4,7 @@
   "evidence_recorded": {
     "event_id": "0000000b-0000-4000-8000-00000000c002",
     "event_type": "EvidenceRecorded",
-    "idempotency_key": "3fe6f3c35f63cfd36a8e76ce8607d83a48852e03d4d1fd3c25bf5a7caea26d85",
+    "idempotency_key": "299ffbc44772e48bbc3c54a596f8a4cfaacd6db425889360cc2cb7a823417bdf",
     "occurred_at": "2026-08-25T13:05:00+00:00",
     "payload": {
       "affordance_id": "aff-blue-green-001",
@@ -34,8 +34,9 @@
         }
       ],
       "operational_settlement_ref": "sha256:c28a594d14e0e2f7d10d6e1d8d29357149d9b19db7292b0b344da894729246ed",
-      "proof_result_ref": "sha256:070ef1783b0841d84fbfd86334ffc90a9feaf1f64c6cbccffd917de35b69583d",
-      "work_request_id": "wr-gsf-001"
+      "proof_result_ref": "sha256:658ed41a84cfe0a2c0c3cd0512d20916ccb118b06de751d848e77362ffef47bd",
+      "work_request_id": "wr-gsf-001",
+      "world_ref": "world:t07@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
     },
     "provenance": {
       "chain": [
