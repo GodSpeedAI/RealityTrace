@@ -55,5 +55,6 @@
     "0000000a-0000-4000-8000-00000000c001"
   ],
   "proof_event_id": "0000000a-0000-4000-8000-00000000c001",
-  "work_request_id": "wr-gsf-001"
+  "work_request_id": "wr-gsf-001",
+  "world_ref": "world:t07@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 }

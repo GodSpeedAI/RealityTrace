@@ -422,6 +422,7 @@ fn t08_regenerates_the_cross_repo_golden_fixture_for_the_python_gate() {
         .join("tests/fixtures/t08_evidence_recorded.json");
     let body = json!({
         "domain_model_sha256": model_digest(),
+        "world_ref": WORLD,
         "work_request_id": WORK_REQUEST_ID,
         "affordance_id": AFFORDANCE_ID,
         "proof_event_id": PROOF_EVENT_ID,
