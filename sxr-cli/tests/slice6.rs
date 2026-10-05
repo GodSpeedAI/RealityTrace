@@ -588,7 +588,10 @@ fn ingest_with(
         cmd.env("SXR_DAEMON_SOCKET", s);
     }
     let mut child = cmd.spawn().expect("spawn ingest");
-    child.stdin.as_mut().unwrap().write_all(OK_STREAM).unwrap();
+    // The child may reject its arguments and exit without reading stdin; the write then fails with
+    // a broken pipe. The assertions judge the exit code and output, not whether the stream was consumed.
+    let _ = child.stdin.as_mut().unwrap().write_all(OK_STREAM);
+    drop(child.stdin.take());
     let out = child.wait_with_output().expect("wait ingest");
     let v = serde_json::from_slice(&out.stdout).unwrap_or(Value::Null);
     (
