@@ -163,6 +163,7 @@ fn emission_for<'a>(model: &'a str) -> EvidenceEmission<'a> {
         proof_event_id: PROOF_EVENT_ID,
         event_id: EVIDENCE_EVENT_ID,
         occurred_at: OCCURRED_AT,
+        context_bundle_ref: None,
     }
 }
 
@@ -193,6 +194,7 @@ fn emit_from_real_chain() -> (Value, ComparisonInputs, String) {
         proof_event_id: PROOF_EVENT_ID,
         event_id: EVIDENCE_EVENT_ID,
         occurred_at: OCCURRED_AT,
+        context_bundle_ref: None,
     };
     let envelope = emit_evidence_recorded(&comparison, &emission)
         .expect("REAL E8 emission must succeed from resolved comparison inputs");

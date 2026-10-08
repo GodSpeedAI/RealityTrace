@@ -148,6 +148,11 @@ pub struct EvidenceEmission<'a> {
     pub event_id: &'a str,
     /// Caller-supplied RFC3339 timestamp (purity: no clock in this crate).
     pub occurred_at: &'a str,
+    /// The exact context bundle identity from the proof lineage
+    /// (E7 `context_bundle_ref`), carried into E8 so the evidence lineage can
+    /// recover the observer representation used for the act. Optional: the
+    /// bundle is context, never proof that retrieved claims were true.
+    pub context_bundle_ref: Option<&'a Value>,
 }
 
 fn is_canonical_digest(s: &str) -> bool {
@@ -357,6 +362,9 @@ pub fn emit_evidence_recorded(
             "model_hash": emission.local_model_sha256.trim(),
         }),
     );
+    if let Some(v) = emission.context_bundle_ref {
+        payload.insert("context_bundle_ref".into(), v.clone());
+    }
 
     // 6. Causality: the settlement and the ProofCompleted event ids — the
     //    ids RealityTrace itself bound during E7 ingestion — as caused_by
@@ -422,6 +430,7 @@ mod tests {
             proof_event_id: "0000000a-0000-4000-8000-000000000001",
             event_id: "0000000b-0000-4000-8000-000000000002",
             occurred_at: "2026-08-25T12:00:00+00:00",
+            context_bundle_ref: None,
         }
     }
 

@@ -43,6 +43,15 @@ fn hop_5_evidence_from_the_real_e7_and_e6() {
     };
     assert_eq!(comparison.world_ref, world);
 
+    // The exact context bundle identity the proof carried: RealityTrace binds
+    // expectations/observations/evidence to the same lineage. It is CONTEXT
+    // (what was made available), never proof that retrieved claims were true.
+    let bundle_ref = e7["payload"]["context_bundle_ref"].clone();
+    assert!(
+        bundle_ref.is_object(),
+        "E7 must carry the exact context bundle identity"
+    );
+
     // A well-formed UUID derived from the proof event, so reruns are deterministic.
     let h = sxr_core::canonical_json::sha256_hex(e7["event_id"].as_str().unwrap().as_bytes());
     let h = h.trim_start_matches("sha256:");
@@ -64,10 +73,16 @@ fn hop_5_evidence_from_the_real_e7_and_e6() {
             proof_event_id: e7["event_id"].as_str().unwrap(),
             event_id: &evidence_id,
             occurred_at: "2026-10-05T12:30:00+00:00",
+            context_bundle_ref: Some(&bundle_ref),
         },
     )
     .expect("the evidence is emitted");
     assert_eq!(e8["payload"]["world_ref"], world.as_str());
+    // The bundle identity survives into the evidence record.
+    assert_eq!(
+        e8["payload"]["context_bundle_ref"]["envelope_id"],
+        bundle_ref["envelope_id"]
+    );
 
     // A world other than the pinned one is refused at ingestion, settling nothing.
     let other = format!("world:other@sha256:{}", "d".repeat(64));
