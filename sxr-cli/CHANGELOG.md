@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.4.0](https://github.com/GodSpeedAI/RealityTrace/compare/realitytrace-v0.3.0...realitytrace-v0.4.0) (2026-10-08)
+
+
+### Features
+
+* **sxr-df:** fail closed on unsupported DomainForge compiler version ([7e7b1ab](https://github.com/GodSpeedAI/RealityTrace/commit/7e7b1ab5bd5927b3a2ef761f4cbab113475685b7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * sxr-core bumped from 0.3.0 to 0.4.0
+    * sxr-ledger bumped from 0.2.1 to 0.2.2
+    * sxr-git bumped from 0.2.1 to 0.2.2
+    * sxr-df bumped from 0.2.1 to 0.3.0
+    * sxr-verify bumped from 0.2.1 to 0.2.2
+
 ## [0.3.0](https://github.com/GodSpeedAI/RealityTrace/compare/realitytrace-v0.2.0...realitytrace-v0.3.0) (2026-09-25)
 
 
