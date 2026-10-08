@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-core-v0.3.0...sxr-core-v0.4.0) (2026-10-08)
+
+
+### Features
+
+* **evidence:** carry the exact context bundle identity into E8 ([0e2a97b](https://github.com/GodSpeedAI/RealityTrace/commit/0e2a97b4347c5dc6d8a6b9562d804d76b9fd450c))
+
 ## [0.3.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-core-v0.2.0...sxr-core-v0.3.0) (2026-09-25)
 
 
