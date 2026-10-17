@@ -73,6 +73,9 @@ const PLACEHOLDER_IDS: [&str; 5] = ["placeholder", "unknown", "none", "<missing>
 fn canonical_agent(source_agent: &str) -> Option<&'static str> {
     match source_agent {
         "swe-seed" | "swe_seed" => Some("swe_seed"),
+        "sea-forge-security-acceptance" | "security_acceptance" | "security-acceptance" => {
+            Some("security_acceptance")
+        }
         "context-kernel" | "context_kernel" => Some("context_kernel"),
         "sea-forge" | "sea_forge" => Some("sea_forge"),
         "godspeed-agent" | "godspeed_agent" | "gsa" => Some("godspeed_agent"),
@@ -223,6 +226,34 @@ impl std::fmt::Display for Refusal {
 
 impl std::error::Error for Refusal {}
 
+/// The component a deployment binds as the authoritative ProofCompleted
+/// producer for a cycle. Each producer is exclusive for the cycles bound to
+/// it: a `swe_seed` cycle refuses every other stamp, and a frozen
+/// security-acceptance cycle refuses `swe_seed` and, in particular, the
+/// actor under test (`sea_forge`), whose claims are never proof.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ProofProducer {
+    /// The SWE_SEED harness (edge E7 as frozen).
+    SweSeed,
+    /// A frozen security-acceptance suite: expectations come from a pinned,
+    /// independently governed suite, not from the system under test.
+    SecurityAcceptance,
+}
+
+impl ProofProducer {
+    /// Canonical component id this producer must be stamped with.
+    pub fn canonical(self) -> &'static str {
+        match self {
+            Self::SweSeed => "swe_seed",
+            Self::SecurityAcceptance => "security_acceptance",
+        }
+    }
+}
+
+fn default_proof_producer() -> String {
+    ProofProducer::SweSeed.canonical().to_string()
+}
+
 /// Locally-resolved facts the gate binds against. Mirrors the T06/T04
 /// convention: consumers bind to independently declared identities rather
 /// than trusting the delivery.
@@ -245,6 +276,11 @@ pub struct IngestParams<'a> {
 /// trusting editable copies.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComparisonInputs {
+    /// Canonical id of the producer whose ProofCompleted was admitted.
+    /// Defaults to `swe_seed` on state persisted before producers were
+    /// distinguished.
+    #[serde(default = "default_proof_producer")]
+    pub proof_producer: String,
     /// The semantic world this comparison was made in (verbatim, pinned).
     /// Defaults to empty on state persisted before world pinning; emission
     /// refuses an empty or malformed value.
@@ -408,6 +444,25 @@ pub fn ingest(
     params: &IngestParams<'_>,
     state: &mut IngestState,
 ) -> Result<Admission, Refusal> {
+    ingest_from(
+        ProofProducer::SweSeed,
+        proof,
+        referenced_settlement,
+        params,
+        state,
+    )
+}
+
+/// [`ingest`] for a cycle whose authoritative producer the deployment binds
+/// explicitly. Every other gate (identity, namespace, settlement binding,
+/// first claim stands) is unchanged.
+pub fn ingest_from(
+    producer: ProofProducer,
+    proof: &Value,
+    referenced_settlement: Option<&Value>,
+    params: &IngestParams<'_>,
+    state: &mut IngestState,
+) -> Result<Admission, Refusal> {
     // 1. Structural wire shape.
     let obj = proof
         .as_object()
@@ -435,20 +490,20 @@ pub fn ingest(
         )));
     }
 
-    // 2. Exclusive producer authority: swe_seed, nobody else.
+    // 2. Exclusive producer authority: the bound producer, nobody else.
     let source_agent = meaningful(obj.get("source_agent").and_then(Value::as_str))
         .ok_or_else(|| Refusal::MalformedEnvelope("source_agent missing".into()))?;
     match canonical_agent(&source_agent) {
-        Some("swe_seed") => {}
+        Some(agent) if agent == producer.canonical() => {}
         Some(other) => {
             return Err(Refusal::ProducerForge {
-                authoritative: "swe_seed".to_string(),
+                authoritative: producer.canonical().to_string(),
                 got: other.to_string(),
             });
         }
         None => {
             return Err(Refusal::ProducerForge {
-                authoritative: "swe_seed".to_string(),
+                authoritative: producer.canonical().to_string(),
                 got: source_agent.clone(),
             });
         }
@@ -762,6 +817,7 @@ pub fn ingest(
         proof_contract_canonical: canonical_json(&Value::Object(contract.clone())),
         model_hash: declared.to_string(),
         comparison: ComparisonInputs {
+            proof_producer: producer.canonical().to_string(),
             world_ref: world_ref.to_string(),
             proof_envelope_sha256: proof_digest.clone(),
             operational_settlement_ref: settlement_ref.to_string(),

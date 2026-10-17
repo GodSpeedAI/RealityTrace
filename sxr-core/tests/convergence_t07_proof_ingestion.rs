@@ -839,3 +839,57 @@ fn a_delivery_from_another_world_is_refused_as_drift() {
     );
     assert!(state.is_empty());
 }
+
+// --- Bound producer: frozen security acceptance ---------------------------------
+
+/// A cycle bound to the frozen security-acceptance producer admits only that
+/// stamp. The SWE_SEED harness and, above all, the actor under test
+/// (`sea-forge`) are refused, and the admitted comparison names its producer.
+/// Default `ingest` keeps the exclusive `swe_seed` authority.
+#[test]
+fn t07_bound_security_acceptance_producer_is_exclusive_for_its_cycles() {
+    use sxr_core::proof_ingest::{Admission, ProofProducer, ingest_from};
+    let (base, _) = valid_delivery(0x91);
+    let mut acceptance = base.clone();
+    acceptance["source_agent"] = json!("sea-forge-security-acceptance");
+
+    let mut state = IngestState::new();
+    match ingest_from(
+        ProofProducer::SecurityAcceptance,
+        &acceptance,
+        None,
+        &params(),
+        &mut state,
+    ) {
+        Ok(Admission::First(comparison)) => {
+            assert_eq!(comparison.proof_producer, "security_acceptance")
+        }
+        other => panic!("acceptance proof not admitted: {other:?}"),
+    }
+
+    for impostor in ["swe-seed", "sea-forge", "realitytrace", "mystery-component"] {
+        let mut forged = base.clone();
+        forged["source_agent"] = json!(impostor);
+        let mut state = IngestState::new();
+        let err = ingest_from(
+            ProofProducer::SecurityAcceptance,
+            &forged,
+            None,
+            &params(),
+            &mut state,
+        )
+        .unwrap_err();
+        assert!(
+            matches!(err, Refusal::ProducerForge { .. }),
+            "{impostor}: {err}"
+        );
+        assert!(state.is_empty());
+    }
+
+    // The default gate still refuses the acceptance stamp.
+    let mut state = IngestState::new();
+    assert!(matches!(
+        ingest(&acceptance, None, &params(), &mut state),
+        Err(Refusal::ProducerForge { .. })
+    ));
+}

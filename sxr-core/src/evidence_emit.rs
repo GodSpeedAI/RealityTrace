@@ -223,11 +223,93 @@ fn bare_sha256_hex(bytes: &[u8]) -> String {
 fn derive_difference(expected: &Value, observed: &Value) -> Value {
     let expected_digest = bare_digest(expected);
     let observed_digest = bare_digest(observed);
+    let mut fields = Vec::new();
+    let truncated = field_differences(expected, observed, String::new(), &mut fields);
     json!({
         "verdict": if expected_digest == observed_digest { "equivalent" } else { "divergent" },
         "expected_sha256": expected_digest,
         "observed_sha256": observed_digest,
+        "fields": fields,
+        "fields_truncated": truncated,
     })
+}
+
+/// Most field-level entries a `difference` carries; beyond it the list is
+/// marked truncated (the digests still decide the verdict).
+const MAX_FIELD_DIFFERENCES: usize = 256;
+
+/// Field-level discrepancy structure, derived like the verdict: one entry per
+/// JSON Pointer (RFC 6901) where the canonical values first differ, with the
+/// canonical digest of each side's value there (`missing`: present only in
+/// the expectation; `unexpected`: present only in the observation). Values
+/// are not copied — both are already verbatim in the envelope. Returns
+/// whether the list was truncated.
+fn field_differences(
+    expected: &Value,
+    observed: &Value,
+    pointer: String,
+    out: &mut Vec<Value>,
+) -> bool {
+    fn escape(token: &str) -> String {
+        token.replace('~', "~0").replace('/', "~1")
+    }
+    if canonical_json(expected) == canonical_json(observed) {
+        return false;
+    }
+    if out.len() >= MAX_FIELD_DIFFERENCES {
+        return true;
+    }
+    match (expected, observed) {
+        (Value::Object(e), Value::Object(o)) => {
+            let mut keys: Vec<&String> = e.keys().chain(o.keys()).collect();
+            keys.sort();
+            keys.dedup();
+            let mut truncated = false;
+            for key in keys {
+                let at = format!("{pointer}/{}", escape(key));
+                truncated |= match (e.get(key), o.get(key)) {
+                    (Some(ev), Some(ov)) => field_differences(ev, ov, at, out),
+                    (Some(ev), None) => push_field(out, at, "missing", Some(ev), None),
+                    (None, Some(ov)) => push_field(out, at, "unexpected", None, Some(ov)),
+                    (None, None) => false,
+                };
+            }
+            truncated
+        }
+        (Value::Array(e), Value::Array(o)) => {
+            let mut truncated = false;
+            for index in 0..e.len().max(o.len()) {
+                let at = format!("{pointer}/{index}");
+                truncated |= match (e.get(index), o.get(index)) {
+                    (Some(ev), Some(ov)) => field_differences(ev, ov, at, out),
+                    (Some(ev), None) => push_field(out, at, "missing", Some(ev), None),
+                    (None, Some(ov)) => push_field(out, at, "unexpected", None, Some(ov)),
+                    (None, None) => false,
+                };
+            }
+            truncated
+        }
+        _ => push_field(out, pointer, "changed", Some(expected), Some(observed)),
+    }
+}
+
+fn push_field(
+    out: &mut Vec<Value>,
+    pointer: String,
+    change: &str,
+    expected: Option<&Value>,
+    observed: Option<&Value>,
+) -> bool {
+    if out.len() >= MAX_FIELD_DIFFERENCES {
+        return true;
+    }
+    out.push(json!({
+        "pointer": pointer,
+        "change": change,
+        "expected_sha256": expected.map(bare_digest),
+        "observed_sha256": observed.map(bare_digest),
+    }));
+    false
 }
 
 /// Emit the canonical v1 `EvidenceRecorded` envelope stamped `realitytrace`,
@@ -371,6 +453,7 @@ pub fn emit_evidence_recorded(
     //    parents, oldest first (ENV-I2/I4).
     let chain = vec![
         format!("domain_model_hash:{}", emission.local_model_sha256.trim()),
+        format!("proof_producer:{}", comparison.proof_producer),
         format!("caused_by:{}", comparison.settlement_event_id.trim()),
         format!("caused_by:{}", emission.proof_event_id.trim()),
     ];
@@ -411,6 +494,7 @@ mod tests {
 
     fn comparison() -> ComparisonInputs {
         ComparisonInputs {
+            proof_producer: "swe_seed".into(),
             world_ref: WORLD.into(),
             proof_envelope_sha256: format!("sha256:{}", "a".repeat(64)),
             operational_settlement_ref: format!("sha256:{}", "b".repeat(64)),
@@ -432,6 +516,52 @@ mod tests {
             occurred_at: "2026-08-25T12:00:00+00:00",
             context_bundle_ref: None,
         }
+    }
+
+    #[test]
+    fn unit_field_differences_name_each_diverging_pointer() {
+        let d = derive_difference(
+            &json!({"a": 1, "b": [1, 2], "c/d": "x", "gone": true}),
+            &json!({"a": 2, "b": [1], "c/d": "x", "extra": null}),
+        );
+        let fields: Vec<(String, String)> = d["fields"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|f| {
+                (
+                    f["pointer"].as_str().unwrap().to_string(),
+                    f["change"].as_str().unwrap().to_string(),
+                )
+            })
+            .collect();
+        assert_eq!(
+            fields,
+            [
+                ("/a".to_string(), "changed".to_string()),
+                ("/b/1".to_string(), "missing".to_string()),
+                ("/extra".to_string(), "unexpected".to_string()),
+                ("/gone".to_string(), "missing".to_string()),
+            ]
+        );
+        assert_eq!(
+            d["fields"][0]["expected_sha256"],
+            json!(bare_digest(&json!(1)))
+        );
+        assert_eq!(
+            d["fields"][0]["observed_sha256"],
+            json!(bare_digest(&json!(2)))
+        );
+        assert_eq!(d["fields_truncated"], json!(false));
+        // Equivalent values carry no field entries.
+        let same = derive_difference(&json!({"a": 1}), &json!({"a": 1}));
+        assert_eq!(same["fields"], json!([]));
+        // A huge divergence is bounded and says so.
+        let wide: serde_json::Map<String, Value> =
+            (0..300).map(|i| (format!("k{i:03}"), json!(i))).collect();
+        let d = derive_difference(&Value::Object(wide), &json!({}));
+        assert_eq!(d["fields"].as_array().unwrap().len(), MAX_FIELD_DIFFERENCES);
+        assert_eq!(d["fields_truncated"], json!(true));
     }
 
     #[test]
