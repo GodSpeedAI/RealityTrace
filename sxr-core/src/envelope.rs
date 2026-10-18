@@ -168,7 +168,19 @@ pub fn build_envelope(parts: &EnvelopeParts) -> Result<Value, EnvelopeError> {
         json!(parts.completeness_status),
     );
     envelope.insert("provenance_refs".into(), json!(parts.provenance_refs));
-    envelope.insert("omission_status".into(), json!("no_known_omissions"));
+    // CEP-0008 §34/§52: known omissions are marked, never silently absent,
+    // so the status follows what the boundary record declares.
+    let declares_omissions = parts.boundary_record["known_omissions"]
+        .as_array()
+        .is_some_and(|omissions| !omissions.is_empty());
+    envelope.insert(
+        "omission_status".into(),
+        json!(if declares_omissions {
+            "known_omissions_recorded"
+        } else {
+            "no_known_omissions"
+        }),
+    );
     envelope.insert("lineage_refs".into(), json!(parts.lineage_refs));
     envelope.insert("validation_status".into(), json!("validated"));
     for (key, value) in sections_obj {
