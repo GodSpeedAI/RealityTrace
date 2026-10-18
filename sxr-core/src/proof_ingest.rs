@@ -342,8 +342,9 @@ impl IngestState {
 #[derive(Debug, Clone, PartialEq)]
 pub enum Admission {
     /// First admission of this delivery; carries the preserved comparison
-    /// inputs for the later expected-versus-observed evaluation.
-    First(ComparisonInputs),
+    /// inputs for the later expected-versus-observed evaluation. Boxed: the
+    /// inputs dwarf the other variant.
+    First(Box<ComparisonInputs>),
     /// Redelivery under stable identity (event id or content digest already
     /// recorded). Consequence-free: nothing is rewritten, nothing appended.
     DuplicateDelivery,
@@ -862,7 +863,7 @@ pub fn ingest_from(
     state.seen_identities.extend(identities);
     state.claims.push(claim);
 
-    Ok(Admission::First(comparison))
+    Ok(Admission::First(Box::new(comparison)))
 }
 
 /// Fold the producer idempotency key into a namespaced ledger identity.

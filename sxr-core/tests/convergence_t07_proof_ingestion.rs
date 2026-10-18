@@ -759,7 +759,7 @@ fn t07_without_the_delivered_settlement_the_gate_binds_to_locally_known_identity
         observed_effects,
         referenced_settlement_sha256,
         ..
-    } = comparison;
+    } = *comparison;
     assert!(observed_effects.is_none());
     assert!(referenced_settlement_sha256.is_none());
 

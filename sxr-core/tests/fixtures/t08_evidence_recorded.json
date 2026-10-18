@@ -4,12 +4,21 @@
   "evidence_recorded": {
     "event_id": "0000000b-0000-4000-8000-00000000c002",
     "event_type": "EvidenceRecorded",
-    "idempotency_key": "299ffbc44772e48bbc3c54a596f8a4cfaacd6db425889360cc2cb7a823417bdf",
+    "idempotency_key": "c3fa70f5316e83e60f808b6b926aa24aa2da2f3e6c9d281acc6d66a11cb69f1a",
     "occurred_at": "2026-08-25T13:05:00+00:00",
     "payload": {
       "affordance_id": "aff-blue-green-001",
       "difference": {
         "expected_sha256": "060c46641253a4d5c362c76c03d5e86a395c4bae93a7d33c22421b9e525f7389",
+        "fields": [
+          {
+            "change": "changed",
+            "expected_sha256": "060c46641253a4d5c362c76c03d5e86a395c4bae93a7d33c22421b9e525f7389",
+            "observed_sha256": "1287b82a14d9d1ffa85443d1904971c36c040b28e2a2f143047364ad8d64519f",
+            "pointer": ""
+          }
+        ],
+        "fields_truncated": false,
         "observed_sha256": "1287b82a14d9d1ffa85443d1904971c36c040b28e2a2f143047364ad8d64519f",
         "verdict": "divergent"
       },
@@ -41,6 +50,7 @@
     "provenance": {
       "chain": [
         "domain_model_hash:4cd7ff010a0ac3e4bc9b59b2e5aef6669512d352b0f798c984eaf76cecb4f210",
+        "proof_producer:swe_seed",
         "caused_by:d77960c1-0658-4d40-b121-cb94c65c2cb6",
         "caused_by:0000000a-0000-4000-8000-00000000c001"
       ],

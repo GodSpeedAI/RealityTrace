@@ -198,7 +198,7 @@ fn emit_from_real_chain() -> (Value, ComparisonInputs, String) {
     };
     let envelope = emit_evidence_recorded(&comparison, &emission)
         .expect("REAL E8 emission must succeed from resolved comparison inputs");
-    (envelope, comparison, cited_settlement_ref())
+    (envelope, *comparison, cited_settlement_ref())
 }
 
 // --- Positive path: one real composed chain drives everything --------------------
