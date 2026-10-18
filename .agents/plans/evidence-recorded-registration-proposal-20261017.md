@@ -1,8 +1,13 @@
 # Proposal: register `evidence.recorded` (E8) as a §5.3b record kind
 
-Status: proposal only. It is not implemented on branch
-`security/acceptance-evidence-20261017`. Registering a record kind is a
-public contract change (§5.3b), and its envelope vocabulary is CEP-owned.
+Status: **implemented** (2026-10-18), commit de45a8b: `evidence.recorded`
+is registered as an `evidence_packet` and mapped by
+`sxr-core/src/evidence_record.rs`. The owner decided the open questions
+below as: Question = the frozen expectation; direction derived from the
+verdict; digests only, as content-unavailable representations;
+subject prefixes `work_request:`, `affordance:`, `question:`, `proof:`,
+`settlement:`; reliability `deterministic`, relevance `direct`. The text
+below is the original proposal, kept for the record.
 
 ## Why
 
