@@ -139,6 +139,7 @@ fn subject_refs(kind: RecordKind) -> Vec<String> {
             "target:concept:abc".into(),
         ],
         RecordKind::ConformanceClaimed => vec!["target:concept:abc".into(), "claim:c-3".into()],
+        RecordKind::EvidenceRecorded => recorded_parts().1,
     }
 }
 
@@ -255,6 +256,7 @@ fn sections_for(kind: RecordKind) -> serde_json::Value {
             "transformations": [{"transformation_id": "tx:7", "transformation_type": "proposed_change", "scope": "locus:concept:abc"}],
             "questions": [{"question_id": "q-3", "question_form": "should_change"}]
         }),
+        RecordKind::EvidenceRecorded => recorded_parts().0.entity_sections,
         RecordKind::ConformanceClaimed => json!({
             "conformance": [{"conformance_id": "conf-1", "evaluated_entity_refs": ["concept:abc"]}],
             "claims": [{"claim_id": "c-3", "claim_type": "conformance", "subject_ref": "concept:abc"}]
@@ -371,4 +373,51 @@ fn envelope_id_and_created_at_vary_but_shape_is_stable() {
     assert_eq!(ea["cep_version"], eb["cep_version"]);
     assert_eq!(ea["envelope_version"], eb["envelope_version"]);
     assert_eq!(ea["envelope_kind"], eb["envelope_kind"]);
+}
+
+/// The production `evidence.recorded` mapping of a fixed E8.
+fn recorded_parts() -> (sxr_core::envelope::EnvelopeParts, Vec<String>) {
+    let e8 = json!({
+        "schema_version": "v1", "event_id": "0000000b-0000-4000-8000-0000000c0001",
+        "source_agent": "realitytrace", "event_type": "EvidenceRecorded",
+        "occurred_at": "2026-08-07T12:00:00Z", "idempotency_key": "a".repeat(64),
+        "payload": {
+            "work_request_id": "wr-1", "affordance_id": "aff-1",
+            "proof_result_ref": format!("sha256:{}", "b".repeat(64)),
+            "operational_settlement_ref": format!("sha256:{}", "c".repeat(64)),
+            "difference": {"verdict": "divergent", "expected_sha256": "d".repeat(64),
+                           "observed_sha256": "e".repeat(64)}
+        },
+        "provenance": {"origin": "realitytrace", "chain": ["caused_by:s-1", "caused_by:p-1"]}
+    });
+    let p = parts(RecordKind::EvidenceRecorded);
+    sxr_core::evidence_record::evidence_recorded_parts(
+        &e8,
+        sxr_core::evidence_record::RecordContext {
+            envelope_id: p.envelope_id,
+            created_at: p.created_at,
+            created_by: p.created_by,
+            scope: p.scope,
+            provenance_refs: p.provenance_refs,
+            lineage_refs: p.lineage_refs,
+        },
+    )
+    .unwrap()
+}
+
+/// CEP-0008 §34/§52: a declared omission is marked in `omission_status`;
+/// without one the status says so. Never a silent "no omissions".
+#[test]
+fn omission_status_follows_declared_known_omissions() {
+    let mut parts = parts(RecordKind::RepoEnrolled);
+    parts.entity_sections = sections_for(RecordKind::RepoEnrolled);
+    assert_eq!(
+        build_envelope(&parts).unwrap()["omission_status"],
+        "no_known_omissions"
+    );
+    parts.boundary_record["known_omissions"] = json!(["checkout history before enrollment"]);
+    assert_eq!(
+        build_envelope(&parts).unwrap()["omission_status"],
+        "known_omissions_recorded"
+    );
 }

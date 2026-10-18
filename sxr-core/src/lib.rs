@@ -14,6 +14,7 @@ pub mod clock;
 pub mod embedded_schema;
 pub mod envelope;
 pub mod evidence_emit;
+pub mod evidence_record;
 pub mod graph;
 pub mod proof_ingest;
 pub mod record_kinds;
