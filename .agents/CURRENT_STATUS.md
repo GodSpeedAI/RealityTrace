@@ -42,3 +42,9 @@ Exec004 code/artifacts and pre-existing aborted run directories were not modifie
 - DomainForge 0.19.0 is published (crates.io, PyPI, npm). `sxr_df::PINNED_DOMAINFORGE_VERSION` is now `0.19.0`; installed CLI upgraded to 0.19.0.
 - Verified: `cargo test --workspace` 0 failures; the 3 `sxr-df` real-binary tests pass against the 0.19.0 binary (env: `SXR_TEST_DOMAINFORGE_BIN`, `SXR_TEST_DOMAINFORGE_ROOT`, `SXR_TEST_LARGE_SEA_DIR`).
 - Note: 0.19.0 adds opt-in `--world-name` to `domainforge envelope`; sxr does not use it yet (Stage 8 evidence path).
+
+## DomainForge 0.21.1 bump (2026-10-21)
+- `sxr_df::PINNED_DOMAINFORGE_VERSION` is now `0.21.1`, matching SEA-Forge, Cognate and Horizon. DomainForge world identity includes `producer_version`, so a stack split across 0.19.0 / 0.21.0 / 0.21.1 names the same source as different worlds; before this change RealityTrace refused the 0.21.1 CLI (`unsupported domainforge version: expected 0.19.0, found 0.21.1`).
+- `proof/{slice3,slice4,slice5,red-green}.sh` now write the current registry format (`version = 1`, `[[namespaces]]`); the retired `[namespaces.logistics]` map form is rejected by DomainForge (`invalid type: map, expected a sequence`). These scripts are not in CI.
+- Verified: `cargo test --workspace` 209 passed, 0 failed; the 3 `sxr-df` real-binary tests pass against the released 0.21.1 CLI (`SXR_TEST_DOMAINFORGE_BIN`, `SXR_TEST_DOMAINFORGE_ROOT=~/projects/domainforge`, `SXR_TEST_LARGE_SEA_DIR` = a dir with a >64 KiB interaction-model.sea); `proof/red-green.sh` passes (RED unsettled + missing + contradiction, GREEN settled); godspeed-readiness R02 passes on this branch.
+- Next: keep `PINNED_DOMAINFORGE_VERSION` in lockstep with the stack (godspeed-readiness gate C01 checks it).
