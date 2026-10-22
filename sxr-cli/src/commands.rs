@@ -2376,14 +2376,7 @@ pub fn run_finish(ctx: &Ctx, run_id: &str) -> Result<Value> {
 // ── ledger commands ──────────────────────────────────────────────────────
 
 pub fn ledger_verify(ctx: &Ctx, repo_id: &str) -> Result<Value> {
-    let dir = ctx.ensure_repo_dir(repo_id)?;
-    let db_path = dir.join("ledger.db");
-    let ledger = sxr_ledger::ledger::Ledger::open(
-        &db_path,
-        repo_id,
-        sxr_ledger::ledger::LedgerConfig::default(),
-    )
-    .map_err(|e| anyhow!("open ledger: {e}"))?;
+    let ledger = ledger_io::open_existing(ctx, repo_id)?;
     let report = ledger.verify_full().map_err(|e| anyhow!("verify: {e}"))?;
     Ok(output::output(vec![
         ("ok", json!(report.complete)),
@@ -2401,7 +2394,7 @@ pub fn ledger_verify(ctx: &Ctx, repo_id: &str) -> Result<Value> {
 }
 
 pub fn ledger_export(ctx: &Ctx, repo_id: &str) -> Result<Value> {
-    let rows = ledger_io::read_all(ctx, repo_id)?;
+    let rows = ledger_io::read_all_existing(ctx, repo_id)?;
     let entries: Vec<Value> = rows
         .iter()
         .map(|r| {
@@ -2419,7 +2412,7 @@ pub fn ledger_export(ctx: &Ctx, repo_id: &str) -> Result<Value> {
 }
 
 pub fn ledger_history_json(ctx: &Ctx, repo_id: &str) -> Result<Value> {
-    let rows = ledger_io::read_all(ctx, repo_id)?;
+    let rows = ledger_io::read_all_existing(ctx, repo_id)?;
     let hist: Vec<Value> = rows
         .iter()
         .map(|r| {

@@ -58,6 +58,29 @@ pub fn append_record(
 }
 
 /// Read all ledger rows for a repo.
+/// Open an existing ledger for a read-only command. Never creates one: a repo that is not enrolled,
+/// or an enrolled repo whose ledger file is gone, is an error. Opening would otherwise create an
+/// empty ledger that verifies as an intact chain, so data loss would report `ok: true`.
+pub fn open_existing(ctx: &Ctx, repo_id: &str) -> Result<Ledger> {
+    crate::state::require_enrollment(ctx, repo_id)?;
+    let db_path = ctx.repo_dir(repo_id).join("ledger.db");
+    if !db_path.is_file() {
+        anyhow::bail!(
+            "ledger for repo {repo_id} not found at {}; refusing to treat a missing ledger as empty",
+            db_path.display()
+        );
+    }
+    Ledger::open(&db_path, repo_id, LedgerConfig::default())
+        .map_err(|e| anyhow!("open ledger: {e}"))
+}
+
+/// All rows of an existing ledger (read-only commands; see [`open_existing`]).
+pub fn read_all_existing(ctx: &Ctx, repo_id: &str) -> Result<Vec<sxr_core::LedgerRow>> {
+    open_existing(ctx, repo_id)?
+        .read_all()
+        .map_err(|e| anyhow!("read: {e}"))
+}
+
 pub fn read_all(ctx: &Ctx, repo_id: &str) -> Result<Vec<sxr_core::LedgerRow>> {
     let dir = ctx.ensure_repo_dir(repo_id)?;
     let db_path = dir.join("ledger.db");
