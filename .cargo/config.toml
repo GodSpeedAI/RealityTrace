@@ -1,9 +1,0 @@
-# Machine-local build configuration (WSL sandbox, record of decision in
-# `.agents/reports/1-sxr-ledger-loop.md`): the system SQLite 3.46.1 has no
-# `libsqlite3.so` dev symlink (root-owned), so rusqlite links the runtime
-# library through a user-local symlink directory.
-[env]
-SQLITE3_LIB_DIR = { value = "/home/sprime01/.local/lib/sqlite3", force = true }
-
-[build]
-rustflags = ["-L", "native=/home/sprime01/.local/lib/sqlite3"]
