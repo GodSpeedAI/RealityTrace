@@ -75,11 +75,18 @@ This document provides the definitive reference for the `sxr` command-line execu
 - **Purpose**: Initiates an active verification run binding a snapshot, question, and threshold.
 - **Output JSON**: `{ run_id: String }`.
 
-#### `sxr plan create --run <id> --verifier <id> --target <target> [--from-contract <c>] [--obligation <o>] [--json]`
+#### `sxr plan create --run <id> --verifier <id> --target <target> [--from-contract <c>] [--obligation <o>] [--argv-json <json> [--cwd <rel>] [--timeout-s <n>] [--launcher-json <json>]] [--json]`
 - **Purpose**: Builds an executable verification plan.
 - **Flags**:
   - `--run <id>`: Active run ID.
-  - `--verifier <id>`: Verifier runner ID (e.g. `cargo-test`).
+  - `--verifier <id>`: Verifier ID. `verify run` can execute `cargo-test` and `command`. Any other id
+    (e.g. `pytest`) is only a label for output recorded with `ingest`; `verify run` refuses it.
+  - `--argv-json <json>` (`command` only, required): the exact argv to run, e.g. `'["bun","test"]'`.
+  - `--cwd <rel>` (`command` only): working directory relative to the enrolled repo; must not leave it.
+    Default `.`.
+  - `--timeout-s <n>` (`command` only): 1-86400, default 900.
+  - `--launcher-json <json>` (`command` only): a prefix the argv runs under, e.g. a sandbox command. It is
+    recorded in the plan and the observation.
   - `--target <str>`: Target declaration URI (e.g. `concept:<uuid>`).
   - `--from-contract <str>`: (Optional) Import verification obligation from contract.
 - **Output JSON**: `{ plan_id: String, transformation_ref: String }`.
@@ -93,8 +100,11 @@ This document provides the definitive reference for the `sxr` command-line execu
 ### 6. `verify` (Verification Execution)
 
 #### `sxr verify run --run <id> [--json]`
-- **Purpose**: Executes the plan steps using the designated verifier runner in a filtered environment.
-- **Output JSON**: `{ run_id: String, status: "observed", observations: [ { observation_id, exit_code, parsed_summary } ] }`.
+- **Purpose**: Executes exactly the verifier the plan names, in a cleared environment (allowlist only).
+  A verifier id it cannot run is refused and nothing is recorded. Before the verifier runs, it records
+  `target_digest`: sha256 over the sorted `<path>\0<f|l>\0<sha256>\n` lines of every regular file and
+  symlink (by link target, not followed) under the enrolled repo, skipping `.git`.
+- **Output JSON**: `{ observations: [ { observation_id, run_id, verifier_id, target_digest, exit_code, crashed, stdout_ref, stderr_ref, parsed } ] }`.
 - **Exit Codes**: `0` if verifier completed, `6` if runner failed to spawn or timed out.
 
 ---

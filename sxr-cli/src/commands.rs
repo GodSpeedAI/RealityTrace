@@ -7,7 +7,6 @@ use serde_json::{Value, json};
 use sha2::Digest;
 use std::path::PathBuf;
 use sxr_core::record_kinds::RecordKind;
-use sxr_verify::VerifierPort;
 
 use crate::ledger_io::{self, append_record, ledger_position_json, open_repo_ledger};
 use crate::output;
@@ -659,6 +658,92 @@ fn repo_for_run(ctx: &Ctx, run_id: &str) -> Result<RunMeta> {
 
 // ── plan create ──────────────────────────────────────────────────────────
 
+/// `plan create` options for the `command` verifier.
+#[derive(Debug, Default)]
+pub struct CommandArgs {
+    pub argv_json: Option<String>,
+    pub cwd: Option<String>,
+    pub timeout_s: Option<u64>,
+    pub launcher_json: Option<String>,
+}
+
+fn json_string_array(raw: &str, what: &str) -> Result<Vec<String>> {
+    let v: Vec<String> = serde_json::from_str(raw)
+        .with_context(|| format!("{what} must be a JSON array of strings"))?;
+    Ok(v)
+}
+
+/// A relative path that cannot leave the directory it is joined to.
+fn contained_relative(rel: &str) -> Result<std::path::PathBuf> {
+    let p = std::path::Path::new(rel);
+    if p.is_absolute()
+        || p.components().any(|c| {
+            !matches!(
+                c,
+                std::path::Component::Normal(_) | std::path::Component::CurDir
+            )
+        })
+    {
+        bail!("--cwd must be a relative path inside the enrolled repo: {rel}");
+    }
+    Ok(p.to_path_buf())
+}
+
+/// The plan step's invocation: fixed for `cargo-test`, declared for `command`.
+fn plan_invocation(verifier: &str, args: &CommandArgs) -> Result<(Value, Vec<Value>)> {
+    let declared = args.argv_json.is_some()
+        || args.cwd.is_some()
+        || args.timeout_s.is_some()
+        || args.launcher_json.is_some();
+    if verifier != sxr_verify::COMMAND_VERIFIER_ID {
+        if declared {
+            bail!("--argv-json/--cwd/--timeout-s/--launcher-json apply only to --verifier command");
+        }
+        return Ok((
+            json!({
+                "argv": ["cargo", "test", "--offline", "--message-format", "json"],
+                "cwd": ".",
+                "env_allowlist": ["PATH", "HOME", "CARGO_HOME"],
+                "timeout_s": 900,
+            }),
+            vec![json!("offline only"), json!("slice-1 cargo-test")],
+        ));
+    }
+    let argv = json_string_array(
+        args.argv_json
+            .as_deref()
+            .ok_or_else(|| anyhow!("--verifier command requires --argv-json"))?,
+        "--argv-json",
+    )?;
+    if argv.is_empty() || argv[0].is_empty() {
+        bail!("--argv-json must name a program");
+    }
+    let cwd = args.cwd.clone().unwrap_or_else(|| ".".into());
+    contained_relative(&cwd)?;
+    let timeout_s = args.timeout_s.unwrap_or(900);
+    if timeout_s == 0 || timeout_s > 86_400 {
+        bail!("--timeout-s must be between 1 and 86400");
+    }
+    let launcher = match args.launcher_json.as_deref() {
+        Some(raw) => json_string_array(raw, "--launcher-json")?,
+        None => Vec::new(),
+    };
+    let mut invocation = json!({
+        "argv": argv,
+        "cwd": cwd,
+        "env_allowlist": ["PATH", "HOME"],
+        "timeout_s": timeout_s,
+    });
+    if !launcher.is_empty() {
+        invocation["launcher"] = json!(launcher);
+    }
+    Ok((
+        invocation,
+        vec![json!("declared command verifier: exit code is the result")],
+    ))
+}
+
+#[allow(clippy::too_many_arguments)]
 pub fn plan_create(
     ctx: &Ctx,
     run_id: &str,
@@ -666,7 +751,9 @@ pub fn plan_create(
     target: &str,
     from_contract: Option<&str>,
     obligation: Option<&str>,
+    command: &CommandArgs,
 ) -> Result<Value> {
+    let (invocation, boundary_limitations) = plan_invocation(verifier, command)?;
     let mut meta = repo_for_run(ctx, run_id)?;
     let e = state::require_enrollment(ctx, &meta.repo_id)?;
     let plan_id = ulid();
@@ -724,12 +811,7 @@ pub fn plan_create(
             "claim_ref": step_claim_ref,
             "evidence_requirement_ref": step_evidence_requirement_ref,
             "verifier_id": verifier,
-            "invocation": {
-                "argv": ["cargo", "test", "--offline", "--message-format", "json"],
-                "cwd": ".",
-                "env_allowlist": ["PATH", "HOME", "CARGO_HOME"],
-                "timeout_s": 900,
-            },
+            "invocation": invocation,
             "produces_evidence_type": produces_evidence_type,
             "targets": step_targets,
             "expected_answer_shape": expected_answer_shape,
@@ -744,7 +826,7 @@ pub fn plan_create(
         }],
         "boundary": {
             "excluded": ["browser", "performance", "security"],
-            "limitations": ["offline only", "slice-1 cargo-test"],
+            "limitations": boundary_limitations,
         },
     });
     let sections = json!({
@@ -819,18 +901,53 @@ fn load_contract_obligations(ctx: &Ctx, repo_id: &str, contract_id: &str) -> Res
 
 // ── verify run ───────────────────────────────────────────────────────────
 
+/// The verification step the plan declares. `cargo-test` keeps its fixed invocation; `command` runs the
+/// plan's declared argv, cwd (inside the enrolled repo), timeout and launcher. Any other verifier id is
+/// refused: `verify run` never substitutes a different verifier for the one the plan names.
 fn step_from_plan(
-    _meta: &RunMeta,
+    plan_step: &Value,
     target: &str,
-    cwd: &std::path::Path,
-) -> sxr_verify::VerificationStep {
-    sxr_verify::VerificationStep {
-        step_id: "unit".into(),
-        obligation_ref: None,
-        claim_ref: None,
-        evidence_requirement_ref: "contract://test#evidence/unit".into(),
-        verifier_id: "cargo-test".into(),
-        invocation: sxr_verify::Invocation {
+    root: &std::path::Path,
+) -> Result<sxr_verify::VerificationStep> {
+    let verifier_id = plan_step
+        .get("verifier_id")
+        .and_then(Value::as_str)
+        .unwrap_or(sxr_verify::VERIFIER_ID)
+        .to_string();
+    if sxr_verify::verifier_for(&verifier_id).is_none() {
+        bail!(
+            "verifier {verifier_id} cannot be run by `verify run` (runnable: cargo-test, command); record its output with `ingest`"
+        );
+    }
+    let invocation = if verifier_id == sxr_verify::COMMAND_VERIFIER_ID {
+        let inv = plan_step
+            .get("invocation")
+            .ok_or_else(|| anyhow!("command plan has no invocation"))?;
+        let strings = |key: &str| -> Vec<String> {
+            inv.get(key)
+                .and_then(Value::as_array)
+                .map(|a| {
+                    a.iter()
+                        .filter_map(|v| v.as_str().map(str::to_string))
+                        .collect()
+                })
+                .unwrap_or_default()
+        };
+        let rel = contained_relative(inv.get("cwd").and_then(Value::as_str).unwrap_or("."))?;
+        let cwd = root.join(rel);
+        let (canon_root, canon_cwd) = (root.canonicalize()?, cwd.canonicalize()?);
+        if !canon_cwd.starts_with(&canon_root) {
+            bail!("plan cwd {} leaves the enrolled repo", cwd.display());
+        }
+        sxr_verify::Invocation {
+            argv: strings("argv"),
+            cwd: canon_cwd,
+            env_allowlist: strings("env_allowlist"),
+            timeout_s: inv.get("timeout_s").and_then(Value::as_u64).unwrap_or(900),
+            launcher: strings("launcher"),
+        }
+    } else {
+        sxr_verify::Invocation {
             argv: vec![
                 "cargo".into(),
                 "test".into(),
@@ -838,15 +955,24 @@ fn step_from_plan(
                 "--message-format".into(),
                 "json".into(),
             ],
-            cwd: cwd.into(),
+            cwd: root.into(),
             env_allowlist: vec!["PATH".into(), "HOME".into(), "CARGO_HOME".into()],
             timeout_s: 900,
-        },
+            launcher: Vec::new(),
+        }
+    };
+    Ok(sxr_verify::VerificationStep {
+        step_id: "unit".into(),
+        obligation_ref: None,
+        claim_ref: None,
+        evidence_requirement_ref: "contract://test#evidence/unit".into(),
+        verifier_id,
+        invocation,
         produces_evidence_type: "test_result".into(),
         targets: vec![target.into()],
         expected_answer_shape: "boolean_with_failure_list".into(),
         on_crash: "record_omission".into(),
-    }
+    })
 }
 
 pub fn verify_run(ctx: &Ctx, run_id: &str) -> Result<Value> {
@@ -861,15 +987,25 @@ pub fn verify_run(ctx: &Ctx, run_id: &str) -> Result<Value> {
         .unwrap_or("concept:unknown")
         .to_string();
 
-    let step = step_from_plan(&meta, &target, &e.filesystem_path);
+    let plan_step = plugin.get("step").cloned().unwrap_or(Value::Null);
+    let step = step_from_plan(&plan_step, &target, &e.filesystem_path)?;
+    let verifier = sxr_verify::verifier_for(&step.verifier_id)
+        .ok_or_else(|| anyhow!("verifier {} is not registered", step.verifier_id))?;
+    // What is verified: the enrolled tree's content digest, taken before the verifier runs.
+    let target_digest = sxr_verify::tree_digest(&e.filesystem_path)
+        .with_context(|| format!("digest {}", e.filesystem_path.display()))?;
     let artifacts_dir = ctx.ensure_repo_dir(&meta.repo_id)?.join("artifacts");
-    let verifier = sxr_verify::CargoTestVerifier;
     let outcome = verifier
         .execute(
             &step,
             &sxr_verify::ExecutionContext::new(artifacts_dir.clone()),
         )
-        .map_err(|e| anyhow!("cargo-test verifier failed: {e}"))?;
+        .map_err(|err| anyhow!("{} verifier failed: {err}", step.verifier_id))?;
+    let invocation = json!({
+        "argv": step.invocation.argv,
+        "launcher": step.invocation.launcher,
+        "timeout_s": step.invocation.timeout_s,
+    });
     let observation_id = ulid();
     let sections = json!({
         "observations": [{ "observation_id": observation_id, "scope": format!("run:{run_id}") }],
@@ -879,6 +1015,9 @@ pub fn verify_run(ctx: &Ctx, run_id: &str) -> Result<Value> {
             "representation_type": "verifier_stdout",
             "content_hash": outcome.stdout_ref,
             "inline_content": {
+                "verifier_id": step.verifier_id,
+                "invocation": invocation,
+                "target_digest": target_digest,
                 "exit_code": outcome.exit_code,
                 "crashed": outcome.crashed,
                 "stderr_ref": outcome.stderr_ref,
@@ -915,6 +1054,8 @@ pub fn verify_run(ctx: &Ctx, run_id: &str) -> Result<Value> {
         json!([{
             "observation_id": observation_id,
             "run_id": run_id,
+            "verifier_id": step.verifier_id,
+            "target_digest": target_digest,
             "exit_code": outcome.exit_code,
             "crashed": outcome.crashed,
             "stdout_ref": outcome.stdout_ref,
@@ -943,14 +1084,14 @@ fn repo_plan(ctx: &Ctx, repo_id: &str, run_id: &str) -> Result<Value> {
                 .and_then(|a| a.first());
             if let Some(rep) = rep {
                 let content = rep.get("inline_content").cloned().unwrap_or(Value::Null);
-                let targets = content
+                let step = content
                     .get("steps")
                     .and_then(Value::as_array)
                     .and_then(|a| a.first())
-                    .and_then(|s| s.get("targets"))
                     .cloned()
-                    .unwrap_or(json!([]));
-                return Ok(json!({ "targets": targets, "plan_id": plan_id }));
+                    .unwrap_or(Value::Null);
+                let targets = step.get("targets").cloned().unwrap_or(json!([]));
+                return Ok(json!({ "targets": targets, "plan_id": plan_id, "step": step }));
             }
         }
     }
@@ -978,6 +1119,19 @@ pub fn evidence_create(
         .unwrap_or("concept:unknown")
         .to_string();
     let obs_row = repo_observation(ctx, &meta.repo_id, observation_id)?;
+    // The rules are the profile of the verifier that produced the observation: the one `verify run`
+    // recorded, else the plan's.
+    let verifier_id = obs_row
+        .verifier_id
+        .clone()
+        .or_else(|| {
+            progress
+                .pointer("/step/verifier_id")
+                .and_then(Value::as_str)
+                .map(str::to_string)
+        })
+        .unwrap_or_else(|| sxr_verify::VERIFIER_ID.to_string());
+    let profile = sxr_verify::profile_ref(&verifier_id);
     let observation_pos = obs_row.pos.clone();
     let plan_pos = meta.plan_position.clone().unwrap_or_else(pos_fallback);
     let precedes = plan_pos.append_ordinal < observation_pos.append_ordinal;
@@ -1005,21 +1159,21 @@ pub fn evidence_create(
         ),
         deriv(
             "direction",
-            "verifier-profile://cargo-test@1#exit_code_to_direction",
+            &format!("{profile}#exit_code_to_direction"),
             &json!({"exit_code": obs_row.exit_code, "crashed": obs_row.crashed}),
             &plan_pos,
             precedes,
         ),
         deriv(
             "evidence_type",
-            "verifier-profile://cargo-test@1#evidence_types",
+            &format!("{profile}#evidence_types"),
             &json!({"evidence_types": [evidence_type]}),
             &plan_pos,
             precedes,
         ),
         deriv(
             "reliability",
-            "verifier-profile://cargo-test@1#reliability_model",
+            &format!("{profile}#reliability_model"),
             &json!({"factors": []}),
             &plan_pos,
             precedes,
@@ -1068,8 +1222,8 @@ pub fn evidence_create(
         ),
         deriv(
             "source",
-            "verifier-profile://cargo-test@1",
-            &json!({"id": "cargo-test", "version": "1"}),
+            &profile,
+            &json!({"id": verifier_id, "version": "1"}),
             &plan_pos,
             precedes,
         ),
@@ -1153,6 +1307,8 @@ fn deriv(
 
 struct ObsInfo {
     pos: sxr_core::LedgerPosition,
+    /// The verifier `verify run` executed; `None` for observations recorded before it was stored.
+    verifier_id: Option<String>,
     exit_code: Option<i32>,
     crashed: bool,
     stdout_ref: String,
@@ -1190,8 +1346,13 @@ fn repo_observation(ctx: &Ctx, repo_id: &str, observation_id: &str) -> Result<Ob
                 .and_then(Value::as_str)
                 .map(str::to_string)
                 .unwrap_or_default();
+            let verifier_id = inc
+                .and_then(|i| i.get("verifier_id"))
+                .and_then(Value::as_str)
+                .map(str::to_string);
             return Ok(ObsInfo {
                 pos,
+                verifier_id,
                 exit_code,
                 crashed,
                 stdout_ref,
