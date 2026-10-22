@@ -52,6 +52,61 @@ impl VerifierPort for CargoTestVerifier {
     }
 }
 
+/// The `command@1` verifier: runs exactly the argv a plan declares (optionally under a launcher), in a
+/// cleared environment, and records the same observation fields as `cargo-test`. No output parser: the
+/// exit code is the result.
+pub const COMMAND_VERIFIER_ID: &str = "command";
+
+#[derive(Debug)]
+pub struct CommandVerifier;
+
+impl VerifierPort for CommandVerifier {
+    fn describe(&self) -> VerifierDescriptor {
+        VerifierDescriptor {
+            id: COMMAND_VERIFIER_ID.into(),
+            version: VERIFIER_VERSION.into(),
+            evidence_types: vec!["test_result".into(), "execution_log".into()],
+            deterministic: false,
+        }
+    }
+
+    fn execute(
+        &self,
+        step: &VerificationStep,
+        ctx: &ExecutionContext,
+    ) -> Result<VerifierOutcome, crate::error::VerifierError> {
+        if step.verifier_id != COMMAND_VERIFIER_ID {
+            return Err(crate::error::VerifierError::UnsupportedVerifier(
+                step.verifier_id.clone(),
+            ));
+        }
+        if step.invocation.argv.is_empty() || step.invocation.argv[0].is_empty() {
+            return Err(crate::error::VerifierError::InvalidInvocation(
+                "argv is empty".into(),
+            ));
+        }
+        if !step.invocation.cwd.is_dir() {
+            return Err(crate::error::VerifierError::InvalidInvocation(format!(
+                "cwd {} is not a directory",
+                step.invocation.cwd.display()
+            )));
+        }
+        let mut outcome = run_invocation(&step.invocation, ctx)?;
+        outcome.parsed = None;
+        Ok(outcome)
+    }
+}
+
+/// The verifier registered under `id`, or `None`: `verify run` refuses an unregistered id instead of
+/// running something else.
+pub fn verifier_for(id: &str) -> Option<&'static dyn VerifierPort> {
+    match id {
+        VERIFIER_ID => Some(&CargoTestVerifier),
+        COMMAND_VERIFIER_ID => Some(&CommandVerifier),
+        _ => None,
+    }
+}
+
 fn run_invocation(
     invocation: &Invocation,
     ctx: &ExecutionContext,
@@ -59,8 +114,13 @@ fn run_invocation(
     std::fs::create_dir_all(&ctx.artifacts_dir)?;
     let started_at = chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Micros, true);
 
-    let mut cmd = Command::new(&invocation.argv[0]);
-    cmd.args(&invocation.argv[1..])
+    let full: Vec<&String> = invocation
+        .launcher
+        .iter()
+        .chain(invocation.argv.iter())
+        .collect();
+    let mut cmd = Command::new(full[0]);
+    cmd.args(&full[1..])
         .current_dir(&invocation.cwd)
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
@@ -171,6 +231,7 @@ mod tests {
                     "RUSTC_WRAPPER".into(),
                 ],
                 timeout_s,
+                launcher: Vec::new(),
             },
             produces_evidence_type: "test_result".into(),
             targets: Vec::new(),
@@ -367,5 +428,92 @@ fn it_fails() {
             .execute(&step, &ExecutionContext::new(dir.path().join("artifacts")))
             .unwrap_err();
         assert!(matches!(err, VerifierError::UnsupportedVerifier(_)));
+    }
+
+    fn command_step(argv: &[&str], launcher: &[&str], cwd: PathBuf) -> VerificationStep {
+        let mut st = step(argv, cwd, 30);
+        st.verifier_id = COMMAND_VERIFIER_ID.into();
+        st.invocation.env_allowlist = vec!["PATH".into()];
+        st.invocation.launcher = launcher.iter().map(|s| s.to_string()).collect();
+        st
+    }
+
+    #[test]
+    fn command_verifier_runs_exactly_the_declared_argv_in_the_declared_cwd() {
+        let dir = tempdir().unwrap();
+        let art = tempdir().unwrap();
+        let st = command_step(
+            &["sh", "-c", "pwd > ran-in; echo out; exit 3"],
+            &[],
+            dir.path().into(),
+        );
+        let o = CommandVerifier
+            .execute(&st, &ExecutionContext::new(art.path()))
+            .unwrap();
+        assert_eq!(o.exit_code, Some(3));
+        assert!(!o.crashed);
+        assert_eq!(direction_of(&o), "contradicts");
+        assert!(o.parsed.is_none());
+        let ran_in = std::fs::read_to_string(dir.path().join("ran-in")).unwrap();
+        assert_eq!(
+            std::path::Path::new(ran_in.trim()).canonicalize().unwrap(),
+            dir.path().canonicalize().unwrap()
+        );
+        let hex = o.stdout_ref.trim_start_matches("sha256:");
+        assert_eq!(
+            std::fs::read_to_string(art.path().join(format!("{hex}.stdout"))).unwrap(),
+            "out\n"
+        );
+    }
+
+    #[test]
+    fn command_verifier_runs_under_the_launcher() {
+        let dir = tempdir().unwrap();
+        let art = tempdir().unwrap();
+        // The environment is cleared; only the launcher can set this variable.
+        let argv = ["sh", "-c", "test \"$SXR_LAUNCHED\" = yes"];
+        let bare = CommandVerifier
+            .execute(
+                &command_step(&argv, &[], dir.path().into()),
+                &ExecutionContext::new(art.path()),
+            )
+            .unwrap();
+        assert_eq!(bare.exit_code, Some(1));
+        let launched = CommandVerifier
+            .execute(
+                &command_step(&argv, &["env", "SXR_LAUNCHED=yes"], dir.path().into()),
+                &ExecutionContext::new(art.path()),
+            )
+            .unwrap();
+        assert_eq!(launched.exit_code, Some(0));
+    }
+
+    #[test]
+    fn command_verifier_refuses_an_empty_argv_and_other_ids() {
+        let dir = tempdir().unwrap();
+        let art = tempdir().unwrap();
+        let ctx = ExecutionContext::new(art.path());
+        let empty = command_step(&[], &[], dir.path().into());
+        assert!(matches!(
+            CommandVerifier.execute(&empty, &ctx),
+            Err(VerifierError::InvalidInvocation(_))
+        ));
+        let mut other = command_step(&["true"], &[], dir.path().into());
+        other.verifier_id = "pytest".into();
+        assert!(matches!(
+            CommandVerifier.execute(&other, &ctx),
+            Err(VerifierError::UnsupportedVerifier(_))
+        ));
+    }
+
+    #[test]
+    fn only_registered_verifiers_resolve() {
+        assert_eq!(
+            verifier_for("cargo-test").unwrap().describe().id,
+            "cargo-test"
+        );
+        assert_eq!(verifier_for("command").unwrap().describe().id, "command");
+        assert!(verifier_for("pytest").is_none());
+        assert!(verifier_for("").is_none());
     }
 }

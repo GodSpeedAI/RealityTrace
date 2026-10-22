@@ -10,7 +10,8 @@ To execute test suites and verification tools in a clean, filtered environment a
 ---
 
 ## 2. Responsibilities
-- Implement the `VerifierPort` trait and register the `cargo-test` verifier (`port.rs`, `verifier.rs`).
+- Implement the `VerifierPort` trait and register the `cargo-test` and `command@1` verifiers (`port.rs`, `verifier.rs`); `verifier_for` resolves an id or refuses it.
+- Compute the target's content digest (`digest.rs`, `tree_digest`).
 - Scrub environment variables (`filtered_env`) before spawning verifier processes.
 - Execute verifiers under specified working directories and capture stdout, stderr, and exit codes.
 - Parse structured output formats (specifically `cargo-json`) into `ParsedSummary` counts (`passed`, `failed`, `ignored`).
@@ -83,7 +84,8 @@ Invoked when `sxr verify run --run <run_id>` executes a planned step.
 
 ## 9. Failure Modes & Diagnostic Codes
 - `VerifierError::NotARepo`: Working directory is missing `Cargo.toml`.
-- `VerifierError::UnsupportedVerifier`: Plan requested a verifier ID other than `cargo-test`.
+- `VerifierError::UnsupportedVerifier`: Plan requested a verifier ID that is not registered (`cargo-test`, `command`).
+- `VerifierError::InvalidInvocation`: a `command` step with an empty argv or a missing cwd.
 - `VerifierError::ProcessSpawnFailed`: Failed to execute the `cargo` binary.
 - `VerifierError::Timeout`: Execution exceeded configured plan step timeout.
 

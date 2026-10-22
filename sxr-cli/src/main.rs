@@ -59,7 +59,7 @@ enum Command {
     /// Import a DomainForge verification contract (§14.0).
     #[command(subcommand)]
     Contract(ContractCmds),
-    /// Execute plan steps (cargo-test).
+    /// Execute the plan's verifier (cargo-test or command); other verifier ids are refused.
     #[command(subcommand)]
     Verify(VerifyCmds),
     /// Derive Evidence from an observation.
@@ -192,6 +192,18 @@ enum PlanCmds {
         /// Obligation id to bind when --from-contract is set.
         #[arg(long)]
         obligation: Option<String>,
+        /// `--verifier command` only: the exact argv to run, as a JSON array of strings.
+        #[arg(long)]
+        argv_json: Option<String>,
+        /// `--verifier command` only: working directory relative to the enrolled repo (default ".").
+        #[arg(long)]
+        cwd: Option<String>,
+        /// `--verifier command` only: timeout in seconds (default 900, at most 86400).
+        #[arg(long)]
+        timeout_s: Option<u64>,
+        /// `--verifier command` only: a launcher prefix (e.g. a sandbox command), as a JSON array.
+        #[arg(long)]
+        launcher_json: Option<String>,
     },
 }
 
@@ -607,6 +619,10 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 target,
                 from_contract,
                 obligation,
+                argv_json,
+                cwd,
+                timeout_s,
+                launcher_json,
             } => commands::plan_create(
                 ctx,
                 &run,
@@ -614,6 +630,12 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 &target,
                 from_contract.as_deref(),
                 obligation.as_deref(),
+                &commands::CommandArgs {
+                    argv_json,
+                    cwd,
+                    timeout_s,
+                    launcher_json,
+                },
             )?,
         },
         Command::Contract(c) => match c {

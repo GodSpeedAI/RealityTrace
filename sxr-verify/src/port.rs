@@ -13,6 +13,11 @@ use std::path::PathBuf;
 /// crashed/unknown → unknown.
 pub const DIRECTION_RULE_REF: &str = "verifier-profile://cargo-test@1#exit_code_to_direction";
 
+/// The verifier-profile ref of a registered verifier (`verifier-profile://<id>@1`).
+pub fn profile_ref(verifier_id: &str) -> String {
+    format!("verifier-profile://{verifier_id}@1")
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct VerifierDescriptor {
     pub id: String,
@@ -45,6 +50,10 @@ pub struct Invocation {
     /// else is cleared — verification runs must not inherit ambient state.
     pub env_allowlist: Vec<String>,
     pub timeout_s: u64,
+    /// A prefix the verifier is run under (e.g. a sandbox command). Empty: run `argv` directly. It is
+    /// recorded with the observation, so evidence states how the verifier was confined.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub launcher: Vec<String>,
 }
 
 /// Runtime context for one `execute`: where artifact bytes land. The
