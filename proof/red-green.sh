@@ -22,7 +22,11 @@ edition = "2021"
 path = "src/lib.rs"
 EOF
 cat > "$REPO/.sea-registry.toml" <<'EOF'
-[namespaces.logistics]
+version = 1
+default_namespace = "default"
+
+[[namespaces]]
+namespace = "logistics"
 patterns = [".sea/*.sea"]
 EOF
 cat > "$REPO/.sea/model.sea" <<'EOF'

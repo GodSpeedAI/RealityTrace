@@ -34,7 +34,11 @@ cat > "$ROOT/src/lib.rs" <<'EOF'
 pub fn camera_flow_realized() -> bool { true }
 EOF
 cat > "$ROOT/.sea-registry.toml" <<'EOF'
-[namespaces.logistics]
+version = 1
+default_namespace = "default"
+
+[[namespaces]]
+namespace = "logistics"
 patterns = [".sea/*.sea"]
 EOF
 cat > "$ROOT/.gitignore" <<'EOF'

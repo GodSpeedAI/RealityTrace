@@ -9,4 +9,4 @@ pub use error::SemanticError;
 
 /// The DomainForge release this RealityTrace build is verified against.
 /// Production callers opt in via `CliDomainForgeAdapter::with_required_version`.
-pub const PINNED_DOMAINFORGE_VERSION: &str = "0.19.0";
+pub const PINNED_DOMAINFORGE_VERSION: &str = "0.21.1";
