@@ -1,0 +1,53 @@
+name: clean-install
+
+# Readiness gate O01 (RealityTrace part): follow the README install on a machine with no author
+# environment. Fresh $HOME, no SQLite development package, install from this revision, then
+# the README's verification commands and a minimal real ledger loop.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  clean-install:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove system SQLite development files (a clean machine need not have them)
+        run: |
+          sudo apt-get remove -y libsqlite3-dev >/dev/null 2>&1 || true
+          ! ls /usr/lib/x86_64-linux-gnu/libsqlite3.so 2>/dev/null
+
+      - name: Install into a fresh HOME (README "Installation", from this revision)
+        run: |
+          export RUSTUP_HOME="$HOME/.rustup" CARGO_HOME="$HOME/.cargo"
+          export HOME="$RUNNER_TEMP/fresh-home"; mkdir -p "$HOME"
+          "$CARGO_HOME/bin/cargo" install --path sxr-cli --locked --root "$HOME/.local"
+          echo "FRESH_HOME=$HOME" >> "$GITHUB_ENV"
+
+      - name: Verify (README) and run a minimal real ledger loop
+        run: |
+          export HOME="$FRESH_HOME"; unset XDG_DATA_HOME XDG_STATE_HOME XDG_RUNTIME_DIR
+          RT="$HOME/.local/bin/realitytrace"
+          "$RT" --version
+          "$RT" doctor --json | tee doctor.json
+          python3 -c "import json; d=json.load(open('doctor.json')); assert d['data_root'].startswith('$HOME'), d"
+          if ldd "$RT" | grep -q libsqlite3; then echo "links system SQLite"; exit 1; fi
+
+          repo="$HOME/repo"; mkdir -p "$repo"; cd "$repo"
+          echo fixture > README; git init -q; git add -A
+          git -c user.email=ci@example.invalid -c user.name=ci commit -qm init
+          rid=$("$RT" repo enroll "$repo" --json | python3 -c "import json,sys; print(json.load(sys.stdin)['repo_id'])")
+          "$RT" ledger verify --repo "$rid" --json | tee verify.json
+          python3 -c "import json; d=json.load(open('verify.json')); assert d['ok'] is True and d['verified_count'] >= 1, d"
+
+          # A lost ledger must not verify as an empty, intact chain.
+          rm -f "$HOME/.local/share/sxr/repos/$rid"/ledger.db*
+          if "$RT" ledger verify --repo "$rid" --json; then echo "lost ledger verified"; exit 1; fi
+          echo "clean install OK"
