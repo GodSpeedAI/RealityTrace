@@ -235,6 +235,23 @@ fn command_verifier_runs_the_declared_argv_under_the_launcher_and_records_what_i
     let inline = &recorded["payload"]["representations"][0]["inline_content"];
     assert_eq!(inline["verifier_id"], "command");
     assert_eq!(inline["target_digest"], expected_digest.as_str());
+    // RT-1: the persisted observation says when the verifier ran, start before completion.
+    let started = chrono::DateTime::parse_from_rfc3339(
+        inline["started_at"].as_str().expect("started_at persisted"),
+    )
+    .unwrap();
+    let completed = chrono::DateTime::parse_from_rfc3339(
+        inline["completed_at"]
+            .as_str()
+            .expect("completed_at persisted"),
+    )
+    .unwrap();
+    assert!(
+        started <= completed,
+        "started_at {started} must not be after completed_at {completed}"
+    );
+    assert_eq!(inline["started_at"], obs["started_at"]);
+    assert_eq!(inline["completed_at"], obs["completed_at"]);
     assert_eq!(
         inline["invocation"]["launcher"][1],
         format!("SXR_MARK={}", marker.display())

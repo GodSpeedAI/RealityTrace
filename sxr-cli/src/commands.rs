@@ -1018,6 +1018,10 @@ pub fn verify_run(ctx: &Ctx, run_id: &str) -> Result<Value> {
                 "verifier_id": step.verifier_id,
                 "invocation": invocation,
                 "target_digest": target_digest,
+                // RT-1 (Horizon SPEC-CR-002): when the verifier ran. `completed_at` is taken after the child's
+                // exit (or kill on timeout) was observed and its output drained, so a delay only makes it later.
+                "started_at": outcome.started_at,
+                "completed_at": outcome.ended_at,
                 "exit_code": outcome.exit_code,
                 "crashed": outcome.crashed,
                 "stderr_ref": outcome.stderr_ref,
@@ -1056,6 +1060,8 @@ pub fn verify_run(ctx: &Ctx, run_id: &str) -> Result<Value> {
             "run_id": run_id,
             "verifier_id": step.verifier_id,
             "target_digest": target_digest,
+            "started_at": outcome.started_at,
+            "completed_at": outcome.ended_at,
             "exit_code": outcome.exit_code,
             "crashed": outcome.crashed,
             "stdout_ref": outcome.stdout_ref,
