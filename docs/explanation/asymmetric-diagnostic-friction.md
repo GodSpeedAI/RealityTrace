@@ -25,25 +25,48 @@ To halt this pathology, SXR enforces **Asymmetric Diagnostic Friction (AC-DIAG-0
 
 ```mermaid
 flowchart TD
-    Failure["Verification Contradiction (Residual)"] --> Hypotheses["Enumerate 9 Candidate Loci"]
+    Residual["Verification Contradiction (Residual R = G_decl \\ G_obs)"] --> Enum["sxr diagnostic enumerate<br/>(9 Candidate Loci Created)"]
 
-    subgraph CheapLoci["Cheap Failure Loci (Must be investigated first)"]
-        V["verifier (flaky test)"]
-        E["environment (OS/network)"]
-        S["specification (test contract)"]
-        C["contract (interface binding)"]
+    subgraph T1["Tier 1: Infrastructure Loci ($0.02 - $0.15)"]
+        V["verifier (flaky harness/timeout)"]
+        E["environment (missing OS dependency)"]
+        S["specification (stale test assertion)"]
+        C["contract (interface signature)"]
     end
 
-    subgraph ExpensiveLoci["Expensive Loci (Model Changes)"]
-        M["declared_model (.sea refactor)"]
+    subgraph T2["Tier 2: Implementation Loci ($1.20 - $3.50)"]
+        R["runtime (execution state)"]
+        I["implementation (Rust code bug)"]
     end
 
-    Hypotheses --> CheapLoci
-    Hypotheses --> ExpensiveLoci
+    subgraph T3["Tier 3: Translation ($8.00)"]
+        T["translation (compiler mapping bug)"]
+    end
 
-    CheapLoci -->|Must collect CONTRADICTING evidence| Exclusion["Evidence-Excluded Loci"]
-    Exclusion -->|Only when all cheap loci excluded| Unlock["Unlock declared_model Proposal"]
+    subgraph T4["Tier 4: Declared Domain Model ($25.00+ High Blast Radius)"]
+        M["declared_model (.sea architectural refactor)"]
+    end
+
+    Enum --> T1
+    Enum --> T2
+    Enum --> T3
+    Enum --> T4
+
+    T1 -->|Active Falsification Required: direction = contradicts| Ex1["Tier 1 Excluded"]
+    Ex1 -->|Unlocks Tier 2 Investigation| T2
+    T2 -->|Active Falsification Required| Ex2["Tier 2 Excluded"]
+    Ex2 -->|Unlocks Tier 3 Investigation| T3
+    T3 -->|Active Falsification Required| Ex3["Tier 3 Excluded"]
+
+    Ex3 --> Barrier{"Friction Barrier<br/>(AC-DIAG-001)"}
+    Barrier -->|All Cheaper Loci Excluded| Unlock["Unlock: sxr diagnostic propose --locus declared_model"]
+    
+    AgentAttempt["Agent attempts premature model refactor"] -.-> Barrier
+    Barrier -.->|Cheaper Loci Unadjudicated| Block["HALT: Exit Code 3<br/>(Silence is NOT Exclusion)"]
 ```
+
+> **Interactive Tool**: To step through live failure scenarios, observe exit code 3 blocks, and test how active falsification lowers the friction barrier, launch the [Asymmetric Diagnostic Friction & 9-Locus Attribution Simulator](../explainers/diagnostic-friction-simulator.html).
+
 
 ---
 

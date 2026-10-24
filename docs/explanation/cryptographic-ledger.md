@@ -27,15 +27,45 @@ An audit runtime for autonomous systems must satisfy competing demands:
 
 ## 3. The Hash Chain Mathematics
 
-In `sxr-ledger`, every entry in the `ledger` table binds its predecessor:
+In `sxr-ledger`, every entry in the `ledger` table binds its predecessor in a dense, gapless sequence:
 
-```text
-Row 1: [ordinal: 1, prev_hash: NULL,        entry_hash: H1] <--- Genesis
-Row 2: [ordinal: 2, prev_hash: H1,          entry_hash: H2]
-Row 3: [ordinal: 3, prev_hash: H2,          entry_hash: H3]
-...
-Row N: [ordinal: N, prev_hash: H_{N-1},     entry_hash: HN]
+```mermaid
+flowchart TD
+    subgraph Row1["Ordinal #1 (Genesis)"]
+        O1["ordinal: 1<br/>prev_hash: NULL<br/>payload_hash: H_p1"] --> E1["entry_hash: H1 = SHA256(canonical(row_1))"]
+    end
+
+    subgraph Row2["Ordinal #2 (Snapshot)"]
+        O2["ordinal: 2<br/>prev_hash: H1<br/>payload_hash: H_p2"] --> E2["entry_hash: H2 = SHA256(canonical(row_2))"]
+    end
+
+    subgraph Row3["Ordinal #3 (Question)"]
+        O3["ordinal: 3<br/>prev_hash: H2<br/>payload_hash: H_p3"] --> E3["entry_hash: H3 = SHA256(canonical(row_3))"]
+    end
+
+    subgraph RowN["Ordinal #N (Current Head)"]
+        ON["ordinal: N<br/>prev_hash: H_{N-1}<br/>payload_hash: H_pN"] --> EN["entry_hash: HN = SHA256(canonical(row_N))"]
+    end
+
+    subgraph CAS["Content-Addressable Storage (Payloads > 64 KB)"]
+        CasStore[("cas/ Store<br/>cas://sha256:hex")]
+    end
+
+    E1 -->|Binds to prev_hash| O2
+    E2 -->|Binds to prev_hash| O3
+    E3 -.->|Chained down to head| ON
+    O2 -.->|Offloaded if > 64KB| CasStore
+
+    subgraph CQRS["Transactional Outbox & Derived Projections"]
+        Outbox["outbox Table<br/>(Atomic with append)"] --> Drain["Projection Engine<br/>(Drains via watermark)"]
+        Drain --> Proj[("Relational Projections<br/>G_declared, G_observed, FTS5")]
+    end
+
+    ON -->|Appended with row| Outbox
 ```
+
+> **Interactive Tool**: To experiment with live cryptographic chain verification and observe how tampering with any payload breaks downstream links, launch the [Cryptographic Ledger & Settlement Explorer](../explainers/ledger-and-settlement-explorer.html).
+
 
 ### Hash Computation Formula
 The `entry_hash` is computed over a canonical JSON object:
