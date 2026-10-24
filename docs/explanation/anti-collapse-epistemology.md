@@ -20,6 +20,32 @@ When an autonomous agent operates in an environment plagued by epistemic collaps
 
 SXR is designed to structurally prevent the seven specific collapse shapes identified in the **Common Event Protocol (CEP-0008)**:
 
+```mermaid
+flowchart TD
+    subgraph RawWorld["Uninterpreted Execution"]
+        Subprocess["Verifier Process / Subprocess"] --> Telemetry["Raw Logs & Exit Code 0"]
+        Telemetry -->|QUARANTINED| Obs["observation.recorded<br/>(Zero Semantic Authority)"]
+    end
+
+    subgraph DerivationGate["Anti-Collapse Derivation Barrier"]
+        Obs -->|Explicit Derivation Rule| Evid["evidence.created<br/>(question_ref, direction, reliability)"]
+        Quest["question.declared"] --> Evid
+    end
+
+    subgraph SettlementGate["Deterministic Settlement Barrier (AC-SETTLEMENT-002)"]
+        Evid --> Evaluate{"threshold::evaluate()<br/>(AllEvidenceSupports / AnyContradicts)"}
+        Thresh["threshold.declared"] --> Evaluate
+        ModelStatus{"Model Valid?"} --> Auth{"authorize_settlement()"}
+        Evaluate --> Auth
+        Auth -->|Pass & Valid| Settled["settlement.registered: SETTLED"]
+        Auth -->|Model Invalid| Blocked["BLOCKED: AC-SETTLEMENT-002<br/>(Positive settlement rejected)"]
+        Auth -->|Contradiction| Failed["settlement.registered: FAILED"]
+    end
+```
+
+> **Interactive Tool**: To step through all 5 epistemic stages, compare $G_{declared}$ and $G_{observed}$ dual graphs, and inspect the 7 Anti-Collapse Axioms, launch the [Epistemic Pipeline, Dual-Graph Projections & Anti-Collapse Workbench](../explainers/epistemic-pipeline-workbench.html).
+
+
 ### 1. Data-as-Evidence Collapse
 - **The Trap**: Assuming raw telemetry (logs, exit codes, benchmark numbers) inherently constitutes evidence.
 - **The Reality**: Data is neutral observation. It only becomes *evidence* when tied to a specific proposition, with explicit evaluation of relevance, reliability, and direction (`supports` vs `contradicts`).

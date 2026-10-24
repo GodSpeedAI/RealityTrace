@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RealityTrace (SXR) — Cognitive Representation Portal</title>
+  <style>
+    :root {
+      --bg: #070b12;
+      --surface: #0e1624;
+      --surface-raised: #152236;
+      --surface-border: #1f334d;
+      --border-focus: #38bdf8;
+      --text: #e2e8f0;
+      --text-muted: #8ba1b7;
+      --text-dim: #556c82;
+      --cyan: #38bdf8;
+      --cyan-soft: rgba(56, 189, 248, 0.12);
+      --emerald: #34d399;
+      --emerald-soft: rgba(52, 211, 153, 0.12);
+      --amber: #fbbf24;
+      --amber-soft: rgba(251, 191, 36, 0.12);
+      --rose: #f87171;
+      --rose-soft: rgba(248, 113, 113, 0.12);
+      --purple: #c084fc;
+      --purple-soft: rgba(192, 132, 252, 0.12);
+      --indigo: #818cf8;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --radius: 8px;
+      --transition: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 100vh;
+      padding: 32px 20px 80px;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    /* Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .breadcrumb a {
+      color: var(--cyan);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-cyan { background: var(--cyan-soft); color: var(--cyan); border: 1px solid rgba(56,189,248,0.25); }
+    .badge-emerald { background: var(--emerald-soft); color: var(--emerald); border: 1px solid rgba(52,211,153,0.25); }
+    .badge-amber { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(251,191,36,0.25); }
+
+    /* Hero */
+    header.hero {
+      margin-bottom: 36px;
+    }
+    header.hero h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    header.hero p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 900px;
+      line-height: 1.6;
+    }
+
+    /* Principles Quote Box */
+    .philosophy-banner {
+      background: var(--surface);
+      border-left: 3px solid var(--cyan);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      border-top: 1px solid var(--surface-border);
+      border-right: 1px solid var(--surface-border);
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .quote-text {
+      font-style: italic;
+      color: #fff;
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+    }
+    .quote-author {
+      font-size: 0.78rem;
+      color: var(--cyan);
+      font-weight: 600;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all var(--transition);
+    }
+    .filter-btn:hover {
+      background: var(--surface-raised);
+      color: #fff;
+    }
+    .filter-btn.active {
+      background: var(--cyan);
+      color: #070b12;
+      border-color: var(--cyan);
+      font-weight: 700;
+    }
+
+    /* Explainer Cards Grid */
+    .explorers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .explorer-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all var(--transition);
+      position: relative;
+    }
+    .explorer-card:hover {
+      border-color: var(--border-focus);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-top {
+      margin-bottom: 18px;
+    }
+    .card-badges {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .card-question {
+      font-size: 0.82rem;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card-features {
+      margin: 16px 0;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: 6px;
+      border: 1px solid var(--surface-border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .feat-item {
+      font-size: 0.78rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feat-icon {
+      color: var(--emerald);
+      font-size: 0.85rem;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--surface-border);
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+    .source-links {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+    .btn-launch {
+      background: var(--cyan);
+      color: #070b12;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition);
+    }
+    .btn-launch:hover {
+      opacity: 0.9;
+      transform: translateX(2px);
+    }
+
+    /* Architecture Map Overview */
+    .arch-overview-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .arch-box {
+      background: var(--surface-raised);
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      padding: 16px;
+    }
+    .arch-box-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .arch-box-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Canonical Links */
+    .canonical-nav {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .canonical-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .canonical-link {
+      color: var(--cyan);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .canonical-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Nav Bar -->
+  <nav class="nav-bar">
+    <div class="breadcrumb">
+      <a href="../index.html">SXR Documentation</a>
+      <span>/</span>
+      <span style="color: #fff;">Cognitive Representation Portal</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <span class="badge badge-emerald">3 Interactive Explainers</span>
+      <span class="badge badge-cyan">Zero Network Dependencies</span>
+      <span class="badge badge-amber">Self-Contained</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <h1>RealityTrace (SXR) — Cognitive Representation Portal</h1>
+    <p>
+      This portal provides an interactive, visually intelligible interface to the Semantic Exhaust Runtime (SXR). 
+      Rather than reading hundreds of lines of code or mentally simulating complex asynchronous state transitions, explore the runtime mechanisms directly through Bret Victor-inspired dynamic representations.
+    </p>
+  </header>
+
+  <!-- Philosophy Quote -->
+  <div class="philosophy-banner">
+    <div class="quote-text">
+      "The form in which an idea is represented determines which human cognitive capabilities can be brought to bear on understanding it. Good representations make previously difficult thinking easier."
+    </div>
+    <div class="quote-author">— Bret Victor, The Humane Representation of Thought</div>
+  </div>
+
+  <!-- Persona Filters -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCards('all')">All Cognitive Views (3)</button>
+    <button class="filter-btn" onclick="filterCards('agent')">Autonomous Agent Developers</button>
+    <button class="filter-btn" onclick="filterCards('architect')">Architects & Maintainers</button>
+    <button class="filter-btn" onclick="filterCards('auditor')">Auditors & Cryptographers</button>
+  </div>
+
+  <!-- The Explainers Grid -->
+  <div class="explorers-grid" id="explorersGrid">
+
+    <!-- Card 1: Diagnostic Friction Simulator -->
+    <div class="explorer-card" data-personas="agent architect">
+      <div class="card-top">
+        <div class="card-badges">
+          <span class="badge badge-rose">Slice 5 Attribution</span>
+          <span class="badge badge-amber">Exit Code 3 Guard</span>
+          <span class="badge badge-cyan">AC-DIAG-001</span>
+        </div>
+        <h2 class="card-title">Asymmetric Diagnostic Friction & 9-Locus Attribution Simulator</h2>
+        <div class="card-question">
+          <span>Question Answered:</span>
+          <span>Why do AI agents destroy working code during test failures?</span>
+        </div>
+        <p class="card-desc">
+          Interactively observe the failure pathology of autonomous agents. Test how SXR isolates verification residuals across 9 candidate loci and halts premature model refactorings via cost-ordered falsification barriers.
+        </p>
+
+        <div class="card-features">
+          <div class="feat-item"><span class="feat-icon">✓</span> 4 Cost Tiers matrix (Verifier $0.05 vs Model $25.00+)</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> Live simulation of agent exit code 3 refusal</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> Interactive §12.5a 4 settlement criteria checklist</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> Active falsification: "Silence is not exclusion"</div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="source-links">sxr-cli/src/commands.rs:642</div>
+        <a href="diagnostic-friction-simulator.html" class="btn-launch">
+          <span>Open Simulator</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 2: Cryptographic Ledger Explorer -->
+    <div class="explorer-card" data-personas="architect auditor">
+      <div class="card-top">
+        <div class="card-badges">
+          <span class="badge badge-emerald">AC-LEDGER-001</span>
+          <span class="badge badge-cyan">AC-SETTLEMENT-002</span>
+          <span class="badge badge-amber">SQLite STRICT WAL</span>
+        </div>
+        <h2 class="card-title">Cryptographic Append-Only Ledger & Settlement Explorer</h2>
+        <div class="card-question">
+          <span>Question Answered:</span>
+          <span>How does SXR prove tamper-evidence and binding settlement?</span>
+        </div>
+        <p class="card-desc">
+          Inspect the live dense SHA-256 hash chain in SQLite. Experiment with malicious payload injection to observe immediate downstream cryptographic breakage, and evaluate thresholds over live evidence.
+        </p>
+
+        <div class="card-features">
+          <div class="feat-item"><span class="feat-icon">✓</span> Gapless ordinal chaining ($h_n = \text{SHA256}(\text{canonical}(\text{row}_n))$)</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> Live tamper lab with real-time hash recomputation</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> Threshold algebra: AllEvidenceSupports vs AnyEvidenceContradicts</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> CAS payload offloading threshold (> 64 KB)</div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="source-links">sxr-ledger/src/ledger.rs</div>
+        <a href="ledger-and-settlement-explorer.html" class="btn-launch">
+          <span>Open Explorer</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 3: Epistemic Pipeline & Dual Graphs -->
+    <div class="explorer-card" data-personas="agent architect auditor">
+      <div class="card-top">
+        <div class="card-badges">
+          <span class="badge badge-purple">CEP-0008 Compliant</span>
+          <span class="badge badge-emerald">AC-GRAPH-001</span>
+          <span class="badge badge-cyan">AC-REPLAY-002</span>
+        </div>
+        <h2 class="card-title">Epistemic Pipeline, Dual-Graph Projections & Anti-Collapse Workbench</h2>
+        <div class="card-question">
+          <span>Question Answered:</span>
+          <span>Why is a test exit code 0 not proof of working software?</span>
+        </div>
+        <p class="card-desc">
+          Step through SXR's 5-stage epistemological pipeline (Declaration → Execution → Telemetry → Evidence → Settlement). Compare $G_{declared}$ side-by-side with $G_{observed}$ and inspect the 7 Anti-Collapse Axioms.
+        </p>
+
+        <div class="card-features">
+          <div class="feat-item"><span class="feat-icon">✓</span> Interactive 5-stage state machine with JSON envelopes</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> Interactive SVG graph: G_declared vs G_observed residual</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> Side-by-side comparison of 7 CEP-0008 anti-collapse axioms</div>
+          <div class="feat-item"><span class="feat-icon">✓</span> Deterministic projection replay engine ($AC-REPLAY-002$)</div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="source-links">sxr-core/src/envelope.rs</div>
+        <a href="epistemic-pipeline-workbench.html" class="btn-launch">
+          <span>Open Workbench</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- System Architecture Topology Reference -->
+  <section class="arch-overview-card">
+    <div style="font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+      SXR Architectural Subsystem Map
+    </div>
+    <div style="font-size: 0.85rem; color: var(--text-muted);">
+      How the six core Rust crates collaborate without cyclic dependencies.
+    </div>
+
+    <div class="arch-grid">
+      <div class="arch-box">
+        <div class="arch-box-title">
+          <span class="badge badge-cyan">Pure Domain</span>
+          <span>sxr-core</span>
+        </div>
+        <div class="arch-box-desc">
+          Zero-I/O crate containing domain types, 26 record kinds, CEP-0008 schema validation, SHA-256 hash chain algebra, threshold math, and E7/E8 convergence gates.
+        </div>
+      </div>
+
+      <div class="arch-box">
+        <div class="arch-box-title">
+          <span class="badge badge-emerald">Storage Engine</span>
+          <span>sxr-ledger</span>
+        </div>
+        <div class="arch-box-desc">
+          Durable SQLite STRICT WAL ledger, advisory writer flock serialization, transactional CQRS outbox, and Content-Addressable Storage (CAS) for large payloads.
+        </div>
+      </div>
+
+      <div class="arch-box">
+        <div class="arch-box-title">
+          <span class="badge badge-purple">Boundary Adapters</span>
+          <span>sxr-git / df / verify</span>
+        </div>
+        <div class="arch-box-desc">
+          External ports: <code>sxr-git</code> mints ULID identities; <code>sxr-df</code> wraps DomainForge to parse <code>.sea</code> models; <code>sxr-verify</code> executes test suites and streams JSON output.
+        </div>
+      </div>
+
+      <div class="arch-box">
+        <div class="arch-box-title">
+          <span class="badge badge-rose">Orchestration</span>
+          <span>sxr-cli</span>
+        </div>
+        <div class="arch-box-desc">
+          Unified CLI dispatch, background UNIX socket daemon, deterministic projection engine ($G_{declared}, G_{observed}$, FTS5), and Slice 5 diagnostic attribution loop.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Canonical Documentation Links -->
+  <footer class="canonical-nav">
+    <div style="font-size: 0.82rem; color: var(--text-muted);">
+      Looking for canonical documentation, tutorials, or reference tables?
+    </div>
+    <div class="canonical-links">
+      <a href="../index.html" class="canonical-link">Documentation Index</a>
+      <a href="../mental-model.html" class="canonical-link">Mental Model</a>
+      <a href="../architecture/logical.html" class="canonical-link">Logical Architecture</a>
+      <a href="../../source-map.md" class="canonical-link">Source Traceability Map</a>
+      <a href="../../README.md" class="canonical-link">Repository README</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  function filterCards(persona) {
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    const cards = document.querySelectorAll('.explorer-card');
+    cards.forEach(card => {
+      const personas = card.getAttribute('data-personas');
+      if (persona === 'all' || personas.includes(persona)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

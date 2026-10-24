@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SXR — Cryptographic Ledger, Hash Chaining & Settlement Explorer</title>
+  <style>
+    :root {
+      --bg: #070b12;
+      --surface: #0e1624;
+      --surface-raised: #152236;
+      --surface-border: #1f334d;
+      --border-focus: #38bdf8;
+      --text: #e2e8f0;
+      --text-muted: #8ba1b7;
+      --text-dim: #556c82;
+      --cyan: #38bdf8;
+      --cyan-soft: rgba(56, 189, 248, 0.12);
+      --emerald: #34d399;
+      --emerald-soft: rgba(52, 211, 153, 0.12);
+      --amber: #fbbf24;
+      --amber-soft: rgba(251, 191, 36, 0.12);
+      --rose: #f87171;
+      --rose-soft: rgba(248, 113, 113, 0.12);
+      --purple: #c084fc;
+      --purple-soft: rgba(192, 132, 252, 0.12);
+      --indigo: #818cf8;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --radius: 8px;
+      --transition: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 100vh;
+      padding: 24px 20px 80px;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* Nav bar */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .breadcrumb a {
+      color: var(--cyan);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-cyan { background: var(--cyan-soft); color: var(--cyan); border: 1px solid rgba(56,189,248,0.25); }
+    .badge-emerald { background: var(--emerald-soft); color: var(--emerald); border: 1px solid rgba(52,211,153,0.25); }
+    .badge-amber { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(251,191,36,0.25); }
+    .badge-rose { background: var(--rose-soft); color: var(--rose); border: 1px solid rgba(248,113,113,0.25); }
+
+    /* Header */
+    header.hero {
+      margin-bottom: 28px;
+    }
+    header.hero h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    header.hero p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 900px;
+      line-height: 1.6;
+    }
+
+    /* Telemetry Ribbon */
+    .telemetry-ribbon {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      margin-bottom: 28px;
+    }
+    .telem-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .telem-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+    }
+    .telem-value {
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Cards */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Hash Chain Visualizer */
+    .chain-container {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 12px 6px 18px;
+    }
+    .chain-block {
+      flex: 0 0 260px;
+      background: var(--surface-raised);
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      transition: all var(--transition);
+    }
+    .chain-block.tampered {
+      border-color: var(--rose);
+      background: rgba(248, 113, 113, 0.08);
+      box-shadow: 0 0 14px rgba(248, 113, 113, 0.2);
+    }
+    .chain-block.active-head {
+      border-color: var(--cyan);
+    }
+    .block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--surface-border);
+      padding-bottom: 6px;
+    }
+    .block-ordinal {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--cyan);
+    }
+    .block-kind {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: #fff;
+      font-weight: 700;
+    }
+    .field-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .field-lbl {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .field-val {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 3px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--surface-border);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .field-val.highlight-hash {
+      color: var(--emerald);
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+    .field-val.error-hash {
+      color: var(--rose);
+      border-color: rgba(248, 113, 113, 0.4);
+      font-weight: 700;
+    }
+
+    /* Grid Layout for Controls */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 900px) {
+      .two-col-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Buttons & Controls */
+    .btn {
+      background: var(--surface-raised);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover {
+      background: #18283e;
+      border-color: var(--text-muted);
+    }
+    .btn-danger {
+      background: rgba(248, 113, 113, 0.12);
+      border-color: rgba(248, 113, 113, 0.3);
+      color: var(--rose);
+    }
+    .btn-danger:hover {
+      background: var(--rose);
+      color: #000;
+    }
+    .btn-primary {
+      background: var(--cyan);
+      color: #070b12;
+      border-color: var(--cyan);
+      font-weight: 700;
+    }
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    /* Terminal Output */
+    .terminal-box {
+      background: #04070d;
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: #93c5fd;
+      padding: 12px;
+      height: 180px;
+      overflow-y: auto;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+    .term-line { margin-bottom: 3px; }
+    .term-prompt { color: var(--emerald); }
+    .term-err { color: var(--rose); font-weight: 700; }
+    .term-ok { color: var(--emerald); }
+
+    /* Settlement Evaluator Box */
+    .eval-box {
+      background: var(--bg);
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .eval-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+    select, input[type="range"] {
+      background: var(--surface-raised);
+      border: 1px solid var(--surface-border);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+    }
+    .verdict-banner {
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .verdict-settled { background: var(--emerald-soft); color: var(--emerald); border: 1px solid rgba(52,211,153,0.3); }
+    .verdict-failed { background: var(--rose-soft); color: var(--rose); border: 1px solid rgba(248,113,113,0.3); }
+    .verdict-blocked { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="breadcrumb">
+      <a href="../index.html">SXR Documentation</a>
+      <span>/</span>
+      <a href="index.html">Explorers</a>
+      <span>/</span>
+      <span style="color: #fff;">Cryptographic Ledger & Settlement</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <span class="badge badge-emerald">AC-LEDGER-001 Dense Chain</span>
+      <span class="badge badge-cyan">AC-SETTLEMENT-002 Invariant</span>
+      <span class="badge badge-amber">Self-Contained Offline</span>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <h1>Cryptographic Append-Only Ledger & Settlement Explorer</h1>
+    <p>
+      In SXR, raw execution output is not proof, and process exit code <code>0</code> is not settlement. 
+      Every event is committed to a dense, gapless SHA-256 hash chain in SQLite (<span style="font-family: var(--mono);">ledger.db</span>), where each record binds its predecessor's digest ($h_n = \text{SHA256}(\text{canonical}(\text{row}_n))$).
+      Explore the live cryptographic chain, test how tamper-evidence breaks downstream links, and observe how threshold algebra determines formal settlement.
+    </p>
+  </header>
+
+  <!-- Live Telemetry Ribbon -->
+  <section class="telemetry-ribbon">
+    <div class="telem-item">
+      <div class="telem-label">Database Substrate</div>
+      <div class="telem-value">SQLite STRICT (WAL Mode)</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">Total Chain Entries</div>
+      <div class="telem-value" id="telemCount">7 Sequential Rows</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">Cryptographic Integrity</div>
+      <div class="telem-value" id="telemIntegrity" style="color: var(--emerald);">100% UNBROKEN CHAIN</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">Outbox Drain Status</div>
+      <div class="telem-value">Watermark: Ordinal #7</div>
+    </div>
+  </section>
+
+  <!-- Visual Ledger Hash Chain (Mechanism First) -->
+  <section class="panel">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div>
+        <div class="card-title">
+          <span>Dense SHA-256 Hash Chaining (AC-LEDGER-001)</span>
+          <span class="badge badge-cyan">Gapless 1-Indexed</span>
+        </div>
+        <div class="card-subtitle">
+          Scroll horizontally to inspect how every record cryptographically seals the previous row. Tampering with any payload breaks all downstream links.
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-danger" onclick="tamperRow(3)">Tamper with Row #4</button>
+        <button class="btn" onclick="restoreLedger()">Restore Integrity</button>
+      </div>
+    </div>
+
+    <!-- The Chain Blocks -->
+    <div class="chain-container" id="chainContainer">
+      <!-- Populated dynamically by JS -->
+    </div>
+  </section>
+
+  <!-- Interactive Controls: 2 Columns -->
+  <div class="two-col-grid">
+
+    <!-- Left Column: Verification & Tamper Lab -->
+    <div class="panel">
+      <div class="card-title">1. Cryptographic Verification & Verification CLI</div>
+      <div class="card-subtitle">Execute integrity audit commands to detect tampering or gaps.</div>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+        <button class="btn btn-primary" onclick="runVerifyChain()">Execute: sxr ledger verify</button>
+        <button class="btn" onclick="tamperPayload(5)">Mutate Row #6 Observation</button>
+      </div>
+
+      <div class="field-lbl">Hash Chain Invariant Formula</div>
+      <div style="background: var(--bg); padding: 8px; border-radius: 4px; font-family: var(--mono); font-size: 0.72rem; color: var(--cyan); margin-bottom: 12px; border: 1px solid var(--surface-border);">
+        h_n = SHA256(canonical_json({ append_ordinal: n, previous_entry_hash: h_{n-1}, payload_hash: SHA256(payload), ... }))
+      </div>
+
+      <div class="field-lbl">Terminal Output Stream</div>
+      <div class="terminal-box" id="termOutput">
+        <div class="term-line"><span class="term-prompt">$</span> sxr ledger verify --repo 01JK8V</div>
+        <div class="term-line"><span class="term-ok">[CHAIN VERIFIED]</span> 7 entries verified. Gapless ordinals 1..7. All cryptographic links intact.</div>
+      </div>
+    </div>
+
+    <!-- Right Column: Deterministic Settlement Engine -->
+    <div class="panel">
+      <div class="card-title">2. Settlement Engine & Invariant AC-SETTLEMENT-002</div>
+      <div class="card-subtitle">Test how thresholds and model status evaluate evidence into a binding verdict.</div>
+
+      <div class="eval-box">
+        <div class="eval-row">
+          <span>Threshold Acceptance Rule:</span>
+          <select id="thresholdRule" onchange="evaluateSettlement()">
+            <option value="AllEvidenceSupports">AllEvidenceSupports (Strict)</option>
+            <option value="AnyEvidenceContradicts">AnyEvidenceContradicts (Fail-Fast)</option>
+            <option value="RequiresEvidence">RequiresEvidence (Min Count >= 2)</option>
+          </select>
+        </div>
+
+        <div class="eval-row">
+          <span>Declared Model Status:</span>
+          <select id="modelStatus" onchange="evaluateSettlement()">
+            <option value="Valid">Valid (0 DomainForge syntax/closure errors)</option>
+            <option value="Invalid">Invalid (Model validation failed / OmissionRecord)</option>
+          </select>
+        </div>
+
+        <div class="eval-row">
+          <span>Evidence Direction Balance:</span>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn" style="padding: 2px 8px; font-size: 0.7rem;" onclick="addEvidence('supports')">+1 Supports</button>
+            <button class="btn" style="padding: 2px 8px; font-size: 0.7rem;" onclick="addEvidence('contradicts')">+1 Contradicts</button>
+            <button class="btn" style="padding: 2px 8px; font-size: 0.7rem;" onclick="resetEvidence()">Reset</button>
+          </div>
+        </div>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted);" id="evidenceCountLabel">
+          Evidence Items: 2 Supports, 0 Contradicts
+        </div>
+
+        <!-- Settlement Result Banner -->
+        <div class="verdict-banner verdict-settled" id="verdictBanner">
+          <div>
+            <div style="font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;">Settlement Verdict</div>
+            <div style="font-size: 1.1rem; font-weight: 800;" id="verdictText">SETTLED</div>
+          </div>
+          <div id="verdictDetail" style="font-size: 0.75rem; text-align: right; max-width: 250px;">
+            All evidence supports the question; threshold satisfied.
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 10px;">
+        <strong>Invariant AC-SETTLEMENT-002:</strong> If a snapshot's declared model was marked invalid, positive acceptance (<code>settled</code>) is mathematically forbidden at the protocol boundary, regardless of how many tests pass!
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Content-Addressable Storage (CAS) Offloading Interactive Slider -->
+  <section class="panel">
+    <div class="card-title">
+      <span>3. Content-Addressable Storage (CAS) Offloading</span>
+      <span class="badge badge-amber">Threshold: 64 KB</span>
+    </div>
+    <div class="card-subtitle">
+      Small envelopes are stored inline in SQLite. Envelopes exceeding 64 KB are offloaded to disk at <code>$XDG_DATA_HOME/sxr/repos/&lt;id&gt;/cas/&lt;sha256&gt;</code> and referenced via URI.
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 14px;">
+      <span style="font-size: 0.8rem; font-weight: 700;">Simulated Payload Size:</span>
+      <input type="range" id="payloadSizeSlider" min="1" max="256" value="32" style="width: 280px;" oninput="updateCasSimulation()">
+      <span id="payloadSizeLabel" style="font-family: var(--mono); font-size: 0.85rem; font-weight: 700; color: var(--cyan);">32 KB</span>
+    </div>
+
+    <div id="casDisplayBox" style="background: var(--surface-raised); border: 1px solid var(--surface-border); border-radius: 6px; padding: 12px; font-family: var(--mono); font-size: 0.75rem;">
+      <div style="color: var(--emerald); font-weight: 700;">✓ INLINE STORAGE (Under 64 KB)</div>
+      <div style="color: var(--text-muted); margin-top: 4px;">Payload is written directly to <code>ledger.payload</code> in SQLite. Zero filesystem fragmentation.</div>
+    </div>
+  </section>
+
+  <!-- Deep Architecture Evidence -->
+  <section class="panel" style="margin-bottom: 0;">
+    <div class="card-title">Source Traceability Matrix</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 10px;">
+      <div style="background: var(--surface-raised); padding: 12px; border-radius: 6px; border: 1px solid var(--surface-border);">
+        <div style="font-weight: 700; color: #fff; font-size: 0.8rem;">sxr-core::chain</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Pure SHA-256 hash algebra and chain verification without I/O.</div>
+        <div style="font-family: var(--mono); font-size: 0.7rem; color: var(--cyan); margin-top: 6px;">sxr-core/src/chain.rs</div>
+      </div>
+      <div style="background: var(--surface-raised); padding: 12px; border-radius: 6px; border: 1px solid var(--surface-border);">
+        <div style="font-weight: 700; color: #fff; font-size: 0.8rem;">sxr-ledger::ledger</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Strict SQLite append transaction and writer flock serialization.</div>
+        <div style="font-family: var(--mono); font-size: 0.7rem; color: var(--cyan); margin-top: 6px;">sxr-ledger/src/ledger.rs</div>
+      </div>
+      <div style="background: var(--surface-raised); padding: 12px; border-radius: 6px; border: 1px solid var(--surface-border);">
+        <div style="font-weight: 700; color: #fff; font-size: 0.8rem;">sxr-core::threshold</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Evaluates acceptance algebra and enforces AC-SETTLEMENT-002.</div>
+        <div style="font-family: var(--mono); font-size: 0.7rem; color: var(--cyan); margin-top: 6px;">sxr-core/src/threshold.rs</div>
+      </div>
+      <div style="background: var(--surface-raised); padding: 12px; border-radius: 6px; border: 1px solid var(--surface-border);">
+        <div style="font-weight: 700; color: #fff; font-size: 0.8rem;">proof/gate1.sh</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Comprehensive test suite proving hash verification under real execution.</div>
+        <div style="font-family: var(--mono); font-size: 0.7rem; color: var(--cyan); margin-top: 6px;">proof/gate1.sh</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Initial Ledger Chain Data
+  const initialRows = [
+    { ordinal: 1, kind: 'repo.enrolled', payload: '{"repo_id":"01JK8V...","path":"/repos/shop"}', prevHash: '0000000000000000000000000000000000000000000000000000000000000000', tampered: false },
+    { ordinal: 2, kind: 'semantic.snapshot', payload: '{"closure_hash":"3a8f...","concepts":8}', prevHash: '', tampered: false },
+    { ordinal: 3, kind: 'question.declared', payload: '{"question_type":"invariant","target":"order"}', prevHash: '', tampered: false },
+    { ordinal: 4, kind: 'threshold.declared', payload: '{"rule":"AllEvidenceSupports","min_rel":"Med"}', prevHash: '', tampered: false },
+    { ordinal: 5, kind: 'run.started', payload: '{"run_id":"01JK8V_RUN","commit":"e8a1c9"}', prevHash: '', tampered: false },
+    { ordinal: 6, kind: 'plan.created', payload: '{"verifier":"cargo-test","target":"concept:order"}', prevHash: '', tampered: false },
+    { ordinal: 7, kind: 'observation.recorded', payload: '{"exit_code":0,"passed":14,"failed":0}', prevHash: '', tampered: false }
+  ];
+
+  let currentRows = JSON.parse(JSON.stringify(initialRows));
+
+  // Compute mock deterministic hashes
+  function pseudoHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    const hex = Math.abs(hash).toString(16).padStart(8, '0');
+    return hex.repeat(8).substring(0, 64);
+  }
+
+  function recomputeChain() {
+    let prev = '0000000000000000000000000000000000000000000000000000000000000000';
+    for (let i = 0; i < currentRows.length; i++) {
+      currentRows[i].prevHash = prev;
+      currentRows[i].payloadHash = pseudoHash(currentRows[i].payload);
+      currentRows[i].entryHash = pseudoHash(`${currentRows[i].ordinal}|${currentRows[i].prevHash}|${currentRows[i].payloadHash}|${currentRows[i].kind}`);
+      prev = currentRows[i].entryHash;
+    }
+  }
+
+  function renderChain() {
+    const container = document.getElementById('chainContainer');
+    container.innerHTML = '';
+
+    let isBroken = false;
+    let brokenOrdinal = null;
+
+    currentRows.forEach((row, idx) => {
+      const block = document.createElement('div');
+      block.className = 'chain-block';
+      if (row.tampered) {
+        block.classList.add('tampered');
+      }
+
+      // Check if chain broken here
+      if (idx > 0 && currentRows[idx].prevHash !== currentRows[idx - 1].entryHash) {
+        isBroken = true;
+        if (!brokenOrdinal) brokenOrdinal = row.ordinal;
+      }
+
+      block.innerHTML = `
+        <div class="block-header">
+          <span class="block-ordinal">#${row.ordinal}</span>
+          <span class="block-kind">${row.kind}</span>
+        </div>
+        <div class="field-row">
+          <span class="field-lbl">Previous Entry Hash</span>
+          <span class="field-val ${row.tampered ? 'error-hash' : ''}">${row.prevHash.substring(0, 16)}...</span>
+        </div>
+        <div class="field-row">
+          <span class="field-lbl">Payload Hash</span>
+          <span class="field-val ${row.tampered ? 'error-hash' : ''}">${row.payloadHash.substring(0, 16)}...</span>
+        </div>
+        <div class="field-row">
+          <span class="field-lbl">Entry Hash (h_${row.ordinal})</span>
+          <span class="field-val highlight-hash ${row.tampered ? 'error-hash' : ''}">${row.entryHash.substring(0, 16)}...</span>
+        </div>
+      `;
+
+      container.appendChild(block);
+    });
+
+    // Update telemetry
+    const telemIntegrity = document.getElementById('telemIntegrity');
+    if (currentRows.some(r => r.tampered)) {
+      telemIntegrity.style.color = 'var(--rose)';
+      telemIntegrity.innerText = 'BROKEN: TAMPER DETECTED';
+    } else {
+      telemIntegrity.style.color = 'var(--emerald)';
+      telemIntegrity.innerText = '100% UNBROKEN CHAIN';
+    }
+  }
+
+  function tamperRow(index) {
+    currentRows[index].payload = '{"rule":"AllEvidenceSupports","min_rel":"Low","TAMPERED":true}';
+    currentRows[index].tampered = true;
+    currentRows[index].payloadHash = pseudoHash(currentRows[index].payload);
+    currentRows[index].entryHash = pseudoHash('corrupted_hash_' + Math.random());
+    
+    // Notice that downstream row prevHash will now MISMATCH!
+    renderChain();
+    
+    const term = document.getElementById('termOutput');
+    term.innerHTML += `<div class="term-line term-err">[SECURITY ALERT] Payload in row #${currentRows[index].ordinal} mutated in SQLite!</div>`;
+    term.innerHTML += `<div class="term-line term-err">[MISMATCH] Row #${currentRows[index+1].ordinal} previous_entry_hash no longer matches entry_hash of row #${currentRows[index].ordinal}!</div>`;
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function tamperPayload(index) {
+    currentRows[index].payload = '{"exit_code":0,"TAMPERED_TESTS":999}';
+    currentRows[index].tampered = true;
+    currentRows[index].payloadHash = pseudoHash(currentRows[index].payload);
+    currentRows[index].entryHash = pseudoHash('corrupted_hash_' + Math.random());
+    renderChain();
+    const term = document.getElementById('termOutput');
+    term.innerHTML += `<div class="term-line term-err">[SECURITY ALERT] Observation payload in row #${currentRows[index].ordinal} tampered!</div>`;
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function restoreLedger() {
+    currentRows = JSON.parse(JSON.stringify(initialRows));
+    recomputeChain();
+    renderChain();
+    const term = document.getElementById('termOutput');
+    term.innerHTML += `<div class="term-line term-ok">[RESTORE] Ledger restored to verified cryptographic state.</div>`;
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function runVerifyChain() {
+    const term = document.getElementById('termOutput');
+    term.innerHTML += `<div class="term-line"><span class="term-prompt">$</span> sxr ledger verify --repo 01JK8V</div>`;
+
+    const tampered = currentRows.find(r => r.tampered);
+    if (tampered) {
+      term.innerHTML += `<div class="term-line term-err">[FAIL exit 1] Cryptographic integrity verification FAILED!</div>`;
+      term.innerHTML += `<div class="term-line term-err">Hash chain mismatch at ordinal #${tampered.ordinal}. Computed hash does not match stored entry_hash.</div>`;
+    } else {
+      term.innerHTML += `<div class="term-line term-ok">[PASS exit 0] 7 entries verified. Hash chain dense and intact.</div>`;
+    }
+    term.scrollTop = term.scrollHeight;
+  }
+
+  // Settlement Evaluator State
+  let evidenceState = {
+    supports: 2,
+    contradicts: 0
+  };
+
+  function addEvidence(type) {
+    if (type === 'supports') evidenceState.supports++;
+    if (type === 'contradicts') evidenceState.contradicts++;
+    evaluateSettlement();
+  }
+
+  function resetEvidence() {
+    evidenceState.supports = 0;
+    evidenceState.contradicts = 0;
+    evaluateSettlement();
+  }
+
+  function evaluateSettlement() {
+    const rule = document.getElementById('thresholdRule').value;
+    const modelStatus = document.getElementById('modelStatus').value;
+    const countLabel = document.getElementById('evidenceCountLabel');
+    countLabel.innerText = `Evidence Items: ${evidenceState.supports} Supports, ${evidenceState.contradicts} Contradicts`;
+
+    const banner = document.getElementById('verdictBanner');
+    const text = document.getElementById('verdictText');
+    const detail = document.getElementById('verdictDetail');
+
+    // Invariant AC-SETTLEMENT-002 check:
+    if (modelStatus === 'Invalid') {
+      banner.className = 'verdict-banner verdict-blocked';
+      text.innerText = 'BLOCKED (AC-SETTLEMENT-002)';
+      detail.innerText = 'Model validation failed. Positive settlement is strictly forbidden regardless of test exit code.';
+      return;
+    }
+
+    // Evaluate rules
+    if (rule === 'AllEvidenceSupports') {
+      if (evidenceState.contradicts > 0) {
+        banner.className = 'verdict-banner verdict-failed';
+        text.innerText = 'FAILED';
+        detail.innerText = 'Contradictory evidence present; violates AllEvidenceSupports threshold.';
+      } else if (evidenceState.supports > 0) {
+        banner.className = 'verdict-banner verdict-settled';
+        text.innerText = 'SETTLED';
+        detail.innerText = 'All recorded evidence supports the question; threshold satisfied.';
+      } else {
+        banner.className = 'verdict-banner verdict-failed';
+        text.innerText = 'INCONCLUSIVE';
+        detail.innerText = 'Zero supporting evidence items found.';
+      }
+    } else if (rule === 'AnyEvidenceContradicts') {
+      if (evidenceState.contradicts > 0) {
+        banner.className = 'verdict-banner verdict-failed';
+        text.innerText = 'FAILED (FAIL-FAST)';
+        detail.innerText = 'Single contradiction triggered immediate failure.';
+      } else {
+        banner.className = 'verdict-banner verdict-settled';
+        text.innerText = 'SETTLED';
+        detail.innerText = 'Zero contradictions recorded.';
+      }
+    } else if (rule === 'RequiresEvidence') {
+      if (evidenceState.supports >= 2 && evidenceState.contradicts === 0) {
+        banner.className = 'verdict-banner verdict-settled';
+        text.innerText = 'SETTLED';
+        detail.innerText = `Threshold met: ${evidenceState.supports} supporting items (>= 2 required).`;
+      } else {
+        banner.className = 'verdict-banner verdict-failed';
+        text.innerText = 'UNMET THRESHOLD';
+        detail.innerText = `Requires at least 2 supports and 0 contradicts. Current supports: ${evidenceState.supports}`;
+      }
+    }
+  }
+
+  function updateCasSimulation() {
+    const val = parseInt(document.getElementById('payloadSizeSlider').value);
+    document.getElementById('payloadSizeLabel').innerText = val + ' KB';
+    const box = document.getElementById('casDisplayBox');
+
+    if (val <= 64) {
+      box.innerHTML = `
+        <div style="color: var(--emerald); font-weight: 700;">✓ INLINE STORAGE (Under 64 KB threshold)</div>
+        <div style="color: var(--text-muted); margin-top: 4px;">Payload is written directly to <code>ledger.payload</code> in SQLite. Compact and fast.</div>
+      `;
+    } else {
+      const mockCasUri = `cas://sha256:${pseudoHash('cas_content_' + val).substring(0, 16)}...`;
+      box.innerHTML = `
+        <div style="color: var(--amber); font-weight: 700;">⎘ CAS OFFLOAD ACTIVATED (${val} KB > 64 KB)</div>
+        <div style="color: var(--text-muted); margin-top: 4px;">Large payload written to disk: <code>$XDG_DATA_HOME/sxr/repos/01JK8V/cas/${pseudoHash('cas').substring(0, 12)}</code></div>
+        <div style="color: var(--cyan); margin-top: 4px;">Ledger row stores reference: <code>${mockCasUri}</code></div>
+      `;
+    }
+  }
+
+  // Initial init
+  recomputeChain();
+  renderChain();
+  evaluateSettlement();
+</script>
+
+</body>
+</html>

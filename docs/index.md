@@ -58,7 +58,18 @@ flowchart LR
 
 ---
 
-## 4. The 10 Concepts You Need First
+## 4. Interactive Cognitive Explainers
+
+Rather than mentally simulating complex asynchronous state transitions, explore the runtime mechanisms directly through self-contained, offline-first interactive applications:
+
+- **[Cognitive Representation Portal](./explainers/index.html)**: Central navigation dashboard connecting all visual models, reader personas, and implementation source trails.
+- **[Asymmetric Diagnostic Friction & 9-Locus Attribution Simulator](./explainers/diagnostic-friction-simulator.html)**: Interactively step through failure scenarios, observe exit code 3 refusal of premature model changes, and test how active falsification lowers the friction barrier (`AC-DIAG-001`).
+- **[Cryptographic Append-Only Ledger & Settlement Explorer](./explainers/ledger-and-settlement-explorer.html)**: Inspect the dense SHA-256 hash chain in SQLite, test real-time tamper detection, and evaluate threshold algebra over live evidence (`AC-LEDGER-001`, `AC-SETTLEMENT-002`).
+- **[Epistemic Pipeline, Dual-Graph Projections & Anti-Collapse Workbench](./explainers/epistemic-pipeline-workbench.html)**: Step through the 5 epistemic stages, compare $G_{declared}$ side-by-side with $G_{observed}$, and examine the 7 CEP-0008 anti-collapse axioms.
+
+---
+
+## 5. The 10 Concepts You Need First
 
 1. **Semantic Snapshot (`semantic.snapshot`)**: An immutable record of a repository's declared semantic model (`.sea` files) at a specific point in time, extracted via DomainForge.
 2. **Question (`question.declared`)**: A formal inquiry regarding the codebase (e.g. "Does concept X satisfy invariant Y?").
@@ -73,7 +84,7 @@ flowchart LR
 
 ---
 
-## 5. A Representative Journey
+## 6. A Representative Journey
 
 Here is how a single verification lifecycle unfolds from start to finish:
 
@@ -88,12 +99,13 @@ Here is how a single verification lifecycle unfolds from start to finish:
 
 ---
 
-## 6. Where to Go Next
+## 7. Where to Go Next
 
 Choose the path that fits your current goal:
 
 | Your Goal | Recommended Starting Page |
 | :--- | :--- |
+| **I want an interactive visual explanation** | [Cognitive Representation Portal](./explainers/index.html) |
 | **I want a hands-on tutorial** | [Quickstart Tutorial](./tutorials/quickstart.md) |
 | **I want to understand the conceptual philosophy** | [Mental Model](./mental-model.md) & [Anti-Collapse Epistemology](./explanation/anti-collapse-epistemology.md) |
 | **I want to inspect the architectural topology** | [Architecture Specification](../architecture.md) & [Logical Architecture](./architecture/logical.md) |

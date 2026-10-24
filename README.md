@@ -394,6 +394,18 @@ A complete trace contains: Expectation, Observation, Comparison, Evidence, Prove
 
 ---
 
+## Cognitive Interface & Interactive Explainers
+
+RealityTrace provides self-contained, offline-first interactive explainers for exploring the runtime mechanisms directly:
+
+- **[Cognitive Representation Portal](docs/explainers/index.html)**: Main dashboard for interactive explainers and visual models.
+- **[Asymmetric Diagnostic Friction Simulator](docs/explainers/diagnostic-friction-simulator.html)**: Interactive simulation of the Slice 5 attribution loop, 9 failure loci, and the exit code 3 model-mutation guard (`AC-DIAG-001`).
+- **[Cryptographic Ledger & Settlement Explorer](docs/explainers/ledger-and-settlement-explorer.html)**: Live SHA-256 hash chaining, real-time tamper falsification, and threshold evaluation algebra.
+- **[Epistemic Pipeline & Anti-Collapse Workbench](docs/explainers/epistemic-pipeline-workbench.html)**: The 5 epistemic stages, $G_{declared}$ vs $G_{observed}$ dual graphs, and the 7 CEP-0008 anti-collapse axioms.
+- **[Documentation Map](documentation-map.md)**: Full 9-layer Diátaxis knowledge system.
+
+---
+
 ## Status
 
 RealityTrace is part of the GodSpeed AI architecture. Stable contract:
