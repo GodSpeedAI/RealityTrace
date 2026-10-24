@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.2](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-ledger-v0.2.1...sxr-ledger-v0.2.2) (2026-10-24)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * sxr-core bumped from 0.3.0 to 0.4.0
+
 ## [0.2.1](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-ledger-v0.2.0...sxr-ledger-v0.2.1) (2026-09-25)
 
 
