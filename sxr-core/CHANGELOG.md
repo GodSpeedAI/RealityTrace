@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.4.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-core-v0.3.0...sxr-core-v0.4.0) (2026-10-24)
+
+
+### Features
+
+* **evidence:** bind a frozen security-acceptance producer and name field-level differences ([8c95489](https://github.com/GodSpeedAI/RealityTrace/commit/8c9548990bd21f091e790a7d16c4eedf37f54a64))
+* **evidence:** carry the exact context bundle identity into E8 ([0e2a97b](https://github.com/GodSpeedAI/RealityTrace/commit/0e2a97b4347c5dc6d8a6b9562d804d76b9fd450c))
+* **record-kinds:** register evidence.recorded for persisted E8 comparisons ([de45a8b](https://github.com/GodSpeedAI/RealityTrace/commit/de45a8ba9f002260200e04f392a157ad6b23aea3))
+
+
+### Bug Fixes
+
+* **envelope:** mark declared known omissions in omission_status ([c1b9dbb](https://github.com/GodSpeedAI/RealityTrace/commit/c1b9dbbb0654bc9f8b198dc62c772a220fbef57a))
+* **evidence:** box the admitted comparison and refresh the t08 fixture ([2b85fe5](https://github.com/GodSpeedAI/RealityTrace/commit/2b85fe5fd7384f29647d8ce8dc9a79c5ae3d5ba3))
+
 ## [0.3.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-core-v0.2.0...sxr-core-v0.3.0) (2026-09-25)
 
 
