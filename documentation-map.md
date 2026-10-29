@@ -296,6 +296,13 @@ The documentation is organized in nine progressive layers (Layer 0 to Layer 8):
 - **Prerequisites**: Existing repository ledger.
 - **Related Pages**: [`docs/workflows/graph-projections.md`](./docs/workflows/graph-projections.md).
 
+#### [`docs/how-to/install-native-binaries.md`](./docs/how-to/install-native-binaries.md)
+- **Purpose**: Practical procedure for installing released `realitytrace` binaries (Linux .deb/.tar.gz, macOS .pkg/.dmg, Windows .zip/setup.exe) and verifying their checksums.
+- **Audience Need**: Install and roll back a precompiled binary without a Rust toolchain, including on NVIDIA Jetson AGX Orin (Ubuntu 22.04, glibc 2.35).
+- **Diátaxis Type**: How-To Guide.
+- **Prerequisites**: A release artifact and its `SHA256SUMS`.
+- **Related Pages**: [`docs/how-to/operate-daemon.md`](./docs/how-to/operate-daemon.md), [`docs/how-to/enroll-and-configure.md`](./docs/how-to/enroll-and-configure.md).
+
 #### [`docs/how-to/add-verifier.md`](./docs/how-to/add-verifier.md)
 - **Purpose**: Guide for developers extending `sxr-verify` with a new test runner or static analysis port.
 - **Audience Need**: Add support for non-cargo verifiers (e.g. pytest, eslint, custom runners).
