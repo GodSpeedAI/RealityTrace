@@ -55,6 +55,11 @@ difference:
   - real_domainforge_materializes_large_cas_carried_representation remains Not
     Tested — its SXR_TEST_LARGE_SEA_DIR fixture (interaction-model.sea) is absent.
   - Windows has no coverage of the DomainForge process adapter (review finding 4).
+  - Seven sxr-ledger unit tests fail on Windows (directory fsync, read-only
+    semantics, case-sensitivity probe). Pre-existing, not introduced here; the
+    probe is not wired into the CLI and the queue is the daemon's path, which is
+    unsupported on Windows. Recorded in the review report, not silenced. The
+    accurate Windows claim is direct CLI + ledger only.
   - No install on real Jetson hardware; the glibc/arch preconditions are proven
     (max GLIBC_2.34 <= 2.35, aarch64, deb Depends libc6 >= 2.34).
 

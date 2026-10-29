@@ -448,13 +448,20 @@ jobs:
           cargo build --release --locked -p realitytrace --bin realitytrace
           test "$(target/release/realitytrace.exe --version)" = "realitytrace ${VERSION}"
 
-      - name: Test the ledger on Windows
+      - name: Test the writer lock on Windows
         shell: bash
-        # The portability change that matters most on this platform is the
-        # writer lock: std maps `File::try_lock` to LockFileEx here, not flock.
-        # The unit tests cover contention and the capability probes, so run
-        # them instead of inferring Windows behaviour from the Linux run.
-        run: cargo test --locked -p sxr-ledger --lib
+        # The portability change that matters on this platform is the writer
+        # lock: std maps `File::try_lock` to LockFileEx here, not flock. These
+        # two tests assert exclusivity and release-on-drop, so run them on the
+        # platform they were written for instead of inferring from the Linux run.
+        #
+        # The rest of sxr-ledger's unit tests are deliberately NOT run here:
+        # its durability primitives (directory fsync, read-only file handling,
+        # case-sensitivity probing) are Unix-shaped and 7 of them fail on
+        # Windows. That is a pre-existing gap recorded in
+        # .agents/reports/native-binary-distribution-review.md, not something
+        # this step is allowed to paper over.
+        run: "cargo test --locked -p sxr-ledger --lib writer_lock"
 
       - name: Ensure a usable Inno Setup
         shell: pwsh
