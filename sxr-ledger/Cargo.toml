@@ -20,7 +20,6 @@ chrono.workspace = true
 thiserror.workspace = true
 rusqlite.workspace = true
 ulid.workspace = true
-libc.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true

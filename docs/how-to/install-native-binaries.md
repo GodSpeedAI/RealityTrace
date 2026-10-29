@@ -33,11 +33,30 @@ rather than degrading silently, and all direct CLI/ledger operation works.
 
 ## Verify the download
 
+Linux and Windows (Git Bash / WSL):
+
 ```sh
 sha256sum -c SHA256SUMS --ignore-missing
 ```
 
-Optional, where GitHub CLI is available: `gh attestation verify <asset> --repo GodSpeedAI/RealityTrace`.
+macOS (`sha256sum` is not part of a stock install):
+
+```sh
+shasum -a 256 -c SHA256SUMS --ignore-missing
+```
+
+Where GitHub CLI is available, you may also check the build provenance that was
+attached at publish time:
+
+```sh
+gh attestation verify <asset> --repo GodSpeedAI/RealityTrace
+```
+
+This only succeeds when the release carries provenance. Provenance is attached
+automatically when the publishing run itself built the release tag; a release
+whose binaries were re-attached later via `attach_binaries_tag` intentionally
+has none (the attestation would name the wrong commit). `SHA256SUMS` is always
+present and is the baseline check.
 
 ---
 

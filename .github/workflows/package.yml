@@ -47,15 +47,30 @@ on:
         type: string
         required: false
         default: ""
-  push:
-    branches: [feat/native-binary-distribution]
+  # Verified in pull requests that touch packaging or the dependency graph.
+  # There is deliberately no `push:` trigger: the full four-platform matrix is
+  # too expensive to run on every branch push, and release builds are driven by
+  # release-please.yml via workflow_call (or a manual dispatch against a tag).
+  pull_request:
+    paths:
+      - 'packaging/**'
+      - '.github/workflows/package.yml'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
 
 permissions:
   contents: read
 
 concurrency:
-  group: package-${{ inputs.ref || github.ref }}
-  cancel-in-progress: ${{ !inputs.upload }}
+  # Release builds (upload=true, tag ref) must never be cancelled by a later
+  # run in the same group: a cancelled build leaves the GitHub Release created
+  # with no assets, and publish-binaries is then skipped rather than failed, so
+  # the failure notice never runs. Only branch/PR candidates may be superseded,
+  # and they get their own event-scoped group so a manual dispatch can never
+  # collide with a release build.
+  group: >-
+    package-${{ inputs.upload && 'release' || github.event_name }}-${{ inputs.ref || github.ref }}
+  cancel-in-progress: ${{ inputs.upload != true }}
 
 env:
   CARGO_TERM_COLOR: never
@@ -175,10 +190,14 @@ jobs:
           test "$(realitytrace --version)" = "realitytrace ${VERSION}"
           dpkg -L realitytrace | grep -q '^/usr/bin/realitytrace$'
           dpkg -L realitytrace | grep -q '^/usr/lib/systemd/user/realitytrace.service$'
-          # The vendor unit is installed but never enabled.
-          ! systemctl --global is-enabled realitytrace >/dev/null 2>&1 || {
-            echo "::error::the package must not enable the daemon"; exit 1;
-          }
+          # The package must not enable the daemon. `systemctl --global
+          # is-enabled` only inspects /etc/systemd/user and is unavailable
+          # without a user manager, so assert the mechanism that could actually
+          # enable it: no maintainer script, and no enablement symlink anywhere.
+          test ! -e /var/lib/dpkg/info/realitytrace.postinst
+          test ! -e /etc/systemd/user/default.target.wants/realitytrace.service
+          test ! -e "/home/runner/.config/systemd/user/default.target.wants/realitytrace.service"
+          test -z "$(find /etc/systemd/user "$HOME/.config/systemd/user" -name 'realitytrace.service' 2>/dev/null)"
           sh packaging/smoke-realitytrace.sh /usr/bin/realitytrace "$VERSION"
           dpkg -s realitytrace | sed -n '1,12p'
           sudo apt-get remove -y realitytrace
@@ -429,13 +448,51 @@ jobs:
           cargo build --release --locked -p realitytrace --bin realitytrace
           test "$(target/release/realitytrace.exe --version)" = "realitytrace ${VERSION}"
 
-      - name: Ensure Inno Setup
+      - name: Test the ledger on Windows
+        shell: bash
+        # The portability change that matters most on this platform is the
+        # writer lock: std maps `File::try_lock` to LockFileEx here, not flock.
+        # The unit tests cover contention and the capability probes, so run
+        # them instead of inferring Windows behaviour from the Linux run.
+        run: cargo test --locked -p sxr-ledger --lib
+
+      - name: Ensure a usable Inno Setup
         shell: pwsh
+        # x64compatible (ArchitecturesAllowed / InstallIn64BitMode) needs Inno
+        # Setup >= 6.3; hosted images can ship 6.0-6.2, so check the version
+        # rather than only the presence of iscc.exe.
         run: |
-          $iscc = Get-Command iscc.exe -ErrorAction SilentlyContinue
-          if (-not $iscc -and -not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
-            choco install innosetup --no-progress -y
+          $ErrorActionPreference = 'Stop'
+          function Get-Iscc {
+            $cmd = Get-Command iscc.exe -ErrorAction SilentlyContinue
+            if ($cmd) { return $cmd.Source }
+            $candidate = Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'
+            if (Test-Path $candidate) { return $candidate }
+            return $null
           }
+          function Get-InnoVersion([string]$Iscc) {
+            $exe = Join-Path (Split-Path $Iscc) 'ISCC.exe'
+            return (Get-Item $exe).VersionInfo.FileVersion
+          }
+          $iscc = Get-Iscc
+          if ($iscc) {
+            $version = Get-InnoVersion $iscc
+            Write-Host "found Inno Setup $version at $iscc"
+            $ok = $false
+            if ($version -match '^6\.(\d+)') { $ok = ([int]$Matches[1] -ge 3) }
+            elseif ($version -match '^([7-9]|1\d+)\.') { $ok = $true }
+            if (-not $ok) {
+              Write-Host "Inno Setup $version is older than 6.3; upgrading"
+              choco upgrade innosetup --no-progress -y
+              $iscc = $null
+            }
+          }
+          if (-not $iscc) {
+            choco install innosetup --no-progress -y
+            $iscc = Get-Iscc
+          }
+          if (-not $iscc) { throw 'ISCC.exe not found and could not be installed' }
+          Write-Host "using Inno Setup $(Get-InnoVersion $iscc) at $iscc"
 
       - name: Build the .zip and setup.exe
         shell: pwsh

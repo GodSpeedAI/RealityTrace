@@ -23,6 +23,26 @@ case "$version" in
         ;;
 esac
 
+# The artifact builders cannot express a prerelease: `pkgbuild --version` and
+# the Inno Setup `AppVersion` both require a purely numeric x.y.z. Refuse here,
+# at the first gate, rather than after four platforms have compiled.
+case "$version" in
+    [0-9]*.[0-9]*.[0-9]*)
+        patch=${version#*.}
+        patch=${patch#*.}
+        case "$patch" in
+            '' | *[!0-9]*)
+                echo "error: CLI version '$version' is not a numeric x.y.z release; native packages cannot encode prerelease or build metadata" >&2
+                exit 1
+                ;;
+        esac
+        ;;
+    *)
+        echo "error: CLI version '$version' is not a numeric x.y.z release; native packages cannot encode prerelease or build metadata" >&2
+        exit 1
+        ;;
+esac
+
 if [ "$#" -gt 0 ] && [ -n "$1" ]; then
     requested=$1
     requested=${requested#realitytrace-v}
