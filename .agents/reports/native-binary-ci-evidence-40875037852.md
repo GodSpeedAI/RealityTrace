@@ -81,6 +81,56 @@ Same 13 checks passed for the extracted tarball, the container installs, the
 macOS `.pkg`, and the Windows per-user install. Windows additionally asserted
 `daemon` exits non-zero with a "not supported" explanation.
 
+## Final PR verification — PR #12
+
+PR: https://github.com/GodSpeedAI/RealityTrace/pull/12
+Head: `43f3d32842d54f2e977118663de88de370ffd0ab`
+Merge commit the PR runs built: `7645a8e7786f73dc8279f071cdb9de8d5631504c`
+(`git merge 43f3d32 into 4d05cc0`)
+
+All nine checks pass at this head:
+
+| Check | Result | Run |
+|---|---|---|
+| Check, Test & Lint | pass | 40916250866 |
+| clean-install | pass | 40916250702 |
+| packaged binary (.deb) clean install | pass | 40916250702 |
+| packaged binary (tarball) clean install | pass | 40916250702 |
+| package (linux amd64) | pass | 40916250761 |
+| package (linux arm64) | pass | 40916250761 |
+| package (macos universal) | pass | 40916250761 |
+| package (windows x86_64) | pass | 40916250761 |
+| domainforge 0.21.2 real-binary compatibility | pass | 40916250761 |
+
+An earlier head (`76060b7`) failed only `package (windows x86_64)`, on the
+newly added Windows test step: running the whole `sxr-ledger` suite there
+exposed 7 pre-existing Unix-shaped durability failures. The step is now scoped
+to `writer_lock` and those failures are recorded in
+`.agents/reports/native-binary-distribution-review.md`.
+
+### Final artifact SHA-256 (built from the merge commit above)
+
+| Asset | SHA-256 |
+|---|---|
+| `realitytrace_0.3.0_arm64.deb` | `938a81ebde8e3aadb290bfeee93cb3cce7b847d3837dd429e65ad517926f90ce` |
+| `realitytrace-0.3.0-aarch64-unknown-linux-gnu.tar.gz` | `dff62cf3f2fd66b86a289ee30178fd7752baa143a5a2d1657da2f545dbc24df1` |
+| `realitytrace_0.3.0_amd64.deb` | `b33a939d940b87b23860783d8bba7f4646543d0d775eb424a678dbe1978dd53f` |
+| `realitytrace-0.3.0-x86_64-unknown-linux-gnu.tar.gz` | `091136aa8fd992dc4e8293e629338742d297fb7698b58c684d38496ec5bb6a1e` |
+| `realitytrace-0.3.0-x86_64-pc-windows-msvc.zip` | `ed06b5a19e6913127269307afe95d47b61757f17dbb5995bc3a2738b55a21e82` |
+| `realitytrace-0.3.0-x86_64-pc-windows-msvc-setup.exe` | `778198b67a7b77d771f813f65508cf99145aa9ee95fb998a0e5634fd22e86f02` |
+| `realitytrace-0.3.0-macos-universal.pkg` | `3e6f07531e20ef5fb68d89b2c5dba1b534496969866ca4cb0c4783cc5ec51ec1` |
+| `realitytrace-0.3.0-macos-universal.dmg` | `f08d66bb9612f046e9b1f353d2a38e6a27fecebe6c7fec1d19fc130a5f309694` |
+
+Re-verified: ARM64 tarball is `ELF 64-bit LSB pie, ARM aarch64`, max symbol
+`GLIBC_2.34`, no RPATH.
+
+**Identity note.** A `pull_request` run checks out the synthetic merge commit,
+so `built-from-*.txt` records the merge result (`7645a8e7`), not the branch head
+(`43f3d32`). That is correct for a candidate build. The **release** path is
+different and stricter: `package.yml` is called with `ref: <tag>` and checks out
+the tag, so `built-from-*.txt` records the tag commit, which is exactly what
+`publish-binaries` compares against its own `git rev-parse HEAD` of the tag.
+
 ## Not tested
 
 - `real_domainforge_materializes_large_cas_carried_representation` —
