@@ -555,16 +555,17 @@ jobs:
       - name: Install DomainForge 0.21.2 from crates.io
         run: |
           set -euo pipefail
-          cargo install domainforge-core --version 0.21.2 --features cli --locked
+          cargo install domainforge-core --version 0.21.2 --features cli
           test "$(domainforge --version)" = "domainforge 0.21.2"
+          echo "SXR_TEST_DOMAINFORGE_BIN=$HOME/.cargo/bin/domainforge" >> "$GITHUB_ENV"
 
       - name: Check out the DomainForge v0.21.2 fixtures
-        run: git clone --depth 1 --branch v0.21.2 https://github.com/GodSpeedAI/DomainForge "$RUNNER_TEMP/domainforge"
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch v0.21.2 https://github.com/GodSpeedAI/DomainForge "$RUNNER_TEMP/domainforge"
+          echo "SXR_TEST_DOMAINFORGE_ROOT=$RUNNER_TEMP/domainforge" >> "$GITHUB_ENV"
 
       - name: Run the real-binary integration tests
-        env:
-          SXR_TEST_DOMAINFORGE_BIN: ${{ env.HOME }}/.cargo/bin/domainforge
-          SXR_TEST_DOMAINFORGE_ROOT: ${{ runner.temp }}/domainforge
         run: |
           set -euo pipefail
           cargo test -p sxr-df --test real_binary_tests -- --ignored real_domainforge_resolves_the_dogfood_entry

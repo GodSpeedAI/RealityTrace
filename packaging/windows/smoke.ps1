@@ -156,7 +156,18 @@ try {
     if (-not $python) { Fail "python is required for the tamper-evidence check" }
     $db = Join-Path $env:XDG_DATA_HOME "sxr\repos\$rid\ledger.db"
     if (-not (Test-Path $db)) { Fail "no ledger.db under $db" }
-    & python -c "import sqlite3,sys; c=sqlite3.connect(sys.argv[1]); c.execute(\"UPDATE ledger SET payload='{\\\"tampered\\\":true}' WHERE append_ordinal=(SELECT MAX(append_ordinal) FROM ledger)\"); c.commit(); c.close()" $db
+    $tamper = Join-Path $work 'tamper.py'
+    @'
+import sqlite3, sys
+con = sqlite3.connect(sys.argv[1])
+con.execute(
+    "UPDATE ledger SET payload = ? WHERE append_ordinal = (SELECT MAX(append_ordinal) FROM ledger)",
+    ('{"tampered":true}',),
+)
+con.commit()
+con.close()
+'@ | Set-Content -Path $tamper -Encoding ASCII
+    & python $tamper $db
     if ($LASTEXITCODE -ne 0) { Fail "could not tamper with the ledger for the negative test" }
     & $RT ledger verify --repo $rid --json *> $null
     if ($LASTEXITCODE -eq 0) { Fail "a tampered committed payload verified as intact" }
