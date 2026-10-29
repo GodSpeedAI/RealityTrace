@@ -46,8 +46,9 @@ observed_state:
       DomainForge process adapter), which is accepted and documented.
 
 difference:
-  - The PR has not been opened yet, so the review fixes and the two new
-    packaged-binary clean-install jobs have not run in CI.
+  - "PR #12 is open (https://github.com/GodSpeedAI/RealityTrace/pull/12); the
+    review fixes and the two new packaged-binary clean-install jobs are being
+    verified by the PR checks."
   - No artifact is published to any release yet (candidate artifacts only).
   - The ABI gate refuses this host's binary (glibc 2.43 > 2.35) by design; the
     2.35 artifacts come from the ubuntu-22.04 / ubuntu-22.04-arm runners.

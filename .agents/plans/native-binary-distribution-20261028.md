@@ -68,3 +68,25 @@ semantics, not just exit codes.
   install + full ledger loop + negative tests.
 - CI: all platform jobs green; packaged-binary install tests green; Mode A
   artifacts uploaded; hashes recorded in handoff.
+
+## Outcome (2026-10-29)
+
+Implemented as planned. Deviations, all from the adversarial review:
+
+- The Mode A `push` trigger was replaced by a path-filtered `pull_request`
+  trigger; release builds are driven by `release-please.yml` via
+  `workflow_call`. A manual dispatch against a tag can no longer cancel an
+  in-flight release build.
+- `publish-binaries` additionally verifies each builder's `SHA256SUMS-<os>`, so
+  the uploaded bytes are bound to the build and not only the checkout.
+- The Windows job now runs `cargo test -p sxr-ledger --lib` and checks the Inno
+  Setup version (>= 6.3 needed for `x64compatible`).
+- `packaging/version.sh` refuses non-numeric `x.y.z` versions, because
+  `pkgbuild` and the Inno `AppVersion` cannot encode prerelease metadata.
+- `libc` was dropped entirely: `File::try_lock` removed the last use.
+- The `#![cfg(unix)]` gate on `sxr-df/tests/process_tests.rs` leaves Windows
+  without DomainForge process-adapter coverage. Accepted and documented as a
+  known gap rather than silently claimed.
+
+Evidence: `.agents/reports/native-binary-ci-evidence-40875037852.md`,
+`.agents/reports/native-binary-distribution-review.md`.
