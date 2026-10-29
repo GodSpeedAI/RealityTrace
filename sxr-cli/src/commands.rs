@@ -2649,9 +2649,16 @@ pub fn export_anti_collapse_corpus(
 
 /// Daemon presence probe: the socket accepts connections only while the
 /// daemon holds it (§16.1, F-15). Informational — never a hard requirement.
+#[cfg(unix)]
 fn daemon_active(ctx: &Ctx) -> bool {
     use std::os::unix::net::UnixStream;
     UnixStream::connect(ctx.socket_path()).is_ok()
+}
+
+/// Non-Unix builds cannot run the daemon, so it cannot be active.
+#[cfg(not(unix))]
+fn daemon_active(_ctx: &Ctx) -> bool {
+    false
 }
 
 /// Exit code for `doctor`: 0 healthy, 2 when corrupt queue segments exist
@@ -3033,33 +3040,45 @@ fn submit_to_daemon(
     bytes: &[u8],
     extensions: Option<&Value>,
 ) -> Result<Option<(String, Value)>> {
-    use std::io::{BufRead, Write};
-    use std::os::unix::net::UnixStream;
-    let socket = ctx.socket_path();
-    let mut stream = match UnixStream::connect(&socket) {
-        Ok(s) => s,
-        Err(_) => return Ok(None),
-    };
-    // Build the same envelope the direct path would commit (§16.3 parity:
-    // the queue holds the validated request, never a differently-built one).
-    let built = build_ingest_envelope(ctx, repo_id, run_id, verifier, bytes, None, extensions)?;
-    let request = crate::daemon::record_request(repo_id, &built);
-    stream.write_all(serde_json::to_string(&request)?.as_bytes())?;
-    stream.write_all(b"\n")?;
-    let mut resp = String::new();
-    std::io::BufReader::new(&mut stream)
-        .read_line(&mut resp)
-        .context("read daemon receipt")?;
-    let receipt: Value = serde_json::from_str(resp.trim()).context("parse daemon receipt line")?;
-    if let Some(err) = receipt.get("error").and_then(Value::as_str) {
-        bail!("daemon rejected request: {err}");
+    #[cfg(not(unix))]
+    {
+        // No socket transport on this platform: the designed F-15 fallback is
+        // the direct CLI writer path (§16.3 parity — zero semantic
+        // difference), not a degradation.
+        let _ = (ctx, repo_id, run_id, verifier, bytes, extensions);
+        return Ok(None);
     }
-    let position = receipt
-        .get("queue_position")
-        .and_then(Value::as_str)
-        .unwrap_or_default()
-        .to_string();
-    Ok(Some((position, receipt)))
+    #[cfg(unix)]
+    {
+        use std::io::{BufRead, Write};
+        use std::os::unix::net::UnixStream;
+        let socket = ctx.socket_path();
+        let mut stream = match UnixStream::connect(&socket) {
+            Ok(s) => s,
+            Err(_) => return Ok(None),
+        };
+        // Build the same envelope the direct path would commit (§16.3 parity:
+        // the queue holds the validated request, never a differently-built one).
+        let built = build_ingest_envelope(ctx, repo_id, run_id, verifier, bytes, None, extensions)?;
+        let request = crate::daemon::record_request(repo_id, &built);
+        stream.write_all(serde_json::to_string(&request)?.as_bytes())?;
+        stream.write_all(b"\n")?;
+        let mut resp = String::new();
+        std::io::BufReader::new(&mut stream)
+            .read_line(&mut resp)
+            .context("read daemon receipt")?;
+        let receipt: Value =
+            serde_json::from_str(resp.trim()).context("parse daemon receipt line")?;
+        if let Some(err) = receipt.get("error").and_then(Value::as_str) {
+            bail!("daemon rejected request: {err}");
+        }
+        let position = receipt
+            .get("queue_position")
+            .and_then(Value::as_str)
+            .unwrap_or_default()
+            .to_string();
+        Ok(Some((position, receipt)))
+    }
 }
 
 pub fn spool_status(ctx: &Ctx, repo_id: &str) -> Result<Value> {

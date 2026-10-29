@@ -101,5 +101,5 @@ This document maps all high-level concepts, capabilities, schemas, and operation
 | **Slice 4 Proof Script** | [`proof/slice4.sh`](file:///home/sprime01/projects/sxr/proof/slice4.sh) | Gate 4 proof: $G_{observed}$ graph projection, residuals, and anti-collapse corpus export. |
 | **Slice 5 Proof Script** | [`proof/slice5.sh`](file:///home/sprime01/projects/sxr/proof/slice5.sh) | Gate 5 proof: 9-locus diagnostic attribution loop and asymmetric model friction. |
 | **Slice 6 Proof Script** | [`proof/slice6.sh`](file:///home/sprime01/projects/sxr/proof/slice6.sh) | Gate 6 proof: daemon durability parity (AC-DAEMON-001) and crash recovery. |
-| **Systemd Service Unit** | [`packaging/sxr.service`](file:///home/sprime01/projects/sxr/packaging/sxr.service) | Service definition for background deployment of the `sxr daemon`. |
+| **Systemd Service Unit** | [`packaging/realitytrace.service`](file:///home/sprime01/projects/sxr/packaging/realitytrace.service) | User-unit definition for background deployment of `realitytrace daemon` (source/tarball installs; the `.deb` ships the same unit as a vendor unit). |
 | **Ablation Evaluation Suite** | [`ablation/eval/`](file:///home/sprime01/projects/sxr/ablation/eval/) | Empirical evaluation harness testing hypothesis attribution across evidence revisions. |

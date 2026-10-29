@@ -51,3 +51,79 @@ jobs:
           rm -f "$HOME/.local/share/sxr/repos/$rid"/ledger.db*
           if "$RT" ledger verify --repo "$rid" --json; then echo "lost ledger verified"; exit 1; fi
           echo "clean install OK"
+
+  packaged-binary-deb:
+    name: packaged binary (.deb) clean install
+    # The same readiness question as clean-install, but for the artifact a user
+    # actually downloads. Ubuntu 22.04 is the glibc 2.35 baseline.
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install packaging tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq dpkg-dev binutils
+
+      - name: Build the release binary and .deb
+        run: |
+          set -euo pipefail
+          version=$(sh packaging/version.sh)
+          cargo build --release --locked -p realitytrace --bin realitytrace
+          test "$(target/release/realitytrace --version)" = "realitytrace ${version}"
+          sh packaging/check-linux-binary.sh target/release/realitytrace amd64
+          mkdir -p dist
+          sh packaging/deb/build.sh "$version" amd64 target/release dist
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Install the .deb on a machine without SQLite development files
+        run: |
+          set -euo pipefail
+          sudo apt-get remove -y libsqlite3-dev >/dev/null 2>&1 || true
+          ! ls /usr/lib/x86_64-linux-gnu/libsqlite3.so 2>/dev/null
+          sudo apt-get install -y "./dist/realitytrace_${VERSION}_amd64.deb"
+          test "$(realitytrace --version)" = "realitytrace ${VERSION}"
+
+      - name: Exercise evidence and ledger semantics on the installed binary
+        run: sh packaging/smoke-realitytrace.sh /usr/bin/realitytrace "$VERSION"
+
+      - name: Remove the package and prove it is gone
+        run: |
+          set -euo pipefail
+          sudo apt-get remove -y realitytrace
+          ! command -v realitytrace
+          test ! -e /usr/bin/realitytrace
+          test ! -e /usr/lib/systemd/user/realitytrace.service
+
+  packaged-binary-tarball:
+    name: packaged binary (tarball) clean install
+    # The tarball must work with no package manager at all: extract and run.
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build the release binary and tarball
+        run: |
+          set -euo pipefail
+          version=$(sh packaging/version.sh)
+          cargo build --release --locked -p realitytrace --bin realitytrace
+          sh packaging/check-linux-binary.sh target/release/realitytrace amd64
+          mkdir -p dist
+          sh packaging/linux/build-tarball.sh "$version" x86_64-unknown-linux-gnu target/release dist
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Extract into a fresh tree and exercise the semantics
+        run: |
+          set -euo pipefail
+          work=$(mktemp -d)
+          tar -xzf "dist/realitytrace-${VERSION}-x86_64-unknown-linux-gnu.tar.gz" -C "$work"
+          sh packaging/smoke-realitytrace.sh \
+            "$work/realitytrace-${VERSION}-x86_64-unknown-linux-gnu/realitytrace" "$VERSION"

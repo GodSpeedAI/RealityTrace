@@ -1,0 +1,572 @@
+name: Package
+
+# Native binaries for the realitytrace CLI:
+#   Linux amd64/arm64  .deb and .tar.gz (Ubuntu 22.04 / glibc 2.35 baseline)
+#   macOS              universal .pkg/.dmg (arm64-only if the x86_64 slice fails)
+#   Windows x86_64     .zip and per-user Inno Setup .exe
+#
+# Reusable (workflow_call, called by release-please.yml) and runnable on push or
+# from the Actions UI for release-candidate validation. Every package is
+# INSTALLED on the runner that built it and functionally tested against real
+# evidence/ledger semantics before it is offered as an artifact.
+#
+# Packages are UNSIGNED: no Apple Developer ID and no Authenticode certificate.
+#
+# Identity: the version always comes from sxr-cli/Cargo.toml (the workspace has
+# its own independent version). A requested release must name that exact
+# version, and a tag ref must be the matching `realitytrace-v<version>` tag, so
+# artifacts built from one commit can never be published under another release.
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Git ref to build (e.g. a realitytrace-v* tag). Empty builds the caller's commit."
+        type: string
+        required: false
+        default: ""
+      version:
+        description: "Expected CLI version or component tag. Empty reads sxr-cli/Cargo.toml."
+        type: string
+        required: false
+        default: ""
+      upload:
+        description: "True for release publication runs; disables cancellation of in-flight builds."
+        type: boolean
+        required: false
+        default: false
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git ref to build. Empty builds the selected branch/commit."
+        type: string
+        required: false
+        default: ""
+      version:
+        description: "Expected CLI version or component tag. Empty reads sxr-cli/Cargo.toml."
+        type: string
+        required: false
+        default: ""
+  push:
+    branches: [feat/native-binary-distribution]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: package-${{ inputs.ref || github.ref }}
+  cancel-in-progress: ${{ !inputs.upload }}
+
+env:
+  CARGO_TERM_COLOR: never
+  CARGO_INCREMENTAL: "0"
+
+jobs:
+  linux:
+    name: package (linux ${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            arch: amd64
+            target: x86_64-unknown-linux-gnu
+          # Native ARM runner on Ubuntu 22.04: the binary links glibc 2.35,
+          # which is exactly the NVIDIA Jetson AGX Orin (Ubuntu 22.04) baseline.
+          - runner: ubuntu-22.04-arm
+            arch: arm64
+            target: aarch64-unknown-linux-gnu
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || '' }}
+          persist-credentials: false
+
+      - name: Resolve and validate the release identity
+        id: version
+        shell: bash
+        env:
+          REQUESTED: ${{ inputs.version || '' }}
+          REF: ${{ inputs.ref || '' }}
+        run: |
+          set -euo pipefail
+          if [ -n "$REQUESTED" ]; then
+            version=$(sh packaging/version.sh "$REQUESTED")
+          else
+            version=$(sh packaging/version.sh)
+          fi
+          case "$REF" in
+            '') ;;
+            realitytrace-v*)
+              test "$REF" = "realitytrace-v${version}" || {
+                echo "::error::ref ${REF} is not the tag for CLI version ${version}"
+                exit 1
+              }
+              ;;
+            v*)
+              test "$REF" = "v${version}" || {
+                echo "::error::ref ${REF} is not the tag for CLI version ${version}"
+                exit 1
+              }
+              ;;
+            *)
+              echo "building branch/commit ref ${REF} as a candidate package for ${version}"
+              ;;
+          esac
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Building realitytrace ${version} from $(git rev-parse HEAD)"
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ matrix.arch }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.arch }}-cargo-
+
+      - name: Install packaging tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq dpkg-dev binutils
+
+      - name: Build the release binary
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          cargo build --release --locked -p realitytrace --bin realitytrace
+          test "$(target/release/realitytrace --version)" = "realitytrace ${VERSION}"
+
+      - name: Verify the Linux ABI baseline (glibc 2.35)
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: sh packaging/check-linux-binary.sh target/release/realitytrace "$ARCH"
+
+      - name: Build the .deb and tarball
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          ARCH: ${{ matrix.arch }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          sh packaging/deb/build.sh "$VERSION" "$ARCH" target/release dist
+          sh packaging/linux/build-tarball.sh "$VERSION" "$TARGET" target/release dist
+          ls -l dist
+
+      - name: Install and functionally test the .deb
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          deb="dist/realitytrace_${VERSION}_${ARCH}.deb"
+          sudo apt-get install -y "./$deb"
+          test "$(realitytrace --version)" = "realitytrace ${VERSION}"
+          dpkg -L realitytrace | grep -q '^/usr/bin/realitytrace$'
+          dpkg -L realitytrace | grep -q '^/usr/lib/systemd/user/realitytrace.service$'
+          # The vendor unit is installed but never enabled.
+          ! systemctl --global is-enabled realitytrace >/dev/null 2>&1 || {
+            echo "::error::the package must not enable the daemon"; exit 1;
+          }
+          sh packaging/smoke-realitytrace.sh /usr/bin/realitytrace "$VERSION"
+          dpkg -s realitytrace | sed -n '1,12p'
+          sudo apt-get remove -y realitytrace
+          ! command -v realitytrace
+          test ! -e /usr/bin/realitytrace
+          test ! -e /usr/lib/systemd/user/realitytrace.service
+          echo "install test: .deb installed, exercised, and removed cleanly"
+
+      - name: Install and test inside a clean Ubuntu 22.04 / Debian 12
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          if ! command -v docker >/dev/null 2>&1; then
+            echo "::warning::docker is unavailable; the native runner is Ubuntu 22.04 and the apt install test above already proves the ABI baseline"
+            exit 0
+          fi
+          for image in ubuntu:22.04 debian:12; do
+            docker run --rm -e "V=$VERSION" -v "$PWD:/work:ro" "$image" sh -ec '
+              apt-get update -qq >/dev/null
+              apt-get install -y -qq /work/dist/realitytrace_"$V"_*.deb git python3 >/dev/null
+              test "$(realitytrace --version)" = "realitytrace $V"
+              sh /work/packaging/smoke-realitytrace.sh /usr/bin/realitytrace "$V"
+              echo "clean '"$image"': realitytrace $V"
+            '
+          done
+
+      - name: Functional smoke of the tarball payload
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          work=$(mktemp -d)
+          tar -xzf "dist/realitytrace-${VERSION}-${TARGET}.tar.gz" -C "$work"
+          sh packaging/smoke-realitytrace.sh "$work/realitytrace-${VERSION}-${TARGET}/realitytrace" "$VERSION"
+
+      - name: Checksums
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          cd dist
+          sha256sum ./*.deb ./*.tar.gz > "SHA256SUMS-linux-${ARCH}"
+          sha256sum -c "SHA256SUMS-linux-${ARCH}"
+
+      - name: Record the built commit
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: git rev-parse HEAD > "dist/built-from-linux-${ARCH}.txt"
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: pkg-linux-${{ matrix.arch }}
+          path: |
+            dist/*.deb
+            dist/*.tar.gz
+            dist/SHA256SUMS-linux-${{ matrix.arch }}
+            dist/built-from-linux-${{ matrix.arch }}.txt
+          if-no-files-found: error
+          retention-days: 30
+
+  macos:
+    name: package (macos universal)
+    runs-on: macos-latest
+    timeout-minutes: 60
+    outputs:
+      label: ${{ steps.variant.outputs.label }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || '' }}
+          persist-credentials: false
+
+      - name: Resolve and validate the release identity
+        id: version
+        shell: bash
+        env:
+          REQUESTED: ${{ inputs.version || '' }}
+          REF: ${{ inputs.ref || '' }}
+        run: |
+          set -euo pipefail
+          if [ -n "$REQUESTED" ]; then
+            version=$(sh packaging/version.sh "$REQUESTED")
+          else
+            version=$(sh packaging/version.sh)
+          fi
+          case "$REF" in
+            '') ;;
+            realitytrace-v*) test "$REF" = "realitytrace-v${version}" || { echo "::error::ref ${REF} != realitytrace-v${version}"; exit 1; } ;;
+            v*) test "$REF" = "v${version}" || { echo "::error::ref ${REF} != v${version}"; exit 1; } ;;
+          esac
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Build arm64 slice
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          cargo build --release --locked --target aarch64-apple-darwin -p realitytrace --bin realitytrace
+          test "$(target/aarch64-apple-darwin/release/realitytrace --version)" = "realitytrace ${VERSION}"
+
+      - name: Build x86_64 slice (best effort)
+        id: x86
+        continue-on-error: true
+        run: cargo build --release --locked --target x86_64-apple-darwin -p realitytrace --bin realitytrace
+
+      - name: Choose the package variant
+        id: variant
+        shell: bash
+        env:
+          X86_OUTCOME: ${{ steps.x86.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "$X86_OUTCOME" = "success" ]; then
+            echo "label=universal" >> "$GITHUB_OUTPUT"
+            echo "expect=arm64 x86_64" >> "$GITHUB_OUTPUT"
+            echo "x86dir=target/x86_64-apple-darwin/release" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::x86_64 slice outcome was ${X86_OUTCOME}; shipping arm64-only (never mislabeled universal)"
+            echo "label=arm64" >> "$GITHUB_OUTPUT"
+            echo "expect=arm64" >> "$GITHUB_OUTPUT"
+            echo "x86dir=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build the .pkg and .dmg
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          X86DIR: ${{ steps.variant.outputs.x86dir }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          sh packaging/macos/build.sh "$VERSION" target/aarch64-apple-darwin/release "$X86DIR" dist
+          ls -l dist
+
+      - name: Install and functionally test the .pkg
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          LABEL: ${{ steps.variant.outputs.label }}
+          EXPECT: ${{ steps.variant.outputs.expect }}
+        run: |
+          set -euo pipefail
+          pkg="dist/realitytrace-${VERSION}-macos-${LABEL}.pkg"
+          sudo installer -pkg "$pkg" -target /
+          test "$(/usr/local/bin/realitytrace --version)" = "realitytrace ${VERSION}"
+          archs=$(lipo -archs /usr/local/bin/realitytrace)
+          echo "install test: lipo -archs -> $archs"
+          for want in $EXPECT; do
+            case " $archs " in
+              *" $want "*) ;;
+              *) echo "::error::installed binary lacks $want (got $archs)"; exit 1 ;;
+            esac
+          done
+          sh packaging/smoke-realitytrace.sh /usr/local/bin/realitytrace "$VERSION"
+          pkgutil --pkg-info ai.godspeed.realitytrace
+          sudo rm -f /usr/local/bin/realitytrace
+          sudo rm -rf /usr/local/share/doc/realitytrace
+          sudo pkgutil --forget ai.godspeed.realitytrace >/dev/null
+          test ! -e /usr/local/bin/realitytrace
+          echo "install test: .pkg installed, exercised, and removed cleanly"
+
+      - name: Verify the .dmg carries the same .pkg payload
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          LABEL: ${{ steps.variant.outputs.label }}
+        run: |
+          set -euo pipefail
+          pkg="dist/realitytrace-${VERSION}-macos-${LABEL}.pkg"
+          dmg="dist/realitytrace-${VERSION}-macos-${LABEL}.dmg"
+          built=$(shasum -a 256 "$pkg" | cut -d' ' -f1)
+          mnt=$(mktemp -d /tmp/rtdmg.XXXXXX)
+          hdiutil attach -nobrowse -readonly -noverify -noautoopen -mountpoint "$mnt" "$dmg" >/dev/null
+          inside=$(shasum -a 256 "$mnt/$(basename "$pkg")" | cut -d' ' -f1)
+          hdiutil detach "$mnt" >/dev/null
+          rmdir "$mnt" 2>/dev/null || true
+          test "$built" = "$inside"
+          echo "install test: dmg payload pkg matches the built pkg"
+
+      - name: Checksums
+        run: |
+          set -euo pipefail
+          cd dist
+          shasum -a 256 ./*.pkg ./*.dmg > SHA256SUMS-macos
+          shasum -a 256 -c SHA256SUMS-macos
+
+      - name: Record the built commit
+        run: git rev-parse HEAD > dist/built-from-macos.txt
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: pkg-macos
+          path: |
+            dist/*.pkg
+            dist/*.dmg
+            dist/SHA256SUMS-macos
+            dist/built-from-macos.txt
+          if-no-files-found: error
+          retention-days: 30
+
+  windows:
+    name: package (windows x86_64)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || '' }}
+          persist-credentials: false
+
+      - name: Resolve and validate the release identity
+        id: version
+        shell: bash
+        env:
+          REQUESTED: ${{ inputs.version || '' }}
+          REF: ${{ inputs.ref || '' }}
+        run: |
+          set -euo pipefail
+          if [ -n "$REQUESTED" ]; then
+            version=$(sh packaging/version.sh "$REQUESTED")
+          else
+            version=$(sh packaging/version.sh)
+          fi
+          case "$REF" in
+            '') ;;
+            realitytrace-v*) test "$REF" = "realitytrace-v${version}" || { echo "::error::ref ${REF} != realitytrace-v${version}"; exit 1; } ;;
+            v*) test "$REF" = "v${version}" || { echo "::error::ref ${REF} != v${version}"; exit 1; } ;;
+          esac
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build the release binary
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          cargo build --release --locked -p realitytrace --bin realitytrace
+          test "$(target/release/realitytrace.exe --version)" = "realitytrace ${VERSION}"
+
+      - name: Ensure Inno Setup
+        shell: pwsh
+        run: |
+          $iscc = Get-Command iscc.exe -ErrorAction SilentlyContinue
+          if (-not $iscc -and -not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup --no-progress -y
+          }
+
+      - name: Build the .zip and setup.exe
+        shell: pwsh
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          & "$PWD\packaging\windows\build.ps1" $env:VERSION "$PWD\target\release" "$PWD\dist"
+          if ($LASTEXITCODE -ne 0) { throw "build.ps1 failed" }
+
+      - name: Install and functionally test the per-user installer
+        shell: pwsh
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $base = "realitytrace-$($env:VERSION)-x86_64-pc-windows-msvc"
+          $setup = Join-Path $PWD "dist\$base-setup.exe"
+          $app = Join-Path $env:LOCALAPPDATA 'Programs\RealityTrace'
+          $log = Join-Path $env:RUNNER_TEMP 'install.log'
+          $p = Start-Process -FilePath $setup -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/CURRENTUSER', "/LOG=$log") -Wait -PassThru
+          if ($p.ExitCode -ne 0) {
+            if (Test-Path $log) { Get-Content $log | Select-Object -Last 40 }
+            throw "setup.exe exited $($p.ExitCode)"
+          }
+          foreach ($f in 'realitytrace.exe', 'LICENSE') {
+            if (-not (Test-Path (Join-Path $app $f))) { throw "missing $f in $app" }
+          }
+          Write-Host "installed to $app"
+
+          # Fresh process: rebuild PATH from the registry, not from this shell.
+          $check = Join-Path $env:RUNNER_TEMP 'check-path.ps1'
+          @'
+          $ErrorActionPreference = 'Stop'
+          $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')
+          $cmd = Get-Command realitytrace.exe
+          Write-Output "resolved: $($cmd.Source)"
+          $out = (& realitytrace.exe --version) | Out-String
+          Write-Output "version output: $($out.Trim())"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if ($out.Trim() -ne "realitytrace $($env:VERSION)") { exit 1 }
+          exit 0
+          '@ | Set-Content -Path $check -Encoding ASCII
+          & pwsh -NoProfile -File $check
+          if ($LASTEXITCODE -ne 0) { throw "PATH/version check failed in a new process" }
+
+          & pwsh -NoProfile -File "$PWD\packaging\windows\smoke.ps1" "$app\realitytrace.exe" $env:VERSION
+          if ($LASTEXITCODE -ne 0) { throw "functional smoke failed" }
+
+          $unins = Get-ChildItem -Path $app -Filter 'unins*.exe' | Select-Object -First 1
+          if (-not $unins) { throw 'uninstaller not found' }
+          $u = Start-Process -FilePath $unins.FullName -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES') -Wait -PassThru
+          if ($u.ExitCode -ne 0) { throw "uninstaller exited $($u.ExitCode)" }
+          if (Test-Path (Join-Path $app 'realitytrace.exe')) { throw 'realitytrace.exe still present after uninstall' }
+          $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+          if (($userPath -split ';') -contains $app) { throw 'user PATH still contains the install dir' }
+          Write-Host 'uninstall: binaries removed and user PATH entry removed'
+
+      - name: Verify the zip payload
+        shell: pwsh
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $zip = Join-Path $PWD "dist\realitytrace-$($env:VERSION)-x86_64-pc-windows-msvc.zip"
+          $out = Join-Path $env:RUNNER_TEMP 'zipcheck'
+          Remove-Item -Recurse -Force $out -ErrorAction SilentlyContinue
+          Expand-Archive -Path $zip -DestinationPath $out
+          foreach ($f in 'realitytrace.exe', 'LICENSE') {
+            if (-not (Test-Path (Join-Path $out $f))) { throw "zip missing $f" }
+          }
+          $got = (& (Join-Path $out 'realitytrace.exe') --version | Out-String).Trim()
+          if ($got -ne "realitytrace $($env:VERSION)") { throw "zip binary version: $got" }
+
+      - name: Checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd dist
+          sha256sum ./*.zip ./*-setup.exe > SHA256SUMS-windows
+          sha256sum -c SHA256SUMS-windows
+
+      - name: Record the built commit
+        shell: bash
+        run: git rev-parse HEAD > dist/built-from-windows.txt
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: pkg-windows
+          path: |
+            dist/*.zip
+            dist/*-setup.exe
+            dist/SHA256SUMS-windows
+            dist/built-from-windows.txt
+          if-no-files-found: error
+          retention-days: 30
+
+  domainforge-compat:
+    name: domainforge 0.21.2 real-binary compatibility
+    # The pin is only meaningful if it is exercised against the real compiler.
+    # Builds DomainForge from crates.io and checks out its tagged source for the
+    # fixtures the integration tests name.
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || '' }}
+          persist-credentials: false
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install DomainForge 0.21.2 from crates.io
+        run: |
+          set -euo pipefail
+          cargo install domainforge-core --version 0.21.2 --features cli --locked
+          test "$(domainforge --version)" = "domainforge 0.21.2"
+
+      - name: Check out the DomainForge v0.21.2 fixtures
+        run: git clone --depth 1 --branch v0.21.2 https://github.com/GodSpeedAI/DomainForge "$RUNNER_TEMP/domainforge"
+
+      - name: Run the real-binary integration tests
+        env:
+          SXR_TEST_DOMAINFORGE_BIN: ${{ env.HOME }}/.cargo/bin/domainforge
+          SXR_TEST_DOMAINFORGE_ROOT: ${{ runner.temp }}/domainforge
+        run: |
+          set -euo pipefail
+          cargo test -p sxr-df --test real_binary_tests -- --ignored real_domainforge_resolves_the_dogfood_entry
+          cargo test -p sxr-df --test real_binary_tests -- --ignored real_binary_composition_and_settlement_authorization
+          echo "::notice::The large-CAS test (real_domainforge_materializes_large_cas_carried_representation) needs SXR_TEST_LARGE_SEA_DIR, which this repository does not ship; it is reported as Not Tested, not as a compatibility failure."

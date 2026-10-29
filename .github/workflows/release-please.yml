@@ -10,6 +10,11 @@ on:
         required: false
         type: boolean
         default: false
+      attach_binaries_tag:
+        description: 'Existing realitytrace-v* tag to (re)attach native binaries to. Leave empty to skip binary publication.'
+        required: false
+        type: string
+        default: ''
 
 concurrency:
   group: release-${{ github.ref }}
@@ -30,6 +35,11 @@ jobs:
       release_created: ${{ steps.release.outputs.releases_created }}
       tag_name: ${{ steps.release.outputs['sxr-cli--tag_name'] }}
       version: ${{ steps.release.outputs['sxr-cli--version'] }}
+      # Path-prefixed flag: true only when the CLI component itself released.
+      # `releases_created` is true for ANY component release (sxr-core, ledger,
+      # ...), so binaries must gate on this narrower output or a non-CLI
+      # release would try to build and attach CLI artifacts.
+      cli_release_created: ${{ steps.release.outputs['sxr-cli--release_created'] }}
     steps:
       - name: Run release-please
         id: release
@@ -63,3 +73,136 @@ jobs:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: |
           ./scripts/publish-crates.sh
+
+  package-binaries:
+    name: Build and install-test native binaries
+    needs: [release-please]
+    # Only the CLI release (realitytrace-v*) produces binary artifacts. A
+    # maintainer can also re-attach binaries to an existing tag by dispatching
+    # this workflow with attach_binaries_tag. Tags are never moved.
+    if: >-
+      needs.release-please.outputs.cli_release_created == 'true' ||
+      (github.event_name == 'workflow_dispatch' && inputs.attach_binaries_tag != '')
+    uses: ./.github/workflows/package.yml
+    with:
+      ref: ${{ inputs.attach_binaries_tag || needs.release-please.outputs.tag_name }}
+      version: ${{ inputs.attach_binaries_tag || needs.release-please.outputs.tag_name }}
+      upload: true
+    permissions:
+      contents: read
+
+  publish-binaries:
+    name: Attach native binaries to the GitHub Release
+    needs: [release-please, package-binaries]
+    # Fail closed: nothing is attached unless every platform built, install-
+    # tested, and recorded the same source commit.
+    if: needs.package-binaries.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write      # gh release upload
+      id-token: write      # Sigstore keyless signing of the provenance
+      attestations: write  # store the attestation on the repository
+    env:
+      RELEASE_TAG: ${{ inputs.attach_binaries_tag || needs.release-please.outputs.tag_name }}
+    steps:
+      - name: Checkout the release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+          # Keep the write credential out of the checkout.
+          persist-credentials: false
+
+      - name: Download every native package
+        uses: actions/download-artifact@v4
+        with:
+          pattern: pkg-*
+          path: dist
+          merge-multiple: true
+
+      - name: Every package was built from the release tag
+        run: |
+          set -euo pipefail
+          tag_commit="$(git rev-parse HEAD)"
+          for os in linux-amd64 linux-arm64 macos windows; do
+            file="dist/built-from-${os}.txt"
+            test -f "$file" || { echo "::error::missing $file"; exit 1; }
+            built="$(cat "$file")"
+            test "$built" = "$tag_commit" || {
+              echo "::error::${os} packages built from ${built}, tag ${RELEASE_TAG} is ${tag_commit}"
+              exit 1
+            }
+          done
+
+      - name: Every required artifact is present
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#realitytrace-}"
+          version="${version#v}"
+          cd dist
+          for pattern in \
+            "realitytrace_${version}_amd64.deb" \
+            "realitytrace_${version}_arm64.deb" \
+            "realitytrace-${version}-x86_64-unknown-linux-gnu.tar.gz" \
+            "realitytrace-${version}-aarch64-unknown-linux-gnu.tar.gz" \
+            "realitytrace-${version}-x86_64-pc-windows-msvc.zip" \
+            "realitytrace-${version}-x86_64-pc-windows-msvc-setup.exe"; do
+            compgen -G "$pattern" >/dev/null || {
+              echo "::error::missing asset matching ${pattern}"
+              exit 1
+            }
+          done
+          if compgen -G "realitytrace-${version}-macos-universal.pkg" >/dev/null; then
+            compgen -G "realitytrace-${version}-macos-universal.dmg" >/dev/null || {
+              echo "::error::universal .pkg present without its .dmg"
+              exit 1
+            }
+          else
+            for ext in pkg dmg; do
+              compgen -G "realitytrace-${version}-macos-arm64.${ext}" >/dev/null || {
+                echo "::error::missing macOS arm64 .${ext} (no universal package was produced)"
+                exit 1
+              }
+            done
+          fi
+
+      - name: Generate and verify SHA256SUMS
+        run: |
+          set -euo pipefail
+          cd dist
+          rm -f SHA256SUMS-* built-from-*.txt
+          sha256sum $(ls -1 | LC_ALL=C sort) > SHA256SUMS
+          sha256sum -c SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Compare the built commit with the run commit
+        id: source
+        run: |
+          set -euo pipefail
+          built="$(git rev-parse HEAD)"
+          if [ "$built" = "$GITHUB_SHA" ]; then
+            echo "attest=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "attest=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Built ${built} for ${RELEASE_TAG} but this run is for ${GITHUB_SHA}; no provenance attestation is attached because it would name the wrong commit."
+          fi
+
+      - name: Attest build provenance
+        if: steps.source.outputs.attest == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: dist/*
+
+      - name: Attach packages to the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release upload "$RELEASE_TAG" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+
+      - name: Binary attach failure report
+        if: failure()
+        run: |
+          echo "::error::Native binaries were not attached for ${RELEASE_TAG}."
+          echo "The GitHub Release may lack packages or carry a SHA256SUMS that does not match them."
+          echo "Recovery: rerun this workflow from the Actions UI with attach_binaries_tag=${RELEASE_TAG}; the upload step replaces assets with --clobber and never moves the tag."

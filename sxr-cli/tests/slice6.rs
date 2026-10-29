@@ -14,6 +14,12 @@
 //!   commit with `"daemon": false` — zero semantic difference.
 //! - A second daemon on the same socket is rejected; the socket path honors
 //!   `SXR_DAEMON_SOCKET`.
+//!
+//! The harness shells out to shell-scripted fake `domainforge` binaries and
+//! Unix-domain sockets, so the file is Unix-only. Windows coverage for the
+//! shared (transport-independent) logic comes from the crate unit tests and
+//! the platform smoke tests in CI.
+#![cfg(unix)]
 
 use realitytrace as sxr_cli;
 use serde_json::{Value, json};

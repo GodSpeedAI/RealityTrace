@@ -29,11 +29,20 @@ fn state_root() -> PathBuf {
 fn expand_tilde(p: PathBuf) -> PathBuf {
     if let Ok(s) = p.clone().into_os_string().into_string()
         && (s == "~" || s.starts_with("~/"))
-        && let Ok(home) = std::env::var("HOME")
+        && let Some(home) = home_dir()
     {
         return PathBuf::from(home).join(s.trim_start_matches("~/"));
     }
     p
+}
+
+/// The user's home directory. `HOME` everywhere; `USERPROFILE` as the Windows
+/// fallback (cmd/PowerShell sessions have no `HOME`). Empty values are ignored.
+fn home_dir() -> Option<String> {
+    std::env::var("HOME")
+        .ok()
+        .filter(|v| !v.is_empty())
+        .or_else(|| std::env::var("USERPROFILE").ok().filter(|v| !v.is_empty()))
 }
 
 /// Root context for a CLI invocation.

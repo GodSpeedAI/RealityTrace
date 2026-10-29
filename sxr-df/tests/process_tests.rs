@@ -2,6 +2,11 @@
 //! construction, exit-code handling, and stderr/empty-stdout paths. The
 //! envelope payloads are the committed fixtures captured from the real
 //! Slice 0B binary.
+//!
+//! The fake binaries are shell scripts, so the file is Unix-only; the
+//! adapter contract is additionally covered against the real binary by
+//! `real_binary_tests.rs` (opt-in) on every platform that can run it.
+#![cfg(unix)]
 
 use serde_json::json;
 use std::fs;
