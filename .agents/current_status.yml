@@ -1,6 +1,6 @@
 task: native_binary_distribution
 status: in_progress
-timestamp: "2026-10-29T12:30:00Z"
+timestamp: "2026-10-29T14:10:00Z"
 system: RealityTrace (SXR)
 branch: feat/native-binary-distribution
 
@@ -23,39 +23,51 @@ expected_state:
 observed_state:
   source:
     portability: >-
-      std File::try_lock replaces libc::flock (sxr-ledger); HOME falls back to
-      USERPROFILE; daemon socket transport is #[cfg(unix)] with an explicit
-      non-Unix refusal; Unix-only tests cfg-gated.
+      std File::try_lock replaces libc::flock (sxr-ledger; libc dependency now
+      removed); HOME falls back to USERPROFILE; daemon socket transport is
+      #[cfg(unix)] with an explicit non-Unix refusal; Unix-only tests cfg-gated.
     domainforge_pin: "0.21.2 (sxr-df/src/lib.rs) + pin_tests regression"
-    local_gates: "fmt clean, clippy -D warnings clean, workspace tests all ok"
-  packaging:
-    linux: "check-linux-binary.sh, deb/build.sh, linux/build-tarball.sh (reproducible), smoke-realitytrace.sh"
-    macos: "packaging/macos/build.sh (lipo + pkgbuild + hdiutil)"
-    windows: "packaging/windows/build.ps1, realitytrace.iss, smoke.ps1"
-    version: "packaging/version.sh (CLI crate is the source of truth)"
-  artifacts:
-    local_deb: "built and inspected; payload/unit/control verified (host glibc 2.43, so not the release ABI)"
-    local_tarball: "byte-reproducible; extracted binary passed the full functional smoke"
-    ci: "not yet run; nothing published"
+    local_gates: >-
+      fmt clean; clippy --workspace --all-targets -D warnings clean; workspace
+      tests 27 result lines, 0 failed, 3 ignored; packaged-binary functional
+      smoke ALL CHECKS PASSED against a fresh release build.
+  ci:
+    run_40875037852: >-
+      Package @ bdbf929 - all five jobs success (linux amd64, linux arm64,
+      macOS universal, windows x86_64, domainforge 0.21.2). Artifacts
+      downloaded and re-verified locally.
+    run_40876006984: "Package @ 35883dc - all five jobs success (docs-link commit)."
+    artifacts: ".agents/reports/native-binary-ci-evidence-40875037852.md (hashes, ABI, payload)"
+  review:
+    report: ".agents/reports/native-binary-distribution-review.md"
+    outcome: >-
+      No critical finding; one High (release-build cancellation), three Medium,
+      seven Low. All fixed except finding 4 (Windows coverage of the
+      DomainForge process adapter), which is accepted and documented.
 
 difference:
-  - No CI run yet, so no downloadable ARM64 artifact and no recorded hashes.
+  - The PR has not been opened yet, so the review fixes and the two new
+    packaged-binary clean-install jobs have not run in CI.
+  - No artifact is published to any release yet (candidate artifacts only).
   - The ABI gate refuses this host's binary (glibc 2.43 > 2.35) by design; the
-    2.35 artifacts must come from ubuntu-22.04 / ubuntu-22.04-arm runners.
-  - Windows and macOS packaging has not executed anywhere yet.
+    2.35 artifacts come from the ubuntu-22.04 / ubuntu-22.04-arm runners.
   - real_domainforge_materializes_large_cas_carried_representation remains Not
-    Tested: its SXR_TEST_LARGE_SEA_DIR fixture (interaction-model.sea) is absent.
+    Tested — its SXR_TEST_LARGE_SEA_DIR fixture (interaction-model.sea) is absent.
+  - Windows has no coverage of the DomainForge process adapter (review finding 4).
+  - No install on real Jetson hardware; the glibc/arch preconditions are proven
+    (max GLIBC_2.34 <= 2.35, aarch64, deb Depends libc6 >= 2.34).
 
 next_actions:
-  - Commit and push the branch.
-  - Run the Mode A packaging workflow and fix any platform failures.
-  - Download and verify the ARM64 .deb/.tar.gz; record SHA-256 hashes and run URLs.
-  - Open the PR; run the adversarial review.
-  - Update this file with the settled CI evidence.
+  - Push the branch and open the PR; confirm the PR-triggered Package run and the
+    packaged-binary clean-install jobs are green.
+  - Record the PR run URL and the final head SHA in the reports.
+  - Produce the handoff with per-platform status, hashes, and Jetson commands.
 
 evidence:
-  report: .agents/reports/native-binary-distribution-verification.md
   plan: .agents/plans/native-binary-distribution-20261028.md
+  verification: .agents/reports/native-binary-distribution-verification.md
+  ci: .agents/reports/native-binary-ci-evidence-40875037852.md
+  review: .agents/reports/native-binary-distribution-review.md
   previous_task_report: .agents/reports/repository-documentation-architect-2026-09-02.yml
 
 hard_constraints:
