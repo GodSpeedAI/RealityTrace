@@ -2790,6 +2790,7 @@ pub fn ingest_idempotency_key(run_id: &str, verifier: &str) -> String {
 }
 
 /// Build the ingest request metadata object (§11.1a spool shape).
+#[allow(clippy::too_many_arguments)]
 fn ingest_request_meta(
     repo_id: &str,
     run_id: &str,
@@ -2934,6 +2935,7 @@ pub fn build_ingest_envelope(
 /// `cargo-json` yields exactly the one envelope `build_ingest_envelope`
 /// always produced; `agent-event-v1` yields one per NDJSON line. Direct
 /// commit, daemon submission, and spool drain all construct through here.
+#[allow(clippy::too_many_arguments)]
 pub fn build_ingest_envelopes(
     ctx: &Ctx,
     repo_id: &str,

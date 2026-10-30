@@ -17,7 +17,10 @@ fn entry(i: u32) -> PendingEntry {
 }
 
 fn config(n: u64) -> LedgerConfig {
-    LedgerConfig { tail_verify_on_open: n, ..LedgerConfig::default() }
+    LedgerConfig {
+        tail_verify_on_open: n,
+        ..LedgerConfig::default()
+    }
 }
 
 #[test]
@@ -45,9 +48,14 @@ fn tail_window_still_detects_corruption_inside_it() {
     }
     ledger
         .conn()
-        .execute("UPDATE ledger SET payload = '{\"i\":99}' WHERE append_ordinal = 6", [])
+        .execute(
+            "UPDATE ledger SET payload = '{\"i\":99}' WHERE append_ordinal = 6",
+            [],
+        )
         .unwrap();
     drop(ledger);
-    let err = Ledger::open(&path, "01JT", config(3)).unwrap_err().to_string();
+    let err = Ledger::open(&path, "01JT", config(3))
+        .unwrap_err()
+        .to_string();
     assert!(err.contains("01JT:6"), "{err}");
 }

@@ -436,7 +436,12 @@ fn invalid_line_is_reported_by_number_and_appends_nothing() {
     e["exit_code"] = Value::Null; // tool events must say how they ended
     cases.push(e);
     for c in cases {
-        let (code, _, err) = h.ingest(&run_id, "agent-event-v1", &ndjson(&[c.clone()]), &[]);
+        let (code, _, err) = h.ingest(
+            &run_id,
+            "agent-event-v1",
+            &ndjson(std::slice::from_ref(&c)),
+            &[],
+        );
         assert_eq!(code, 2, "{c} should be refused: {err}");
         assert!(err.contains("line 1"), "{err}");
     }

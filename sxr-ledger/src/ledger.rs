@@ -456,7 +456,11 @@ impl Ledger {
         self.verify_range(None, &all)
     }
 
-    fn verify_range(&self, anchor: Option<(u64, &str)>, rows: &[LedgerRow]) -> Result<VerifyReport> {
+    fn verify_range(
+        &self,
+        anchor: Option<(u64, &str)>,
+        rows: &[LedgerRow],
+    ) -> Result<VerifyReport> {
         let refs: Vec<&LedgerRow> = rows.iter().collect();
         let mut limitations = vec![
             "tamper-evident, not tamper-proof: anyone with write access can rewrite the whole chain (CEP-0008 §55)".to_string(),
@@ -496,7 +500,11 @@ fn is_unique_violation(e: &rusqlite::Error) -> bool {
 
 /// Locate the first divergent `(ledger_id, append_ordinal)` by re-verifying
 /// each row in order (AC-LEDGER-001 names both fields).
-fn divergence_position(_msg: &str, anchor: Option<&str>, rows: &[LedgerRow]) -> Option<LedgerPosition> {
+fn divergence_position(
+    _msg: &str,
+    anchor: Option<&str>,
+    rows: &[LedgerRow],
+) -> Option<LedgerPosition> {
     let refs: Vec<&LedgerRow> = rows.iter().collect();
     let mut prev_hash: Option<&str> = anchor;
     for (i, row) in refs.iter().enumerate() {
