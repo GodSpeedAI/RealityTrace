@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-df-v0.2.1...sxr-df-v0.3.0) (2026-10-30)
+
+
+### Features
+
+* **packaging:** precompiled native binaries for Linux, macOS, and Windows ([#12](https://github.com/GodSpeedAI/RealityTrace/issues/12)) ([4d154b1](https://github.com/GodSpeedAI/RealityTrace/commit/4d154b12da03243cf813822218110dc1632dc9da))
+* **sxr-df:** fail closed on unsupported DomainForge compiler version ([7e7b1ab](https://github.com/GodSpeedAI/RealityTrace/commit/7e7b1ab5bd5927b3a2ef761f4cbab113475685b7))
+* **sxr-df:** pin DomainForge 0.19.0 ([ee48738](https://github.com/GodSpeedAI/RealityTrace/commit/ee4873855ce29a72500fe74db90b2f6ac348fd71))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * sxr-core bumped from 0.3.0 to 0.4.0
+
 ## [0.2.1](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-df-v0.2.0...sxr-df-v0.2.1) (2026-09-25)
 
 
