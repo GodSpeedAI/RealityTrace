@@ -3,6 +3,7 @@
 //! The binary (`main.rs`) is the primary entry point; this lib mirrors the
 //! same module set.
 
+pub mod agent_event;
 pub mod commands;
 pub mod daemon;
 pub mod determinism;
