@@ -27,8 +27,11 @@ sxr daemon --socket /tmp/sxr.sock --drain-delay-ms 250
 > [!TIP]
 > In production systemd environments, deploy using the provided unit file:
 > ```bash
-> systemctl --user start sxr.service
+> systemctl --user start realitytrace.service
 > ```
+> The `.deb` installs the same unit as a vendor unit under
+> `/usr/lib/systemd/user/`; a copy under `~/.config/systemd/user/` (from
+> `packaging/realitytrace.service` for a source/tarball install) overrides it.
 
 Verify the daemon is alive:
 ```bash

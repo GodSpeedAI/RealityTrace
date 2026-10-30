@@ -111,6 +111,7 @@ Choose the path that fits your current goal:
 | **I want to inspect the architectural topology** | [Architecture Specification](../architecture.md) & [Logical Architecture](./architecture/logical.md) |
 | **I want to understand a specific crate or subsystem** | [Subsystems Directory](./subsystems/sxr-core.md) |
 | **I need to run, manage, or debug the system** | [How-To Guides Index](./how-to/enroll-and-configure.md) & [CLI Reference](./reference/cli.md) |
+| **I need to install a precompiled binary** | [Install Native Binaries](./how-to/install-native-binaries.md) |
 | **I want to look up schemas, record kinds, or exit codes** | [Technical Reference](./reference/schemas.md) |
 | **I need to find the implementation of a concept** | [Source Traceability Map](../source-map.md) |
 | **I want to see the full documentation map** | [Documentation Map](../documentation-map.md) |

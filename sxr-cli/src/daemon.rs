@@ -7,9 +7,12 @@
 
 use anyhow::{Context, Result, anyhow, bail};
 use serde_json::Value;
+#[cfg(unix)]
 use std::os::unix::net::{UnixListener, UnixStream};
+#[cfg(unix)]
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
+#[cfg(unix)]
 use std::thread;
 
 use crate::commands;
@@ -124,6 +127,7 @@ fn drain_repo_queue(ctx: &Ctx, repo_id: &str) -> Result<u64> {
 /// Minimal sd_notify(3) support: write `READY=1` to `$NOTIFY_SOCKET`
 /// (systemd user unit, §18.4). A no-op when the variable is unset (tests and
 /// proof scripts run without systemd).
+#[cfg(unix)]
 fn notify_ready() {
     use std::io::Write;
     let Ok(sock_path) = std::env::var("NOTIFY_SOCKET") else {
@@ -137,6 +141,7 @@ fn notify_ready() {
 
 /// Bind the listener, replacing a stale socket left by an unclean shutdown
 /// (an old socket whose server is gone must not block startup).
+#[cfg(unix)]
 fn bind_listener(socket: &Path) -> Result<UnixListener> {
     if socket.exists() {
         match UnixStream::connect(socket) {
@@ -157,6 +162,7 @@ fn bind_listener(socket: &Path) -> Result<UnixListener> {
 /// receipt), respond with the receipt line — or an `{"error": ...}` line when
 /// the request is rejected, so the caller never mistakes rejection for
 /// success (§11.1a: `accepted` is never a successful final response).
+#[cfg(unix)]
 fn handle_client(ctx: &Ctx, mut stream: UnixStream) -> Result<()> {
     use std::io::{BufRead, BufReader, Write};
     let mut reader = BufReader::new(stream.try_clone().context("clone socket")?);
@@ -204,6 +210,7 @@ fn handle_client(ctx: &Ctx, mut stream: UnixStream) -> Result<()> {
 
 /// `sxr daemon`: run until killed. `--drain-delay-ms` paces the commit loop
 /// (a test hook: a long delay makes kill-after-receipt deterministic).
+#[cfg(unix)]
 pub fn daemon_run(ctx: &Ctx, socket: Option<&str>, drain_delay_ms: u64) -> Result<()> {
     let socket_path: PathBuf = socket
         .map(PathBuf::from)
@@ -231,4 +238,16 @@ pub fn daemon_run(ctx: &Ctx, socket: Option<&str>, drain_delay_ms: u64) -> Resul
         }
         thread::sleep(std::time::Duration::from_millis(drain_delay_ms));
     }
+}
+
+/// Non-Unix builds carry no socket transport. The daemon is refused
+/// explicitly — never silently degraded — while every queue/drain/recovery
+/// entry point above remains available (they are transport-independent).
+#[cfg(not(unix))]
+pub fn daemon_run(_ctx: &Ctx, _socket: Option<&str>, _drain_delay_ms: u64) -> Result<()> {
+    bail!(
+        "the RealityTrace daemon is not supported on this platform: it communicates \
+         over a Unix-domain socket, which this OS does not provide. Direct CLI \
+         operation (including queue recovery) is fully supported."
+    );
 }

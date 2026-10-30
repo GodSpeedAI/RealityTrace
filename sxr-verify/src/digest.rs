@@ -80,12 +80,15 @@ mod tests {
         std::fs::rename(a.path().join("README.md"), a.path().join("README")).unwrap();
 
         // A symlink is recorded by its target, not followed.
-        std::os::unix::fs::symlink("/etc/passwd", a.path().join("link")).unwrap();
-        let d3 = tree_digest(a.path()).unwrap();
-        assert_ne!(d1, d3);
-        std::fs::remove_file(a.path().join("link")).unwrap();
-        std::os::unix::fs::symlink("/etc/hosts", a.path().join("link")).unwrap();
-        assert_ne!(d3, tree_digest(a.path()).unwrap());
+        #[cfg(unix)]
+        {
+            std::os::unix::fs::symlink("/etc/passwd", a.path().join("link")).unwrap();
+            let d3 = tree_digest(a.path()).unwrap();
+            assert_ne!(d1, d3);
+            std::fs::remove_file(a.path().join("link")).unwrap();
+            std::os::unix::fs::symlink("/etc/hosts", a.path().join("link")).unwrap();
+            assert_ne!(d3, tree_digest(a.path()).unwrap());
+        }
     }
 
     #[test]

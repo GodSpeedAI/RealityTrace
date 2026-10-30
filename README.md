@@ -330,6 +330,13 @@ Authority (SEA-Forge) and observation (RealityTrace) are separate. Execution (Ga
 cargo install realitytrace
 ```
 
+Precompiled binaries (no Rust toolchain needed) are attached to each
+`realitytrace-v*` GitHub Release: `.deb` and `.tar.gz` for Linux amd64/arm64
+(built against glibc 2.35, so Ubuntu 22.04 and the NVIDIA Jetson AGX Orin are
+supported), `.pkg`/`.dmg` for macOS, and `.zip`/per-user installer for Windows.
+See [Install Native Binaries](./docs/how-to/install-native-binaries.md) for the
+per-platform steps, checksum verification, and rollback.
+
 Verify installation and environment status:
 
 ```bash

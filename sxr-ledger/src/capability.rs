@@ -5,7 +5,6 @@
 use crate::error::{Error, Result};
 use std::fs::{self, File, OpenOptions};
 use std::io::{Read, Write};
-use std::os::unix::io::AsRawFd;
 use std::path::{Path, PathBuf};
 
 /// §10.2a classification.
@@ -121,8 +120,9 @@ fn classify(report: &ProbeReport) -> FilesystemClass {
     }
 }
 
-/// POSIX advisory locking: a second fd must not be able to take LOCK_EX while
-/// the first holds it.
+/// Advisory file locking (std API): a second fd must not be able to take an
+/// exclusive lock while the first holds it (flock on Unix, LockFileEx on
+/// Windows).
 fn probe_locking(dir: &Path) -> Result<()> {
     let path = dir.join("probe.lock");
     let a = OpenOptions::new()
@@ -131,24 +131,31 @@ fn probe_locking(dir: &Path) -> Result<()> {
         .read(true)
         .write(true)
         .open(&path)?;
-    let rc = unsafe { libc::flock(a.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) };
-    if rc != 0 {
-        return Err(Error::Io(std::io::Error::last_os_error()));
-    }
+    a.try_lock().map_err(|e| match e {
+        std::fs::TryLockError::Error(io_err) => Error::Io(io_err),
+        std::fs::TryLockError::WouldBlock => {
+            Error::Integrity("locking probe: initial lock blocked unexpectedly".into())
+        }
+    })?;
     let b = OpenOptions::new().read(true).open(&path)?;
-    let rc = unsafe { libc::flock(b.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) };
-    if rc == 0 {
-        // Locking silently succeeded without excluding — unsafe, not degraded.
-        unsafe { libc::flock(b.as_raw_fd(), libc::LOCK_UN) };
-        return Err(Error::Integrity(
-            "locking probe: second lock acquired while first held".into(),
-        ));
+    match b.try_lock() {
+        Ok(()) => {
+            // Locking silently succeeded without excluding — unsafe, not degraded.
+            let _ = b.unlock();
+            let _ = a.unlock();
+            return Err(Error::Integrity(
+                "locking probe: second lock acquired while first held".into(),
+            ));
+        }
+        // Contended as required. Any other error is a real probe failure.
+        Err(std::fs::TryLockError::WouldBlock) => {}
+        Err(std::fs::TryLockError::Error(err)) => {
+            let _ = a.unlock();
+            return Err(Error::Io(err));
+        }
     }
-    let err = std::io::Error::last_os_error();
-    if err.raw_os_error() != Some(libc::EWOULDBLOCK) {
-        return Err(Error::Io(err));
-    }
-    unsafe { libc::flock(a.as_raw_fd(), libc::LOCK_UN) };
+    let _ = b.unlock();
+    let _ = a.unlock();
     Ok(())
 }
 

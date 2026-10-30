@@ -2689,9 +2689,16 @@ pub fn export_anti_collapse_corpus(
 
 /// Daemon presence probe: the socket accepts connections only while the
 /// daemon holds it (§16.1, F-15). Informational — never a hard requirement.
+#[cfg(unix)]
 fn daemon_active(ctx: &Ctx) -> bool {
     use std::os::unix::net::UnixStream;
     UnixStream::connect(ctx.socket_path()).is_ok()
+}
+
+/// Non-Unix builds cannot run the daemon, so it cannot be active.
+#[cfg(not(unix))]
+fn daemon_active(_ctx: &Ctx) -> bool {
+    false
 }
 
 /// Exit code for `doctor`: 0 healthy, 2 when corrupt queue segments exist

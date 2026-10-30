@@ -1,84 +1,87 @@
-task: repository_documentation_architect
-status: completed
-timestamp: "2026-09-02T20:45:00Z"
-system: Semantic Exhaust Runtime (SXR / RealityTrace)
+task: native_binary_distribution
+status: in_progress
+timestamp: "2026-10-29T14:10:00Z"
+system: RealityTrace (SXR)
+branch: feat/native-binary-distribution
 
-deliverables:
-  architecture_spec: architecture.md
-  documentation_map: documentation-map.md
-  source_map: source-map.md
-  repository_readme: README.md
-  documentation_tree: docs/
+objective: >-
+  Ship precompiled realitytrace binaries for Linux amd64/arm64 (.deb + .tar.gz),
+  Windows x64 (.zip + per-user setup.exe), and macOS universal (.pkg + .dmg),
+  bound to the realitytrace-v* CLI release identity, with glibc 2.35 (Jetson AGX
+  Orin) as the Linux baseline, packaged-binary CI tests that assert evidence and
+  ledger semantics, and DomainForge pinned and exercised at 0.21.2.
 
-layers:
-  layer_0_orientation:
-    - docs/index.md
-  layer_1_mental_model:
-    - docs/mental-model.md
-  layer_2_architecture:
-    - docs/architecture/logical.md
-    - docs/architecture/runtime.md
-    - docs/architecture/data-storage.md
-    - docs/architecture/dependency.md
-    - docs/architecture/security-trust.md
-  layer_3_subsystems:
-    - docs/subsystems/sxr-core.md
-    - docs/subsystems/sxr-ledger.md
-    - docs/subsystems/sxr-git.md
-    - docs/subsystems/sxr-df.md
-    - docs/subsystems/sxr-verify.md
-    - docs/subsystems/sxr-cli.md
-    - docs/subsystems/ablation.md
-  layer_4_workflows:
-    - docs/workflows/repo-enrollment.md
-    - docs/workflows/semantic-snapshot.md
-    - docs/workflows/verification-run.md
-    - docs/workflows/graph-projections.md
-    - docs/workflows/diagnostic-loop.md
-    - docs/workflows/daemon-and-durability.md
-  layer_5_explanation:
-    - docs/explanation/anti-collapse-epistemology.md
-    - docs/explanation/cryptographic-ledger.md
-    - docs/explanation/projections-and-outbox.md
-    - docs/explanation/asymmetric-diagnostic-friction.md
-    - docs/explanation/isolation-invariants.md
-  layer_6_tutorials:
-    - docs/tutorials/quickstart.md
-  layer_7_how_to:
-    - docs/how-to/enroll-and-configure.md
-    - docs/how-to/execute-verification-run.md
-    - docs/how-to/diagnose-failures.md
-    - docs/how-to/operate-daemon.md
-    - docs/how-to/rebuild-projections.md
-    - docs/how-to/add-verifier.md
-  layer_8_reference:
-    - docs/reference/cli.md
-    - docs/reference/record-kinds.md
-    - docs/reference/schemas.md
-    - docs/reference/environment-and-xdg.md
-    - docs/reference/exit-codes.md
+expected_state:
+  - Release realitytrace-v* carries verified native artifacts for all platforms.
+  - ARM64 .deb and .tar.gz download from CI and run on Ubuntu 22.04 / glibc 2.35.
+  - Binary publication gates only on the CLI component release, never moves tags,
+    and refuses version/commit mismatch.
+  - DomainForge 0.21.2 is enforced and the real-binary contract tests pass.
+  - Packaged-binary tests prove supporting evidence settles, contradicting
+    evidence does not, tampering is rejected, and a lost ledger fails closed.
 
-invariants_verified:
-  - AC-CORE-001 (Zero-I/O sxr-core boundary)
-  - AC-SECURITY-001 (Repository non-mutation)
-  - AC-IDENTITY-001 (ULID minting decoupled from Git)
-  - AC-IDENTITY-002 (Multi-tenant partition isolation)
-  - AC-LEDGER-001 (Dense SHA-256 hash chaining)
-  - AC-SETTLEMENT-002 (Refusal of positive settlement on invalid models and legacy v1-legacy snapshots)
-  - AC-GRAPH-001 (Observed graph admission requires explicit qualifying evidence)
-  - AC-DIAG-001 (Asymmetric friction against premature model blame)
-  - AC-DAEMON-001 (Direct vs daemon record parity)
-  - AC-REPLAY-002 (Rebuild determinism over projections)
-  - AC-DF-001 (Bounded subprocess execution: 16 MiB buffer cap, 30s timeout)
-  - AC-DF-002 (Subprocess composition verified against live domainforge binary)
+observed_state:
+  source:
+    portability: >-
+      std File::try_lock replaces libc::flock (sxr-ledger; libc dependency now
+      removed); HOME falls back to USERPROFILE; daemon socket transport is
+      #[cfg(unix)] with an explicit non-Unix refusal; Unix-only tests cfg-gated.
+    domainforge_pin: "0.21.2 (sxr-df/src/lib.rs) + pin_tests regression"
+    local_gates: >-
+      fmt clean; clippy --workspace --all-targets -D warnings clean; workspace
+      tests 27 result lines, 0 failed, 3 ignored; packaged-binary functional
+      smoke ALL CHECKS PASSED against a fresh release build.
+  ci:
+    run_40875037852: >-
+      Package @ bdbf929 - all five jobs success (linux amd64, linux arm64,
+      macOS universal, windows x86_64, domainforge 0.21.2). Artifacts
+      downloaded and re-verified locally.
+    run_40876006984: "Package @ 35883dc - all five jobs success (docs-link commit)."
+    pr_12: >-
+      Head 43f3d32 - all nine checks pass (Check/Test/Lint, clean-install,
+      packaged-binary .deb, packaged-binary tarball, four platform packages,
+      domainforge 0.21.2). PR runs build the merge commit 7645a8e7; the release
+      path checks out the tag instead and is stricter.
+    artifacts: ".agents/reports/native-binary-ci-evidence-40875037852.md (hashes, ABI, payload)"
+  review:
+    report: ".agents/reports/native-binary-distribution-review.md"
+    outcome: >-
+      No critical finding; one High (release-build cancellation), three Medium,
+      seven Low. All fixed except finding 4 (Windows coverage of the
+      DomainForge process adapter), which is accepted and documented.
 
-remediation_status:
-  date: "2026-09-08"
-  outcome: "Unified DomainForge / SXR / SEA-Forge / CEP interface remediation complete and verified"
-  test_evidence:
-    - "sxr-core snapshot_and_threshold_tests (8 passed)"
-    - "sxr-df fixture_tests (17 passed)"
-    - "sxr-df real_binary_tests::real_binary_composition_and_settlement_authorization (1 passed against live binary)"
-    - "sxr-cli test suite (35 passed)"
+difference:
+  - All nine PR checks pass at head 43f3d32; the PR is open and awaiting merge
+    (https://github.com/GodSpeedAI/RealityTrace/pull/12).
+  - No artifact is published to any release yet (candidate artifacts only).
+  - The ABI gate refuses this host's binary (glibc 2.43 > 2.35) by design; the
+    2.35 artifacts come from the ubuntu-22.04 / ubuntu-22.04-arm runners.
+  - real_domainforge_materializes_large_cas_carried_representation remains Not
+    Tested — its SXR_TEST_LARGE_SEA_DIR fixture (interaction-model.sea) is absent.
+  - Windows has no coverage of the DomainForge process adapter (review finding 4).
+  - Seven sxr-ledger unit tests fail on Windows (directory fsync, read-only
+    semantics, case-sensitivity probe). Pre-existing, not introduced here; the
+    probe is not wired into the CLI and the queue is the daemon's path, which is
+    unsupported on Windows. Recorded in the review report, not silenced. The
+    accurate Windows claim is direct CLI + ledger only.
+  - No install on real Jetson hardware; the glibc/arch preconditions are proven
+    (max GLIBC_2.34 <= 2.35, aarch64, deb Depends libc6 >= 2.34).
 
-next_action: None (Interface remediation and documentation complete)
+next_actions:
+  - Push the branch and open the PR; confirm the PR-triggered Package run and the
+    packaged-binary clean-install jobs are green.
+  - Record the PR run URL and the final head SHA in the reports.
+  - Produce the handoff with per-platform status, hashes, and Jetson commands.
+
+evidence:
+  plan: .agents/plans/native-binary-distribution-20261028.md
+  verification: .agents/reports/native-binary-distribution-verification.md
+  ci: .agents/reports/native-binary-ci-evidence-40875037852.md
+  review: .agents/reports/native-binary-distribution-review.md
+  previous_task_report: .agents/reports/repository-documentation-architect-2026-09-02.yml
+
+hard_constraints:
+  - No history rewrite, no force-push, no tag mutation.
+  - crates.io publishing behaviour unchanged.
+  - Historical run evidence untouched.
+  - Fail closed on ambiguous or missing evidence.

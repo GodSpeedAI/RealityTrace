@@ -1,11 +1,11 @@
-//! The writer role is claimed by `flock(2)` on `repos/<repo_id>/writer.lock`
-//! (§11.1). Blocking default with a bounded wait; `spool` is opt-in at the CLI
-//! layer and never a silent fallback on contention (§11.1a).
+//! The writer role is claimed by an exclusive whole-file OS lock on
+//! `repos/<repo_id>/writer.lock` (§11.1) — `flock(2)` on Unix, `LockFileEx`
+//! on Windows, via the std file-lock API (stable since 1.89). Blocking
+//! default with a bounded wait; `spool` is opt-in at the CLI layer and never
+//! a silent fallback on contention (§11.1a).
 
 use crate::error::{Error, Result};
 use std::fs::{File, OpenOptions};
-use std::io;
-use std::os::unix::io::AsRawFd;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
@@ -24,7 +24,7 @@ impl std::fmt::Debug for WriterLock {
 }
 
 impl WriterLock {
-    /// Acquire `flock(2)` LOCK_EX on `writer.lock`, waiting up to
+    /// Acquire an exclusive whole-file lock on `writer.lock`, waiting up to
     /// `timeout_secs` (blocking default 30 s, §11.1a).
     pub fn acquire(path: &Path, timeout_secs: u64) -> Result<WriterLock> {
         let file = OpenOptions::new()
@@ -35,16 +35,15 @@ impl WriterLock {
             .open(path)?;
         let deadline = Instant::now() + std::time::Duration::from_secs(timeout_secs);
         loop {
-            let rc = unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) };
-            if rc == 0 {
-                return Ok(WriterLock {
-                    file,
-                    path: path.to_path_buf(),
-                });
-            }
-            let err = io::Error::last_os_error();
-            if err.raw_os_error() != Some(libc::EWOULDBLOCK) {
-                return Err(Error::Io(err));
+            match file.try_lock() {
+                Ok(()) => {
+                    return Ok(WriterLock {
+                        file,
+                        path: path.to_path_buf(),
+                    });
+                }
+                Err(std::fs::TryLockError::WouldBlock) => {}
+                Err(std::fs::TryLockError::Error(err)) => return Err(Error::Io(err)),
             }
             if Instant::now() >= deadline {
                 return Err(Error::LockTimeout {
@@ -63,9 +62,7 @@ impl WriterLock {
 
 impl Drop for WriterLock {
     fn drop(&mut self) {
-        unsafe {
-            libc::flock(self.file.as_raw_fd(), libc::LOCK_UN);
-        }
+        let _ = self.file.unlock();
     }
 }
 
