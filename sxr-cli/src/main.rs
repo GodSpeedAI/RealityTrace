@@ -6,6 +6,7 @@ use anyhow::{Result, anyhow};
 use clap::{Parser, Subcommand};
 use serde_json::{Value, json};
 
+mod agent_event;
 mod commands;
 mod daemon;
 mod determinism;
@@ -170,6 +171,10 @@ enum RunCmds {
         question: String,
         #[arg(long)]
         threshold: String,
+        /// Opt-in: fail unless the question and threshold are already
+        /// declared in the ledger (default: not checked).
+        #[arg(long)]
+        require_declared: bool,
     },
     Finish {
         #[arg(long)]
@@ -609,7 +614,15 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 snapshot,
                 question,
                 threshold,
-            } => commands::run_begin(ctx, &repo, &snapshot, &question, &threshold)?,
+                require_declared,
+            } => commands::run_begin(
+                ctx,
+                &repo,
+                &snapshot,
+                &question,
+                &threshold,
+                require_declared,
+            )?,
             RunCmds::Finish { run } => commands::run_finish(ctx, &run)?,
         },
         Command::Plan(c) => match c {
