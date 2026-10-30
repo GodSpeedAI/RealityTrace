@@ -575,6 +575,82 @@ fn exit_code_sets_evidence_direction() {
 }
 
 #[test]
+fn journey_check_requires_exit_code_and_sets_direction() {
+    let (h, rid, run_id) = setup();
+    // null exit_code is refused: a journey check is always observed one way or the other
+    let (code, _, err) = h.ingest(
+        &run_id,
+        "agent-event-v1",
+        &ndjson(&[event(1, "journey_check", Value::Null, "user")]),
+        &[],
+    );
+    assert_eq!(code, 2, "{err}");
+    assert!(err.contains("requires an integer exit_code"), "{err}");
+    assert!(h.observations(&rid).is_empty());
+
+    // 0 = satisfied, non-zero = contradicted (any non-zero value is accepted)
+    let (code, out, err) = h.ingest(
+        &run_id,
+        "agent-event-v1",
+        &ndjson(&[
+            event(2, "journey_check", json!(0), "user"),
+            event(3, "journey_check", json!(1), "user"),
+            event(4, "journey_check", json!(127), "user"),
+        ]),
+        &[],
+    );
+    assert_eq!(code, 0, "{err}");
+    assert_eq!(out["new_observations"], 3);
+    let ids: Vec<String> = out["observation_ids"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|v| v.as_str().unwrap().to_string())
+        .collect();
+    for (obs, want) in ids.iter().zip(["supports", "contradicts", "contradicts"]) {
+        h.json(&[
+            "evidence",
+            "create",
+            "--run",
+            &run_id,
+            "--observation",
+            obs,
+            "--derive",
+        ]);
+        let ev: Vec<Value> = h
+            .json(&["ledger", "export", "--repo", &rid])
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|r| r["record_kind"] == "evidence.created")
+            .cloned()
+            .collect();
+        let last = ev.last().unwrap();
+        assert_eq!(last["payload"]["evidence"][0]["direction"], want, "{obs}");
+    }
+    // the kind is recorded verbatim in the extension
+    let kinds: Vec<String> = h
+        .observations(&rid)
+        .iter()
+        .map(|r| {
+            r["payload"]["extensions"]["agent_event"]["kind"]
+                .as_str()
+                .unwrap_or("")
+                .to_string()
+        })
+        .collect();
+    assert!(kinds.iter().all(|k| k == "journey_check"), "{kinds:?}");
+    // non-journey session kinds still refuse a non-null exit code
+    let (code, ..) = h.ingest(
+        &run_id,
+        "agent-event-v1",
+        &ndjson(&[event(5, "stop", json!(0), "user")]),
+        &[],
+    );
+    assert_eq!(code, 2);
+}
+
+#[test]
 fn ledger_verifies_after_agent_ingest() {
     let (h, rid, run_id) = setup();
     h.ingest(&run_id, "agent-event-v1", &ndjson(&batch()), &[]);

@@ -124,6 +124,7 @@ const KINDS: &[&str] = &[
     "session_start",
     "tool_post",
     "tool_fail",
+    "journey_check",
     "stop",
     "session_end",
     "usage",
@@ -239,11 +240,13 @@ fn validate_exit_code(o: &Map<String, Value>, kind: &str) -> Result<Option<i32>>
         ),
     };
     match (kind, code) {
-        ("tool_post" | "tool_fail", None) => {
+        ("tool_post" | "tool_fail" | "journey_check", None) => {
             bail!("kind {kind:?} requires an integer exit_code (direction is never guessed)")
         }
         ("tool_fail", Some(0)) => bail!("kind \"tool_fail\" cannot carry exit_code 0"),
-        ("tool_post" | "tool_fail", Some(_)) => {}
+        // journey_check: 0 = declared artifact observed and satisfied; non-zero =
+        // observed and contradicted. Absence of an observation is "undefined".
+        ("tool_post" | "tool_fail" | "journey_check", Some(_)) => {}
         (_, Some(_)) => bail!("kind {kind:?} must have a null exit_code"),
         (_, None) => {}
     }
