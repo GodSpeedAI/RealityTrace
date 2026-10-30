@@ -442,21 +442,30 @@ impl Ledger {
     pub fn verify_tail(&self, n: u64) -> Result<VerifyReport> {
         let all = self.read_all()?;
         let start = all.len().saturating_sub(n as usize);
-        self.verify_range(&all[start..])
+        // Anchor the window on the row just before it, so a ledger longer than
+        // `n` is not misread as a chain whose first row lacks a genesis.
+        let anchor = start
+            .checked_sub(1)
+            .map(|i| (all[i].append_ordinal, all[i].entry_hash.as_str()));
+        self.verify_range(anchor, &all[start..])
     }
 
     /// Verify the whole generation chain from ordinal 1 (AC-LEDGER-001).
     pub fn verify_full(&self) -> Result<VerifyReport> {
         let all = self.read_all()?;
-        self.verify_range(&all)
+        self.verify_range(None, &all)
     }
 
-    fn verify_range(&self, rows: &[LedgerRow]) -> Result<VerifyReport> {
+    fn verify_range(
+        &self,
+        anchor: Option<(u64, &str)>,
+        rows: &[LedgerRow],
+    ) -> Result<VerifyReport> {
         let refs: Vec<&LedgerRow> = rows.iter().collect();
         let mut limitations = vec![
             "tamper-evident, not tamper-proof: anyone with write access can rewrite the whole chain (CEP-0008 §55)".to_string(),
         ];
-        match chain::chain_verify(&refs) {
+        match chain::chain_verify_from(anchor, &refs) {
             Ok(()) => Ok(VerifyReport {
                 ledger_id: self.ledger_id.clone(),
                 verified_count: refs.len() as u64,
@@ -465,7 +474,7 @@ impl Ledger {
                 limitations,
             }),
             Err(msg) => {
-                let position = divergence_position(&msg, rows);
+                let position = divergence_position(&msg, anchor.map(|(_, h)| h), rows);
                 if position.is_none() {
                     limitations.push(msg.clone());
                 }
@@ -491,9 +500,13 @@ fn is_unique_violation(e: &rusqlite::Error) -> bool {
 
 /// Locate the first divergent `(ledger_id, append_ordinal)` by re-verifying
 /// each row in order (AC-LEDGER-001 names both fields).
-fn divergence_position(_msg: &str, rows: &[LedgerRow]) -> Option<LedgerPosition> {
+fn divergence_position(
+    _msg: &str,
+    anchor: Option<&str>,
+    rows: &[LedgerRow],
+) -> Option<LedgerPosition> {
     let refs: Vec<&LedgerRow> = rows.iter().collect();
-    let mut prev_hash: Option<&str> = None;
+    let mut prev_hash: Option<&str> = anchor;
     for (i, row) in refs.iter().enumerate() {
         let ok_hash = chain::verify_entry_hashes(row).is_ok();
         let ok_link = match (prev_hash, row.previous_entry_hash.as_deref()) {

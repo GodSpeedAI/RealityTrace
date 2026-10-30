@@ -8,6 +8,7 @@ use sha2::Digest;
 use std::path::PathBuf;
 use sxr_core::record_kinds::RecordKind;
 
+use crate::agent_event::{self, IngestFormat};
 use crate::ledger_io::{self, append_record, ledger_position_json, open_repo_ledger};
 use crate::output;
 use crate::projections;
@@ -588,14 +589,53 @@ pub fn threshold_declare(ctx: &Ctx, repo_id: &str, question_id: &str, file: &str
 
 // ── run begin ────────────────────────────────────────────────────────────
 
+/// `--require-declared` (opt-in): the referenced question and threshold must
+/// already be committed in the repo's ledger, and the threshold must have been
+/// declared for that question. Without the flag `run begin` stays as it was
+/// and checks nothing.
+fn require_declared(ctx: &Ctx, repo_id: &str, question_id: &str, threshold_id: &str) -> Result<()> {
+    // `run begin` appends to this ledger anyway, so opening (creating) it here is no new effect.
+    let rows =
+        ledger_io::read_all(ctx, repo_id).context("--require-declared: read the repo ledger")?;
+    let has = |kind: &str, refs: &[String]| {
+        rows.iter().any(|r| {
+            r.record_kind == kind
+                && refs
+                    .iter()
+                    .all(|want| r.subject_refs.iter().any(|have| have == want))
+        })
+    };
+    if !has("question.declared", &[format!("question:{question_id}")]) {
+        bail!(
+            "--require-declared: question {question_id} not found in the ledger (declare it before `run begin`)"
+        );
+    }
+    if !has(
+        "threshold.declared",
+        &[
+            format!("threshold:{threshold_id}"),
+            format!("question:{question_id}"),
+        ],
+    ) {
+        bail!(
+            "--require-declared: threshold {threshold_id} for question {question_id} not found in the ledger (declare it before `run begin`)"
+        );
+    }
+    Ok(())
+}
+
 pub fn run_begin(
     ctx: &Ctx,
     repo_id: &str,
     snapshot_id: &str,
     question_id: &str,
     threshold_id: &str,
+    require_declared_refs: bool,
 ) -> Result<Value> {
     let e = state::require_enrollment(ctx, repo_id)?;
+    if require_declared_refs {
+        require_declared(ctx, repo_id, question_id, threshold_id)?;
+    }
     let run_id = ulid();
     let mut repo = open_repo_ledger(ctx, repo_id)?;
     let sections = json!({
@@ -2757,11 +2797,13 @@ pub fn ingest_idempotency_key(run_id: &str, verifier: &str) -> String {
 }
 
 /// Build the ingest request metadata object (§11.1a spool shape).
+#[allow(clippy::too_many_arguments)]
 fn ingest_request_meta(
     repo_id: &str,
     run_id: &str,
     verifier: &str,
     stdin_format: &str,
+    idempotency_key: &str,
     stdin_sha256: &str,
     observation_id: &str,
     extensions: Option<&Value>,
@@ -2772,7 +2814,7 @@ fn ingest_request_meta(
         "run_id": run_id,
         "verifier": verifier,
         "stdin_format": stdin_format,
-        "idempotency_key": ingest_idempotency_key(run_id, verifier),
+        "idempotency_key": idempotency_key,
         "stdin_sha256": stdin_sha256,
         "observation_id": observation_id,
     });
@@ -2896,6 +2938,236 @@ pub fn build_ingest_envelope(
     })
 }
 
+/// Build the envelopes for one ingested stream, dispatching on `format`.
+/// `cargo-json` yields exactly the one envelope `build_ingest_envelope`
+/// always produced; `agent-event-v1` yields one per NDJSON line. Direct
+/// commit, daemon submission, and spool drain all construct through here.
+#[allow(clippy::too_many_arguments)]
+pub fn build_ingest_envelopes(
+    ctx: &Ctx,
+    repo_id: &str,
+    run_id: &str,
+    verifier: &str,
+    format: IngestFormat,
+    bytes: &[u8],
+    observation_id: Option<&str>,
+    extensions: Option<&Value>,
+) -> Result<Vec<IngestEnvelope>> {
+    match format {
+        IngestFormat::CargoJson => Ok(vec![build_ingest_envelope(
+            ctx,
+            repo_id,
+            run_id,
+            verifier,
+            bytes,
+            observation_id,
+            extensions,
+        )?]),
+        IngestFormat::AgentEventV1 => {
+            build_agent_event_envelopes(ctx, repo_id, run_id, verifier, bytes, extensions)
+        }
+    }
+}
+
+/// Whether the run already holds agent events, and if so whether they are
+/// builder-role. Builder events live in a run of their own (HC-A2/INV-20).
+fn run_agent_role_class(ctx: &Ctx, repo_id: &str, run_id: &str) -> Result<Option<bool>> {
+    let want = format!("run:{run_id}");
+    for r in ledger_io::read_all(ctx, repo_id)? {
+        if r.record_kind != "observation.recorded" || !r.subject_refs.contains(&want) {
+            continue;
+        }
+        let payload: Value =
+            serde_json::from_str(&r.payload).context("parse observation payload")?;
+        if let Some(role) = payload
+            .pointer("/extensions/agent_event/role")
+            .and_then(Value::as_str)
+        {
+            return Ok(Some(role == "builder"));
+        }
+    }
+    Ok(None)
+}
+
+/// Build (never commit) one `observation.recorded` envelope per
+/// `agent-event/v1` line. Raw bytes are persisted before parsing, as for
+/// every other format; the batch is then validated all-or-nothing.
+fn build_agent_event_envelopes(
+    ctx: &Ctx,
+    repo_id: &str,
+    run_id: &str,
+    verifier: &str,
+    bytes: &[u8],
+    extensions: Option<&Value>,
+) -> Result<Vec<IngestEnvelope>> {
+    let meta = repo_for_run(ctx, run_id)?;
+    let e = state::require_enrollment(ctx, repo_id)?;
+    let progress = repo_plan(ctx, repo_id, run_id)?;
+    let target = progress
+        .get("targets")
+        .and_then(Value::as_array)
+        .and_then(|a| a.first())
+        .and_then(Value::as_str)
+        .unwrap_or("concept:unknown")
+        .to_string();
+    let artifacts_dir = ctx.ensure_repo_dir(repo_id)?.join("artifacts");
+    std::fs::create_dir_all(&artifacts_dir).context("create artifacts dir")?;
+    std::fs::write(
+        artifacts_dir.join(format!(
+            "{}.stdout",
+            hex::encode(sha2::Sha256::digest(bytes))
+        )),
+        bytes,
+    )
+    .context("persist ingested stream")?;
+    if let Some(ext) = extensions {
+        validate_ingest_extensions(ext)?;
+        if ext.get("agent_event").is_some() {
+            bail!("--extensions must not use the reserved \"agent_event\" key for agent-event-v1");
+        }
+    }
+    let events = agent_event::parse_batch(bytes, verifier)?;
+    let batch_is_builder = events[0].is_builder();
+    if run_agent_role_class(ctx, repo_id, run_id)?.is_some_and(|b| b != batch_is_builder) {
+        bail!(
+            "agent-event-v1: run {run_id} already holds {} events; builder and non-builder events never share a run",
+            if batch_is_builder {
+                "non-builder"
+            } else {
+                "builder"
+            }
+        );
+    }
+    let plan_id = meta.plan_id.clone().unwrap_or_default();
+    let mut out = Vec::with_capacity(events.len());
+    for ev in events {
+        let observation_id = agent_event::observation_id_for(&ev.event_id);
+        let hex_line = hex::encode(sha2::Sha256::digest(&ev.raw));
+        std::fs::write(artifacts_dir.join(format!("{hex_line}.stdout")), &ev.raw)
+            .context("persist agent event line")?;
+        let mut sections = observation_sections(
+            &observation_id,
+            run_id,
+            ev.exit_code,
+            false,
+            &format!("sha256:{hex_line}"),
+            None,
+            &None,
+        );
+        sections["representations"][0]["inline_content"]["verifier_id"] = json!(verifier);
+        let mut ext = extensions.cloned().unwrap_or_else(|| json!({}));
+        ext["agent_event"] = ev.record.clone();
+        sections["extensions"] = ext;
+        let subject_refs = vec![
+            format!("observation:{observation_id}"),
+            format!("run:{run_id}"),
+            format!("target:{target}"),
+        ];
+        let envelope = crate::envelopes::build(
+            RecordKind::ObservationRecorded,
+            repo_id,
+            &e.checkout_id,
+            None,
+            None,
+            Some(run_id),
+            vec![format!("plan:{plan_id}")],
+            sections,
+            subject_refs.clone(),
+            None,
+            None,
+        )?;
+        out.push(IngestEnvelope {
+            envelope,
+            subject_refs,
+            kind: RecordKind::ObservationRecorded,
+            idempotency_key: agent_event::event_idempotency_key(run_id, verifier, &ev.event_id),
+            observation_id,
+            parsed: Value::Null,
+        });
+    }
+    Ok(out)
+}
+
+/// The outcome of committing a batch of agent-event envelopes.
+pub struct AgentCommit {
+    pub new: Vec<String>,
+    pub already: Vec<String>,
+    /// Re-deliveries of a committed event id whose raw line differs. They are
+    /// no-ops (the committed event is never overwritten) but are reported.
+    pub conflicting: Vec<String>,
+    pub last: Option<sxr_core::LedgerPosition>,
+}
+
+/// Commit agent-event envelopes under one writer lock. Idempotent per event:
+/// a key already in the ledger appends nothing.
+pub fn commit_agent_event_envelopes(
+    ctx: &Ctx,
+    repo_id: &str,
+    builts: &[IngestEnvelope],
+) -> Result<AgentCommit> {
+    let mut repo = open_repo_ledger(ctx, repo_id)?;
+    let mut committed_refs: Option<std::collections::HashMap<String, String>> = None;
+    let mut out = AgentCommit {
+        new: Vec::new(),
+        already: Vec::new(),
+        conflicting: Vec::new(),
+        last: None,
+    };
+    for built in builts {
+        let new_ref = built
+            .envelope
+            .pointer("/representations/0/content_hash")
+            .and_then(Value::as_str)
+            .unwrap_or_default()
+            .to_string();
+        let existing = repo
+            .ledger
+            .position_by_idempotency_key(&built.idempotency_key)
+            .context("check idempotency key")?;
+        if let Some(pos) = existing {
+            if committed_refs.is_none() {
+                let rows = repo.ledger.read_all().map_err(|e| anyhow!("read: {e}"))?;
+                committed_refs = Some(
+                    rows.into_iter()
+                        .filter_map(|r| {
+                            let key = r.idempotency_key?;
+                            let p: Value = serde_json::from_str(&r.payload).ok()?;
+                            let h = p
+                                .pointer("/representations/0/content_hash")?
+                                .as_str()?
+                                .to_string();
+                            Some((key, h))
+                        })
+                        .collect(),
+                );
+            }
+            let refs = committed_refs.as_ref().expect("just filled");
+            if refs
+                .get(&built.idempotency_key)
+                .is_some_and(|old| *old != new_ref)
+            {
+                out.conflicting.push(built.observation_id.clone());
+            }
+            out.already.push(built.observation_id.clone());
+            out.last = Some(pos);
+            continue;
+        }
+        let pos = append_record(
+            &mut repo,
+            built.kind,
+            Some(built.idempotency_key.clone()),
+            built.subject_refs.clone(),
+            &built.envelope,
+        )?;
+        if let Some(m) = &mut committed_refs {
+            m.insert(built.idempotency_key.clone(), new_ref);
+        }
+        out.new.push(built.observation_id.clone());
+        out.last = Some(pos);
+    }
+    Ok(out)
+}
+
 /// Commit one built ingest envelope to the ledger (idempotent by key).
 pub fn commit_ingest_envelope(
     ctx: &Ctx,
@@ -2935,6 +3207,8 @@ pub fn ingest(
     async_mode: bool,
     extensions: Option<&str>,
 ) -> Result<(Value, i32)> {
+    // An unknown format is refused before anything is read, spooled, or built.
+    let format = IngestFormat::parse(stdin_format)?;
     let meta = repo_for_run(ctx, run_id)?;
     let extensions = extensions.map(parse_ingest_extensions).transpose()?;
     let mut buf = Vec::new();
@@ -2946,17 +3220,25 @@ pub fn ingest(
         // The observation id is minted now and carried in the request, so
         // drain rebuilds the exact envelope the direct path would have
         // produced here (record parity).
-        let obs_id = ulid();
+        // agent-event-v1 observation ids derive from the events themselves, and its spool entry is
+        // keyed by the batch bytes (the ledger dedups per event at drain).
+        let (obs_id, key) = match format {
+            IngestFormat::CargoJson => (ulid(), ingest_idempotency_key(run_id, verifier)),
+            IngestFormat::AgentEventV1 => (
+                String::new(),
+                agent_event::batch_spool_key(run_id, verifier, &stdin_sha256),
+            ),
+        };
         let meta_json = ingest_request_meta(
             &meta.repo_id,
             run_id,
             verifier,
             stdin_format,
+            &key,
             &stdin_sha256,
             &obs_id,
             extensions.as_ref(),
         );
-        let key = ingest_idempotency_key(run_id, verifier);
         let dir = ctx.spool_dir(&meta.repo_id);
         std::fs::create_dir_all(&dir).context("create spool dir")?;
         let ndjson_path = dir.join(format!("{key}.ndjson"));
@@ -2978,16 +3260,17 @@ pub fn ingest(
     }
 
     if async_mode
-        && let Some((duration, resp)) = submit_to_daemon(
+        && let Some((duration, resp, queued)) = submit_to_daemon(
             ctx,
             &meta.repo_id,
             run_id,
             verifier,
+            format,
             &buf,
             extensions.as_ref(),
         )?
     {
-        let v = output::output(vec![
+        let mut fields = vec![
             ("run_id", json!(run_id)),
             ("verifier", json!(verifier)),
             ("bytes_received", json!(buf.len())),
@@ -2995,11 +3278,54 @@ pub fn ingest(
             ("daemon", json!(true)),
             ("receipt", resp),
             ("queue_position", json!(duration)),
-        ]);
-        return Ok((v, 0));
+        ];
+        if format == IngestFormat::AgentEventV1 {
+            fields.push(("events_queued", json!(queued)));
+        }
+        return Ok((output::output(fields), 0));
     }
     // F-15: daemon unavailable (or --async not requested) — direct CLI writer
     // lock, zero semantic difference.
+
+    if format == IngestFormat::AgentEventV1 {
+        let builts = build_ingest_envelopes(
+            ctx,
+            &meta.repo_id,
+            run_id,
+            verifier,
+            format,
+            &buf,
+            None,
+            extensions.as_ref(),
+        )?;
+        let c = commit_agent_event_envelopes(ctx, &meta.repo_id, &builts)?;
+        return Ok((
+            output::output(vec![
+                ("run_id", json!(run_id)),
+                ("verifier", json!(verifier)),
+                ("bytes_received", json!(buf.len())),
+                ("durability", json!("committed")),
+                ("daemon", json!(false)),
+                ("events", json!(builts.len())),
+                ("new_observations", json!(c.new.len())),
+                ("already_committed_count", json!(c.already.len())),
+                ("already_committed", json!(c.new.is_empty())),
+                (
+                    "observation_ids",
+                    json!([c.new.clone(), c.already.clone()].concat()),
+                ),
+                ("conflicting_redeliveries", json!(c.conflicting)),
+                (
+                    "ledger_position",
+                    c.last
+                        .as_ref()
+                        .map(ledger_position_json)
+                        .unwrap_or(Value::Null),
+                ),
+            ]),
+            0,
+        ));
+    }
 
     let built = build_ingest_envelope(
         ctx,
@@ -3037,15 +3363,16 @@ fn submit_to_daemon(
     repo_id: &str,
     run_id: &str,
     verifier: &str,
+    format: IngestFormat,
     bytes: &[u8],
     extensions: Option<&Value>,
-) -> Result<Option<(String, Value)>> {
+) -> Result<Option<(String, Value, usize)>> {
     #[cfg(not(unix))]
     {
         // No socket transport on this platform: the designed F-15 fallback is
         // the direct CLI writer path (§16.3 parity — zero semantic
         // difference), not a degradation.
-        let _ = (ctx, repo_id, run_id, verifier, bytes, extensions);
+        let _ = (ctx, repo_id, run_id, verifier, format, bytes, extensions);
         return Ok(None);
     }
     #[cfg(unix)]
@@ -3057,27 +3384,38 @@ fn submit_to_daemon(
             Ok(s) => s,
             Err(_) => return Ok(None),
         };
-        // Build the same envelope the direct path would commit (§16.3 parity:
+        // Build the same envelope(s) the direct path would commit (§16.3 parity:
         // the queue holds the validated request, never a differently-built one).
-        let built = build_ingest_envelope(ctx, repo_id, run_id, verifier, bytes, None, extensions)?;
-        let request = crate::daemon::record_request(repo_id, &built);
-        stream.write_all(serde_json::to_string(&request)?.as_bytes())?;
-        stream.write_all(b"\n")?;
-        let mut resp = String::new();
-        std::io::BufReader::new(&mut stream)
-            .read_line(&mut resp)
-            .context("read daemon receipt")?;
-        let receipt: Value =
-            serde_json::from_str(resp.trim()).context("parse daemon receipt line")?;
-        if let Some(err) = receipt.get("error").and_then(Value::as_str) {
-            bail!("daemon rejected request: {err}");
+        let builts = build_ingest_envelopes(
+            ctx, repo_id, run_id, verifier, format, bytes, None, extensions,
+        )?;
+        let mut last: Option<(String, Value)> = None;
+        for (i, built) in builts.iter().enumerate() {
+            // One request per connection; the first reuses the probe connection.
+            if i > 0 {
+                stream = UnixStream::connect(&socket).context("connect to daemon")?;
+            }
+            let request = crate::daemon::record_request(repo_id, built);
+            stream.write_all(serde_json::to_string(&request)?.as_bytes())?;
+            stream.write_all(b"\n")?;
+            let mut resp = String::new();
+            std::io::BufReader::new(&mut stream)
+                .read_line(&mut resp)
+                .context("read daemon receipt")?;
+            let receipt: Value =
+                serde_json::from_str(resp.trim()).context("parse daemon receipt line")?;
+            if let Some(err) = receipt.get("error").and_then(Value::as_str) {
+                bail!("daemon rejected request: {err}");
+            }
+            let position = receipt
+                .get("queue_position")
+                .and_then(Value::as_str)
+                .unwrap_or_default()
+                .to_string();
+            last = Some((position, receipt));
         }
-        let position = receipt
-            .get("queue_position")
-            .and_then(Value::as_str)
-            .unwrap_or_default()
-            .to_string();
-        Ok(Some((position, receipt)))
+        let (position, receipt) = last.expect("a build yields at least one envelope");
+        Ok(Some((position, receipt, builts.len())))
     }
 }
 
@@ -3144,6 +3482,51 @@ pub fn spool_drain(ctx: &Ctx, repo_id: &str) -> Result<Value> {
                 }
                 // Drain is ordinary ingest: a spooled record can still be
                 // rejected on validation (§11.1a).
+                let stored_format = meta
+                    .get("stdin_format")
+                    .and_then(Value::as_str)
+                    .unwrap_or_default();
+                if IngestFormat::from_stored(stored_format) == IngestFormat::AgentEventV1 {
+                    let batch_key = agent_event::batch_spool_key(run_id, verifier, expected_sha);
+                    if !key.is_empty() && batch_key != key {
+                        rejected.push(format!(
+                            "{} (idempotency key mismatch: expected {key}, got {batch_key})",
+                            entry.path.display()
+                        ));
+                        let _ = crate::durability::spool_remove(entry);
+                        continue;
+                    }
+                    let built = build_ingest_envelopes(
+                        ctx,
+                        repo_id,
+                        run_id,
+                        verifier,
+                        IngestFormat::AgentEventV1,
+                        &bytes,
+                        None,
+                        extensions,
+                    );
+                    match built {
+                        // build persists the raw batch before validating, so a rejected
+                        // batch keeps its bytes under artifacts/ when the entry is removed.
+                        Err(e) if e.to_string().starts_with("agent-event-v1") => {
+                            rejected.push(format!("{} ({e})", entry.path.display()));
+                            let _ = crate::durability::spool_remove(entry);
+                        }
+                        Err(e) => failures.push(format!("{}: {e:#}", entry.path.display())),
+                        Ok(builts) => match commit_agent_event_envelopes(ctx, repo_id, &builts) {
+                            Ok(c) => {
+                                let _ = crate::durability::spool_remove(entry);
+                                drained += c.new.len() as u64;
+                                already += c.already.len() as u64;
+                                observations.extend(c.new);
+                                observations.extend(c.already);
+                            }
+                            Err(e) => failures.push(format!("{}: {e:#}", entry.path.display())),
+                        },
+                    }
+                    continue;
+                }
                 if sxr_verify::parse_cargo_json(&bytes).is_none() {
                     rejected.push(format!(
                         "{} (unparseable verifier stream)",

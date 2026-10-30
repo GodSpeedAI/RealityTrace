@@ -65,9 +65,18 @@ pub fn verify_entry_hashes(row: &LedgerRow) -> Result<(), String> {
 /// `previous_entry_hash` linkage. Returns the first divergent ordinal on
 /// failure; the error names ledger_id and append_ordinal (AC-LEDGER-001).
 pub fn chain_verify(rows: &[&LedgerRow]) -> Result<(), String> {
-    let mut prev: Option<&str> = None;
+    chain_verify_from(None, rows)
+}
+
+/// Verify a contiguous window of the chain. `anchor` is the `(append_ordinal,
+/// entry_hash)` of the row immediately before the window (None when the
+/// window starts at ordinal 1). The anchor itself is not re-verified: a tail
+/// check is a partial check by design; `chain_verify` covers the whole chain.
+pub fn chain_verify_from(anchor: Option<(u64, &str)>, rows: &[&LedgerRow]) -> Result<(), String> {
+    let base = anchor.map(|(o, _)| o).unwrap_or(0);
+    let mut prev: Option<&str> = anchor.map(|(_, h)| h);
     for (i, row) in rows.iter().enumerate() {
-        let expected_ordinal = (i as u64) + 1;
+        let expected_ordinal = base + (i as u64) + 1;
         if row.append_ordinal != expected_ordinal {
             return Err(format!(
                 "append_ordinal not dense at ({}, {}): expected {}",
@@ -176,6 +185,25 @@ mod tests {
         let err = chain_verify(&[&a]).unwrap_err();
         assert!(err.contains("01JTEST"), "{err}");
         assert!(err.contains("1"), "{err}");
+    }
+
+    #[test]
+    fn verify_from_accepts_a_tail_window_anchored_on_its_predecessor() {
+        let mut a = row(1, None);
+        a.entry_hash = entry_hash(&a);
+        let mut b = row(2, Some(a.entry_hash.clone()));
+        b.entry_hash = entry_hash(&b);
+        let mut c = row(3, Some(b.entry_hash.clone()));
+        c.entry_hash = entry_hash(&c);
+        // The window [b, c] alone is not a genesis chain...
+        assert!(chain_verify(&[&b, &c]).is_err());
+        // ...but it is valid when anchored on a.
+        assert!(chain_verify_from(Some((1, a.entry_hash.as_str())), &[&b, &c]).is_ok());
+        // A wrong anchor hash is a chain break at the window's first row.
+        let err = chain_verify_from(Some((1, "sha256:beef")), &[&b, &c]).unwrap_err();
+        assert!(err.contains("chain break") && err.contains("2"), "{err}");
+        // A wrong anchor ordinal is a density error.
+        assert!(chain_verify_from(Some((5, a.entry_hash.as_str())), &[&b, &c]).is_err());
     }
 
     #[test]
