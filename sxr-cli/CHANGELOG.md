@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.4.0](https://github.com/GodSpeedAI/RealityTrace/compare/realitytrace-v0.3.0...realitytrace-v0.4.0) (2026-10-30)
+
+
+### Features
+
+* **ingest:** agent-event-v1 ingest, journey_check events, and ledger tail-verify fix ([#13](https://github.com/GodSpeedAI/RealityTrace/issues/13)) ([b616335](https://github.com/GodSpeedAI/RealityTrace/commit/b616335136bf363ab5b4215a6b74e17575b0e66f))
+* **packaging:** precompiled native binaries for Linux, macOS, and Windows ([#12](https://github.com/GodSpeedAI/RealityTrace/issues/12)) ([4d154b1](https://github.com/GodSpeedAI/RealityTrace/commit/4d154b12da03243cf813822218110dc1632dc9da))
+* **sxr-df:** fail closed on unsupported DomainForge compiler version ([7e7b1ab](https://github.com/GodSpeedAI/RealityTrace/commit/7e7b1ab5bd5927b3a2ef761f4cbab113475685b7))
+* **verify:** persist when a verifier ran (started_at, completed_at) ([#10](https://github.com/GodSpeedAI/RealityTrace/issues/10)) ([1234b2b](https://github.com/GodSpeedAI/RealityTrace/commit/1234b2b9b19b05955fc2486f212ae59811b0c3ea))
+
+
+### Bug Fixes
+
+* **ledger:** read-only ledger commands never create a ledger ([#6](https://github.com/GodSpeedAI/RealityTrace/issues/6)) ([1c9f220](https://github.com/GodSpeedAI/RealityTrace/commit/1c9f2209dc58d31d9f1bc19ce51da6b5efbe235b))
+* **verify:** run the verifier the plan names; add command@1 and a target digest ([#9](https://github.com/GodSpeedAI/RealityTrace/issues/9)) ([89c1ea4](https://github.com/GodSpeedAI/RealityTrace/commit/89c1ea448b7bb2aa56a4e5e2449554ec45f96435))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * sxr-core bumped from 0.3.0 to 0.4.0
+    * sxr-ledger bumped from 0.2.1 to 0.3.0
+    * sxr-git bumped from 0.2.1 to 0.2.2
+    * sxr-df bumped from 0.2.1 to 0.3.0
+    * sxr-verify bumped from 0.2.1 to 0.3.0
+
 ## [0.3.0](https://github.com/GodSpeedAI/RealityTrace/compare/realitytrace-v0.2.0...realitytrace-v0.3.0) (2026-09-25)
 
 

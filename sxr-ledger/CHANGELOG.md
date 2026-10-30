@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.3.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-ledger-v0.2.1...sxr-ledger-v0.3.0) (2026-10-30)
+
+
+### Features
+
+* **ingest:** agent-event-v1 ingest, journey_check events, and ledger tail-verify fix ([#13](https://github.com/GodSpeedAI/RealityTrace/issues/13)) ([b616335](https://github.com/GodSpeedAI/RealityTrace/commit/b616335136bf363ab5b4215a6b74e17575b0e66f))
+* **packaging:** precompiled native binaries for Linux, macOS, and Windows ([#12](https://github.com/GodSpeedAI/RealityTrace/issues/12)) ([4d154b1](https://github.com/GodSpeedAI/RealityTrace/commit/4d154b12da03243cf813822218110dc1632dc9da))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * sxr-core bumped from 0.3.0 to 0.4.0
+
 ## [0.2.1](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-ledger-v0.2.0...sxr-ledger-v0.2.1) (2026-09-25)
 
 
