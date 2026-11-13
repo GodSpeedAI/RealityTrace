@@ -1,8 +1,8 @@
 {
-  "sxr-core": "0.3.0",
-  "sxr-ledger": "0.2.1",
-  "sxr-git": "0.2.1",
-  "sxr-df": "0.2.1",
-  "sxr-verify": "0.2.1",
-  "sxr-cli": "0.3.0"
+  "sxr-core": "0.4.0",
+  "sxr-ledger": "0.3.0",
+  "sxr-git": "0.2.2",
+  "sxr-df": "0.3.0",
+  "sxr-verify": "0.3.0",
+  "sxr-cli": "0.4.0"
 }
