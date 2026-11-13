@@ -489,6 +489,10 @@ fn old_format_is_unchanged_and_unknown_format_is_refused() {
     // another legacy spelling lands on the same key: still one observation per run+verifier
     let (_, dup, _) = h.ingest(&run_id, "cargo-test-json", OK_STREAM, &[]);
     assert_eq!(dup["already_committed"], true);
+    // the spelling Cognate's observation outbox sends is accepted too
+    let (code, dup, err) = h.ingest(&run_id, "json", OK_STREAM, &[]);
+    assert_eq!(code, 0, "{err}");
+    assert_eq!(dup["already_committed"], true);
     let rows = h.observations(&rid);
     assert_eq!(rows.len(), 1);
     let p = &rows[0]["payload"];
