@@ -21,6 +21,7 @@ pub const AGENT_EVENT_VERSION: u64 = 1;
 /// Spellings that have always selected the (only) cargo/libtest parser. The
 /// string used to be ignored, so every spelling a caller ever passed worked;
 /// the known in-repo spellings stay accepted and parse exactly as before.
+/// `json` is the spelling Cognate's observation outbox sends.
 const CARGO_JSON_SPELLINGS: &[&str] = &[
     "cargo-json",
     "cargo-test-json",
@@ -29,6 +30,7 @@ const CARGO_JSON_SPELLINGS: &[&str] = &[
     "pytest-progress",
     "df-validate",
     "corpus",
+    "json",
 ];
 
 /// The verifier-stream formats `ingest` understands.
@@ -432,6 +434,18 @@ mod tests {
             IngestFormat::from_stored("anything"),
             IngestFormat::CargoJson
         );
+    }
+
+    #[test]
+    fn json_spelling_from_cognate_outbox_selects_cargo_json() {
+        assert_eq!(
+            IngestFormat::parse("json").unwrap(),
+            IngestFormat::CargoJson
+        );
+        let err = IngestFormat::parse("yaml").unwrap_err().to_string();
+        assert!(err.contains("unknown --stdin-format"), "{err}");
+        assert!(err.contains("json"), "{err}");
+        assert!(err.split(", ").any(|t| t == "json"), "{err}");
     }
 
     #[test]
