@@ -186,7 +186,9 @@ jobs:
           rm -f SHA256SUMS-* built-from-*.txt
           # NUL-sorted, NUL-delimited: no word-splitting on filenames, and an
           # empty dist/ cannot produce an empty sums file that verifies itself.
-          find . -maxdepth 1 -type f -printf '%P\0' | LC_ALL=C sort -z | xargs -0 sha256sum > SHA256SUMS
+          # The redirect creates SHA256SUMS before find runs; exclude it or the
+          # file lists its own (empty) digest and the check below fails.
+          find . -maxdepth 1 -type f ! -name SHA256SUMS -printf '%P\0' | LC_ALL=C sort -z | xargs -0 -r sha256sum > SHA256SUMS
           test -s SHA256SUMS
           sha256sum -c --strict SHA256SUMS
           cat SHA256SUMS
