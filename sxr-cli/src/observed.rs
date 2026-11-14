@@ -9,11 +9,14 @@ use std::collections::BTreeSet;
 use std::path::Path;
 use sxr_core::record_kinds::RecordKind;
 use sxr_ledger::ledger::{Ledger, LedgerConfig};
+use sxr_observed::compare::{CompareInput, Compared, Evaluator, compare};
 use sxr_observed::derive::{Options, Until, derive};
+use sxr_observed::df_cli::CliEvaluator;
 use sxr_observed::ingest::{
     EXTENSION_KEY, EventValidator, EvidenceIndex, INGEST_NOTE_KEY, REJECTION_NOTE_KEY,
     UnsignedOnly, classify,
 };
+use sxr_observed::tail::ExpectedHead;
 
 use crate::state::{self, Ctx};
 use crate::{envelopes, ledger_io};
@@ -145,6 +148,7 @@ pub struct DeriveArgs<'a> {
     pub declared: Option<&'a Path>,
     pub coverage_manifest: Option<&'a Path>,
     pub independent_systems: &'a [String],
+    pub expected_head: Option<ExpectedHead>,
 }
 
 fn read_json(p: &Path) -> Result<Value> {
@@ -152,26 +156,31 @@ fn read_json(p: &Path) -> Result<Value> {
         .with_context(|| format!("parse {}", p.display()))
 }
 
-/// Derive the observed representation (read-only). Returns canonical JSON text.
-pub fn derive_command(ctx: &Ctx, a: &DeriveArgs) -> Result<String> {
-    state::require_enrollment(ctx, a.repo)?;
-    let db = ctx.repo_dir(a.repo).join("ledger.db");
+fn read_rows(ctx: &Ctx, repo: &str) -> Result<Vec<sxr_core::LedgerRow>> {
+    state::require_enrollment(ctx, repo)?;
+    let db = ctx.repo_dir(repo).join("ledger.db");
     if !db.is_file() {
         bail!(
             "ledger for repo {} not found at {}; refusing to treat a missing ledger as empty",
-            a.repo,
+            repo,
             db.display()
         );
     }
-    // The startup tail check is off: derive verifies the whole chain itself and
-    // reports CHAIN_VERIFY_FAILED, the same code for every verification failure.
+    // The startup tail check is off: derive and compare verify the whole chain
+    // themselves and report CHAIN_VERIFY_FAILED, the same code for every
+    // verification failure.
     let cfg = LedgerConfig {
         tail_verify_on_open: 0,
         ..LedgerConfig::default()
     };
-    let rows = Ledger::open(&db, a.repo, cfg)
+    Ledger::open(&db, repo, cfg)
         .and_then(|l| l.read_all())
-        .map_err(|e| anyhow!("open ledger: {e}"))?;
+        .map_err(|e| anyhow!("open ledger: {e}"))
+}
+
+/// Derive the observed representation (read-only). Returns canonical JSON text.
+pub fn derive_command(ctx: &Ctx, a: &DeriveArgs) -> Result<String> {
+    let rows = read_rows(ctx, a.repo)?;
     let declared_keys = a
         .declared
         .map(|p| -> Result<BTreeSet<String>> {
@@ -208,6 +217,78 @@ pub fn derive_command(ctx: &Ctx, a: &DeriveArgs) -> Result<String> {
         declared_keys,
         coverage_manifest,
         independent_systems: a.independent_systems.iter().cloned().collect(),
+        expected_head: a.expected_head.clone(),
     };
     Ok(derive(&rows, &opts).map_err(|e| anyhow!("{e}"))?.canonical)
+}
+
+pub struct CompareArgs<'a> {
+    pub repo: &'a str,
+    pub observed: &'a Path,
+    pub reference: &'a Path,
+    pub profile: &'a Path,
+    pub mapping: &'a Path,
+    pub world: &'a str,
+    pub declared_snapshot: &'a str,
+    pub model: Option<&'a Path>,
+    pub domainforge_bin: Option<&'a Path>,
+    pub facts_out: Option<&'a Path>,
+    pub expected_head: Option<ExpectedHead>,
+}
+
+/// The DomainForge binary: `--domainforge-bin`, else the environment variable
+/// the other commands use (`REALITYTRACE_DOMAINFORGE_BIN`, `SXR_DOMAINFORGE_BIN`).
+/// A configured path that is not a file is an error, never skipped. `PATH` is
+/// not searched: the binary that decides must be named.
+fn configured_binary(flag: Option<&Path>) -> Result<Option<std::path::PathBuf>> {
+    let from_env = ["REALITYTRACE_DOMAINFORGE_BIN", "SXR_DOMAINFORGE_BIN"]
+        .iter()
+        .find_map(|k| std::env::var_os(k).filter(|v| !v.is_empty()));
+    let Some(p) = flag.map(Path::to_path_buf).or(from_env.map(Into::into)) else {
+        return Ok(None);
+    };
+    if !p.is_file() {
+        bail!(
+            "EVALUATE_UNAVAILABLE: configured DomainForge binary {} is not a file",
+            p.display()
+        );
+    }
+    Ok(Some(p))
+}
+
+/// Compare the observed representation with the declared expectations.
+/// Read-only on the ledger; writes only `--facts-out` (the generated facts
+/// file) when asked. Returns canonical JSON text.
+pub fn compare_command(ctx: &Ctx, a: &CompareArgs) -> Result<String> {
+    let rows = read_rows(ctx, a.repo)?;
+    let (observed, reference, profile, mapping) = (
+        read_json(a.observed)?,
+        read_json(a.reference)?,
+        read_json(a.profile)?,
+        read_json(a.mapping)?,
+    );
+    let evaluator = match (configured_binary(a.domainforge_bin)?, a.model) {
+        (Some(bin), Some(model)) => {
+            Some(CliEvaluator::new(bin, model).map_err(|e| anyhow!("{e}"))?)
+        }
+        _ => None,
+    };
+    let Compared {
+        canonical, facts, ..
+    } = compare(&CompareInput {
+        rows: &rows,
+        observed: &observed,
+        reference: &reference,
+        profile: &profile,
+        mapping: &mapping,
+        world_ref: a.world,
+        snapshot: a.declared_snapshot,
+        expected_head: a.expected_head.clone(),
+        evaluator: evaluator.as_ref().map(|e| e as &dyn Evaluator),
+    })
+    .map_err(|e| anyhow!("{e}"))?;
+    if let (Some(path), Some(text)) = (a.facts_out, facts) {
+        std::fs::write(path, text).with_context(|| format!("write {}", path.display()))?;
+    }
+    Ok(canonical)
 }

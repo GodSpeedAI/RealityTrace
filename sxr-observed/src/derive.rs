@@ -10,6 +10,7 @@ use crate::canon;
 use crate::ingest::{
     EXTENSION_KEY, EventValidator, EvidenceIndex, Hints, INGEST_NOTE_KEY, REJECTION_NOTE_KEY,
 };
+use crate::tail::{self, ExpectedHead};
 use serde_json::{Map, Value, json};
 use std::collections::{BTreeMap, BTreeSet};
 use sxr_core::LedgerRow;
@@ -76,6 +77,9 @@ pub struct Options {
     /// Source systems known independent of the executor (E section 5). Empty:
     /// no occurrence counts as independent.
     pub independent_systems: BTreeSet<String>,
+    /// A ledger head recorded outside the ledger (anchor, frozen reference).
+    /// `None`: the tail is reported `unverified`.
+    pub expected_head: Option<ExpectedHead>,
 }
 
 #[derive(Debug, Clone)]
@@ -202,6 +206,7 @@ pub fn derive(rows: &[LedgerRow], opts: &Options) -> Result<Derived, ObservedErr
             "--kind is evaluated or exploratory",
         ));
     }
+    let tail_verification = tail::check(rows, opts.expected_head.as_ref())?;
     let window = &rows[..window_len(rows, &opts.until)?];
     let evidence = EvidenceIndex::from_rows(window);
     let validator = EventValidator::new();
@@ -341,6 +346,8 @@ pub fn derive(rows: &[LedgerRow], opts: &Options) -> Result<Derived, ObservedErr
         .collect();
 
     let head = window.last();
+    let coverage_rows_for_hash: Option<&Vec<(String, String)>> =
+        opts.coverage_manifest.as_ref().map(|_| &coverage_rows);
     let mut inputs: Vec<&str> = occs.iter().map(|o| o.entry_hash.as_str()).collect();
     inputs.sort_unstable();
     rejected.sort_unstable();
@@ -351,12 +358,13 @@ pub fn derive(rows: &[LedgerRow], opts: &Options) -> Result<Derived, ObservedErr
         "first_ordinal": window.first().map(|r| r.append_ordinal),
         "last_ordinal": head.map(|r| r.append_ordinal),
         "head_entry_hash": head.map(|r| r.entry_hash.as_str()),
+        "tail_verification": tail_verification,
     });
     let input_set_hash = canon::digest(&json!({
         "contract": "observed-representation.v1",
         "selectors": {"world_ref": opts.world_ref, "scope": opts.scope, "episode_ref": opts.episode_ref,
                       "kind": opts.kind, "profile_id": opts.profile_id},
-        "options": {"declared_keys": opts.declared_keys, "coverage_manifest": opts.coverage_manifest,
+        "options": {"declared_keys": opts.declared_keys, "coverage_manifest": coverage_rows_for_hash,
                     "independent_systems": opts.independent_systems},
         "window": window_doc,
         "inputs": inputs, "rejected": rejected, "unverified": unverified,

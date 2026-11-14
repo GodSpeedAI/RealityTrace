@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/contracts/comparison-profile.v1.json",
+  "title": "comparison profile (v1)",
+  "description": "Per comparison kind: the quantifier, the minimum support k, the deadline and the class mapping used by `observed compare`. No vacuous confirmed: a universal rule over zero instances, or fewer than k supporting occurrences, is insufficient with basis below_minimum_support, unless the entry says otherwise with allow_vacuous_truth (RD-08). Deadlines count owning-system sequence steps or causal hops; emitter clocks never decide.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "profile_id",
+    "kinds"
+  ],
+  "properties": {
+    "contract": {
+      "const": "comparison-profile.v1"
+    },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^profile:[^\\s]+$"
+    },
+    "kinds": {
+      "type": "array",
+      "minItems": 1,
+      "description": "At most one entry per kind.",
+      "items": {
+        "$ref": "#/$defs/kind_entry"
+      }
+    }
+  },
+  "$defs": {
+    "kind_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "comparison",
+        "quantifier",
+        "min_support",
+        "allow_vacuous_truth",
+        "deadline",
+        "class_mapping"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "policy_evaluable",
+            "structural",
+            "ordering",
+            "frequency",
+            "absence",
+            "timing"
+          ],
+          "description": "policy_evaluable is decided by DomainForge evaluate; the other five are decided by sxr-observed (E section 6). Context variation is reported in the representation and is not classified, so it has no kind."
+        },
+        "comparison": {
+          "enum": [
+            "episode",
+            "structural"
+          ],
+          "description": "Which residual list the kind feeds. The two are never mixed in one list."
+        },
+        "quantifier": {
+          "enum": [
+            "universal",
+            "existential",
+            "threshold"
+          ],
+          "description": "universal: every instance; existential: at least one; threshold: a count compared with min_support (frequency)."
+        },
+        "min_support": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "k: the fewest supporting occurrences for confirmed."
+        },
+        "allow_vacuous_truth": {
+          "type": "boolean",
+          "description": "true only if the profile accepts a universal rule over zero instances as confirmed."
+        },
+        "deadline": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "unit",
+                "limit"
+              ],
+              "properties": {
+                "unit": {
+                  "enum": [
+                    "sequence_steps",
+                    "causal_hops"
+                  ]
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          ],
+          "description": "null: no deadline. Kind timing requires an object; emitter clocks never decide."
+        },
+        "class_mapping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "true",
+            "false",
+            "unknown"
+          ],
+          "properties": {
+            "true": {
+              "const": "confirmed"
+            },
+            "false": {
+              "const": "contradicted"
+            },
+            "unknown": {
+              "const": "insufficient"
+            },
+            "undeclared": {
+              "const": "observed_undeclared"
+            },
+            "trigger_observed_record_absent": {
+              "const": "declared_unobserved"
+            }
+          },
+          "description": "Fixed by E section 6; carried as data so that a change is a new profile digest. undeclared applies to structural kinds only; trigger_observed_record_absent to absence only."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "timing"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "deadline": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "absence"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "class_mapping": {
+                "required": [
+                  "trigger_observed_record_absent"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "absence"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "else": {
+            "properties": {
+              "class_mapping": {
+                "not": {
+                  "required": [
+                    "trigger_observed_record_absent"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "policy_evaluable"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "class_mapping": {
+                "not": {
+                  "required": [
+                    "undeclared"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "structural"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "class_mapping": {
+                "required": [
+                  "undeclared"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,9 +1,13 @@
 //! Observed representation: ingest classification and deterministic derive.
-//! No I/O; the CLI owns the ledger. See README.md.
+//! No I/O except `df_cli` (spawns the DomainForge binary); the CLI owns the
+//! ledger. See README.md.
 
 pub mod canon;
+pub mod compare;
 pub mod derive;
+pub mod df_cli;
 pub mod ingest;
+pub mod tail;
 
 use std::fmt;
 

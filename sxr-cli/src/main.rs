@@ -162,7 +162,66 @@ enum ObservedCmds {
         /// Write the representation here instead of stdout.
         #[arg(long)]
         out: Option<String>,
+        /// `entry_hash` of the last ledger row at anchor time. With it, a
+        /// ledger that lost that row fails with TAIL_TRUNCATED; without it
+        /// (and without --expected-record-count) the tail is `unverified`.
+        #[arg(long)]
+        expected_head: Option<String>,
+        /// Number of ledger rows at anchor time.
+        #[arg(long)]
+        expected_record_count: Option<u64>,
     },
+    /// Compare an observed representation with the declared expectations and
+    /// print residual records (episode and structural lists, never mixed).
+    /// Writes nothing but `--facts-out`. Refuses on a profile digest that is
+    /// not the one pinned in the frozen reference.
+    Compare {
+        #[arg(long)]
+        repo: String,
+        /// The `observed derive` output file.
+        #[arg(long)]
+        observed: String,
+        /// The frozen reference `{episode_ref, body}` (JSON file).
+        #[arg(long)]
+        reference: String,
+        /// The comparison profile document (its digest must equal the pin).
+        #[arg(long)]
+        profile: String,
+        /// The key and expectation mapping (compare-mapping.v1).
+        #[arg(long)]
+        mapping: String,
+        #[arg(long)]
+        world: String,
+        /// Declared snapshot id the comparison runs against.
+        #[arg(long = "declared")]
+        declared: String,
+        /// The declared model (.sea) given to DomainForge `evaluate`.
+        #[arg(long)]
+        model: Option<String>,
+        /// DomainForge binary (else REALITYTRACE_DOMAINFORGE_BIN). Needs `evaluate`.
+        #[arg(long)]
+        domainforge_bin: Option<String>,
+        /// Write the generated facts file here (it is generated, never edited).
+        #[arg(long)]
+        facts_out: Option<String>,
+        #[arg(long)]
+        expected_head: Option<String>,
+        #[arg(long)]
+        expected_record_count: Option<u64>,
+        /// Write the result here instead of stdout.
+        #[arg(long)]
+        out: Option<String>,
+    },
+}
+
+fn head_from(
+    entry_hash: Option<String>,
+    record_count: Option<u64>,
+) -> Option<sxr_observed::tail::ExpectedHead> {
+    (entry_hash.is_some() || record_count.is_some()).then_some(sxr_observed::tail::ExpectedHead {
+        entry_hash,
+        record_count,
+    })
 }
 
 #[derive(Subcommand)]
@@ -619,7 +678,7 @@ enum Dispatch {
 fn exit_for_error(e: &anyhow::Error) -> i32 {
     // Map known error contexts to §15 exit codes by message prefix.
     let msg = e.to_string();
-    if msg.contains("CHAIN_VERIFY_FAILED") {
+    if msg.contains("CHAIN_VERIFY_FAILED") || msg.contains("TAIL_TRUNCATED") {
         return 5;
     }
     if msg.contains("AC-SETTLEMENT")
@@ -909,6 +968,8 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                 coverage_manifest,
                 independent_system,
                 out,
+                expected_head,
+                expected_record_count,
             } => {
                 let text = observed::derive_command(
                     ctx,
@@ -923,6 +984,49 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
                         declared: declared.as_deref().map(std::path::Path::new),
                         coverage_manifest: coverage_manifest.as_deref().map(std::path::Path::new),
                         independent_systems: &independent_system,
+                        expected_head: head_from(expected_head, expected_record_count),
+                    },
+                )?;
+                if let Some(path) = out {
+                    std::fs::write(&path, format!("{text}\n"))
+                        .map_err(|e| anyhow!("write {path}: {e}"))?;
+                    return Ok(Dispatch::Json(output::output1(
+                        "written",
+                        json!({"path": path, "bytes": text.len() + 1}),
+                    )));
+                }
+                return Ok(Dispatch::Raw(text));
+            }
+            ObservedCmds::Compare {
+                repo,
+                observed,
+                reference,
+                profile,
+                mapping,
+                world,
+                declared,
+                model,
+                domainforge_bin,
+                facts_out,
+                expected_head,
+                expected_record_count,
+                out,
+            } => {
+                let p = |s: &String| std::path::PathBuf::from(s);
+                let text = observed::compare_command(
+                    ctx,
+                    &observed::CompareArgs {
+                        repo: &repo,
+                        observed: &p(&observed),
+                        reference: &p(&reference),
+                        profile: &p(&profile),
+                        mapping: &p(&mapping),
+                        world: &world,
+                        declared_snapshot: &declared,
+                        model: model.as_ref().map(p).as_deref(),
+                        domainforge_bin: domainforge_bin.as_ref().map(p).as_deref(),
+                        facts_out: facts_out.as_ref().map(p).as_deref(),
+                        expected_head: head_from(expected_head, expected_record_count),
                     },
                 )?;
                 if let Some(path) = out {

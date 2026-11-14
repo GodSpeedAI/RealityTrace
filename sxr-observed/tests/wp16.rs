@@ -141,6 +141,7 @@ fn opts() -> Options {
         declared_keys: None,
         coverage_manifest: None,
         independent_systems: BTreeSet::new(),
+        expected_head: None,
     }
 }
 
