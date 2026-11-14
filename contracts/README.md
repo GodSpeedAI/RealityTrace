@@ -6,7 +6,9 @@ Reviewed-before-code contracts for `sxr-observed` and `realitytrace observed`. J
 |---|---|---|
 | Comparison profile | `comparison-profile.v1.json` | 3 / 15 + 1 |
 | Observed representation | `observed-representation.v1.json` | 3 / 17 + 8 |
-| Residual | `residual.v1.json` | 7 / 20 + 0 |
+| Residual | `residual.v1.json` | 7 / 24 + 0 |
+
+The test does no hashing; digests of schema files use SHA-256 over the file bytes, and the RFC 8785 rule itself is tested in the CEP repository only (CEP-0008 section 16.5 vectors).
 
 Test: `cargo test --locked -p sxr-core --test fde_contracts`. Digests: `scripts/check-contract-digests.sh`.
 
@@ -84,6 +86,8 @@ One difference between the declared model and the observed representation, event
 | `profile_id` | `profile:<token>` | yes | the profile that fixes `k` | §6 |
 | `question` | `question:<token>` | yes | RealityTrace question | §5, §13 |
 | `snapshot` | string | yes | declared snapshot id compared | §6, §13 |
+| `representation_id` | `representation:<token>` | yes | the observed representation compared; one-way: the representation does not reference residuals, so its hash never depends on later comparisons | §6, review 2026-11-14 |
+| `input_set_sha256` | `sha256:<hex>` | yes | that representation's `input_set_hash` | §6, review 2026-11-14 |
 | `world_ref` | string | yes | world stamp; a classification stays with its world (NT-07) | §13 |
 
 | `class` | allowed `basis` | decided by |

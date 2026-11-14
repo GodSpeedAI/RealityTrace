@@ -16,15 +16,30 @@
     "evidence_refs",
     "rule",
     "support_count",
+    "representation_id",
+    "input_set_sha256",
     "profile_id",
     "question",
     "snapshot",
     "world_ref"
   ],
   "properties": {
-    "contract": { "const": "residual.v1" },
-    "residual_id": { "type": "string", "pattern": "^residual:[^\\s]+$" },
-    "class": { "enum": ["confirmed", "contradicted", "observed_undeclared", "declared_unobserved", "insufficient"] },
+    "contract": {
+      "const": "residual.v1"
+    },
+    "residual_id": {
+      "type": "string",
+      "pattern": "^residual:[^\\s]+$"
+    },
+    "class": {
+      "enum": [
+        "confirmed",
+        "contradicted",
+        "observed_undeclared",
+        "declared_unobserved",
+        "insufficient"
+      ]
+    },
     "basis": {
       "enum": [
         "policy_true",
@@ -40,7 +55,12 @@
         "executor_only_evidence"
       ]
     },
-    "comparison": { "enum": ["episode", "structural"] },
+    "comparison": {
+      "enum": [
+        "episode",
+        "structural"
+      ]
+    },
     "keys": {
       "type": "array",
       "minItems": 1,
@@ -52,37 +72,194 @@
     },
     "occurrence_ids": {
       "type": "array",
-      "items": { "type": "string", "pattern": "^[^:\\s]+:[^\\s]+$" },
+      "items": {
+        "type": "string",
+        "pattern": "^[^:\\s]+:[^\\s]+$"
+      },
       "description": "Occurrences behind the result (for declared_unobserved, the trigger occurrences); distinct, ascending."
     },
-    "evidence_refs": { "type": "array", "items": { "type": "string", "pattern": "^evidence:[^\\s]+$" } },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^evidence:[^\\s]+$"
+      }
+    },
     "rule": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "ref"],
+      "required": [
+        "kind",
+        "ref"
+      ],
       "properties": {
-        "kind": { "enum": ["policy_evaluable", "structural", "ordering", "frequency", "absence", "timing"], "description": "A comparison-profile kind." },
-        "ref": { "type": "string", "minLength": 1, "description": "The policy name or declared relation the rule is." }
+        "kind": {
+          "enum": [
+            "policy_evaluable",
+            "structural",
+            "ordering",
+            "frequency",
+            "absence",
+            "timing"
+          ],
+          "description": "A comparison-profile kind."
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The policy name or declared relation the rule is."
+        }
       }
     },
-    "support_count": { "type": "integer", "minimum": 0, "description": "Supporting occurrences counted against the profile's minimum k." },
-    "profile_id": { "type": "string", "pattern": "^profile:[^\\s]+$" },
-    "question": { "type": "string", "pattern": "^question:[^\\s]+$" },
-    "snapshot": { "type": "string", "minLength": 1, "description": "The declared snapshot id the comparison ran against." },
-    "world_ref": { "type": "string", "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$", "description": "World stamp: the classification belongs to this world and is never retargeted (NT-07)." }
+    "support_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Supporting occurrences counted against the profile's minimum k."
+    },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^profile:[^\\s]+$"
+    },
+    "question": {
+      "type": "string",
+      "pattern": "^question:[^\\s]+$"
+    },
+    "snapshot": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The declared snapshot id the comparison ran against."
+    },
+    "world_ref": {
+      "type": "string",
+      "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$",
+      "description": "World stamp: the classification belongs to this world and is never retargeted (NT-07)."
+    },
+    "representation_id": {
+      "type": "string",
+      "pattern": "^representation:[^\\s]+$",
+      "description": "The observed representation compared (the `--observed` argument). The reference is one way: the representation never names residuals, so its hash cannot depend on later comparisons."
+    },
+    "input_set_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "The compared representation's input_set_hash, copied so a residual shows which input set it was computed from (AT-08)."
+    }
   },
   "allOf": [
-    { "if": { "properties": { "class": { "const": "confirmed" } }, "required": ["class"] }, "then": { "properties": { "basis": { "enum": ["policy_true", "structural_satisfied"] } } } },
-    { "if": { "properties": { "class": { "const": "contradicted" } }, "required": ["class"] }, "then": { "properties": { "basis": { "enum": ["policy_false", "structural_violated"] } } } },
-    { "if": { "properties": { "class": { "const": "observed_undeclared" } }, "required": ["class"] }, "then": { "properties": { "basis": { "const": "structural_undeclared" } } } },
-    { "if": { "properties": { "class": { "const": "declared_unobserved" } }, "required": ["class"] }, "then": { "properties": { "basis": { "const": "trigger_observed_record_absent" } } } },
     {
-      "if": { "properties": { "class": { "const": "insufficient" } }, "required": ["class"] },
-      "then": { "properties": { "basis": { "enum": ["policy_unknown", "not_evaluable", "below_minimum_support", "evidence_source_silent", "executor_only_evidence"] } } },
+      "if": {
+        "properties": {
+          "class": {
+            "const": "confirmed"
+          }
+        },
+        "required": [
+          "class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "basis": {
+            "enum": [
+              "policy_true",
+              "structural_satisfied"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "class": {
+            "const": "contradicted"
+          }
+        },
+        "required": [
+          "class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "basis": {
+            "enum": [
+              "policy_false",
+              "structural_violated"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "class": {
+            "const": "observed_undeclared"
+          }
+        },
+        "required": [
+          "class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "basis": {
+            "const": "structural_undeclared"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "class": {
+            "const": "declared_unobserved"
+          }
+        },
+        "required": [
+          "class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "basis": {
+            "const": "trigger_observed_record_absent"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "class": {
+            "const": "insufficient"
+          }
+        },
+        "required": [
+          "class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "basis": {
+            "enum": [
+              "policy_unknown",
+              "not_evaluable",
+              "below_minimum_support",
+              "evidence_source_silent",
+              "executor_only_evidence"
+            ]
+          }
+        }
+      },
       "else": {
         "properties": {
-          "occurrence_ids": { "minItems": 1 },
-          "evidence_refs": { "minItems": 1 }
+          "occurrence_ids": {
+            "minItems": 1
+          },
+          "evidence_refs": {
+            "minItems": 1
+          }
         }
       }
     }

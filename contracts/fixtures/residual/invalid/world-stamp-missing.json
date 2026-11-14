@@ -20,5 +20,7 @@
   "support_count": 3,
   "profile_id": "profile:fde-s1-default",
   "question": "question:01JABCDEF0000000000000000A",
-  "snapshot": "snapshot:01JABCDEF0000000000000000S"
+  "snapshot": "snapshot:01JABCDEF0000000000000000S",
+  "representation_id": "representation:01JABCDEF0000000000000000P",
+  "input_set_sha256": "sha256:d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1"
 }

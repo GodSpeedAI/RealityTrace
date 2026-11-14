@@ -21,5 +21,7 @@
   "profile_id": "profile:fde-s1-default",
   "question": "question:01JABCDEF0000000000000000A",
   "snapshot": "snapshot:01JABCDEF0000000000000000S",
-  "world_ref": "world:godspeed-fde-sop"
+  "world_ref": "world:godspeed-fde-sop",
+  "representation_id": "representation:01JABCDEF0000000000000000P",
+  "input_set_sha256": "sha256:d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1"
 }

@@ -123,6 +123,26 @@
       "file": "unknown-field.json",
       "pointer": "",
       "contains": "Additional properties are not allowed"
+    },
+    {
+      "file": "representation-id-missing.json",
+      "pointer": "",
+      "contains": "\"representation_id\" is a required property"
+    },
+    {
+      "file": "input-set-sha256-missing.json",
+      "pointer": "",
+      "contains": "\"input_set_sha256\" is a required property"
+    },
+    {
+      "file": "input-set-sha256-malformed.json",
+      "pointer": "/input_set_sha256",
+      "contains": "does not match"
+    },
+    {
+      "file": "representation-id-not-prefixed.json",
+      "pointer": "/representation_id",
+      "contains": "does not match"
     }
   ],
   "semantic_invalid": []

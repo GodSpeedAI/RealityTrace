@@ -21,5 +21,7 @@
   "profile_id": "profile:fde-s1-default",
   "question": "01JABCDEF0000000000000000A",
   "snapshot": "snapshot:01JABCDEF0000000000000000S",
-  "world_ref": "world:godspeed-fde-sop@sha256:78eddd4e7e4771caa1c37e8e5fa095c5baa899daccea8fac1f6e969f8f37287b"
+  "world_ref": "world:godspeed-fde-sop@sha256:78eddd4e7e4771caa1c37e8e5fa095c5baa899daccea8fac1f6e969f8f37287b",
+  "representation_id": "representation:01JABCDEF0000000000000000P",
+  "input_set_sha256": "sha256:d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1"
 }
