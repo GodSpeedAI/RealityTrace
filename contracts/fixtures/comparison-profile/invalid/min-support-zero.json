@@ -1,0 +1,89 @@
+{
+  "contract": "comparison-profile.v1",
+  "profile_id": "profile:fde-s1-default",
+  "kinds": [
+    {
+      "kind": "policy_evaluable",
+      "comparison": "episode",
+      "quantifier": "universal",
+      "min_support": 0,
+      "allow_vacuous_truth": false,
+      "deadline": null,
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient"
+      }
+    },
+    {
+      "kind": "structural",
+      "comparison": "structural",
+      "quantifier": "universal",
+      "min_support": 1,
+      "allow_vacuous_truth": false,
+      "deadline": null,
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient",
+        "undeclared": "observed_undeclared"
+      }
+    },
+    {
+      "kind": "ordering",
+      "comparison": "episode",
+      "quantifier": "universal",
+      "min_support": 1,
+      "allow_vacuous_truth": false,
+      "deadline": null,
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient"
+      }
+    },
+    {
+      "kind": "frequency",
+      "comparison": "episode",
+      "quantifier": "threshold",
+      "min_support": 3,
+      "allow_vacuous_truth": false,
+      "deadline": null,
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient"
+      }
+    },
+    {
+      "kind": "absence",
+      "comparison": "episode",
+      "quantifier": "universal",
+      "min_support": 1,
+      "allow_vacuous_truth": false,
+      "deadline": null,
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient",
+        "trigger_observed_record_absent": "declared_unobserved"
+      }
+    },
+    {
+      "kind": "timing",
+      "comparison": "episode",
+      "quantifier": "universal",
+      "min_support": 1,
+      "allow_vacuous_truth": false,
+      "deadline": {
+        "unit": "sequence_steps",
+        "limit": 10
+      },
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient"
+      }
+    }
+  ]
+}

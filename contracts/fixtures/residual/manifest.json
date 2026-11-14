@@ -1,0 +1,129 @@
+{
+  "schema": "https://sxr.dev/contracts/residual.v1.json",
+  "valid": [
+    {
+      "file": "confirmed-policy-true.json"
+    },
+    {
+      "file": "confirmed-structural-satisfied.json"
+    },
+    {
+      "file": "contradicted-policy-false.json"
+    },
+    {
+      "file": "observed-undeclared.json"
+    },
+    {
+      "file": "declared-unobserved-trigger-without-record.json"
+    },
+    {
+      "file": "insufficient-below-minimum-support.json"
+    },
+    {
+      "file": "insufficient-not-evaluable-without-occurrences.json"
+    }
+  ],
+  "invalid": [
+    {
+      "file": "basis-missing.json",
+      "pointer": "",
+      "contains": "\"basis\" is a required property"
+    },
+    {
+      "file": "class-not-in-enum-not-evaluable-is-a-basis.json",
+      "pointer": "/class",
+      "contains": "is not one of"
+    },
+    {
+      "file": "basis-not-in-enum.json",
+      "pointer": "/basis",
+      "contains": "is not one of"
+    },
+    {
+      "file": "comparison-not-in-enum.json",
+      "pointer": "/comparison",
+      "contains": "is not one of"
+    },
+    {
+      "file": "comparison-missing.json",
+      "pointer": "",
+      "contains": "\"comparison\" is a required property"
+    },
+    {
+      "file": "confirmed-without-evidence-refs.json",
+      "pointer": "/evidence_refs",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "confirmed-without-occurrence-ids.json",
+      "pointer": "/occurrence_ids",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "confirmed-with-below-minimum-support-basis.json",
+      "pointer": "/basis",
+      "contains": "is not one of"
+    },
+    {
+      "file": "contradicted-with-policy-true-basis.json",
+      "pointer": "/basis",
+      "contains": "is not one of"
+    },
+    {
+      "file": "observed-undeclared-with-policy-basis.json",
+      "pointer": "/basis",
+      "contains": "was expected"
+    },
+    {
+      "file": "declared-unobserved-without-trigger-basis.json",
+      "pointer": "/basis",
+      "contains": "was expected"
+    },
+    {
+      "file": "insufficient-with-policy-true-basis.json",
+      "pointer": "/basis",
+      "contains": "is not one of"
+    },
+    {
+      "file": "world-stamp-missing.json",
+      "pointer": "",
+      "contains": "\"world_ref\" is a required property"
+    },
+    {
+      "file": "world-stamp-alias-not-pinned.json",
+      "pointer": "/world_ref",
+      "contains": "does not match"
+    },
+    {
+      "file": "support-count-negative.json",
+      "pointer": "/support_count",
+      "contains": "less than the minimum of 0"
+    },
+    {
+      "file": "question-not-prefixed.json",
+      "pointer": "/question",
+      "contains": "does not match"
+    },
+    {
+      "file": "keys-empty.json",
+      "pointer": "/keys",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "key-is-a-semantic-ref.json",
+      "pointer": "/keys/0",
+      "contains": "does not match"
+    },
+    {
+      "file": "rule-kind-not-a-profile-kind.json",
+      "pointer": "/rule/kind",
+      "contains": "is not one of"
+    },
+    {
+      "file": "unknown-field.json",
+      "pointer": "",
+      "contains": "Additional properties are not allowed"
+    }
+  ],
+  "semantic_invalid": []
+}

@@ -1,0 +1,25 @@
+{
+  "contract": "residual.v1",
+  "residual_id": "residual:01JABCDEF0000000000000000R",
+  "class": "confirmed",
+  "basis": "policy_true",
+  "comparison": "episode",
+  "keys": [
+    "concept:11fc582b-b054-5386-b245-5a358e3c9327"
+  ],
+  "occurrence_ids": [
+    "sea-forge-ledger:rec-0042"
+  ],
+  "evidence_refs": [
+    "evidence:01JABCDEF0000000000000000B"
+  ],
+  "rule": {
+    "kind": "policy_evaluable",
+    "ref": "godspeed-fde-sop::freeze_before_move"
+  },
+  "support_count": 3,
+  "profile_id": "profile:fde-s1-default",
+  "question": "question:01JABCDEF0000000000000000A",
+  "snapshot": "snapshot:01JABCDEF0000000000000000S",
+  "world_ref": "world:godspeed-fde-sop@sha256:78eddd4e7e4771caa1c37e8e5fa095c5baa899daccea8fac1f6e969f8f37287b"
+}

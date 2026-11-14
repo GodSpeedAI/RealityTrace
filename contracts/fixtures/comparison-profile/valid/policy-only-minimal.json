@@ -1,0 +1,19 @@
+{
+  "contract": "comparison-profile.v1",
+  "profile_id": "profile:policy-only",
+  "kinds": [
+    {
+      "kind": "policy_evaluable",
+      "comparison": "episode",
+      "quantifier": "existential",
+      "min_support": 1,
+      "allow_vacuous_truth": false,
+      "deadline": null,
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient"
+      }
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schema": "https://sxr.dev/contracts/comparison-profile.v1.json",
+  "valid": [
+    {
+      "file": "s1-default.json"
+    },
+    {
+      "file": "policy-only-minimal.json"
+    },
+    {
+      "file": "vacuous-truth-accepted.json"
+    }
+  ],
+  "invalid": [
+    {
+      "file": "min-support-zero.json",
+      "pointer": "/kinds/0/min_support",
+      "contains": "less than the minimum of 1"
+    },
+    {
+      "file": "quantifier-not-in-enum.json",
+      "pointer": "/kinds/0/quantifier",
+      "contains": "is not one of"
+    },
+    {
+      "file": "kind-not-in-enum.json",
+      "pointer": "/kinds/0/kind",
+      "contains": "is not one of"
+    },
+    {
+      "file": "comparison-not-in-enum.json",
+      "pointer": "/kinds/0/comparison",
+      "contains": "is not one of"
+    },
+    {
+      "file": "class-mapping-false-to-confirmed.json",
+      "pointer": "/kinds/0/class_mapping/false",
+      "contains": "was expected"
+    },
+    {
+      "file": "class-mapping-unknown-to-confirmed.json",
+      "pointer": "/kinds/0/class_mapping/unknown",
+      "contains": "was expected"
+    },
+    {
+      "file": "class-mapping-missing-unknown.json",
+      "pointer": "/kinds/0/class_mapping",
+      "contains": "\"unknown\" is a required property"
+    },
+    {
+      "file": "timing-without-deadline.json",
+      "pointer": "/kinds/5/deadline",
+      "contains": "is not of type"
+    },
+    {
+      "file": "deadline-in-wall-clock-seconds.json",
+      "pointer": "/kinds/5/deadline",
+      "contains": "is not valid under any of the schemas"
+    },
+    {
+      "file": "absence-without-trigger-mapping.json",
+      "pointer": "/kinds/4/class_mapping",
+      "contains": "\"trigger_observed_record_absent\" is a required property"
+    },
+    {
+      "file": "trigger-mapping-on-policy-kind.json",
+      "pointer": "/kinds/0/class_mapping",
+      "contains": "is not allowed for"
+    },
+    {
+      "file": "structural-without-undeclared-mapping.json",
+      "pointer": "/kinds/1/class_mapping",
+      "contains": "\"undeclared\" is a required property"
+    },
+    {
+      "file": "allow-vacuous-truth-missing.json",
+      "pointer": "/kinds/0",
+      "contains": "\"allow_vacuous_truth\" is a required property"
+    },
+    {
+      "file": "kinds-empty.json",
+      "pointer": "/kinds",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "unknown-entry-field.json",
+      "pointer": "/kinds/0",
+      "contains": "Additional properties are not allowed"
+    }
+  ],
+  "semantic_invalid": [
+    {
+      "file": "duplicate-kind-entry.json",
+      "code": "PROFILE_DUPLICATE_KIND",
+      "rule": "at most one entry per kind"
+    }
+  ]
+}
