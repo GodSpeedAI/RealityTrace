@@ -4,5 +4,6 @@
   "sxr-git": "0.2.2",
   "sxr-df": "0.3.0",
   "sxr-verify": "0.3.0",
+  "sxr-observed": "0.1.0",
   "sxr-cli": "0.4.0"
 }
