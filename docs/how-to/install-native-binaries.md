@@ -131,12 +131,12 @@ rm -f "$HOME/.local/share/sxr/repos/$rid"/ledger.db*
 
 ### DomainForge integration (semantic snapshots only)
 
-RealityTrace pins **DomainForge 0.21.2** and enforces an exact version match when
+RealityTrace pins **DomainForge 0.22.0** and enforces an exact version match when
 semantic context is configured. DomainForge is distributed through crates.io:
 
 ```sh
-cargo install domainforge-core --version 0.21.2 --features cli --locked
-domainforge --version            # expect: domainforge 0.21.2
+cargo install domainforge-core --version 0.22.0 --features cli --locked
+domainforge --version            # expect: domainforge 0.22.0
 ```
 
 Discovery order: `REALITYTRACE_DOMAINFORGE_BIN`, then `SXR_DOMAINFORGE_BIN`, then
@@ -210,7 +210,7 @@ That refusal is intentional; direct CLI and ledger operation are unaffected.
 | Symptom | Cause | Action |
 |---|---|---|
 | `GLIBC_2.3x not found` | Binary newer than the host | Use the artifact for your distribution; releases target glibc 2.35+ |
-| `DomainForge binary not found` | Semantic snapshot configured without the compiler | Install 0.21.2 and set `REALITYTRACE_DOMAINFORGE_BIN` |
-| `unsupported DomainForge version` | Version drift | Install exactly 0.21.2 |
+| `DomainForge binary not found` | Semantic snapshot configured without the compiler | Install 0.22.0 and set `REALITYTRACE_DOMAINFORGE_BIN` |
+| `unsupported DomainForge version` | Version drift | Install exactly 0.22.0 |
 | Gatekeeper / SmartScreen warning | Unsigned package | Verify `SHA256SUMS`, then allow explicitly |
 | `daemon is not supported` (Windows) | Unix-socket transport absent | Use direct CLI commands |

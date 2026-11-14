@@ -9,14 +9,14 @@ objective: >-
   Windows x64 (.zip + per-user setup.exe), and macOS universal (.pkg + .dmg),
   bound to the realitytrace-v* CLI release identity, with glibc 2.35 (Jetson AGX
   Orin) as the Linux baseline, packaged-binary CI tests that assert evidence and
-  ledger semantics, and DomainForge pinned and exercised at 0.21.2.
+  ledger semantics, and DomainForge pinned and exercised at 0.22.0.
 
 expected_state:
   - Release realitytrace-v* carries verified native artifacts for all platforms.
   - ARM64 .deb and .tar.gz download from CI and run on Ubuntu 22.04 / glibc 2.35.
   - Binary publication gates only on the CLI component release, never moves tags,
     and refuses version/commit mismatch.
-  - DomainForge 0.21.2 is enforced and the real-binary contract tests pass.
+  - DomainForge 0.22.0 is enforced and the real-binary contract tests pass.
   - Packaged-binary tests prove supporting evidence settles, contradicting
     evidence does not, tampering is rejected, and a lost ledger fails closed.
 
@@ -26,7 +26,7 @@ observed_state:
       std File::try_lock replaces libc::flock (sxr-ledger; libc dependency now
       removed); HOME falls back to USERPROFILE; daemon socket transport is
       #[cfg(unix)] with an explicit non-Unix refusal; Unix-only tests cfg-gated.
-    domainforge_pin: "0.21.2 (sxr-df/src/lib.rs) + pin_tests regression"
+    domainforge_pin: "0.22.0 (sxr-df/src/lib.rs) + pin_tests regression"
     local_gates: >-
       fmt clean; clippy --workspace --all-targets -D warnings clean; workspace
       tests 27 result lines, 0 failed, 3 ignored; packaged-binary functional

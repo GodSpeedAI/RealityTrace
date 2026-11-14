@@ -9,7 +9,7 @@ pub use error::SemanticError;
 
 /// The DomainForge release this RealityTrace build is verified against.
 /// Production callers opt in via `CliDomainForgeAdapter::with_required_version`.
-pub const PINNED_DOMAINFORGE_VERSION: &str = "0.21.2";
+pub const PINNED_DOMAINFORGE_VERSION: &str = "0.22.0";
 
 #[cfg(test)]
 mod pin_tests {
@@ -20,6 +20,6 @@ mod pin_tests {
     /// the real-binary tests.
     #[test]
     fn pinned_domainforge_version_is_the_verified_release() {
-        assert_eq!(super::PINNED_DOMAINFORGE_VERSION, "0.21.2");
+        assert_eq!(super::PINNED_DOMAINFORGE_VERSION, "0.22.0");
     }
 }
