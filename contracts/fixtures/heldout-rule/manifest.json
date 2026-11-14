@@ -1,0 +1,39 @@
+{
+  "schema": "https://sxr.dev/contracts/heldout-rule.v1.json",
+  "valid": [
+    {
+      "file": "two-episodes.json"
+    },
+    {
+      "file": "one-episode.json"
+    }
+  ],
+  "invalid": [
+    {
+      "file": "episodes-empty.json",
+      "pointer": "/held_out_episodes",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "kind-not-exclusion.json",
+      "pointer": "/kind",
+      "contains": "was expected"
+    },
+    {
+      "file": "statement-missing.json",
+      "pointer": "",
+      "contains": "\"statement\" is a required property"
+    },
+    {
+      "file": "episode-not-a-key.json",
+      "pointer": "/held_out_episodes/0",
+      "contains": "does not match"
+    },
+    {
+      "file": "unknown-field.json",
+      "pointer": "",
+      "contains": "Additional properties"
+    }
+  ],
+  "semantic_invalid": []
+}

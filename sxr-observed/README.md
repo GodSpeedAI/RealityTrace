@@ -11,3 +11,5 @@ WP-16 and WP-17. Library behind `realitytrace observed ingest`, `derive` and `co
 - `compare` (WP-17): the representation against the declared expectations, as `residual.v1` records in separate episode and structural lists; policy expectations through DomainForge `evaluate` over a generated, hashed facts file; see `contracts/README.md` sections 4 and 5.
 - `tail`: expected-head check that closes the deletion-of-the-last-record gap of the hash chain.
 - `df_cli`: `CliEvaluator`, the `evaluate` port over the CLI binary. A binary without `evaluate` is refused; `validate` is never a fallback.
+- `revision` (WP-18): `propose` (revision proposal, frozen held-out rule, `HELDOUT_CONTAMINATED`), `regression_matrix` (the total transition table of E section 7), `capability_delta` (AT-13 `GAIN` / `NO_GAIN`); see `contracts/README.md` section 6. `derive` re-classifies records emitted under another world with `Options::events_world_ref`; `compare` takes `CompareInput::reference_world_ref` for it.
+

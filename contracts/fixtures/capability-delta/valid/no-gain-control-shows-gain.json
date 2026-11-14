@@ -1,0 +1,31 @@
+{
+  "contract": "capability-delta.v1",
+  "result": "NO_GAIN",
+  "code": "NO_CAPABILITY_GAIN",
+  "frozen": {
+    "frozen_id": "frozen:s1-at13",
+    "sha256": "sha256:1c84cd3955608fba2c2f70a97b8de2df6c9639b11cd75d3cfd0641801bc75673",
+    "prediction": "GAIN"
+  },
+  "old_world_ref": "world:sop@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "new_world_ref": "world:sop@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "episode_ref": "episode:case1:stepS:1@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "classes": {
+    "old": "observed_undeclared",
+    "new": "confirmed",
+    "control_old": "observed_undeclared",
+    "control_new": "confirmed"
+  },
+  "falsifier_triggered": [
+    "control_shows_gain"
+  ],
+  "prediction_met": false,
+  "r58_supported": false,
+  "comparisons": {
+    "old": "comparison:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "new": "comparison:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "control_old": "comparison:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "control_new": "comparison:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "delta_id": "delta:795cbf0edaf32b2821c5a43988f88d5d777f4ca613eec1a276549ea409a35786"
+}

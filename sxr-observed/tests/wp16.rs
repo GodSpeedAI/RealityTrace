@@ -132,6 +132,7 @@ fn base() -> Fixture {
 
 fn opts() -> Options {
     Options {
+        events_world_ref: None,
         world_ref: WORLD.into(),
         scope: "case:case1".into(),
         episode_ref: EPISODE.into(),

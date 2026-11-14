@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/contracts/heldout-rule.v1.json",
+  "title": "held-out rule (v1)",
+  "description": "The rule that selects the held-out validation set of a revision proposal (AT-12, M section 5.6). It is frozen before any run: its digest sha256(JCS(document)) is supplied to `observed propose` from outside (the pre-registration), so the proposer cannot choose the held-out set at proposal time. The rule excludes whole episodes by episode key; every residual and occurrence of a held-out episode is held out.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "rule_id",
+    "kind",
+    "held_out_episodes",
+    "statement"
+  ],
+  "properties": {
+    "contract": {
+      "const": "heldout-rule.v1"
+    },
+    "rule_id": {
+      "type": "string",
+      "pattern": "^rule:[^\\s]+$"
+    },
+    "kind": {
+      "const": "exclude_episodes"
+    },
+    "held_out_episodes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^episode:[^\\s:]+:[^\\s:]+:[0-9]+(?:@sha256:[0-9a-f]{64})?$"
+      },
+      "description": "Episode keys `episode:<case>:<item>:<n>`, or full episode_refs with the digest; an episode matches when its episode_ref equals the entry or starts with the entry followed by `@`."
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The rule in words, as frozen."
+    }
+  }
+}

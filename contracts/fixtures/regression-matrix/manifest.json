@@ -1,0 +1,55 @@
+{
+  "schema": "https://sxr.dev/contracts/regression-matrix.v1.json",
+  "valid": [
+    {
+      "file": "passing-with-gain.json"
+    },
+    {
+      "file": "failing-regression.json"
+    },
+    {
+      "file": "lost-capability.json"
+    },
+    {
+      "file": "escalated-weakening.json"
+    }
+  ],
+  "invalid": [
+    {
+      "file": "verdict-not-in-enum.json",
+      "pointer": "/verdict",
+      "contains": "is not one of"
+    },
+    {
+      "file": "row-code-unknown.json",
+      "pointer": "/rows/0/code",
+      "contains": "is not one of"
+    },
+    {
+      "file": "row-class-not-a-class.json",
+      "pointer": "/rows/0/new_class",
+      "contains": "is not one of"
+    },
+    {
+      "file": "rows-missing.json",
+      "pointer": "",
+      "contains": "\"rows\" is a required property"
+    },
+    {
+      "file": "matrix-id-malformed.json",
+      "pointer": "/matrix_id",
+      "contains": "does not match"
+    },
+    {
+      "file": "row-unknown-field.json",
+      "pointer": "/rows/0",
+      "contains": "Additional properties"
+    },
+    {
+      "file": "no-comparisons.json",
+      "pointer": "/old_comparisons",
+      "contains": "has less than 1 item"
+    }
+  ],
+  "semantic_invalid": []
+}

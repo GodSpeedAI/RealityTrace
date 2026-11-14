@@ -80,6 +80,12 @@ pub struct Options {
     /// A ledger head recorded outside the ledger (anchor, frozen reference).
     /// `None`: the tail is reported `unverified`.
     pub expected_head: Option<ExpectedHead>,
+    /// Re-classification (WP-18, AT-13): the world the events were stamped with
+    /// when they were emitted. `None`: the events carry `world_ref`. With
+    /// `Some(w)` the events of world `w` are classified under `world_ref`, the
+    /// representation and everything derived from it are stamped with
+    /// `world_ref`, and the input-set hash covers `w`.
+    pub events_world_ref: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -152,8 +158,12 @@ fn parse_payload(row: &LedgerRow) -> Option<Value> {
     serde_json::from_str(&row.payload).ok()
 }
 
+fn event_world(o: &Options) -> &str {
+    o.events_world_ref.as_deref().unwrap_or(&o.world_ref)
+}
+
 fn hints_match(h: &Hints, o: &Options, case_id: &str) -> bool {
-    h.world_ref.as_deref().is_none_or(|w| w == o.world_ref)
+    h.world_ref.as_deref().is_none_or(|w| w == event_world(o))
         && h.case_id.as_deref().is_none_or(|c| c == case_id)
         && h.episode_ref.as_deref().is_none_or(|e| e == o.episode_ref)
         && h.kind.as_deref().is_none_or(|k| k == o.kind)
@@ -245,7 +255,7 @@ pub fn derive(rows: &[LedgerRow], opts: &Options) -> Result<Derived, ObservedErr
                     unverified.push(&row.entry_hash);
                     continue;
                 }
-                if hints.world_ref.as_deref() != Some(&opts.world_ref)
+                if hints.world_ref.as_deref() != Some(event_world(opts))
                     || hints.case_id.as_deref() != Some(case_id)
                     || hints.episode_ref.as_deref() != Some(&opts.episode_ref)
                     || hints.kind.as_deref() != Some(&opts.kind)
@@ -360,12 +370,16 @@ pub fn derive(rows: &[LedgerRow], opts: &Options) -> Result<Derived, ObservedErr
         "head_entry_hash": head.map(|r| r.entry_hash.as_str()),
         "tail_verification": tail_verification,
     });
+    let mut options_doc = json!({"declared_keys": opts.declared_keys, "coverage_manifest": coverage_rows_for_hash,
+                    "independent_systems": opts.independent_systems});
+    if let Some(w) = &opts.events_world_ref {
+        options_doc["events_world_ref"] = json!(w);
+    }
     let input_set_hash = canon::digest(&json!({
         "contract": "observed-representation.v1",
         "selectors": {"world_ref": opts.world_ref, "scope": opts.scope, "episode_ref": opts.episode_ref,
                       "kind": opts.kind, "profile_id": opts.profile_id},
-        "options": {"declared_keys": opts.declared_keys, "coverage_manifest": coverage_rows_for_hash,
-                    "independent_systems": opts.independent_systems},
+        "options": options_doc,
         "window": window_doc,
         "inputs": inputs, "rejected": rejected, "unverified": unverified,
     }))?;

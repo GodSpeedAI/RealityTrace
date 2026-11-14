@@ -1,0 +1,14 @@
+{
+  "contract": "capability-frozen.v1",
+  "frozen_id": "frozen:s1-at13",
+  "episode_key": "episode:case1:stepS:1@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "comparison": "structural",
+  "old_expectation": "undeclared:undeclared:7777777777777777777777777777777777777777777777777777777777777777",
+  "new_expectation": "flow-move-purge",
+  "prediction": "GAIN",
+  "falsifier": [
+    "old_world_confirmed",
+    "new_world_not_confirmed",
+    "control_shows_gain"
+  ]
+}

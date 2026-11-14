@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/contracts/revision-proposal.v1.json",
+  "title": "revision proposal (v1)",
+  "description": "A governed structural revision proposal built from residuals (E section 7, step 1). `proposal_id` is `proposal:` + sha256(JCS(document without proposal_id)): the promotion request binds to it. The diagnosis input and the held-out set are disjoint by episode, residual and occurrence, the held-out set is chosen by the frozen rule, and `observed propose` refuses a proposal that overlaps (HELDOUT_CONTAMINATED).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "proposal_id",
+    "proposer",
+    "scope",
+    "old_world_ref",
+    "candidate_world_ref",
+    "held_out_rule",
+    "diagnosis",
+    "held_out",
+    "intended_changes",
+    "semantic_diff_sha256"
+  ],
+  "properties": {
+    "contract": {
+      "const": "revision-proposal.v1"
+    },
+    "proposal_id": {
+      "type": "string",
+      "pattern": "^proposal:[0-9a-f]{64}$"
+    },
+    "proposer": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The principal that raises the proposal; the approver must differ (I-2 family)."
+    },
+    "scope": {
+      "type": "string",
+      "pattern": "^case:[^\\s]+$"
+    },
+    "old_world_ref": {
+      "type": "string",
+      "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$"
+    },
+    "candidate_world_ref": {
+      "type": "string",
+      "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$"
+    },
+    "held_out_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "sha256"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "pattern": "^rule:[^\\s]+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "diagnosis": {
+      "$ref": "#/$defs/set"
+    },
+    "held_out": {
+      "$ref": "#/$defs/set"
+    },
+    "intended_changes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "element",
+          "change"
+        ],
+        "properties": {
+          "element": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The comparison expectation id the change is about (in the candidate world for add_declaration and rename)."
+          },
+          "change": {
+            "enum": [
+              "add_declaration",
+              "change",
+              "weaken",
+              "remove",
+              "rename"
+            ]
+          },
+          "supersedes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Expectation ids of the old world this element replaces (an undeclared element now declared, a rename): the explicit key mapping of E section 7."
+          }
+        }
+      }
+    },
+    "semantic_diff_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "Digest of the DomainForge semantic diff between the two worlds; proposal.raised requires one."
+    }
+  },
+  "$defs": {
+    "set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "episodes",
+        "residual_ids",
+        "occurrence_ids"
+      ],
+      "properties": {
+        "episodes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^episode:[^\\s:]+:[^\\s:]+:[0-9]+(?:@sha256:[0-9a-f]{64})?$"
+          }
+        },
+        "residual_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^residual:[^\\s]+$"
+          }
+        },
+        "occurrence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[^:\\s]+:[^\\s]+$"
+          }
+        }
+      }
+    }
+  }
+}

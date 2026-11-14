@@ -1,0 +1,41 @@
+{
+  "contract": "regression-matrix.v1",
+  "proposal_id": "proposal:09fcdc527ae8c3beab40963d82c8f55aece7c14d3b80f088a48747863e1a2bbb",
+  "proposal_digest": "sha256:09fcdc527ae8c3beab40963d82c8f55aece7c14d3b80f088a48747863e1a2bbb",
+  "old_world_ref": "world:sop@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "candidate_world_ref": "world:sop@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "old_comparisons": [
+    "comparison:8888888888888888888888888888888888888888888888888888888888888888"
+  ],
+  "new_comparisons": [
+    "comparison:9999999999999999999999999999999999999999999999999999999999999999"
+  ],
+  "rows": [
+    {
+      "element": "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111|structural|flow-a",
+      "episode_ref": "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "comparison": "structural",
+      "old_expectation": "flow-a",
+      "new_expectation": "flow-a",
+      "old_class": "contradicted",
+      "new_class": "confirmed",
+      "result": "pass",
+      "code": null,
+      "reason": "listed_weakening",
+      "intended": true,
+      "escalated": true,
+      "reported": "weakening"
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "escalated": 1,
+    "gains": 0
+  },
+  "verdict": "pass",
+  "failure_codes": [],
+  "refusal_code": null,
+  "escalated": true,
+  "matrix_id": "matrix:30b567d5ce9d3d3cccf37154e9302d1a6fc50f1a91c3df4efc8f33f4c81bc3f8"
+}

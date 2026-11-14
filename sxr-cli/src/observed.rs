@@ -16,6 +16,7 @@ use sxr_observed::ingest::{
     EXTENSION_KEY, EventValidator, EvidenceIndex, INGEST_NOTE_KEY, REJECTION_NOTE_KEY,
     UnsignedOnly, classify,
 };
+use sxr_observed::revision;
 use sxr_observed::tail::ExpectedHead;
 
 use crate::state::{self, Ctx};
@@ -149,6 +150,8 @@ pub struct DeriveArgs<'a> {
     pub coverage_manifest: Option<&'a Path>,
     pub independent_systems: &'a [String],
     pub expected_head: Option<ExpectedHead>,
+    /// Re-classification (AT-13): the world the events were emitted under.
+    pub events_world: Option<&'a str>,
 }
 
 fn read_json(p: &Path) -> Result<Value> {
@@ -203,6 +206,7 @@ pub fn derive_command(ctx: &Ctx, a: &DeriveArgs) -> Result<String> {
         })
         .transpose()?;
     let opts = Options {
+        events_world_ref: a.events_world.map(str::to_owned),
         world_ref: a.world.into(),
         scope: a.scope.into(),
         episode_ref: a.episode.into(),
@@ -229,6 +233,8 @@ pub struct CompareArgs<'a> {
     pub profile: &'a Path,
     pub mapping: &'a Path,
     pub world: &'a str,
+    /// Re-classification (AT-13): the world the frozen reference was frozen under.
+    pub reference_world: Option<&'a str>,
     pub declared_snapshot: &'a str,
     pub model: Option<&'a Path>,
     pub domainforge_bin: Option<&'a Path>,
@@ -282,6 +288,7 @@ pub fn compare_command(ctx: &Ctx, a: &CompareArgs) -> Result<String> {
         profile: &profile,
         mapping: &mapping,
         world_ref: a.world,
+        reference_world_ref: a.reference_world,
         snapshot: a.declared_snapshot,
         expected_head: a.expected_head.clone(),
         evaluator: evaluator.as_ref().map(|e| e as &dyn Evaluator),
@@ -291,4 +298,94 @@ pub fn compare_command(ctx: &Ctx, a: &CompareArgs) -> Result<String> {
         std::fs::write(path, text).with_context(|| format!("write {}", path.display()))?;
     }
     Ok(canonical)
+}
+
+// ------------------------------------------------------------ WP-18 revision
+
+fn read_all(paths: &[String]) -> Result<Vec<Value>> {
+    paths.iter().map(|p| read_json(Path::new(p))).collect()
+}
+
+pub struct ProposeArgs<'a> {
+    pub proposer: &'a str,
+    pub scope: &'a str,
+    pub old_world: &'a str,
+    pub candidate_world: &'a str,
+    pub rule: &'a str,
+    pub rule_sha256: Option<&'a str>,
+    pub compared: &'a [String],
+    pub residuals: &'a [String],
+    pub intended: &'a str,
+    pub semantic_diff_sha256: &'a str,
+}
+
+/// Build a revision proposal (`revision-proposal.v1`). Pure: reads the named
+/// files, no ledger.
+pub fn propose_command(a: &ProposeArgs) -> Result<String> {
+    let rule = read_json(Path::new(a.rule))?;
+    let compared = read_all(a.compared)?;
+    let intended: Value = serde_json::from_str(a.intended)
+        .or_else(|_| read_json(Path::new(a.intended)))
+        .context("--intended is neither JSON nor a JSON file")?;
+    let doc = revision::propose(&revision::ProposeInput {
+        proposer: a.proposer,
+        scope: a.scope,
+        old_world_ref: a.old_world,
+        candidate_world_ref: a.candidate_world,
+        rule: &rule,
+        rule_sha256: a.rule_sha256,
+        compared: &compared,
+        diagnosis_residuals: a.residuals,
+        intended_changes: &intended,
+        semantic_diff_sha256: a.semantic_diff_sha256,
+    })
+    .map_err(|e| anyhow!("{e}"))?;
+    revision::canonical(&doc).map_err(|e| anyhow!("{e}"))
+}
+
+/// The regression matrix text and whether it failed.
+pub fn regression_command(
+    proposal: &str,
+    old: &[String],
+    new: &[String],
+) -> Result<(String, bool)> {
+    let proposal = read_json(Path::new(proposal))?;
+    let (old, new) = (read_all(old)?, read_all(new)?);
+    let doc = revision::regression_matrix(&revision::MatrixInput {
+        proposal: &proposal,
+        old: &old,
+        new: &new,
+    })
+    .map_err(|e| anyhow!("{e}"))?;
+    let failed = doc["verdict"] == json!("fail");
+    Ok((
+        revision::canonical(&doc).map_err(|e| anyhow!("{e}"))?,
+        failed,
+    ))
+}
+
+pub struct DeltaArgs<'a> {
+    pub frozen: &'a str,
+    pub frozen_sha256: Option<&'a str>,
+    pub old: &'a str,
+    pub new: &'a str,
+    pub control_old: Option<&'a str>,
+    pub control_new: Option<&'a str>,
+}
+
+pub fn capability_delta_command(a: &DeltaArgs) -> Result<String> {
+    let rd = |p: &str| read_json(Path::new(p));
+    let (frozen, old, new) = (rd(a.frozen)?, rd(a.old)?, rd(a.new)?);
+    let control_old = a.control_old.map(rd).transpose()?;
+    let control_new = a.control_new.map(rd).transpose()?;
+    let doc = revision::capability_delta(&revision::DeltaInput {
+        frozen: &frozen,
+        frozen_sha256: a.frozen_sha256,
+        old: &old,
+        new: &new,
+        control_old: control_old.as_ref(),
+        control_new: control_new.as_ref(),
+    })
+    .map_err(|e| anyhow!("{e}"))?;
+    revision::canonical(&doc).map_err(|e| anyhow!("{e}"))
 }

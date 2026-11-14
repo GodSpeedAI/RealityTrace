@@ -7,6 +7,7 @@ pub mod compare;
 pub mod derive;
 pub mod df_cli;
 pub mod ingest;
+pub mod revision;
 pub mod tail;
 
 use std::fmt;

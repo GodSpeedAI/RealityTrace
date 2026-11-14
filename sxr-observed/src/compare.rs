@@ -68,6 +68,10 @@ pub struct CompareInput<'a> {
     /// The key and expectation mapping (see `contracts/README.md` section 5).
     pub mapping: &'a Value,
     pub world_ref: &'a str,
+    /// Re-classification (WP-18, AT-13): the world the frozen reference was
+    /// frozen under, when it differs from `world_ref` (the world the
+    /// representation was classified under). `None`: the same world.
+    pub reference_world_ref: Option<&'a str>,
     /// Declared snapshot id the comparison runs against.
     pub snapshot: &'a str,
     /// A ledger head recorded outside the ledger. `None`: tail `unverified`.
@@ -695,7 +699,9 @@ pub fn compare(inp: &CompareInput) -> Result<Compared, ObservedError> {
         ));
     }
     let world = inp.world_ref;
-    if doc["world_ref"] != json!(world) || body["world_ref"] != json!(world) {
+    if doc["world_ref"] != json!(world)
+        || body["world_ref"] != json!(inp.reference_world_ref.unwrap_or(world))
+    {
         return Err(err(
             "WORLD_REF_MISMATCH",
             format!(

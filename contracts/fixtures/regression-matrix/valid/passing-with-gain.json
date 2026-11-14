@@ -1,0 +1,56 @@
+{
+  "contract": "regression-matrix.v1",
+  "proposal_id": "proposal:09fcdc527ae8c3beab40963d82c8f55aece7c14d3b80f088a48747863e1a2bbb",
+  "proposal_digest": "sha256:09fcdc527ae8c3beab40963d82c8f55aece7c14d3b80f088a48747863e1a2bbb",
+  "old_world_ref": "world:sop@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "candidate_world_ref": "world:sop@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "old_comparisons": [
+    "comparison:8888888888888888888888888888888888888888888888888888888888888888"
+  ],
+  "new_comparisons": [
+    "comparison:9999999999999999999999999999999999999999999999999999999999999999"
+  ],
+  "rows": [
+    {
+      "element": "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111|structural|flow-a",
+      "episode_ref": "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "comparison": "structural",
+      "old_expectation": "flow-a",
+      "new_expectation": "flow-a",
+      "old_class": "confirmed",
+      "new_class": "confirmed",
+      "result": "pass",
+      "code": null,
+      "reason": "unchanged",
+      "intended": false,
+      "escalated": false,
+      "reported": null
+    },
+    {
+      "element": "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111|structural|undeclared:undeclared:7777777777777777777777777777777777777777777777777777777777777777",
+      "episode_ref": "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "comparison": "structural",
+      "old_expectation": "undeclared:undeclared:7777777777777777777777777777777777777777777777777777777777777777",
+      "new_expectation": "flow-move-purge",
+      "old_class": "observed_undeclared",
+      "new_class": "confirmed",
+      "result": "pass",
+      "code": null,
+      "reason": "intended_gain",
+      "intended": true,
+      "escalated": false,
+      "reported": "gain"
+    }
+  ],
+  "summary": {
+    "pass": 2,
+    "fail": 0,
+    "escalated": 0,
+    "gains": 1
+  },
+  "verdict": "pass",
+  "failure_codes": [],
+  "refusal_code": null,
+  "escalated": false,
+  "matrix_id": "matrix:585c8970593af1ffa54358c980b36193c55dd407872e57b7b54c5265fc24c580"
+}

@@ -1,0 +1,43 @@
+{
+  "contract": "regression-matrix.v1",
+  "proposal_id": "proposal:09fcdc527ae8c3beab40963d82c8f55aece7c14d3b80f088a48747863e1a2bbb",
+  "proposal_digest": "sha256:09fcdc527ae8c3beab40963d82c8f55aece7c14d3b80f088a48747863e1a2bbb",
+  "old_world_ref": "world:sop@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "candidate_world_ref": "world:sop@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "old_comparisons": [
+    "comparison:8888888888888888888888888888888888888888888888888888888888888888"
+  ],
+  "new_comparisons": [
+    "comparison:9999999999999999999999999999999999999999999999999999999999999999"
+  ],
+  "rows": [
+    {
+      "element": "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111|structural|flow-a",
+      "episode_ref": "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "comparison": "structural",
+      "old_expectation": "flow-a",
+      "new_expectation": null,
+      "old_class": "confirmed",
+      "new_class": "absent",
+      "result": "fail",
+      "code": "LOST_CAPABILITY",
+      "reason": "confirmed_capability_lost",
+      "intended": false,
+      "escalated": false,
+      "reported": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 1,
+    "escalated": 0,
+    "gains": 0
+  },
+  "verdict": "fail",
+  "failure_codes": [
+    "LOST_CAPABILITY"
+  ],
+  "refusal_code": "LOST_CAPABILITY",
+  "escalated": false,
+  "matrix_id": "matrix:1ad7c2feecef38f1e7e693c43aa1d234c1b55887c2d2fc8d594feec14717325d"
+}

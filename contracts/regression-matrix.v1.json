@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/contracts/regression-matrix.v1.json",
+  "title": "regression matrix (v1)",
+  "description": "The regression transition matrix of E section 7: the prior episodes' residuals classified under the old world and under the candidate world, one row per element, each judged by the total transition table (RD-25). `matrix_id` is `matrix:` + sha256(JCS(document without matrix_id)). A failing matrix, or none, blocks promotion (REGRESSION_FAILED, LOST_CAPABILITY, UNLISTED_WEAKENING). `escalated` is true when a contradicted element became confirmed by a listed weakening or removal.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "matrix_id",
+    "proposal_id",
+    "proposal_digest",
+    "old_world_ref",
+    "candidate_world_ref",
+    "old_comparisons",
+    "new_comparisons",
+    "rows",
+    "summary",
+    "verdict",
+    "failure_codes",
+    "refusal_code",
+    "escalated"
+  ],
+  "properties": {
+    "contract": {
+      "const": "regression-matrix.v1"
+    },
+    "matrix_id": {
+      "type": "string",
+      "pattern": "^matrix:[0-9a-f]{64}$"
+    },
+    "proposal_id": {
+      "type": "string",
+      "pattern": "^proposal:[0-9a-f]{64}$"
+    },
+    "proposal_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "old_world_ref": {
+      "type": "string",
+      "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$"
+    },
+    "candidate_world_ref": {
+      "type": "string",
+      "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$"
+    },
+    "old_comparisons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^comparison:[^\\s]+$"
+      }
+    },
+    "new_comparisons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^comparison:[^\\s]+$"
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/row"
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pass",
+        "fail",
+        "escalated",
+        "gains"
+      ],
+      "properties": {
+        "pass": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fail": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "escalated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gains": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "failure_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "REGRESSION_FAILED",
+          "LOST_CAPABILITY",
+          "UNLISTED_WEAKENING"
+        ]
+      }
+    },
+    "refusal_code": {
+      "enum": [
+        null,
+        "REGRESSION_FAILED",
+        "LOST_CAPABILITY",
+        "UNLISTED_WEAKENING"
+      ]
+    },
+    "escalated": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "element",
+        "episode_ref",
+        "comparison",
+        "old_expectation",
+        "new_expectation",
+        "old_class",
+        "new_class",
+        "result",
+        "code",
+        "reason",
+        "intended",
+        "escalated",
+        "reported"
+      ],
+      "properties": {
+        "element": {
+          "type": "string",
+          "minLength": 1
+        },
+        "episode_ref": {
+          "type": "string",
+          "pattern": "^episode:[^\\s]+$"
+        },
+        "comparison": {
+          "enum": [
+            "episode",
+            "structural"
+          ]
+        },
+        "old_expectation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "new_expectation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "old_class": {
+          "enum": [
+            "confirmed",
+            "contradicted",
+            "observed_undeclared",
+            "declared_unobserved",
+            "insufficient",
+            "absent"
+          ]
+        },
+        "new_class": {
+          "enum": [
+            "confirmed",
+            "contradicted",
+            "observed_undeclared",
+            "declared_unobserved",
+            "insufficient",
+            "absent"
+          ]
+        },
+        "result": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "code": {
+          "enum": [
+            null,
+            "REGRESSION_FAILED",
+            "LOST_CAPABILITY",
+            "UNLISTED_WEAKENING"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intended": {
+          "type": "boolean"
+        },
+        "escalated": {
+          "type": "boolean"
+        },
+        "reported": {
+          "enum": [
+            null,
+            "gain",
+            "evidence_gained",
+            "new_element",
+            "weakening"
+          ]
+        }
+      }
+    }
+  }
+}

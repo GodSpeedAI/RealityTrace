@@ -232,6 +232,31 @@ fn residual_fixtures() {
 }
 
 #[test]
+fn heldout_rule_fixtures() {
+    run_contract("heldout-rule", 2, 5);
+}
+
+#[test]
+fn revision_proposal_fixtures() {
+    run_contract("revision-proposal", 2, 6);
+}
+
+#[test]
+fn regression_matrix_fixtures() {
+    run_contract("regression-matrix", 3, 6);
+}
+
+#[test]
+fn capability_frozen_fixtures() {
+    run_contract("capability-frozen", 2, 4);
+}
+
+#[test]
+fn capability_delta_fixtures() {
+    run_contract("capability-delta", 2, 4);
+}
+
+#[test]
 fn every_class_and_both_comparisons_have_a_valid_residual() {
     let mut classes = std::collections::BTreeSet::new();
     let mut comparisons = std::collections::BTreeSet::new();
@@ -269,7 +294,7 @@ fn digests_manifest_matches_the_schemas() {
         assert_eq!(hex::encode(Sha256::digest(&bytes)), digest, "{name}");
         listed += 1;
     }
-    assert_eq!(listed, 3);
+    assert_eq!(listed, 8);
     let out = Command::new("sh").arg(script()).output().unwrap();
     assert!(
         out.status.success(),

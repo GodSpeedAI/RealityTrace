@@ -1,0 +1,29 @@
+{
+  "contract": "capability-delta.v1",
+  "result": "PASS",
+  "code": null,
+  "frozen": {
+    "frozen_id": "frozen:s1-at13",
+    "sha256": "sha256:1c84cd3955608fba2c2f70a97b8de2df6c9639b11cd75d3cfd0641801bc75673",
+    "prediction": "GAIN"
+  },
+  "old_world_ref": "world:sop@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "new_world_ref": "world:sop@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "episode_ref": "episode:case1:stepS:1@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "classes": {
+    "old": "observed_undeclared",
+    "new": "confirmed",
+    "control_old": "absent",
+    "control_new": "insufficient"
+  },
+  "falsifier_triggered": [],
+  "prediction_met": true,
+  "r58_supported": true,
+  "comparisons": {
+    "old": "comparison:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "new": "comparison:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "control_old": "comparison:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "control_new": "comparison:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "delta_id": "delta:b4bf66a6510ba7afbb44b526710c8784d88f9e26d46adc87f1ebdb8134058d43"
+}
