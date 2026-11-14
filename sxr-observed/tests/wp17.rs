@@ -972,3 +972,85 @@ fn compare_with_a_world_that_differs_from_the_evaluated_model_is_refused() {
     let e = run(&s, Until::Head, &[SYS], &mapping(true, false), Some(&ev)).unwrap_err();
     assert_eq!(e.code, "WORLD_REF_MISMATCH");
 }
+
+/// The real SOP declared model (WP-13), when `FDE_SOP_MODEL` names it: an
+/// operation-bound policy (`validate_against_predeclared_expectation` on
+/// `act_validate`) decided by DomainForge over events from the frozen episode.
+#[test]
+fn the_fde_sop_model_decides_an_operation_bound_policy_from_ingested_events() {
+    let Some(bin) = df_binary() else { return };
+    let Some(sop) = std::env::var_os("FDE_SOP_MODEL").map(PathBuf::from) else {
+        eprintln!("NOT_RUN: FDE_SOP_MODEL is not set; the SOP-model compare did not run");
+        return;
+    };
+    assert!(
+        sop.is_file(),
+        "FDE_SOP_MODEL={} is not a file",
+        sop.display()
+    );
+    let ev = CliEvaluator::new(bin, &sop).unwrap();
+    let world = ev
+        .evaluate(
+            r#"{"schema":"domainforge.evaluate-facts.v1"}"#,
+            "godspeed-fde-sop",
+        )
+        .unwrap()["world_ref"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let p = profile();
+    let (reference, episode) = reference("evaluated", &[("src-sf", SYS)], &world, &p);
+    let mut f = Fixture::new();
+    for (rid, seq, predeclared) in [("v1", 1, true), ("v2", 2, false)] {
+        let mut e = event(
+            &Ev {
+                rid,
+                seq,
+                key: KEY_C,
+                op: "act_validate",
+                resource: "out-1",
+                system: SYS,
+            },
+            &episode,
+            "evaluated",
+            &world,
+        );
+        e["expectation_refs"] = if predeclared {
+            json!(["question:q1"])
+        } else {
+            json!([])
+        };
+        f.ingest(&e);
+    }
+    let s = Scenario {
+        f,
+        reference,
+        profile: p,
+        episode,
+        kind: "evaluated".into(),
+        world: world.clone(),
+    };
+    let map = json!({"contract": "compare-mapping.v1", "undeclared_question": "question:q1",
+        "operations": {"act_validate": {"node": KEY_C, "input": {
+            "activity_record_id": {"kind": "string", "pointer": "/source/record_id"},
+            "case_id": {"kind": "string", "pointer": "/context/case_id"},
+            "activity": {"typed": {"kind": "enum", "data": {"symbol": "godspeed-fde-sop.enum.DeliveryActivity", "wire": "validate"}}},
+            "output_ref": {"kind": "string", "pointer": "/resource"},
+            "expectation_predeclared": {"kind": "bool", "nonempty": "/expectation_refs"}}}},
+        "expectations": [{"id": "validate-predeclared", "kind": "policy_evaluable",
+            "policy": "validate_against_predeclared_expectation", "operation": "act_validate",
+            "node": KEY_C, "question": "question:q1"}]});
+    let (_, c) = run(&s, Until::Head, &[SYS], &map, Some(&ev)).unwrap();
+    let r = find(&c, "validate_against_predeclared_expectation");
+    assert_eq!(
+        (r["class"].as_str(), r["basis"].as_str()),
+        (Some("contradicted"), Some("policy_false"))
+    );
+    assert_eq!(
+        r["occurrence_ids"],
+        json!([format!("{SYS}:v2")]),
+        "only the event without a predeclared expectation"
+    );
+    assert_eq!(r["world_ref"], json!(world));
+    assert_eq!(c.document["evaluate"]["world_ref"], json!(world));
+}
