@@ -1060,6 +1060,7 @@ dependencies = [
  "sxr-df",
  "sxr-git",
  "sxr-ledger",
+ "sxr-observed",
  "sxr-verify",
  "tempfile",
  "thiserror",
@@ -1344,6 +1345,20 @@ dependencies = [
  "tempfile",
  "thiserror",
  "ulid",
+ "uuid",
+]
+
+[[package]]
+name = "sxr-observed"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "jsonschema",
+ "rusqlite",
+ "serde_json",
+ "sxr-core",
+ "sxr-ledger",
+ "tempfile",
  "uuid",
 ]
 

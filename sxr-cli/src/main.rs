@@ -13,6 +13,7 @@ mod determinism;
 mod durability;
 mod envelopes;
 mod ledger_io;
+mod observed;
 mod output;
 mod projections;
 mod state;
@@ -107,6 +108,61 @@ enum Command {
     Explain(ExplainCmd),
     /// Failure context pack.
     Context(ContextCmd),
+    /// Interaction-event ingest and the observed representation (WP-16).
+    #[command(subcommand)]
+    Observed(ObservedCmds),
+}
+
+#[derive(Subcommand)]
+#[allow(clippy::large_enum_variant)] // clap argument bag, built once per process
+enum ObservedCmds {
+    /// Classify CEP `execution_trace` envelopes carrying
+    /// `extensions["godspeed.interaction_event"]` (NDJSON, `-` for stdin) and
+    /// record each as `observation.recorded` or `ingest.rejected`. Exits 4 if any
+    /// line was rejected (the rejections are recorded).
+    Ingest {
+        #[arg(long)]
+        repo: String,
+        /// NDJSON file, or `-` for stdin.
+        #[arg(long)]
+        file: String,
+    },
+    /// Derive the observed representation from the verified ledger. Read-only.
+    /// Fails with CHAIN_VERIFY_FAILED if the hash chain does not verify.
+    Derive {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        world: String,
+        /// `case:<id>`.
+        #[arg(long)]
+        scope: String,
+        #[arg(long)]
+        episode: String,
+        /// `evaluated` or `exploratory`.
+        #[arg(long)]
+        kind: String,
+        /// Window end, inclusive: append ordinal, entry id, or RFC 3339
+        /// ledger commit time. Default: ledger head.
+        #[arg(long)]
+        until: Option<String>,
+        /// Comparison profile id recorded in the representation.
+        #[arg(long, default_value = "profile:s1-default")]
+        profile: String,
+        /// JSON array of the pinned world's declaration keys; observed keys
+        /// outside it become `undeclared:` nodes.
+        #[arg(long)]
+        declared: Option<String>,
+        /// JSON array of `{emitter, event_kind}` frozen with the episode.
+        #[arg(long)]
+        coverage_manifest: Option<String>,
+        /// Source system known independent of the executor (repeatable).
+        #[arg(long = "independent-system")]
+        independent_system: Vec<String>,
+        /// Write the representation here instead of stdout.
+        #[arg(long)]
+        out: Option<String>,
+    },
 }
 
 #[derive(Subcommand)]
@@ -563,6 +619,9 @@ enum Dispatch {
 fn exit_for_error(e: &anyhow::Error) -> i32 {
     // Map known error contexts to §15 exit codes by message prefix.
     let msg = e.to_string();
+    if msg.contains("CHAIN_VERIFY_FAILED") {
+        return 5;
+    }
     if msg.contains("AC-SETTLEMENT")
         || msg.contains("AC-EVIDENCE")
         || msg.contains("AC-DIAG-001")
@@ -821,6 +880,62 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
         Command::Delta(c) => commands::delta(ctx, &c.repo, &c.question, &c.snapshot)?,
         Command::Explain(c) => commands::explain(ctx, &c.record_id)?,
         Command::Context(c) => commands::context(ctx, &c.repo, &c.failure)?,
+        Command::Observed(c) => match c {
+            ObservedCmds::Ingest { repo, file } => {
+                let mut input = String::new();
+                if file == "-" {
+                    std::io::Read::read_to_string(&mut std::io::stdin(), &mut input)?;
+                } else {
+                    input =
+                        std::fs::read_to_string(&file).map_err(|e| anyhow!("read {file}: {e}"))?;
+                }
+                let (v, any_rejected) = observed::ingest(ctx, &repo, &input)?;
+                let out = output::output1("ingest", v);
+                return Ok(if any_rejected {
+                    Dispatch::JsonExit(out, 4)
+                } else {
+                    Dispatch::Json(out)
+                });
+            }
+            ObservedCmds::Derive {
+                repo,
+                world,
+                scope,
+                episode,
+                kind,
+                until,
+                profile,
+                declared,
+                coverage_manifest,
+                independent_system,
+                out,
+            } => {
+                let text = observed::derive_command(
+                    ctx,
+                    &observed::DeriveArgs {
+                        repo: &repo,
+                        world: &world,
+                        scope: &scope,
+                        episode: &episode,
+                        kind: &kind,
+                        until: until.as_deref(),
+                        profile: &profile,
+                        declared: declared.as_deref().map(std::path::Path::new),
+                        coverage_manifest: coverage_manifest.as_deref().map(std::path::Path::new),
+                        independent_systems: &independent_system,
+                    },
+                )?;
+                if let Some(path) = out {
+                    std::fs::write(&path, format!("{text}\n"))
+                        .map_err(|e| anyhow!("write {path}: {e}"))?;
+                    return Ok(Dispatch::Json(output::output1(
+                        "written",
+                        json!({"path": path, "bytes": text.len() + 1}),
+                    )));
+                }
+                return Ok(Dispatch::Raw(text));
+            }
+        },
     };
     Ok(Dispatch::Json(v))
 }

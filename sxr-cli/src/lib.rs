@@ -10,6 +10,7 @@ pub mod determinism;
 pub mod durability;
 pub mod envelopes;
 pub mod ledger_io;
+pub mod observed;
 pub mod output;
 pub mod projections;
 pub mod state;
