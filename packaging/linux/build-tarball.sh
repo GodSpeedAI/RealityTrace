@@ -70,7 +70,7 @@ Optional daemon (Unix only):
   then: systemctl --user enable --now realitytrace
 
 DomainForge integration (optional, semantic snapshots only):
-  RealityTrace pins DomainForge 0.21.2. It locates the compiler via
+  RealityTrace pins DomainForge 0.22.0. It locates the compiler via
   REALITYTRACE_DOMAINFORGE_BIN, then SXR_DOMAINFORGE_BIN, then "domainforge"
   on PATH. Verify with: domainforge --version
   Override explicitly: REALITYTRACE_DOMAINFORGE_BIN=/path/to/domainforge
