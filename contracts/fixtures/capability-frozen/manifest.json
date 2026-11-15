@@ -1,0 +1,39 @@
+{
+  "schema": "https://sxr.dev/contracts/capability-frozen.v1.json",
+  "valid": [
+    {
+      "file": "all-three-falsifiers.json"
+    },
+    {
+      "file": "no-gain-predicted.json"
+    }
+  ],
+  "invalid": [
+    {
+      "file": "prediction-not-in-enum.json",
+      "pointer": "/prediction",
+      "contains": "is not one of"
+    },
+    {
+      "file": "falsifier-empty.json",
+      "pointer": "/falsifier",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "falsifier-unknown-condition.json",
+      "pointer": "/falsifier/0",
+      "contains": "is not one of"
+    },
+    {
+      "file": "falsifier-missing.json",
+      "pointer": "",
+      "contains": "\"falsifier\" is a required property"
+    },
+    {
+      "file": "episode-key-with-digest.json",
+      "pointer": "/episode_key",
+      "contains": "does not match"
+    }
+  ],
+  "semantic_invalid": []
+}

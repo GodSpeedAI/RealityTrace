@@ -1,0 +1,35 @@
+{
+  "contract": "comparison-profile.v1",
+  "profile_id": "profile:vacuous-ok",
+  "kinds": [
+    {
+      "kind": "policy_evaluable",
+      "comparison": "episode",
+      "quantifier": "universal",
+      "min_support": 1,
+      "allow_vacuous_truth": true,
+      "deadline": null,
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient"
+      }
+    },
+    {
+      "kind": "timing",
+      "comparison": "structural",
+      "quantifier": "universal",
+      "min_support": 1,
+      "allow_vacuous_truth": false,
+      "deadline": {
+        "unit": "causal_hops",
+        "limit": 2
+      },
+      "class_mapping": {
+        "true": "confirmed",
+        "false": "contradicted",
+        "unknown": "insufficient"
+      }
+    }
+  ]
+}

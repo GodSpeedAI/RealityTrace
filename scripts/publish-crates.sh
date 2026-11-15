@@ -70,6 +70,7 @@ CRATES_IN_ORDER=(
   "sxr-ledger"
   "sxr-df"
   "sxr-verify"
+  "sxr-observed"
   "realitytrace"
 )
 

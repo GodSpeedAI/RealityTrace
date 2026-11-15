@@ -6,6 +6,7 @@ members = [
     "sxr-git",
     "sxr-df",
     "sxr-verify",
+    "sxr-observed",
     "sxr-cli",
 ]
 

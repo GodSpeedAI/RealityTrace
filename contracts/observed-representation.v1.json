@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/contracts/observed-representation.v1.json",
+  "title": "observed representation (v1)",
+  "description": "What `observed derive` computes from verified records only: a directly-follows graph over declared and undeclared elements with, for every node and edge, the occurrence ids behind it. Deterministic canonical JSON (RFC 8785): the same ledger and selectors give the same bytes and the same hash. Arrays are sorted as the README states; the schema cannot check order, frequency equality or coverage status, the contract test does.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "world_ref",
+    "episode_ref",
+    "kind",
+    "profile_id",
+    "input_set_hash",
+    "nodes",
+    "edges",
+    "coverage",
+    "uncertainty"
+  ],
+  "properties": {
+    "contract": { "const": "observed-representation.v1" },
+    "world_ref": { "$ref": "#/$defs/world_ref" },
+    "episode_ref": { "$ref": "#/$defs/episode_ref" },
+    "kind": { "enum": ["evaluated", "exploratory"], "description": "The --kind selector." },
+    "profile_id": { "type": "string", "pattern": "^profile:[^\\s]+$", "description": "Comparison profile the representation was derived under." },
+    "input_set_hash": {
+      "$ref": "#/$defs/sha256_prefixed",
+      "description": "Hash of the verified input record set (and the --until bound), computed by `observed derive` (WP-16). A changed input changes this hash (AT-08)."
+    },
+    "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "edges": { "type": "array", "items": { "$ref": "#/$defs/edge" } },
+    "coverage": {
+      "description": "Coverage against the coverage manifest frozen with the episode.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["emitter", "event_kind", "observed_count", "status"],
+        "properties": {
+          "emitter": { "$ref": "#/$defs/text" },
+          "event_kind": { "$ref": "#/$defs/text" },
+          "observed_count": { "type": "integer", "minimum": 0 },
+          "status": { "enum": ["covered", "silent"], "description": "covered iff observed_count > 0." }
+        }
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rejected_event_count", "unverified_event_count"],
+      "properties": {
+        "rejected_event_count": { "type": "integer", "minimum": 0, "description": "Events refused at ingest; they support no conclusion." },
+        "unverified_event_count": { "type": "integer", "minimum": 0, "description": "Events whose source record could not be resolved; excluded from every aggregate." }
+      }
+    }
+  },
+  "$defs": {
+    "text": { "type": "string", "minLength": 1 },
+    "sha256_prefixed": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "world_ref": { "type": "string", "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$" },
+    "episode_ref": { "type": "string", "pattern": "^episode:[^:@\\s]+:[^:@\\s]+:[1-9][0-9]*@sha256:[0-9a-f]{64}$" },
+    "node_id": {
+      "type": "string",
+      "pattern": "^(?:concept:[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|undeclared:[0-9a-f]{64})$",
+      "description": "A declaration_key, or undeclared:<sha256 of operation + resource kind>."
+    },
+    "occurrence_id": {
+      "type": "string",
+      "pattern": "^[^:\\s]+:[^\\s]+$",
+      "description": "The source record's key (system, record_id) written <system>:<record_id> (E section 2)."
+    },
+    "occurrence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/occurrence_id" },
+      "description": "Distinct, ascending."
+    },
+    "count": { "type": "integer", "minimum": 0 },
+    "counts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 1 }
+    },
+    "context_distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roles", "plan_items"],
+      "properties": { "roles": { "$ref": "#/$defs/counts" }, "plan_items": { "$ref": "#/$defs/counts" } }
+    },
+    "authority_outcomes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decided", "not_required", "unknown"],
+      "description": "Occurrences by the class of authority.decision_id: a verified decision, not_required, unknown.",
+      "properties": { "decided": { "$ref": "#/$defs/count" }, "not_required": { "$ref": "#/$defs/count" }, "unknown": { "$ref": "#/$defs/count" } }
+    },
+    "outcome_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["succeeded", "failed", "denied", "interrupted", "unknown"],
+      "properties": {
+        "succeeded": { "$ref": "#/$defs/count" },
+        "failed": { "$ref": "#/$defs/count" },
+        "denied": { "$ref": "#/$defs/count" },
+        "interrupted": { "$ref": "#/$defs/count" },
+        "unknown": { "$ref": "#/$defs/count" }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "occurrence_ids",
+        "frequency",
+        "independent_occurrence_count",
+        "ordering",
+        "context_distribution",
+        "authority_outcomes",
+        "outcome_status"
+      ],
+      "properties": {
+        "node_id": { "$ref": "#/$defs/node_id" },
+        "semantic_ref": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+::[A-Za-z0-9_.-]+$", "description": "Present for a declared node, resolved against the pinned world; absent for undeclared." },
+        "occurrence_ids": { "$ref": "#/$defs/occurrence_ids" },
+        "frequency": { "type": "integer", "minimum": 1, "description": "Equals the number of occurrence_ids." },
+        "independent_occurrence_count": { "$ref": "#/$defs/count", "description": "Occurrences from an emitter independent of the executor. Zero caps the element at insufficient (E section 5)." },
+        "ordering": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Per owning system, ascending by system. Sequences are per system and are never compared across systems.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["system", "first_sequence", "last_sequence"],
+            "properties": {
+              "system": { "$ref": "#/$defs/text" },
+              "first_sequence": { "$ref": "#/$defs/count" },
+              "last_sequence": { "$ref": "#/$defs/count" }
+            }
+          }
+        },
+        "context_distribution": { "$ref": "#/$defs/context_distribution" },
+        "authority_outcomes": { "$ref": "#/$defs/authority_outcomes" },
+        "outcome_status": { "$ref": "#/$defs/outcome_status" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "node_id": { "pattern": "^undeclared:" } }, "required": ["node_id"] },
+          "then": { "not": { "required": ["semantic_ref"] } },
+          "else": { "required": ["semantic_ref"] }
+        }
+      ]
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "occurrence_ids", "frequency", "ordering", "context_distribution", "authority_outcomes", "outcome_status"],
+      "properties": {
+        "from": { "$ref": "#/$defs/node_id" },
+        "to": { "$ref": "#/$defs/node_id" },
+        "occurrence_ids": { "$ref": "#/$defs/occurrence_ids", "description": "The occurrences on both ends of every link, distinct and ascending." },
+        "frequency": { "type": "integer", "minimum": 1, "description": "Number of directly-follows links." },
+        "ordering": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["via_sequence", "via_causation"],
+          "description": "Links found by the owning system's sequence and by causation; their sum equals frequency.",
+          "properties": { "via_sequence": { "$ref": "#/$defs/count" }, "via_causation": { "$ref": "#/$defs/count" } }
+        },
+        "context_distribution": { "$ref": "#/$defs/context_distribution" },
+        "authority_outcomes": { "$ref": "#/$defs/authority_outcomes" },
+        "outcome_status": { "$ref": "#/$defs/outcome_status" }
+      }
+    }
+  }
+}

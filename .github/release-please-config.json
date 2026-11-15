@@ -23,6 +23,9 @@
     "sxr-verify": {
       "release-type": "rust"
     },
+    "sxr-observed": {
+      "release-type": "rust"
+    },
     "sxr-cli": {
       "release-type": "rust",
       "package-name": "realitytrace",

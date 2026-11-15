@@ -1,0 +1,22 @@
+[package]
+name = "sxr-observed"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "RealityTrace observed representation: interaction-event ingest classification and the deterministic `observed derive` computation over a verified ledger. No I/O."
+
+[dependencies]
+sxr-core = { version = "0.4.0", path = "../sxr-core" }
+serde_json.workspace = true
+jsonschema.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+
+[dev-dependencies]
+sxr-ledger = { version = "0.3.0", path = "../sxr-ledger" }
+tempfile.workspace = true
+rusqlite.workspace = true

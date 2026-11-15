@@ -1,0 +1,44 @@
+{
+  "contract": "revision-proposal.v1",
+  "proposer": "actor:proposer",
+  "scope": "case:case1",
+  "old_world_ref": "world:sop@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "candidate_world_ref": "world:sop@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "held_out_rule": {
+    "rule_id": "rule:s1-heldout",
+    "sha256": "sha256:2c2c6a6efcecccabc95b24526f381134826c5ebec5e9f1b0623ed3653ac99a48"
+  },
+  "diagnosis": {
+    "episodes": [
+      "episode:case1:stepA:1@sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    ],
+    "residual_ids": [
+      "residual:5555555555555555555555555555555555555555555555555555555555555555"
+    ],
+    "occurrence_ids": [
+      "sea-forge:stepA-r5"
+    ]
+  },
+  "held_out": {
+    "episodes": [
+      "episode:case1:stepB:1@sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    ],
+    "residual_ids": [
+      "residual:6666666666666666666666666666666666666666666666666666666666666666"
+    ],
+    "occurrence_ids": [
+      "sea-forge:stepB-r5"
+    ]
+  },
+  "intended_changes": [
+    {
+      "element": "flow-move-purge",
+      "change": "add_declaration",
+      "supersedes": [
+        "undeclared:undeclared:7777777777777777777777777777777777777777777777777777777777777777"
+      ]
+    }
+  ],
+  "semantic_diff_sha256": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "proposal_id": "proposal:09fcdc527ae8c3beab40963d82c8f55aece7c14d3b80f088a48747863e1a2bbb"
+}

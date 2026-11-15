@@ -1,0 +1,9 @@
+{
+  "contract": "heldout-rule.v1",
+  "rule_id": "rule:s1-heldout",
+  "kind": "exclude_episodes",
+  "held_out_episodes": [
+    "episode:case1:stepB:1"
+  ],
+  "statement": "Occurrences of the held-out episodes are excluded from diagnosis by episode id."
+}

@@ -13,6 +13,7 @@ mod determinism;
 mod durability;
 mod envelopes;
 mod ledger_io;
+mod observed;
 mod output;
 mod projections;
 mod state;
@@ -107,6 +108,198 @@ enum Command {
     Explain(ExplainCmd),
     /// Failure context pack.
     Context(ContextCmd),
+    /// Interaction-event ingest and the observed representation (WP-16).
+    #[command(subcommand)]
+    Observed(ObservedCmds),
+}
+
+#[derive(Subcommand)]
+#[allow(clippy::large_enum_variant)] // clap argument bag, built once per process
+enum ObservedCmds {
+    /// Classify CEP `execution_trace` envelopes carrying
+    /// `extensions["godspeed.interaction_event"]` (NDJSON, `-` for stdin) and
+    /// record each as `observation.recorded` or `ingest.rejected`. Exits 4 if any
+    /// line was rejected (the rejections are recorded).
+    Ingest {
+        #[arg(long)]
+        repo: String,
+        /// NDJSON file, or `-` for stdin.
+        #[arg(long)]
+        file: String,
+    },
+    /// Derive the observed representation from the verified ledger. Read-only.
+    /// Fails with CHAIN_VERIFY_FAILED if the hash chain does not verify.
+    Derive {
+        #[arg(long)]
+        repo: String,
+        #[arg(long)]
+        world: String,
+        /// `case:<id>`.
+        #[arg(long)]
+        scope: String,
+        #[arg(long)]
+        episode: String,
+        /// `evaluated` or `exploratory`.
+        #[arg(long)]
+        kind: String,
+        /// Window end, inclusive: append ordinal, entry id, or RFC 3339
+        /// ledger commit time. Default: ledger head.
+        #[arg(long)]
+        until: Option<String>,
+        /// Comparison profile id recorded in the representation.
+        #[arg(long, default_value = "profile:s1-default")]
+        profile: String,
+        /// JSON array of the pinned world's declaration keys; observed keys
+        /// outside it become `undeclared:` nodes.
+        #[arg(long)]
+        declared: Option<String>,
+        /// JSON array of `{emitter, event_kind}` frozen with the episode.
+        #[arg(long)]
+        coverage_manifest: Option<String>,
+        /// Source system known independent of the executor (repeatable).
+        #[arg(long = "independent-system")]
+        independent_system: Vec<String>,
+        /// Write the representation here instead of stdout.
+        #[arg(long)]
+        out: Option<String>,
+        /// `entry_hash` of the last ledger row at anchor time. With it, a
+        /// ledger that lost that row fails with TAIL_TRUNCATED; without it
+        /// (and without --expected-record-count) the tail is `unverified`.
+        #[arg(long)]
+        expected_head: Option<String>,
+        /// Number of ledger rows at anchor time.
+        #[arg(long)]
+        expected_record_count: Option<u64>,
+        /// Re-classification (AT-13): the world the events were stamped with
+        /// when emitted. The events are classified under `--world`.
+        #[arg(long)]
+        events_world: Option<String>,
+    },
+    /// Compare an observed representation with the declared expectations and
+    /// print residual records (episode and structural lists, never mixed).
+    /// Writes nothing but `--facts-out`. Refuses on a profile digest that is
+    /// not the one pinned in the frozen reference.
+    Compare {
+        #[arg(long)]
+        repo: String,
+        /// The `observed derive` output file.
+        #[arg(long)]
+        observed: String,
+        /// The frozen reference `{episode_ref, body}` (JSON file).
+        #[arg(long)]
+        reference: String,
+        /// The comparison profile document (its digest must equal the pin).
+        #[arg(long)]
+        profile: String,
+        /// The key and expectation mapping (compare-mapping.v1).
+        #[arg(long)]
+        mapping: String,
+        #[arg(long)]
+        world: String,
+        /// Re-classification (AT-13): the world the frozen reference was
+        /// frozen under, when it differs from `--world`.
+        #[arg(long)]
+        reference_world: Option<String>,
+        /// Declared snapshot id the comparison runs against.
+        #[arg(long = "declared")]
+        declared: String,
+        /// The declared model (.sea) given to DomainForge `evaluate`.
+        #[arg(long)]
+        model: Option<String>,
+        /// DomainForge binary (else REALITYTRACE_DOMAINFORGE_BIN). Needs `evaluate`.
+        #[arg(long)]
+        domainforge_bin: Option<String>,
+        /// Write the generated facts file here (it is generated, never edited).
+        #[arg(long)]
+        facts_out: Option<String>,
+        #[arg(long)]
+        expected_head: Option<String>,
+        #[arg(long)]
+        expected_record_count: Option<u64>,
+        /// Write the result here instead of stdout.
+        #[arg(long)]
+        out: Option<String>,
+    },
+    /// Build a revision proposal from residuals with the frozen held-out rule
+    /// (WP-18). Refuses `HELDOUT_CONTAMINATED` when the diagnosis input
+    /// overlaps the held-out set. Reads and writes no ledger.
+    Propose {
+        #[arg(long)]
+        proposer: String,
+        /// `case:<id>`.
+        #[arg(long)]
+        scope: String,
+        #[arg(long)]
+        old_world: String,
+        #[arg(long)]
+        candidate_world: String,
+        /// The frozen `heldout-rule.v1` document.
+        #[arg(long)]
+        rule: String,
+        /// The rule's digest as frozen in the pre-registration (`sha256:<hex>`).
+        #[arg(long)]
+        rule_sha256: Option<String>,
+        /// A compare result document (old world); repeat per episode.
+        #[arg(long = "compared")]
+        compared: Vec<String>,
+        /// A residual id cited as diagnosis input; repeat.
+        #[arg(long = "residual")]
+        residual: Vec<String>,
+        /// JSON array of intended changes `[{element, change, supersedes?}]`.
+        #[arg(long)]
+        intended: String,
+        /// Digest of the DomainForge semantic diff (`sha256:<hex>`).
+        #[arg(long)]
+        semantic_diff_sha256: String,
+        #[arg(long)]
+        out: Option<String>,
+    },
+    /// The regression transition matrix of E section 7 over the prior
+    /// episodes compared under the old and the candidate world (WP-18). The
+    /// matrix is printed either way; exit 6 when it fails. Reads no ledger.
+    Regression {
+        #[arg(long)]
+        proposal: String,
+        /// Compare results under the old world; repeat per episode.
+        #[arg(long = "old")]
+        old: Vec<String>,
+        /// The same episodes compared under the candidate world; repeat.
+        #[arg(long = "new")]
+        new: Vec<String>,
+        #[arg(long)]
+        out: Option<String>,
+    },
+    /// AT-13: classify the same subsequent-episode records under the old and
+    /// the new world with a control variant, against the frozen falsifier.
+    /// Prints `GAIN` or `NO_GAIN` (exit 0 for both).
+    CapabilityDelta {
+        /// The `capability-frozen.v1` document.
+        #[arg(long)]
+        frozen: String,
+        /// Its digest as frozen in the pre-registration (`sha256:<hex>`).
+        #[arg(long)]
+        frozen_sha256: Option<String>,
+        #[arg(long)]
+        old: String,
+        #[arg(long)]
+        new: String,
+        #[arg(long)]
+        control_old: Option<String>,
+        #[arg(long)]
+        control_new: Option<String>,
+        #[arg(long)]
+        out: Option<String>,
+    },
+}
+
+fn head_from(
+    entry_hash: Option<String>,
+    record_count: Option<u64>,
+) -> Option<sxr_observed::tail::ExpectedHead> {
+    (entry_hash.is_some() || record_count.is_some()).then_some(sxr_observed::tail::ExpectedHead {
+        entry_hash,
+        record_count,
+    })
 }
 
 #[derive(Subcommand)]
@@ -546,6 +739,10 @@ fn main() {
         Ok(Dispatch::Raw(s)) => {
             println!("{s}");
         }
+        Ok(Dispatch::RawExit(s, code)) => {
+            println!("{s}");
+            std::process::exit(code);
+        }
         Err(e) => {
             eprintln!("{prog}: {e:#}");
             std::process::exit(exit_for_error(&e));
@@ -558,11 +755,37 @@ enum Dispatch {
     /// A JSON output followed by a specific exit code (75 spooled, doctor 2).
     JsonExit(Value, i32),
     Raw(String),
+    /// Raw text followed by a specific exit code (a failing regression matrix).
+    RawExit(String, i32),
+}
+
+/// Print canonical text (or write it to `--out`) and exit with `code`.
+fn finish_text(text: String, out: Option<String>, code: i32) -> Result<Dispatch> {
+    if let Some(path) = out {
+        std::fs::write(&path, format!("{text}\n")).map_err(|e| anyhow!("write {path}: {e}"))?;
+        let v = output::output1(
+            "written",
+            json!({"path": path, "bytes": text.len() + 1, "exit": code}),
+        );
+        return Ok(if code == 0 {
+            Dispatch::Json(v)
+        } else {
+            Dispatch::JsonExit(v, code)
+        });
+    }
+    Ok(if code == 0 {
+        Dispatch::Raw(text)
+    } else {
+        Dispatch::RawExit(text, code)
+    })
 }
 
 fn exit_for_error(e: &anyhow::Error) -> i32 {
     // Map known error contexts to §15 exit codes by message prefix.
     let msg = e.to_string();
+    if msg.contains("CHAIN_VERIFY_FAILED") || msg.contains("TAIL_TRUNCATED") {
+        return 5;
+    }
     if msg.contains("AC-SETTLEMENT")
         || msg.contains("AC-EVIDENCE")
         || msg.contains("AC-DIAG-001")
@@ -821,6 +1044,166 @@ fn dispatch(ctx: &Ctx, cmd: Command) -> Result<Dispatch> {
         Command::Delta(c) => commands::delta(ctx, &c.repo, &c.question, &c.snapshot)?,
         Command::Explain(c) => commands::explain(ctx, &c.record_id)?,
         Command::Context(c) => commands::context(ctx, &c.repo, &c.failure)?,
+        Command::Observed(c) => match c {
+            ObservedCmds::Ingest { repo, file } => {
+                let mut input = String::new();
+                if file == "-" {
+                    std::io::Read::read_to_string(&mut std::io::stdin(), &mut input)?;
+                } else {
+                    input =
+                        std::fs::read_to_string(&file).map_err(|e| anyhow!("read {file}: {e}"))?;
+                }
+                let (v, any_rejected) = observed::ingest(ctx, &repo, &input)?;
+                let out = output::output1("ingest", v);
+                return Ok(if any_rejected {
+                    Dispatch::JsonExit(out, 4)
+                } else {
+                    Dispatch::Json(out)
+                });
+            }
+            ObservedCmds::Derive {
+                repo,
+                world,
+                scope,
+                episode,
+                kind,
+                until,
+                profile,
+                declared,
+                coverage_manifest,
+                independent_system,
+                out,
+                expected_head,
+                expected_record_count,
+                events_world,
+            } => {
+                let text = observed::derive_command(
+                    ctx,
+                    &observed::DeriveArgs {
+                        repo: &repo,
+                        world: &world,
+                        scope: &scope,
+                        episode: &episode,
+                        kind: &kind,
+                        until: until.as_deref(),
+                        profile: &profile,
+                        declared: declared.as_deref().map(std::path::Path::new),
+                        coverage_manifest: coverage_manifest.as_deref().map(std::path::Path::new),
+                        independent_systems: &independent_system,
+                        expected_head: head_from(expected_head, expected_record_count),
+                        events_world: events_world.as_deref(),
+                    },
+                )?;
+                if let Some(path) = out {
+                    std::fs::write(&path, format!("{text}\n"))
+                        .map_err(|e| anyhow!("write {path}: {e}"))?;
+                    return Ok(Dispatch::Json(output::output1(
+                        "written",
+                        json!({"path": path, "bytes": text.len() + 1}),
+                    )));
+                }
+                return Ok(Dispatch::Raw(text));
+            }
+            ObservedCmds::Compare {
+                repo,
+                observed,
+                reference,
+                profile,
+                mapping,
+                world,
+                reference_world,
+                declared,
+                model,
+                domainforge_bin,
+                facts_out,
+                expected_head,
+                expected_record_count,
+                out,
+            } => {
+                let p = |s: &String| std::path::PathBuf::from(s);
+                let text = observed::compare_command(
+                    ctx,
+                    &observed::CompareArgs {
+                        repo: &repo,
+                        observed: &p(&observed),
+                        reference: &p(&reference),
+                        profile: &p(&profile),
+                        mapping: &p(&mapping),
+                        world: &world,
+                        reference_world: reference_world.as_deref(),
+                        declared_snapshot: &declared,
+                        model: model.as_ref().map(p).as_deref(),
+                        domainforge_bin: domainforge_bin.as_ref().map(p).as_deref(),
+                        facts_out: facts_out.as_ref().map(p).as_deref(),
+                        expected_head: head_from(expected_head, expected_record_count),
+                    },
+                )?;
+                if let Some(path) = out {
+                    std::fs::write(&path, format!("{text}\n"))
+                        .map_err(|e| anyhow!("write {path}: {e}"))?;
+                    return Ok(Dispatch::Json(output::output1(
+                        "written",
+                        json!({"path": path, "bytes": text.len() + 1}),
+                    )));
+                }
+                return Ok(Dispatch::Raw(text));
+            }
+            ObservedCmds::Propose {
+                proposer,
+                scope,
+                old_world,
+                candidate_world,
+                rule,
+                rule_sha256,
+                compared,
+                residual,
+                intended,
+                semantic_diff_sha256,
+                out,
+            } => {
+                let text = observed::propose_command(&observed::ProposeArgs {
+                    proposer: &proposer,
+                    scope: &scope,
+                    old_world: &old_world,
+                    candidate_world: &candidate_world,
+                    rule: &rule,
+                    rule_sha256: rule_sha256.as_deref(),
+                    compared: &compared,
+                    residuals: &residual,
+                    intended: &intended,
+                    semantic_diff_sha256: &semantic_diff_sha256,
+                })?;
+                return finish_text(text, out, 0);
+            }
+            ObservedCmds::Regression {
+                proposal,
+                old,
+                new,
+                out,
+            } => {
+                let (text, failed) = observed::regression_command(&proposal, &old, &new)?;
+                return finish_text(text, out, if failed { 6 } else { 0 });
+            }
+            ObservedCmds::CapabilityDelta {
+                frozen,
+                frozen_sha256,
+                old,
+                new,
+                control_old,
+                control_new,
+                out,
+            } => {
+                let text = observed::capability_delta_command(&observed::DeltaArgs {
+                    frozen: &frozen,
+                    frozen_sha256: frozen_sha256.as_deref(),
+                    old: &old,
+                    new: &new,
+                    control_old: control_old.as_deref(),
+                    control_new: control_new.as_deref(),
+                })?;
+                return finish_text(text, out, 0);
+            }
+        },
     };
     Ok(Dispatch::Json(v))
 }

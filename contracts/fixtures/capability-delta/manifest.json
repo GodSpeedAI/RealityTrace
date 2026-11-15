@@ -1,0 +1,39 @@
+{
+  "schema": "https://sxr.dev/contracts/capability-delta.v1.json",
+  "valid": [
+    {
+      "file": "gain.json"
+    },
+    {
+      "file": "no-gain-control-shows-gain.json"
+    }
+  ],
+  "invalid": [
+    {
+      "file": "result-not-in-enum.json",
+      "pointer": "/result",
+      "contains": "is not one of"
+    },
+    {
+      "file": "code-unknown.json",
+      "pointer": "/code",
+      "contains": "is not one of"
+    },
+    {
+      "file": "classes-missing-control.json",
+      "pointer": "/classes",
+      "contains": "\"control_new\" is a required property"
+    },
+    {
+      "file": "frozen-digest-missing.json",
+      "pointer": "/frozen",
+      "contains": "\"sha256\" is a required property"
+    },
+    {
+      "file": "r58-missing.json",
+      "pointer": "",
+      "contains": "\"r58_supported\" is a required property"
+    }
+  ],
+  "semantic_invalid": []
+}

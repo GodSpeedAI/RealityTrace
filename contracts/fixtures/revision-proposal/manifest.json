@@ -1,0 +1,54 @@
+{
+  "schema": "https://sxr.dev/contracts/revision-proposal.v1.json",
+  "valid": [
+    {
+      "file": "with-supersedes.json"
+    },
+    {
+      "file": "weakening-and-rename.json"
+    }
+  ],
+  "invalid": [
+    {
+      "file": "held-out-missing.json",
+      "pointer": "",
+      "contains": "\"held_out\" is a required property"
+    },
+    {
+      "file": "no-intended-changes.json",
+      "pointer": "/intended_changes",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "change-not-in-enum.json",
+      "pointer": "/intended_changes/0/change",
+      "contains": "is not one of"
+    },
+    {
+      "file": "proposal-id-malformed.json",
+      "pointer": "/proposal_id",
+      "contains": "does not match"
+    },
+    {
+      "file": "candidate-world-alias.json",
+      "pointer": "/candidate_world_ref",
+      "contains": "does not match"
+    },
+    {
+      "file": "semantic-diff-missing.json",
+      "pointer": "",
+      "contains": "\"semantic_diff_sha256\" is a required property"
+    },
+    {
+      "file": "diagnosis-without-episodes.json",
+      "pointer": "/diagnosis/episodes",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "unknown-field.json",
+      "pointer": "",
+      "contains": "Additional properties"
+    }
+  ],
+  "semantic_invalid": []
+}

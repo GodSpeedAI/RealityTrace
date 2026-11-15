@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sxr.dev/contracts/capability-delta.v1.json",
+  "title": "capability delta (v1)",
+  "description": "The AT-13 result: the same subsequent-episode records classified under the old and the new world, plus a control variant without the newly declared step. `result` is GAIN or NO_GAIN, reported either way. GAIN requires old `observed_undeclared` or `absent`, new `confirmed`, control not confirmed under the new world, and no frozen falsifier triggered. R-58 is supported only by GAIN. `code` is NO_CAPABILITY_GAIN when the control shows the same gain (NT-38).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "delta_id",
+    "result",
+    "code",
+    "frozen",
+    "old_world_ref",
+    "new_world_ref",
+    "episode_ref",
+    "classes",
+    "falsifier_triggered",
+    "prediction_met",
+    "r58_supported",
+    "comparisons"
+  ],
+  "properties": {
+    "contract": {
+      "const": "capability-delta.v1"
+    },
+    "delta_id": {
+      "type": "string",
+      "pattern": "^delta:[0-9a-f]{64}$"
+    },
+    "result": {
+      "enum": [
+        "GAIN",
+        "NO_GAIN"
+      ]
+    },
+    "code": {
+      "enum": [
+        null,
+        "NO_CAPABILITY_GAIN"
+      ]
+    },
+    "frozen": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frozen_id",
+        "sha256",
+        "prediction"
+      ],
+      "properties": {
+        "frozen_id": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "prediction": {
+          "enum": [
+            "GAIN",
+            "NO_GAIN"
+          ]
+        }
+      }
+    },
+    "old_world_ref": {
+      "type": "string",
+      "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$"
+    },
+    "new_world_ref": {
+      "type": "string",
+      "pattern": "^world:[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*@sha256:[0-9a-f]{64}$"
+    },
+    "episode_ref": {
+      "type": "string",
+      "pattern": "^episode:[^\\s]+$"
+    },
+    "classes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old",
+        "new",
+        "control_old",
+        "control_new"
+      ],
+      "properties": {
+        "old": {
+          "enum": [
+            "confirmed",
+            "contradicted",
+            "observed_undeclared",
+            "declared_unobserved",
+            "insufficient",
+            "absent"
+          ]
+        },
+        "new": {
+          "enum": [
+            "confirmed",
+            "contradicted",
+            "observed_undeclared",
+            "declared_unobserved",
+            "insufficient",
+            "absent"
+          ]
+        },
+        "control_old": {
+          "enum": [
+            "confirmed",
+            "contradicted",
+            "observed_undeclared",
+            "declared_unobserved",
+            "insufficient",
+            "absent"
+          ]
+        },
+        "control_new": {
+          "enum": [
+            "confirmed",
+            "contradicted",
+            "observed_undeclared",
+            "declared_unobserved",
+            "insufficient",
+            "absent"
+          ]
+        }
+      }
+    },
+    "falsifier_triggered": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "old_world_confirmed",
+          "new_world_not_confirmed",
+          "control_shows_gain"
+        ]
+      }
+    },
+    "prediction_met": {
+      "type": "boolean"
+    },
+    "r58_supported": {
+      "type": "boolean"
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old",
+        "new",
+        "control_old",
+        "control_new"
+      ],
+      "properties": {
+        "old": {
+          "type": "string",
+          "pattern": "^comparison:[^\\s]+$"
+        },
+        "new": {
+          "type": "string",
+          "pattern": "^comparison:[^\\s]+$"
+        },
+        "control_old": {
+          "type": "string",
+          "pattern": "^comparison:[^\\s]+$"
+        },
+        "control_new": {
+          "type": "string",
+          "pattern": "^comparison:[^\\s]+$"
+        }
+      }
+    }
+  }
+}

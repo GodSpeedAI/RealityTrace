@@ -1,0 +1,204 @@
+{
+  "contract": "observed-representation.v1",
+  "world_ref": "world:godspeed-fde-sop@sha256:78eddd4e7e4771caa1c37e8e5fa095c5baa899daccea8fac1f6e969f8f37287b",
+  "episode_ref": "episode:case-0001:item-03:1@sha256:5347a89e564433d3747833b214919f9589cae1001e0361e320b1cc1f38f5e669",
+  "kind": "evaluated",
+  "profile_id": "profile:fde-s1-default",
+  "input_set_hash": "d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1",
+  "nodes": [
+    {
+      "node_id": "concept:01d8c175-5650-5bb9-811a-a44720e16a94",
+      "semantic_ref": "godspeed-fde-sop.outcome::Settlement",
+      "occurrence_ids": [
+        "sea-forge-ledger:rec-0041"
+      ],
+      "frequency": 1,
+      "independent_occurrence_count": 1,
+      "ordering": [
+        {
+          "system": "sea-forge-ledger",
+          "first_sequence": 41,
+          "last_sequence": 41
+        }
+      ],
+      "context_distribution": {
+        "roles": {
+          "executor": 1
+        },
+        "plan_items": {
+          "item-03": 1
+        }
+      },
+      "authority_outcomes": {
+        "decided": 1,
+        "not_required": 0,
+        "unknown": 0
+      },
+      "outcome_status": {
+        "succeeded": 1,
+        "failed": 0,
+        "denied": 0,
+        "interrupted": 0,
+        "unknown": 0
+      }
+    },
+    {
+      "node_id": "concept:11fc582b-b054-5386-b245-5a358e3c9327",
+      "semantic_ref": "godspeed-fde-sop.evidence::Settlement",
+      "occurrence_ids": [
+        "sea-forge-ledger:rec-0040",
+        "sea-forge-ledger:rec-0042"
+      ],
+      "frequency": 2,
+      "independent_occurrence_count": 2,
+      "ordering": [
+        {
+          "system": "sea-forge-ledger",
+          "first_sequence": 40,
+          "last_sequence": 41
+        }
+      ],
+      "context_distribution": {
+        "roles": {
+          "executor": 2
+        },
+        "plan_items": {
+          "item-03": 2
+        }
+      },
+      "authority_outcomes": {
+        "decided": 2,
+        "not_required": 0,
+        "unknown": 0
+      },
+      "outcome_status": {
+        "succeeded": 2,
+        "failed": 0,
+        "denied": 0,
+        "interrupted": 0,
+        "unknown": 0
+      }
+    },
+    {
+      "node_id": "undeclared:c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+      "occurrence_ids": [
+        "workbench:obs-9"
+      ],
+      "frequency": 1,
+      "independent_occurrence_count": 0,
+      "ordering": [
+        {
+          "system": "workbench",
+          "first_sequence": 3,
+          "last_sequence": 3
+        }
+      ],
+      "context_distribution": {
+        "roles": {
+          "executor": 1
+        },
+        "plan_items": {
+          "item-03": 1
+        }
+      },
+      "authority_outcomes": {
+        "decided": 0,
+        "not_required": 0,
+        "unknown": 1
+      },
+      "outcome_status": {
+        "succeeded": 1,
+        "failed": 0,
+        "denied": 0,
+        "interrupted": 0,
+        "unknown": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "concept:01d8c175-5650-5bb9-811a-a44720e16a94",
+      "to": "concept:11fc582b-b054-5386-b245-5a358e3c9327",
+      "occurrence_ids": [
+        "sea-forge-ledger:rec-0041",
+        "sea-forge-ledger:rec-0042"
+      ],
+      "frequency": 1,
+      "ordering": {
+        "via_sequence": 0,
+        "via_causation": 1
+      },
+      "context_distribution": {
+        "roles": {
+          "executor": 1
+        },
+        "plan_items": {
+          "item-03": 1
+        }
+      },
+      "authority_outcomes": {
+        "decided": 1,
+        "not_required": 0,
+        "unknown": 0
+      },
+      "outcome_status": {
+        "succeeded": 1,
+        "failed": 0,
+        "denied": 0,
+        "interrupted": 0,
+        "unknown": 0
+      }
+    },
+    {
+      "from": "concept:11fc582b-b054-5386-b245-5a358e3c9327",
+      "to": "concept:01d8c175-5650-5bb9-811a-a44720e16a94",
+      "occurrence_ids": [
+        "sea-forge-ledger:rec-0040",
+        "sea-forge-ledger:rec-0041"
+      ],
+      "frequency": 1,
+      "ordering": {
+        "via_sequence": 1,
+        "via_causation": 0
+      },
+      "context_distribution": {
+        "roles": {
+          "executor": 1
+        },
+        "plan_items": {
+          "item-03": 1
+        }
+      },
+      "authority_outcomes": {
+        "decided": 1,
+        "not_required": 0,
+        "unknown": 0
+      },
+      "outcome_status": {
+        "succeeded": 1,
+        "failed": 0,
+        "denied": 0,
+        "interrupted": 0,
+        "unknown": 0
+      }
+    }
+  ],
+  "coverage": [
+    {
+      "emitter": "sea-forge-ledger",
+      "event_kind": "evidence.recorded",
+      "observed_count": 3,
+      "status": "covered"
+    },
+    {
+      "emitter": "cognate",
+      "event_kind": "run.step",
+      "observed_count": 0,
+      "status": "silent"
+    }
+  ],
+  "uncertainty": {
+    "rejected_event_count": 1,
+    "unverified_event_count": 0
+  }
+}

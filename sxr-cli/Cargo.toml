@@ -19,6 +19,7 @@ sxr-ledger = { version = "0.3.0", path = "../sxr-ledger" }
 sxr-git = { version = "0.2.2", path = "../sxr-git" }
 sxr-df = { version = "0.3.0", path = "../sxr-df" }
 sxr-verify = { version = "0.3.0", path = "../sxr-verify" }
+sxr-observed = { version = "0.1.0", path = "../sxr-observed" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true

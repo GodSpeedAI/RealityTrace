@@ -1,0 +1,143 @@
+{
+  "schema": "https://sxr.dev/contracts/observed-representation.v1.json",
+  "valid": [
+    {
+      "file": "declared-and-undeclared-with-edges.json"
+    },
+    {
+      "file": "minimal-one-declared-node.json"
+    },
+    {
+      "file": "exploratory-kind.json"
+    }
+  ],
+  "invalid": [
+    {
+      "file": "input-set-hash-missing.json",
+      "pointer": "",
+      "contains": "\"input_set_hash\" is a required property"
+    },
+    {
+      "file": "input-set-hash-not-prefixed.json",
+      "pointer": "/input_set_hash",
+      "contains": "does not match"
+    },
+    {
+      "file": "world-ref-alias-not-pinned.json",
+      "pointer": "/world_ref",
+      "contains": "does not match"
+    },
+    {
+      "file": "episode-ref-missing.json",
+      "pointer": "",
+      "contains": "\"episode_ref\" is a required property"
+    },
+    {
+      "file": "kind-not-in-enum.json",
+      "pointer": "/kind",
+      "contains": "is not one of"
+    },
+    {
+      "file": "node-without-occurrence-ids.json",
+      "pointer": "/nodes/0/occurrence_ids",
+      "contains": "has less than 1 item"
+    },
+    {
+      "file": "node-id-neither-concept-nor-undeclared.json",
+      "pointer": "/nodes/0/node_id",
+      "contains": "does not match"
+    },
+    {
+      "file": "undeclared-node-carries-semantic-ref.json",
+      "pointer": "/nodes/2",
+      "contains": "is not allowed for"
+    },
+    {
+      "file": "declared-node-without-semantic-ref.json",
+      "pointer": "/nodes/0",
+      "contains": "\"semantic_ref\" is a required property"
+    },
+    {
+      "file": "occurrence-id-is-a-bare-record-id.json",
+      "pointer": "/nodes/0/occurrence_ids/0",
+      "contains": "does not match"
+    },
+    {
+      "file": "authority-outcomes-missing-unknown.json",
+      "pointer": "/nodes/0/authority_outcomes",
+      "contains": "\"unknown\" is a required property"
+    },
+    {
+      "file": "outcome-status-not-a-closed-set.json",
+      "pointer": "/nodes/0/outcome_status",
+      "contains": "Additional properties are not allowed"
+    },
+    {
+      "file": "edge-ordering-missing-via-causation.json",
+      "pointer": "/edges/0/ordering",
+      "contains": "\"via_causation\" is a required property"
+    },
+    {
+      "file": "coverage-missing.json",
+      "pointer": "",
+      "contains": "\"coverage\" is a required property"
+    },
+    {
+      "file": "coverage-status-not-in-enum.json",
+      "pointer": "/coverage/0/status",
+      "contains": "is not one of"
+    },
+    {
+      "file": "uncertainty-missing.json",
+      "pointer": "",
+      "contains": "\"uncertainty\" is a required property"
+    },
+    {
+      "file": "unknown-top-level-field.json",
+      "pointer": "",
+      "contains": "Additional properties are not allowed"
+    }
+  ],
+  "semantic_invalid": [
+    {
+      "file": "frequency-differs-from-occurrence-count.json",
+      "code": "REP_FREQUENCY_MISMATCH",
+      "rule": "node.frequency equals the number of occurrence_ids"
+    },
+    {
+      "file": "occurrence-ids-not-ascending.json",
+      "code": "REP_NOT_CANONICAL_ORDER",
+      "rule": "occurrence_ids are distinct and ascending; nodes ascending by node_id; edges by (from, to)"
+    },
+    {
+      "file": "nodes-not-ascending.json",
+      "code": "REP_NOT_CANONICAL_ORDER",
+      "rule": "occurrence_ids are distinct and ascending; nodes ascending by node_id; edges by (from, to)"
+    },
+    {
+      "file": "edge-endpoint-not-a-node.json",
+      "code": "REP_EDGE_ENDPOINT_UNKNOWN",
+      "rule": "edge from and to name nodes of this representation"
+    },
+    {
+      "file": "edge-ordering-sum-differs-from-frequency.json",
+      "code": "REP_DISTRIBUTION_MISMATCH",
+      "rule": "edge ordering counts sum to frequency; node distributions sum to frequency"
+    },
+    {
+      "file": "node-role-distribution-differs-from-frequency.json",
+      "code": "REP_DISTRIBUTION_MISMATCH",
+      "rule": "edge ordering counts sum to frequency; node distributions sum to frequency"
+    },
+    {
+      "file": "coverage-status-contradicts-count.json",
+      "code": "REP_COVERAGE_INCONSISTENT",
+      "rule": "status is covered iff observed_count > 0"
+    },
+    {
+      "file": "independent-count-exceeds-frequency.json",
+      "code": "REP_DISTRIBUTION_MISMATCH",
+      "rule": "edge ordering counts sum to frequency; node distributions sum to frequency"
+    }
+  ]
+}
