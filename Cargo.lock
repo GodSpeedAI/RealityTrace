@@ -1046,7 +1046,7 @@ dependencies = [
 
 [[package]]
 name = "realitytrace"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1292,7 +1292,7 @@ checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
 name = "sxr-core"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "chrono",
  "hex",
@@ -1307,7 +1307,7 @@ dependencies = [
 
 [[package]]
 name = "sxr-df"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "serde",
  "serde_json",
@@ -1318,7 +1318,7 @@ dependencies = [
 
 [[package]]
 name = "sxr-git"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "chrono",
  "hex",
@@ -1333,7 +1333,7 @@ dependencies = [
 
 [[package]]
 name = "sxr-ledger"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "chrono",
  "hex",
@@ -1350,7 +1350,7 @@ dependencies = [
 
 [[package]]
 name = "sxr-observed"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "chrono",
  "jsonschema",
@@ -1364,7 +1364,7 @@ dependencies = [
 
 [[package]]
 name = "sxr-verify"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "chrono",
  "hex",

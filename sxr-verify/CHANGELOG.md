@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.3.1](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-verify-v0.3.0...sxr-verify-v0.3.1) (2026-11-15)
+
 ## [0.3.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-verify-v0.2.1...sxr-verify-v0.3.0) (2026-11-13)
 
 
