@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-core-v0.4.0...sxr-core-v0.5.0) (2026-11-15)
+
+
+### Features
+
+* **contracts:** comparison profile, observed representation and residual v1 (WP-11) ([635b876](https://github.com/GodSpeedAI/RealityTrace/commit/635b8769dac6a77a87c84f4a7206e5fe06e584f1))
+* **observed:** governed revision proposal, regression matrix and capability delta (WP-18, RealityTrace half) ([4930b7d](https://github.com/GodSpeedAI/RealityTrace/commit/4930b7d6704dc5572b2cb0d4fa83a0a751b095e9))
+* **observed:** sxr-observed ingest, compare and governed revision (WP-11/16/17/18) ([35f7dc5](https://github.com/GodSpeedAI/RealityTrace/commit/35f7dc5a4403af5020bb15dd1d178a7a556ce2f6))
+
 ## [0.4.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-core-v0.3.0...sxr-core-v0.4.0) (2026-11-13)
 
 

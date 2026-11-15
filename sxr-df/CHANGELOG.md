@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.1](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-df-v0.3.0...sxr-df-v0.3.1) (2026-11-15)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * sxr-core bumped from 0.4.0 to 0.5.0
+
 ## [0.3.0](https://github.com/GodSpeedAI/RealityTrace/compare/sxr-df-v0.2.1...sxr-df-v0.3.0) (2026-11-13)
 
 
