@@ -16,36 +16,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+
+      - name: Detect docs-only change
+        id: docs
+        run: |
+          # PR merge commit: HEAD^1 is the base. Pushes to main always run everything.
+          only=false
+          if [ "${{ github.event_name }}" = pull_request ]; then
+            if git diff --name-only HEAD^1 HEAD | grep -vqE '^(docs/|README\.md$|CHANGELOG\.md$)'; then only=false; else only=true; fi
+          fi
+          echo "only=$only" >> "$GITHUB_OUTPUT"
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable
         with:
           components: clippy, rustfmt
 
-      - name: Cargo Cache
-        uses: actions/cache@v4
+      - name: Rust cache (restored everywhere, saved on main only)
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
+          save-if: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Check release scripts
+        if: steps.docs.outputs.only != 'true'
         run: |
           bash -n scripts/publish-crates.sh
           scripts/tests/rate-limit-wait.test.sh
 
       - name: Check code formatting
+        if: steps.docs.outputs.only != 'true'
         run: cargo fmt --all --check
 
       - name: Run clippy
+        if: steps.docs.outputs.only != 'true'
         run: cargo clippy --workspace --all-targets -- -D warnings
 
       - name: Run tests
+        if: steps.docs.outputs.only != 'true'
         run: cargo test --workspace --all-targets
