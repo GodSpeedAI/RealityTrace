@@ -1,5 +1,11 @@
 # Current status
 
+## NT-07 Field Case world provenance
+
+- The evidence envelope now persists the emitted world pin in its hashed scope. A caller-supplied conflicting or unsupported pin is refused. Legacy evidence without a pin remains unbound.
+- The focused core regression failed before the mapper change. All six evidence-record tests and all three CLI read-only ledger tests passed after the fix. The CLI test appends a real emitted envelope to SQLite, exports it, and verifies that changing the persisted pin invalidates the hash.
+- SEA Forge delivery and a shared durable export fixture across a real case re-pin remain open.
+
 ## Objective
 Evidence Revision 005 is implemented as the minimal authorization successor to frozen exec004. It retains ER002 scientific design and exec004 transport exactly, but adds a per-FULL-run immutable authority gate. No provider, qualification, or scientific model call was made.
 

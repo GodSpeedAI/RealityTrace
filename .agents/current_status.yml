@@ -85,3 +85,9 @@ hard_constraints:
   - crates.io publishing behaviour unchanged.
   - Historical run evidence untouched.
   - Fail closed on ambiguous or missing evidence.
+
+nt07_world_provenance:
+  branch: fix/nt07-world-ref
+  status: persistence_verified_delivery_open
+  verified: "6 evidence mapper tests and 3 CLI ledger tests, including actual append and export"
+  next: "Wire committed SEA Forge delivery and compare the same durable evidence across a real re-pin."

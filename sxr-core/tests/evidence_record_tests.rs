@@ -46,6 +46,9 @@ fn emitted_e8_persists_as_a_conformant_evidence_packet() {
     let e8 = emitted();
     let envelope = envelope(&e8);
     assert_eq!(envelope["envelope_kind"], "evidence_packet");
+    assert_eq!(envelope["scope"]["world_ref"], e8["payload"]["world_ref"]);
+    assert_eq!(envelope["scope"]["repo_id"], "repo-test");
+    assert_eq!(envelope["scope"]["checkout_id"], "checkout-test");
     let evidence = &envelope["evidence"][0];
     let proof = e8["payload"]["proof_result_ref"].as_str().unwrap();
     assert_eq!(evidence["question_ref"], frozen_expectation_question(proof));
@@ -141,6 +144,54 @@ fn malformed_e8_is_refused_before_any_envelope() {
         refuse(&|v| v["payload"]["work_request_id"] = json!("  ")),
         RecordRefusal::Malformed {
             field: "work_request_id"
+        }
+    );
+}
+
+#[test]
+fn world_ref_must_be_pinned_in_e8_and_agree_with_caller_scope() {
+    let mut e8 = emitted();
+    let pinned = e8["payload"]["world_ref"].clone();
+    assert!(pinned.is_string());
+    let mut context = ctx();
+    context.scope["world_ref"] = pinned.clone();
+    let (parts, _) = evidence_recorded_parts(&e8, context.clone()).unwrap();
+    assert_eq!(parts.scope["world_ref"], pinned);
+
+    for conflicting in [
+        json!(format!("world:other@sha256:{}", "a".repeat(64))),
+        Value::Null,
+    ] {
+        let mut conflict = context.clone();
+        conflict.scope["world_ref"] = conflicting;
+        assert_eq!(
+            evidence_recorded_parts(&e8, conflict).unwrap_err(),
+            RecordRefusal::Malformed {
+                field: "scope.world_ref",
+            }
+        );
+    }
+
+    for malformed in [
+        json!("world:t07"),
+        json!(format!(" {}", pinned.as_str().unwrap())),
+        Value::Null,
+    ] {
+        e8["payload"]["world_ref"] = malformed;
+        assert_eq!(
+            evidence_recorded_parts(&e8, ctx()).unwrap_err(),
+            RecordRefusal::Malformed {
+                field: "payload.world_ref",
+            }
+        );
+    }
+
+    e8["payload"].as_object_mut().unwrap().remove("world_ref");
+    assert_eq!(envelope(&e8)["scope"], ctx().scope);
+    assert_eq!(
+        evidence_recorded_parts(&e8, context).unwrap_err(),
+        RecordRefusal::Malformed {
+            field: "scope.world_ref",
         }
     );
 }

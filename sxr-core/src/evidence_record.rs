@@ -20,6 +20,7 @@
 
 use crate::envelope::EnvelopeParts;
 use crate::record_kinds::RecordKind;
+use crate::world_ref::is_world_ref;
 use chrono::{DateTime, Utc};
 use serde_json::{Value, json};
 
@@ -92,6 +93,7 @@ pub struct RecordContext {
     pub envelope_id: String,
     pub created_at: DateTime<Utc>,
     pub created_by: String,
+    /// Caller context. A supplied world must match the E8 payload exactly.
     pub scope: Value,
     /// Ledger refs of the envelopes this E8 derives from.
     pub provenance_refs: Vec<String>,
@@ -105,7 +107,8 @@ pub fn frozen_expectation_question(proof_result_ref: &str) -> String {
 }
 
 /// Map an E8 to the parts of its `evidence.recorded` envelope and the
-/// subject refs `validate_record_kind_conformance` checks.
+/// subject refs `validate_record_kind_conformance` checks. Legacy E8 without
+/// a world stays unbound. Only the E8 payload can supply the persisted pin.
 pub fn evidence_recorded_parts(
     e8: &Value,
     ctx: RecordContext,
@@ -122,6 +125,32 @@ pub fn evidence_recorded_parts(
     }
     let event_id = text(&e8["event_id"], "event_id")?;
     let p = &e8["payload"];
+    let world_ref = p
+        .get("world_ref")
+        .map(|world| {
+            world
+                .as_str()
+                .filter(|world| is_world_ref(world))
+                .ok_or(RecordRefusal::Malformed {
+                    field: "payload.world_ref",
+                })
+        })
+        .transpose()?;
+    let mut scope = ctx.scope;
+    let scope_fields = scope
+        .as_object_mut()
+        .ok_or(RecordRefusal::Malformed { field: "scope" })?;
+    if let Some(claimed) = scope_fields.get("world_ref")
+        && (world_ref.is_none() || claimed.as_str() != world_ref)
+    {
+        return Err(RecordRefusal::Malformed {
+            field: "scope.world_ref",
+        });
+    }
+    if let Some(world) = world_ref {
+        scope_fields.insert("world_ref".into(), json!(world));
+    }
+
     let work_request = text(&p["work_request_id"], "work_request_id")?;
     let affordance = text(&p["affordance_id"], "affordance_id")?;
     let proof = sha_ref(&p["proof_result_ref"], "proof_result_ref")?;
@@ -193,7 +222,7 @@ pub fn evidence_recorded_parts(
         created_at: ctx.created_at,
         created_by: ctx.created_by,
         record_kind: RecordKind::EvidenceRecorded,
-        scope: ctx.scope,
+        scope,
         boundary_record: json!({
             "included_sections": ["questions", "representations", "evidence"],
             "excluded_sections": [],
