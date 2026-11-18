@@ -91,3 +91,9 @@ nt07_world_provenance:
   status: persistence_verified_delivery_open
   verified: "6 evidence mapper tests and 3 CLI ledger tests, including actual append and export"
   next: "Wire committed SEA Forge delivery and compare the same durable evidence across a real re-pin."
+
+nt07_joined_proof:
+  status: verified
+  fixture: sxr-cli/examples/nt07_persist.rs
+  verified: SEA settlement to real ledger append and unchanged CLI export across promotion and re-pin
+  open: governed runtime delivery contract for ordinary SEA evidence
