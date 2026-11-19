@@ -3,6 +3,7 @@
 //! compared values never enter the envelope; malformed E8 is refused.
 
 use serde_json::{Value, json};
+use sxr_core::clock::Timestamp;
 use sxr_core::embedded_schema::EnvelopeSchemaValidator;
 use sxr_core::envelope::{
     build_envelope, runtime_scope, sxr_created_by, validate_record_kind_conformance,
@@ -21,9 +22,7 @@ fn emitted() -> Value {
 fn ctx() -> RecordContext {
     RecordContext {
         envelope_id: "0190b9a2-0000-7000-8000-000000000001".into(),
-        created_at: chrono::DateTime::parse_from_rfc3339("2026-10-18T12:00:00Z")
-            .unwrap()
-            .with_timezone(&chrono::Utc),
+        created_at: Timestamp::from_unix_parts(1_792_324_800, 0).unwrap(),
         created_by: sxr_created_by("0.1.0-test"),
         scope: runtime_scope("repo-test", "checkout-test", None, None, None, None),
         provenance_refs: vec!["ledger:gen-test:7".into()],
@@ -152,4 +151,14 @@ fn mapping_is_deterministic_for_a_fixed_context() {
     let b = evidence_recorded_parts(&e8, ctx()).unwrap();
     assert_eq!(a.0.entity_sections, b.0.entity_sections);
     assert_eq!(a.1, b.1);
+}
+
+#[test]
+fn fixed_evidence_envelope_has_exact_timestamp_and_hash() {
+    let envelope = envelope(&emitted());
+    assert_eq!(envelope["created_at"], "2026-10-18T12:00:00.000000Z");
+    assert_eq!(
+        sxr_core::canonical_json::sha256_canonical(&envelope),
+        "sha256:5fc5b92e5ae923a0b95e832da4a8c0ebea520d95197b483c70f8e6e285a0956c"
+    );
 }

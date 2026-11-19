@@ -18,9 +18,9 @@
 //! Only a well-formed RealityTrace E8 maps; anything else is refused before
 //! an envelope exists.
 
+use crate::clock::Timestamp;
 use crate::envelope::EnvelopeParts;
 use crate::record_kinds::RecordKind;
-use chrono::{DateTime, Utc};
 use serde_json::{Value, json};
 
 /// Why an E8 could not be mapped. Nothing partial is ever returned.
@@ -90,7 +90,7 @@ fn sha_ref<'a>(v: &'a Value, field: &'static str) -> Result<&'a str, RecordRefus
 #[derive(Debug, Clone)]
 pub struct RecordContext {
     pub envelope_id: String,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
     pub created_by: String,
     pub scope: Value,
     /// Ledger refs of the envelopes this E8 derives from.

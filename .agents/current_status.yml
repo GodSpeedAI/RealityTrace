@@ -82,3 +82,11 @@ remediation_status:
     - "sxr-cli test suite (35 passed)"
 
 next_action: None (Interface remediation and documentation complete)
+
+chrono_removal_030:
+  base: 42879a82115bcc3586a81a58c614ec5073656f6f
+  status: implementation_unverified
+  scope: "Remove sxr-core direct Chrono dependency; adapt CLI envelope timestamp boundary. Other workspace crates retain Chrono."
+  api: "ClockPort, FixedClock, EnvelopeParts and RecordContext use sxr_core::clock::Timestamp, constructed from Unix seconds and nanoseconds."
+  verification: "Fixed timestamp and evidence hash tests added; compilation and baseline parity not yet run."
+  next_action: "Run baseline and changed tests under shared compile lock, verify hash and workspace CLI compatibility, and resolve any differences before integration."

@@ -1,5 +1,5 @@
 use serde_json::json;
-use sxr_core::clock::FixedClock;
+use sxr_core::clock::{FixedClock, Timestamp};
 use sxr_core::embedded_schema::EnvelopeSchemaValidator;
 use sxr_core::envelope::{
     EnvelopeParts, build_envelope, new_envelope_id, runtime_scope, sxr_created_by,
@@ -10,12 +10,7 @@ use sxr_core::record_kinds::RecordKind;
 fn parts(kind: RecordKind) -> EnvelopeParts {
     EnvelopeParts {
         envelope_id: new_envelope_id(),
-        created_at: FixedClock(
-            chrono::DateTime::parse_from_rfc3339("2026-08-07T12:00:00Z")
-                .unwrap()
-                .with_timezone(&chrono::Utc),
-        )
-        .0,
+        created_at: FixedClock(Timestamp::from_unix_parts(1_786_104_000, 0).unwrap()).0,
         created_by: sxr_created_by("0.1.0-test"),
         record_kind: kind,
         scope: runtime_scope("repo-test", "checkout-test", None, None, None, None),

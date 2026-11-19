@@ -1,8 +1,8 @@
+use crate::clock::Timestamp;
 use crate::clock::{ClockPort, rfc3339_micros};
 use crate::embedded_schema::EnvelopeSchemaValidator;
 use crate::record_kinds::RecordKind;
 use crate::types::{CEP_VERSION, ENVELOPE_VERSION};
-use chrono::{DateTime, Utc};
 use serde_json::{Map, Value, json};
 use uuid::Uuid;
 
@@ -91,7 +91,7 @@ pub const BOUNDARY_KEYS: &[&str] = &[
 pub struct EnvelopeParts {
     /// Outer identity: a UUIDv7. Varies freely per emission (I-DET).
     pub envelope_id: String,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
     pub created_by: String,
     pub record_kind: RecordKind,
     /// Producer-preserved subset applicable to the event: keys from
@@ -338,6 +338,6 @@ pub fn validate_snapshot_row_shape(
 }
 
 /// An injectable clock passed to builders.
-pub fn created_at(clock: &dyn ClockPort) -> DateTime<Utc> {
+pub fn created_at(clock: &dyn ClockPort) -> Timestamp {
     clock.now_utc()
 }

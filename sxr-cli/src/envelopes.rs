@@ -43,7 +43,14 @@ pub fn build(
 ) -> Result<Value> {
     let parts = EnvelopeParts {
         envelope_id: crate::determinism::mint_id("envelope"),
-        created_at: crate::determinism::now_utc(),
+        created_at: {
+            let now = crate::determinism::now_utc();
+            sxr_core::clock::Timestamp::from_unix_parts(
+                now.timestamp(),
+                now.timestamp_subsec_nanos(),
+            )
+            .expect("CLI clock must be representable as an envelope timestamp")
+        },
         created_by: sxr_created_by(SXR_VERSION),
         record_kind: kind,
         scope: runtime_scope(
