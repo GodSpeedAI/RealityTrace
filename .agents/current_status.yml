@@ -85,8 +85,8 @@ next_action: None (Interface remediation and documentation complete)
 
 chrono_removal_030:
   base: 42879a82115bcc3586a81a58c614ec5073656f6f
-  status: implementation_unverified
+  status: core_and_cli_verified
   scope: "Remove sxr-core direct Chrono dependency; adapt CLI envelope timestamp boundary. Other workspace crates retain Chrono."
   api: "ClockPort, FixedClock, EnvelopeParts and RecordContext use sxr_core::clock::Timestamp, constructed from Unix seconds and nanoseconds."
-  verification: "Fixed timestamp and evidence hash tests added; compilation and baseline parity not yet run."
-  next_action: "Run baseline and changed tests under shared compile lock, verify hash and workspace CLI compatibility, and resolve any differences before integration."
+  verification: "Original Chrono year boundaries and fixed evidence hash passed; sxr-core and realitytrace CLI suites passed offline under the shared compile lock with two jobs. Core normal, build, and dev dependencies contain no Chrono."
+  next_action: "Review and integrate against NT07; other workspace packages retain Chrono. Broader workspace, platform, and SEA integration gates remain outstanding."

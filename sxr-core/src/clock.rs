@@ -10,11 +10,13 @@ pub struct Timestamp {
 
 impl Timestamp {
     /// Construct a timestamp. The extra nanosecond range is valid only at the
-    /// end of a minute, where it denotes a leap second.
+    /// end of a minute, where it denotes a leap second. UTC dates outside
+    /// Chrono's supported years (-262143 through 262142) are rejected.
     pub fn from_unix_parts(seconds: i64, nanoseconds: u32) -> Option<Self> {
-        if nanoseconds >= 2_000_000_000
+        let utc = time::OffsetDateTime::from_unix_timestamp(seconds).ok()?;
+        if !(-262_143..=262_142).contains(&utc.year())
+            || nanoseconds >= 2_000_000_000
             || (nanoseconds >= 1_000_000_000 && seconds.rem_euclid(60) != 59)
-            || time::OffsetDateTime::from_unix_timestamp(seconds).is_err()
         {
             return None;
         }
@@ -93,5 +95,45 @@ mod tests {
         assert!(Timestamp::from_unix_parts(0, 1_000_000_000).is_none());
         assert!(Timestamp::from_unix_parts(59, 2_000_000_000).is_none());
         assert!(Timestamp::from_unix_parts(i64::MAX, 0).is_none());
+    }
+
+    #[test]
+    fn chrono_year_bounds_and_signed_years() {
+        fn seconds(year: i32, month: time::Month, day: u8, h: u8, m: u8, s: u8) -> i64 {
+            time::Date::from_calendar_date(year, month, day)
+                .unwrap()
+                .with_hms(h, m, s)
+                .unwrap()
+                .assume_utc()
+                .unix_timestamp()
+        }
+        let min = seconds(-262_143, time::Month::January, 1, 0, 0, 0);
+        let max = seconds(262_142, time::Month::December, 31, 23, 59, 59);
+        assert!(Timestamp::from_unix_parts(min - 1, 999_999_999).is_none());
+        assert!(Timestamp::from_unix_parts(max + 1, 0).is_none());
+        for (sec, nanos, expected) in [
+            (min, 0, "-262143-01-01T00:00:00.000000Z"),
+            (max, 999_999_999, "+262142-12-31T23:59:59.999999Z"),
+            (
+                seconds(-1, time::Month::January, 1, 0, 0, 0),
+                0,
+                "-0001-01-01T00:00:00.000000Z",
+            ),
+            (
+                seconds(0, time::Month::January, 1, 0, 0, 0),
+                0,
+                "0000-01-01T00:00:00.000000Z",
+            ),
+            (
+                seconds(10_000, time::Month::January, 1, 0, 0, 0),
+                0,
+                "+10000-01-01T00:00:00.000000Z",
+            ),
+        ] {
+            assert_eq!(
+                rfc3339_micros(Timestamp::from_unix_parts(sec, nanos).unwrap()),
+                expected
+            );
+        }
     }
 }
