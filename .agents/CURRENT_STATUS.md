@@ -48,3 +48,7 @@ Exec004 code/artifacts and pre-existing aborted run directories were not modifie
 - `proof/{slice3,slice4,slice5,red-green}.sh` now write the current registry format (`version = 1`, `[[namespaces]]`); the retired `[namespaces.logistics]` map form is rejected by DomainForge (`invalid type: map, expected a sequence`). These scripts are not in CI.
 - Verified: `cargo test --workspace` 209 passed, 0 failed; the 3 `sxr-df` real-binary tests pass against the released 0.21.1 CLI (`SXR_TEST_DOMAINFORGE_BIN`, `SXR_TEST_DOMAINFORGE_ROOT=~/projects/domainforge`, `SXR_TEST_LARGE_SEA_DIR` = a dir with a >64 KiB interaction-model.sea); `proof/red-green.sh` passes (RED unsettled + missing + contradiction, GREEN settled); godspeed-readiness R02 passes on this branch.
 - Next: keep `PINNED_DOMAINFORGE_VERSION` in lockstep with the stack (godspeed-readiness gate C01 checks it).
+
+## GodSpeed glossary consolidation (2026-11-20)
+
+Reconciled `GLOSSARY.md` against its owner contracts and source. Cross-checked glossary targets, source links and the eleven semantic scenarios. Runtime and proof behavior are outside this change.

@@ -85,3 +85,9 @@ hard_constraints:
   - crates.io publishing behaviour unchanged.
   - Historical run evidence untouched.
   - Fail closed on ambiguous or missing evidence.
+
+domain_vocabulary:
+  updated: "2026-11-20"
+  status: "documentation validated"
+  glossary: "GLOSSARY.md"
+  verification: "Cross-checked glossary targets, source links and the eleven semantic scenarios."
