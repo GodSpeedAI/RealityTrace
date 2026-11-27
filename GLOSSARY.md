@@ -22,4 +22,6 @@ The durable ordered record from which observation provenance and the evidentiary
 
 ## Sources and boundary
 
-The [RealityTrace model](sxr-core/src/types.rs) and [record kinds](sxr-core/src/record_kinds.csv) govern these terms. An Observation contributes to evidence once it is bound to an expectation or claim. The Verification Result reports the resulting check. An authority may use it to issue a separate Settlement Receipt. The observation ledger and any receipt observation preserve source and provenance.
+The [RealityTrace model](sxr-core/src/types.rs) and [record kinds](sxr-core/src/record_kinds.csv) govern these terms. An Observation contributes to evidence once it is bound to an expectation or claim. The Verification Result is the `evidence.recorded` record kind (`sxr-core/src/record_kinds.csv`): an expected-versus-observed comparison of a frozen expectation with an operational settlement's observed effects. It consumes a settlement and never settles.
+
+The Settlement Receipt is not a RealityTrace record kind or type. It is issued by the external authority (SEA-Forge) after it evaluates the Verification Result. RealityTrace defines no receipt contract, and neither `record_kinds.csv` nor `types.rs` governs the receipt step. The observation ledger and any receipt observation preserve source and provenance.
